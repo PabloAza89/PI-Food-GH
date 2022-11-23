@@ -1,0 +1,41 @@
+.about {
+  background-color: rgba(148, 179, 138, 0.171);
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  color:rgba(240, 248, 255, 0.726);
+  font-size: 4vh;  
+  text-decoration: none;
+}
+
+.alertButtonBG {
+  background-color: rgba(148, 179, 138, 0.171);
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  color:rgba(240, 248, 255, 0.726);
+  font-size: 4vh;  
+  text-decoration: none;
+}
+
+#alertTextLink {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-decoration: none;
+  color: white;
+  height: 9vh;
+  width: 12vw;
+}
+
+.innerText:hover {
+  padding-top: 3px;
+}

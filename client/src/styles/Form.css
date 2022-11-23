@@ -1,0 +1,221 @@
+.form-body {
+  display: flex;
+  flex-direction: row;  
+}
+
+.iconImageForm {
+  display: flex;
+  flex-direction: row;
+  width: 8vh;
+  height: 8vh;
+  align-self: center;
+  margin-left: 1.5vh;
+}
+
+#iconImageDiv {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-content: center;
+  width: 9vh;
+  height: 12vh;
+}
+
+#choose {
+  height: 30px;
+  margin-bottom: 10px;
+}
+
+.image-form {
+  padding-bottom: 0.5vh;
+}
+.asd {
+  display: flex;
+  flex-direction: column;
+  height: 12vh;
+}
+
+#iconText {
+  text-decoration: none;
+  color: white;
+  height: 12vh;
+  width: 12vw;
+}
+
+.main-upper {
+  display: flex;
+  flex-direction: row;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;  
+  align-items: center;
+  justify-self: center;
+  width: 65vw;
+  padding-top: 1vw;
+  font-size:x-large;
+  color: white;
+}
+
+.options-main-align {
+  display: flex;
+  flex-direction: row;
+}
+
+.options-main-left {
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+  padding-right: 0.5vw;
+}
+
+.options-main-right {
+  display: flex;
+  flex-direction: column;
+}
+
+.align-text-options {
+  display: flex;
+  flex-direction: column;
+}
+
+.row-option {
+  display: flex;
+  flex-direction: row;
+  align-content:space-between
+}
+
+.alert {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: right;
+  color: rgb(255, 0, 0);
+  background-color: rgba(218, 236, 116, 0.566);
+  font-weight: bolder;
+  margin-top: 1vh;
+  padding-left: 1vh;
+  padding-right: 1vh;
+  padding-top: 0.5vh;
+  padding-bottom: 0.5vh;
+}
+
+.danger {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  border-left: 50%;
+  background-color: rgba(196, 34, 147, 0.253);
+  height: 27px;
+  margin-bottom: 3px;
+}
+
+.dietAlign {
+  text-align: center;
+  width: 35vw;
+}
+
+.danger::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: rgb(233, 232, 232);
+  opacity: 1; /* Firefox */
+  padding-left: 2px;
+}
+
+.options-left {
+  margin-bottom: 3.5px;
+}
+
+#submmitButton {
+  margin-top: 0.8vh;
+  margin-right: 2vh;
+}
+
+#createNewButton {
+  margin-top: 0.8vh;
+  margin-right: 2vh;
+}
+
+.alertButtonBG {
+  background-color: rgba(148, 179, 138, 0.171);
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  color:rgba(240, 248, 255, 0.726);
+  font-size: 4vh;  
+}
+
+.alertButton {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(65, 177, 177, 0.616);
+  width: 12vw;
+  height: 4vh;
+  margin-top: 2vh;
+  font-size: 2.5vh; 
+  color: rgb(240, 248, 255);
+  padding-top: 2px;
+}
+
+.alertButton:hover {  
+  background-color:  rgba(87, 223, 223, 0.377);  
+  font-size: 2.6vh; 
+  border-width: 2.5px;  
+}
+
+.titleFormRecipe {
+  padding-bottom: 1vh;
+}
+
+.alertButtonBGSuccess {
+  background-color: rgba(148, 179, 138, 0.171);
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  border-color: rgba(240, 248, 255, 0);
+  align-items: center;
+  justify-content: center;
+  color:rgba(240, 248, 255, 0.726);
+  font-size: 5vh;    
+}
+
+.alertButtonSuccess {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(65, 177, 177, 0);
+  width: 12vw;
+  border-color: rgba(240, 248, 255, 0);
+  height: 4vh;
+  margin-top: 0vh;
+  font-size: 2.5vh; 
+  color: rgba(240, 248, 255, 0);
+  padding-top: 2px;
+}
+
+.hiddenSuccess {
+  background-color: rgba(0, 255, 255, 0);
+  color: rgba(240, 248, 255, 0);
+  border-color: rgba(240, 248, 255, 0);
+}
+
+@media (max-width: 1024px) {
+  .form {
+   font-size: large;
+  }  
+  .danger {
+    height: 18px;  
+  }
+  #choose {
+    height: 24px;
+  }
+}

@@ -1,0 +1,63 @@
+.bgImg {
+  display: flex;
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+}
+
+.bgImageLanding {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  background-image: url("../images/landingBG.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  filter: blur(3px);
+  top: -5px;
+  left: -5px;
+  padding-right: 10px;
+  padding-bottom: 10px; 
+}
+
+.landingContainer {
+  display: flex;
+  flex-direction: row;
+  width: 100vw;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;  
+}
+
+.welcomeText {
+  display: flex;
+  color: lightgray;
+  font-size: 3rem;
+  z-index: 2;  
+}
+  
+.welcomeButton {
+  display: flex;
+  justify-content: center;
+  padding-top: 0.1%;
+  align-items: center;
+  margin-top: 0.9%;    
+  background-color: rgba(139, 0, 139, 0.285);
+  border-color: aliceblue;
+  color: beige;
+  font-style: oblique;
+  border-style :solid;
+  border-width: 2px;
+  width: 110px;
+  height: 35px;
+  margin-left: 30px;
+  border-radius: 15%;
+  font-size: 1rem;
+  z-index: 2;
+}
+
+.welcomeButton:hover {
+  background-color: rgba(139, 0, 139, 0.424);
+  font-size: 1.01rem;
+  border-width: 2.5px;
+}
+  
