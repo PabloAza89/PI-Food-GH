@@ -1,0 +1,46 @@
+[
+    {
+        "id": "65806a7c-838a-4454-90a2-a9c3ab39c288",
+        "title": "All Diets"
+    },
+    {
+        "id": "d3bc539f-6386-476e-8e3d-feb8668aab08",
+        "title": "Gluten Free"
+    },
+    {
+        "id": "40e63443-8d49-4902-9bf5-c1ae039f368f",
+        "title": "Ketogenic"
+    },
+    {
+        "id": "bb533c80-be43-4767-9a8c-2692b87b5588",
+        "title": "Vegan"
+    },
+    {
+        "id": "0949f6ee-9ef2-4c21-8d7c-188f553509f2",
+        "title": "Lacto Ovo Vegetarian"
+    },
+    {
+        "id": "9abe4fd5-9735-4ad7-998d-51f34ed56da3",
+        "title": "Pescatarian"
+    },
+    {
+        "id": "b6575a16-8f08-4ec6-ba62-edbeb4f2b374",
+        "title": "Paleolithic"
+    },
+    {
+        "id": "2f220350-80b4-4126-be01-d1353caeea75",
+        "title": "Primal"
+    },
+    {
+        "id": "06ffdff5-fea8-44ef-aa4f-0e267a8ea656",
+        "title": "Fodmap Friendly"
+    },
+    {
+        "id": "4aa3a59c-fdb9-4398-850d-c861a131a98f",
+        "title": "Whole 30"
+    },
+    {
+        "id": "240a3804-4b28-4858-9100-88d89b95c559",
+        "title": "Dairy Free"
+    }
+]

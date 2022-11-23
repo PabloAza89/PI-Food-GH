@@ -1,15 +1,10 @@
 import React, { useState } from "react";
-import { useDispatch } from 'react-redux';
 import "../styles/Form.css";
 import noImage1 from "../images/noImage1.jpg";
 import logo from "../images/logo.png";
 import { Link } from "react-router-dom";
-import { addNew , getNew } from '../actions';
-import user from '../db/user';
 
-export default function Form({ GetAfterCreated , parsedArr }) {
-
-  const dispatch = useDispatch() 
+export default function Form({ GetAfterCreated }) {
   
   const [showAlert, setShowAlert] = useState(false)
   const [firstInstance, setFirstInstance] = useState(false)
@@ -61,14 +56,23 @@ export default function Form({ GetAfterCreated , parsedArr }) {
    const handleSubmit = async (e) => {
     e.preventDefault();
     if (created === 0) {      
-      dispatch(addNew({
-          "title": title,
-          "diets": uniqueNamesDiets,
-          "healthScore": healthScore,
-          "summary": summary,
-          "analyzedInstructions": analyzedInstructions       
-    }))
-      setCreated(1)
+      await fetch('http://localhost:3001/recipes', {
+       method: 'POST',
+       body: JSON.stringify({
+          title: title,
+          diets: uniqueNamesDiets,
+          healthScore: healthScore,
+          summary: summary,
+          analyzedInstructions: analyzedInstructions
+       }),
+       headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+       },       
+    }).then((res) => res.json())     
+      .then(setCreated(1))
+      .catch((err) => {
+        if (err.message === "Unexpected token 'T', \"THERE WAS \"... is not valid JSON") setCreated(0)
+      });
     } else {
       setShowAlert(true)
       
@@ -128,8 +132,7 @@ export default function Form({ GetAfterCreated , parsedArr }) {
       hidden: false
     })
   }
-  
-
+ 
   return !firstInstance ?
     (
       <div className="form-body">

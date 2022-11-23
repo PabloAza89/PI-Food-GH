@@ -1,0 +1,12 @@
+[
+    {
+        "id": 999999, 
+        "title": "AAA TEST",
+        "analyzedInstructions": "ASD",
+        "healthScore": 100,
+        "summary": "ASD",
+        "diets": ["Vegan", "Primal"]
+
+    }
+]
+

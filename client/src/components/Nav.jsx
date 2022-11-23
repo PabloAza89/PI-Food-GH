@@ -60,7 +60,7 @@ export default function Cards({diets , handleTitleMatchChange , handleDietNameCh
           <Link to="/about"> <button className="button">ABOUT !</button> </Link>
         </div>
         <div className="right-lower">
-          <select  onChange={(event) => handleDietNameChange(event.target.value) + dispatch(setIndexChoosen(0)) + defaultPaginateColor()  } >          
+          <select  onChange={(event) => handleDietNameChange(event.target.value) + console.log("VALUE", event.target.value) + dispatch(setIndexChoosen(0)) + defaultPaginateColor()  } >          
             {diets.map(e =>(
               <option id={e.id} key={e.id}>{e.title}</option>
             ))}

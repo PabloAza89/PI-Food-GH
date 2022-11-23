@@ -1,7 +1,8 @@
 const initialState = {
   showMain: false,
   indexChoosen: 0,
-  allIndexes: 0  
+  allIndexes: 0,
+  addNew: []
 }
   
 const reducer = (state = initialState, action) => {
@@ -30,6 +31,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         response: state.indexChoosen
+      } 
+    case 'ADD_NEW': 
+      return {
+        ...state,
+        addNew: [...state.addNew, action.payload]
       } 
     default:
       return state

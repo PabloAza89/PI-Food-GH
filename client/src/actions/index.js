@@ -24,3 +24,10 @@ export function getIndexChoosen() {
     type: 'GET_INDEX_CHOOSEN'
   }
 };
+
+export function addNew(payload) {
+  return {
+    type: 'ADD_NEW',
+    payload
+  }
+};

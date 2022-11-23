@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from 'react-redux';
 import { Route } from "react-router-dom";
 import '../styles/MainPage.css';
 import Cards from "./Cards.jsx";
@@ -7,8 +8,39 @@ import Paginate from "./Paginate.jsx";
 import Nav from "./Nav.jsx";
 import Form from "./Form.jsx";
 import About from "./About.jsx";
+import toAvoidKey from '../db/toAvoidKey';
+import recipes from '../db/recipes';
+import user from '../db/user';
+import { addNew , getNew } from '../actions';
 
 function MainPage() {
+
+
+
+  const value = useSelector((state) => state.addNew);
+
+
+
+
+
+
+  let parsedArr = toAvoidKey.results.map(e => {
+    return {
+        id: e.id,
+        title: e.title,
+        summary: e.summary,
+        healthScore: e.healthScore,
+        analyzedInstructions:
+            e.analyzedInstructions[0] ? e.analyzedInstructions[0].steps.map(e=> e.step) : [],
+        image: e.image,
+        diets: e.diets.map(function(e) {
+            if ((e.indexOf(e) !== e.length - 1)) {
+                return e.split(" ").map(e => e[0].toUpperCase() + e.slice(1)).join(" ")
+            } else return e.split(" ").map(e => e[0].toUpperCase() + e.slice(1)).join(" ")
+            }), 
+        dishTypes: e.dishTypes
+    }
+  })
 
   const [isLoading, setIsLoading] = useState({
     main: true,
@@ -18,13 +50,7 @@ function MainPage() {
   function GetAfterCreated () { 
     setIsLoading(isLoading, isLoading.refresh = true)
 
-    if (isLoading) {
-      fetch('http://localhost:3001/recipes')
-      .then((r) => r.json())
-      .then((res) => setFoods(res))
-      fetch('http://localhost:3001/diets')
-      .then(r => r.json())
-      .then(res => setDiets(res))  
+    if (isLoading) {    
       setIsLoading(isLoading, isLoading.main = false)
     }
   }
@@ -32,17 +58,18 @@ function MainPage() {
   const [foods, setFoods] = useState([]); // ALL MAIN FOODS
   const [diets, setDiets] = useState([]); // ALL MAIN DIETS
 
-  useEffect(() => {
-    if(isLoading) {
-      fetch('http://localhost:3001/recipes')
-      .then((r) => r.json())
-      .then((res) => setFoods(res))
-      fetch('http://localhost:3001/diets')
-      .then(r => r.json())
-      .then(res => setDiets(res))  
+  
+
+
+ useEffect(() => {
+    //if(isLoading) {   
+      
+      setFoods((value).concat(parsedArr))
+      setDiets(recipes)   
       setIsLoading(isLoading, isLoading.main = false)
-    }  
-  }, [isLoading]); // [] -> MEANS RUN ONCE !
+   // }  
+  }, [value]); // [] -> MEANS RUN ONCE !
+
   
   let dietsAndTitleFilter = [] // FIRST INSTANCE ARRAY TO FILTER: 1º DIETS --> 2º TITLE
   let toShow = [] // ARRAY SORTED BY HEALTH LEVEL OR A-Z TO SHOW
@@ -100,6 +127,7 @@ function MainPage() {
       }
     } else {
       if (titleMatch.name === "") {
+        console.log("DIET NAME", dietName.name)
         let qq = foods.filter(e => e.diets.includes(dietName.name))
         dietsAndTitleFilter = qq
       } else {
@@ -109,7 +137,7 @@ function MainPage() {
       }
     }
   }
-
+ 
   function onHealthLevelFilter() {
     if (healthLevel.name === "-- select an option --" && healthLevel.selected === false) {
       let qq = dietsAndTitleFilter.sort((a,b) => b.healthScore - a.healthScore);
@@ -139,14 +167,13 @@ function MainPage() {
       let qq = dietsAndTitleFilter.sort((a, b) => b.title.localeCompare(a.title))
       toShow = qq
     }
-  } 
+  }   
 
   Promise.all([onDietAndTitleFilter()])
   .then(onHealthLevelFilter())
   .then(onSortNameFilter())
+
   
-  
- 
   return isLoading.main ? 
     (<div className="loading">Loading...</div>) :
     (
@@ -158,7 +185,7 @@ function MainPage() {
         <Route exact path="/" render={ () => (<Paginate />)} /> 
         <Route exact path="/" render={ () => (<Cards toShow={toShow}  />) } />
         <Route exact path="/:foodId" render={() => (<Detail onFilterID={onFilterID} />)}/>
-        <Route exact path="/create" render={() => (<Form GetAfterCreated={GetAfterCreated} />)}/>
+        <Route exact path="/create" render={() => (<Form GetAfterCreated={GetAfterCreated} parsedArr={parsedArr} />)}/>
         <Route exact path="/about" render={ () => (<About />)} /> 
       </div>
     )

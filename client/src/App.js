@@ -8,8 +8,8 @@ export default function App() {
   const showMain = useSelector( state => state.showMain )
   return (
     <div className='main'>
-      {/* { showMain ? <MainPage /> : <MainPage /> } */}
-      { showMain ? <MainPage /> : <LandingPage />}
+      { showMain ? <MainPage /> : <MainPage /> }
+      {/* { showMain ? <MainPage /> : <LandingPage />} */}
     </div>
   )
 }
