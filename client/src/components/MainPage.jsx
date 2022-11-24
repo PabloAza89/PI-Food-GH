@@ -10,21 +10,12 @@ import Form from "./Form.jsx";
 import About from "./About.jsx";
 import toAvoidKey from '../db/toAvoidKey';
 import recipes from '../db/recipes';
-import user from '../db/user';
-import { addNew , getNew } from '../actions';
 
 function MainPage() {
 
-
-
   const value = useSelector((state) => state.addNew);
 
-
-
-
-
-
-  let parsedArr = toAvoidKey.results.map(e => {
+  const parsedArr = toAvoidKey.results.map(e => {
     return {
         id: e.id,
         title: e.title,
@@ -58,23 +49,15 @@ function MainPage() {
   const [foods, setFoods] = useState([]); // ALL MAIN FOODS
   const [diets, setDiets] = useState([]); // ALL MAIN DIETS
 
-  
-
-
- useEffect(() => {
-    //if(isLoading) {   
-      
-      setFoods((value).concat(parsedArr))
-      setDiets(recipes)   
-      setIsLoading(isLoading, isLoading.main = false)
-   // }  
-  }, [value]); // [] -> MEANS RUN ONCE !
-
+  useEffect(() => {       
+    setFoods((value).concat(parsedArr))
+    setDiets(recipes)   
+    setIsLoading(isLoading, isLoading.main = false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoading, value]); // [] -> MEANS RUN ONCE !
   
   let dietsAndTitleFilter = [] // FIRST INSTANCE ARRAY TO FILTER: 1º DIETS --> 2º TITLE
   let toShow = [] // ARRAY SORTED BY HEALTH LEVEL OR A-Z TO SHOW
- 
-  
 
   const [dietName, setDietName] = useState({ 
     name: "All Diets", // FIRST INSTANCE DEFAULT VALUE
@@ -127,7 +110,6 @@ function MainPage() {
       }
     } else {
       if (titleMatch.name === "") {
-        console.log("DIET NAME", dietName.name)
         let qq = foods.filter(e => e.diets.includes(dietName.name))
         dietsAndTitleFilter = qq
       } else {
@@ -185,7 +167,7 @@ function MainPage() {
         <Route exact path="/" render={ () => (<Paginate />)} /> 
         <Route exact path="/" render={ () => (<Cards toShow={toShow}  />) } />
         <Route exact path="/:foodId" render={() => (<Detail onFilterID={onFilterID} />)}/>
-        <Route exact path="/create" render={() => (<Form GetAfterCreated={GetAfterCreated} parsedArr={parsedArr} />)}/>
+        <Route exact path="/create" render={() => (<Form GetAfterCreated={GetAfterCreated} />)}/>
         <Route exact path="/about" render={ () => (<About />)} /> 
       </div>
     )

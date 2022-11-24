@@ -3,11 +3,9 @@ import '../styles/Cards.css';
 import Card from './Card.jsx';
 import { useSelector , useDispatch } from 'react-redux';
 import { setAllIndexes } from '../actions';
-//import recipes from '../db/recipes';
 
 export default function Cards({ toShow }) {
-  
-console.log("TO SHOW CARDS", toShow)
+
   const indexChoosen = useSelector( state => state.indexChoosen )
 
   const dispatch = useDispatch()  

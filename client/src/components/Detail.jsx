@@ -10,8 +10,6 @@ import logo from "../images/logo.png";
 export default function Detail({onFilterID}) {
 
     let arrImages = [noImage1, noImage2, noImage3]
-    
-    let randomNumber = Math.floor(Math.random() * 3) // BETWEEN 0 AND 2
 
     var params = useParams()
     
@@ -34,7 +32,7 @@ export default function Detail({onFilterID}) {
                         </Link>
                     </div>
                     <div className="main-upper-right">
-                        <img className="image-detail" src={food.image ? food.image : arrImages[randomNumber]} alt=""></img>
+                        <img className="image-detail" src={food.image.length > 1 ? food.image : arrImages[food.image]} alt=""></img>
                     </div>
                 </div>
                 <div className="main-lower">

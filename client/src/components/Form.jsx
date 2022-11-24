@@ -4,17 +4,16 @@ import "../styles/Form.css";
 import noImage1 from "../images/noImage1.jpg";
 import logo from "../images/logo.png";
 import { Link } from "react-router-dom";
-import { addNew , getNew } from '../actions';
-import user from '../db/user';
+import { addNew } from '../actions';
 
-export default function Form({ GetAfterCreated , parsedArr }) {
+export default function Form({ GetAfterCreated }) {
 
   const dispatch = useDispatch() 
   
   const [showAlert, setShowAlert] = useState(false)
   const [firstInstance, setFirstInstance] = useState(false)
 
-  const [created, setCreated] = useState(0)
+  let [created, setCreated] = useState(0)
   const [dietSelected, setDietSelected] = useState([])
   let uniqueNamesDiets = Array.from(new Set(dietSelected));
 
@@ -60,20 +59,20 @@ export default function Form({ GetAfterCreated , parsedArr }) {
 
    const handleSubmit = async (e) => {
     e.preventDefault();
-    if (created === 0) {      
-      dispatch(addNew({
-          "title": title,
-          "diets": uniqueNamesDiets,
-          "healthScore": healthScore,
-          "summary": summary,
-          "analyzedInstructions": analyzedInstructions       
-    }))
-      setCreated(1)
-    } else {
-      setShowAlert(true)
-      
-    }
-    
+      if (created === 0) {      
+        dispatch(addNew({
+            "id": Math.floor(100000 + Math.random() * 900000),
+            "title": title,
+            "diets": uniqueNamesDiets,
+            "healthScore": healthScore,
+            "summary": summary,
+            "analyzedInstructions": analyzedInstructions,
+            "image": Math.floor(Math.random() * 3)
+      }))
+        setCreated(1)
+      } else {
+        setShowAlert(true)
+      }
  };
 
   function validateTitle(value) {
@@ -129,7 +128,6 @@ export default function Form({ GetAfterCreated , parsedArr }) {
     })
   }
   
-
   return !firstInstance ?
     (
       <div className="form-body">
@@ -179,7 +177,7 @@ export default function Form({ GetAfterCreated , parsedArr }) {
                               })}
           </div>
           <input id="submmitButton" type="button" disabled={handleSubmitButton()} onClick={(event) => setFirstInstance(true) + handleSubmit(event)} value="CREATE !" />
-          <input id="createNewButton" type="submit" onClick={() => handleNewRecipe() + createHandler() + setFirstInstance(false)} value="CREATE NEW RECIPE!" />  
+          <input id="createNewButton" type="button" onClick={() => handleNewRecipe() + createHandler() + setFirstInstance(false)} value="CREATE NEW RECIPE!" />  
           {[error.title , error.health.one, error.health.two ,  error.summary , error.instructions].map(e => (
             e?<span key={e} className="alert">{e}</span>:null
           ))}
