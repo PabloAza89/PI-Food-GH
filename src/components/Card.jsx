@@ -11,10 +11,10 @@ export default function Card({ id, image, title, healthScore , diets, dishTypes 
 
     return (
         <div className="card">
-            <Link to={`${id}`}>
+            <Link to={`/PI-Food-GH/${id}`}>
                 <img className="image" src={image.length > 1 ? image : arrImages[image] } alt=""></img>
              </Link>
-            <Link to={`${id}`} className="title"> 
+            <Link to={`/PI-Food-GH/${id}`} className="title"> 
                 <p className="card-text"><b className="title">{title}</b></p> 
             </Link>
             <div >

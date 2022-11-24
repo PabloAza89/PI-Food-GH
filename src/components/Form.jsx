@@ -131,10 +131,10 @@ export default function Form({ GetAfterCreated }) {
   return !firstInstance ?
     (
       <div className="form-body">
-        <Link  id="iconImageDiv"  to="/" >
+        <Link  id="iconImageDiv"  to="/PI-Food-GH" >
           <img onClick={() => GetAfterCreated()} className="iconImageForm" src={logo} alt=""></img>
         </Link>
-        <Link  id="iconText" to="/">
+        <Link  id="iconText" to="/PI-Food-GH">
           <h2 onClick={() => GetAfterCreated()} >Go Back !</h2> 
         </Link>
         <form className="form" onSubmit={handleSubmit}>        

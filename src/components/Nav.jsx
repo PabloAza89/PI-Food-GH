@@ -35,11 +35,11 @@ export default function Cards({diets , handleTitleMatchChange , handleDietNameCh
   return (    
    <div className='main-nav-div'>
       <div className="main-left">
-        <Link className="iconImage" to="/">
+        <Link className="iconImage" to="/PI-Food-GH">
           <img  className="iconImage" src={logo} alt=""></img>
         </Link>
       </div>
-      <Link id="iconText" to="/">
+      <Link id="iconText" to="/PI-Food-GH">
         <h2>Foodify !</h2>
       </Link>
       <div className="main-right">
@@ -56,8 +56,8 @@ export default function Cards({diets , handleTitleMatchChange , handleDietNameCh
               type="submit" value="SEARCH !"
             />
           </form>
-          <Link to="/create"> <button className="button">CREATE RECIPE !</button> </Link>
-          <Link to="/about"> <button className="button">ABOUT !</button> </Link>
+          <Link to="/PI-Food-GH/create"> <button className="button">CREATE RECIPE !</button> </Link>
+          <Link to="/PI-Food-GH/about"> <button className="button">ABOUT !</button> </Link>
         </div>
         <div className="right-lower">
           <select  onChange={(event) => handleDietNameChange(event.target.value) + dispatch(setIndexChoosen(0)) + defaultPaginateColor()  } >          

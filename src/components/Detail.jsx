@@ -24,10 +24,10 @@ export default function Detail({onFilterID}) {
             <div className="detail-body">
                 <div className="main-upper">
                     <div className="main-upper-left">
-                        <Link id="iconImageDiv" to="/">
+                        <Link id="iconImageDiv" to="/PI-Food-GH">
                             <img className="iconImageForm" src={logo} alt=""></img>
                         </Link>
-                        <Link id="iconText" to="/">
+                        <Link id="iconText" to="/PI-Food-GH">
                             <h2>Go Back !</h2> 
                         </Link>
                     </div>
@@ -62,7 +62,7 @@ export default function Detail({onFilterID}) {
         return (
                 <div className="alertButtonBG">
                     <span>THERE ARE NO MATCHING RECIPES WITH THAT ID !</span>
-                    <Link id="alertTextLink" to="/" >
+                    <Link id="alertTextLink" to="/PI-Food-GH/" >
                         <button className='alertButton'><b className='innerText' >GO BACK !</b></button>
                     </Link>
                 </div>

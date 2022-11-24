@@ -160,15 +160,15 @@ function MainPage() {
     (<div className="loading">Loading...</div>) :
     (
       <div className='mainPage'>   
-        {<Route exact path="/" render={ () => (<Nav diets={diets} foods={foods} 
+        {<Route exact path="/PI-Food-GH" render={ () => (<Nav diets={diets} foods={foods} 
           handleDietNameChange={handleDietNameChange} handleHealthLevelChange={handleHealthLevelChange} 
           handleSortNameChange={handleSortNameChange} handleTitleMatchChange={handleTitleMatchChange}  />)}
         />} 
-        <Route exact path="/" render={ () => (<Paginate />)} /> 
-        <Route exact path="/" render={ () => (<Cards toShow={toShow}  />) } />
-        <Route exact path="/:foodId" render={() => (<Detail onFilterID={onFilterID} />)}/>
-        <Route exact path="/create" render={() => (<Form GetAfterCreated={GetAfterCreated} />)}/>
-        <Route exact path="/about" render={ () => (<About />)} /> 
+        <Route exact path="/PI-Food-GH" render={ () => (<Paginate />)} /> 
+        <Route exact path="/PI-Food-GH" render={ () => (<Cards toShow={toShow}  />) } />
+        <Route exact path="/PI-Food-GH/:foodId" render={() => (<Detail onFilterID={onFilterID} />)}/>
+        <Route exact path="/PI-Food-GH/create" render={() => (<Form GetAfterCreated={GetAfterCreated} />)}/>
+        <Route exact path="/PI-Food-GH/about" render={ () => (<About />)} /> 
       </div>
     )
 }
