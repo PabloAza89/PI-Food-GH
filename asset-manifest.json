@@ -1,0 +1,27 @@
+{
+  "files": {
+    "main.css": "/PI-Food-GH/static/css/main.8a478578.chunk.css",
+    "main.js": "/PI-Food-GH/static/js/main.3ee49867.chunk.js",
+    "main.js.map": "/PI-Food-GH/static/js/main.3ee49867.chunk.js.map",
+    "runtime-main.js": "/PI-Food-GH/static/js/runtime-main.f8bcc66e.js",
+    "runtime-main.js.map": "/PI-Food-GH/static/js/runtime-main.f8bcc66e.js.map",
+    "static/js/2.d8b206a0.chunk.js": "/PI-Food-GH/static/js/2.d8b206a0.chunk.js",
+    "static/js/2.d8b206a0.chunk.js.map": "/PI-Food-GH/static/js/2.d8b206a0.chunk.js.map",
+    "static/js/3.e6d530d9.chunk.js": "/PI-Food-GH/static/js/3.e6d530d9.chunk.js",
+    "static/js/3.e6d530d9.chunk.js.map": "/PI-Food-GH/static/js/3.e6d530d9.chunk.js.map",
+    "index.html": "/PI-Food-GH/index.html",
+    "static/css/main.8a478578.chunk.css.map": "/PI-Food-GH/static/css/main.8a478578.chunk.css.map",
+    "static/js/2.d8b206a0.chunk.js.LICENSE.txt": "/PI-Food-GH/static/js/2.d8b206a0.chunk.js.LICENSE.txt",
+    "static/media/LandingPage.css": "/PI-Food-GH/static/media/landingBG.1e75d93d.jpg",
+    "static/media/logo.8725c9c8.png": "/PI-Food-GH/static/media/logo.8725c9c8.png",
+    "static/media/noImage1.7cc75e3d.jpg": "/PI-Food-GH/static/media/noImage1.7cc75e3d.jpg",
+    "static/media/noImage2.6483570c.jpg": "/PI-Food-GH/static/media/noImage2.6483570c.jpg",
+    "static/media/noImage3.48d84a8d.jpg": "/PI-Food-GH/static/media/noImage3.48d84a8d.jpg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.f8bcc66e.js",
+    "static/js/2.d8b206a0.chunk.js",
+    "static/css/main.8a478578.chunk.css",
+    "static/js/main.3ee49867.chunk.js"
+  ]
+}
