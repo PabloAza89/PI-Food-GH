@@ -60,6 +60,16 @@ const reducer = (state = initialState, action: {type: string; payload: any}) => 
         ...state,
         allRecipesLoaded: action.payload
       };
+    case 'SORT_A_TO_Z':
+      return {
+        ...state,
+        allRecipesLoaded: action.payload
+      };
+    case 'SORT_Z_TO_A':
+      return {
+        ...state,
+        allRecipesLoaded: action.payload
+      };
     case 'SET_SHOW_MAIN':
       return {
         ...state,

@@ -11,6 +11,18 @@ export function allRecipesLoaded(payload: any) {
   }
 };
 
+export function sortAtoZ() {
+  return {
+    type: 'SORT_A_TO_Z',
+  }
+};
+
+export function sortZtoA() {
+  return {
+    type: 'SORT_Z_TO_A',
+  }
+};
+
 export function setShowMain(payload: any) {
   return {
     type: 'SET_SHOW_MAIN',

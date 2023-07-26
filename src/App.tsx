@@ -31,7 +31,7 @@ import Nav from "./components/NavBar/NavBar";
 import Form from "./components/Form.jsx";
 import About from "./components/About.jsx";
 import toAvoidKey from './db/toAvoidKey.json';
-import diets from './db/diets.json';
+import dietss from './db/diets.json';
 import { useDispatch } from 'react-redux';
 import { fetchRecipesFromAPI, allRecipesLoaded } from './actions';
 import store from './store/store';
@@ -253,7 +253,8 @@ function App() {
     }
   
   
-    
+    console.log("other", toAvoidKey)
+    //console.log("other 2", dietss)
 
     return (
       <Box className='mainPage'>
