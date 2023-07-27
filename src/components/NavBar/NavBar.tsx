@@ -4,40 +4,49 @@ import { Link } from "react-router-dom";
 import logo from "../../images/logo.png";
 import { useDispatch, useSelector } from 'react-redux';
 import { Box, Dialog, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material/';
-import { setIndexChoosen } from '../../actions';
+import { 
+  setIndexChoosen, sortMoreHealthy, sortLessHealthy,
+  sortAtoZ, sortZtoA, sortByDiet
+} from '../../actions';
 import dietss from '../../db/diets.json';
 //import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 interface NavBarI {
-  diets:any , /* foods:any, */ handleTitleMatchChange:any , handleDietNameChange:any, handleHealthLevelChange:any, handleSortNameChange:any
+  handleTitleMatchChange: any,
 }
 
-export default function Nav({diets , /* foods, */ handleTitleMatchChange , handleDietNameChange, handleHealthLevelChange, handleSortNameChange}: NavBarI) {
+export default function Nav({ handleTitleMatchChange }: NavBarI) {
 
   const dispatch = useDispatch()
 
   const allRecipesLoaded = useSelector((state: {allRecipesLoaded: boolean}) => state.allRecipesLoaded)
 
   const [healthLevel, setHealthLevel] = useState<string>('');
-  const [sortAZ, setSortAZ] = useState<string>('');
+  const [sortAlpha, setSortAlpha] = useState<string>('');
   const [typeOfDiet, setTypeOfDiet] = useState<string>('All Diets');
 
-  const healthLevelHandler = (event: SelectChangeEvent) => {
-    setSortAZ('' as string);
-    setHealthLevel(event.target.value as string);
+  const healthLevelHandler = (e: SelectChangeEvent) => {
+    setSortAlpha('' as string);
+    setHealthLevel(e.target.value as string);
+    if (e.target.value === "More Healthy") dispatch(sortMoreHealthy())
+    if (e.target.value === "Less Healthy") dispatch(sortLessHealthy())
   };
 
-  const sortAZHandler = (event: SelectChangeEvent) => {
+  const sortAlphaHandler = (e: SelectChangeEvent) => {
     setHealthLevel('' as string);
-    setSortAZ(event.target.value as string);
+    setSortAlpha(e.target.value as string);
+    if (e.target.value === "A-Z") dispatch(sortAtoZ())
+    if (e.target.value === "Z-A") dispatch(sortZtoA())
   };
 
-  const typeOfDietHandler = (event: SelectChangeEvent) => {
-    setTypeOfDiet(event.target.value as string);
+  const typeOfDietHandler = (e: SelectChangeEvent) => {
+    setTypeOfDiet(e.target.value as string);
+    dispatch(sortByDiet(e.target.value))
+    //console.log("target", e.target.value)
   };
 
-  let [healthSelected, setHealthSelected] = useState<any>("")
-  let [aZSelected, setAZSelected] = useState<any>("")
+  //let [healthSelected, setHealthSelected] = useState<any>("")
+  //let [aZSelected, setAZSelected] = useState<any>("")
 
   const [foodSearch, setFoodSearch] = useState("");
 
@@ -48,10 +57,11 @@ export default function Nav({diets , /* foods, */ handleTitleMatchChange , handl
 
 
   //console.log("test", allRecipesLoaded)
-  console.log("test", healthLevel)
+  //console.log("test", healthLevel)
   //console.log("AA", diets.map((e:any) => e.title))
   //console.log("AA", JSON.parse(diets))
-  console.log("AA", dietss)
+  //console.log("AA", dietss)
+  //console.log("target", typeOfDiet)
   
   
 
@@ -121,11 +131,11 @@ export default function Nav({diets , /* foods, */ handleTitleMatchChange , handl
             <Select
               sx={{ width: '150px' }}
               label="Sort alphabetically"
-              value={sortAZ}
-              onChange={sortAZHandler}
+              value={sortAlpha}
+              onChange={sortAlphaHandler}
             >
-              <MenuItem value={"More Healthy"}>A-Z</MenuItem>
-              <MenuItem value={"Less Healthy"}>Z-A</MenuItem>
+              <MenuItem value={"A-Z"}>A-Z</MenuItem>
+              <MenuItem value={"Z-A"}>Z-A</MenuItem>
             </Select>
           </FormControl>
         </div>

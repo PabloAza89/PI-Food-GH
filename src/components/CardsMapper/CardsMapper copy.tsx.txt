@@ -1,9 +1,8 @@
-import * as s from  '../../styles/CardsMapperSX';
+import '../../styles/Cards.css';
 import Card from '../Card/Card';
 import { useSelector , useDispatch } from 'react-redux';
 import { setAllIndexes } from '../../actions';
 import store from '../../store/store';
-import { Box } from '@mui/material';
 
 export default function Cards() {
 
@@ -23,8 +22,7 @@ export default function Cards() {
   }
 
   //const toShow = useSelector((state: {allRecipes: recipesI[]}) => state.allRecipes )
-  const toShow = useSelector((state: { toShow: recipesI[] }) => state.toShow)
-  //const toShow = store.getState().allRecipes
+  const toShow = store.getState().allRecipes
 
   let arraySplitedBy9: any[] = []
 
@@ -56,21 +54,49 @@ export default function Cards() {
 
   return toShow[0] !== undefined ?
   (
-    <Box sx={s.background}>
-      {arraySplitedBy9[0]!.map((e:any) => <Card
-      key={e.id}
-      id={e.id}
-      title={e.title}
-      /* summary={e.summary} */
-      healthScore={e.healthScore}
-      /* analyzedInstructions={e.analyzedInstructions} */
-      diets={e.diets}
-      image={e.image}
-      dishTypes={e.dishTypes}
-      /> )}
-    </Box>
+    <div>
+      <div className='cards'>
+       {arr0to2!.map((e:any) => <Card
+        key={e.id}
+        id={e.id}
+        title={e.title}
+        /* summary={e.summary} */
+        healthScore={e.healthScore}
+        /* analyzedInstructions={e.analyzedInstructions} */
+        diets={e.diets}
+        image={e.image}
+        dishTypes={e.dishTypes}
+        /> )}
+      </div>
+      <div className='cards'>
+        {arr3to5!.map((e:any) => <Card
+          key={e.id}
+          id={e.id}
+          title={e.title}
+          /* summary={e.summary} */
+          healthScore={e.healthScore}
+          /* analyzedInstructions={e.analyzedInstructions} */
+          diets={e.diets}
+          image={e.image}
+          dishTypes={e.dishTypes}
+          /> )}
+      </div>
+      <div className='cards'>
+        {arr6to8!.map((e:any) => <Card
+          key={e.id}
+          id={e.id}
+          title={e.title}
+          /* summary={e.summary} */
+          healthScore={e.healthScore}
+          /* analyzedInstructions={e.analyzedInstructions} */
+          diets={e.diets}
+          image={e.image}
+          dishTypes={e.dishTypes}
+          /> )}
+      </div>
+    </div>
   )
   :
-  (<Box sx={s.notFound} >No recipe was found !</Box>)
+  (<div className="notFound">No recipe was found !</div>)
 
 }

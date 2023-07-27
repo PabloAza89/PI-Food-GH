@@ -13,7 +13,8 @@ interface recipesI {
 }
 
 interface initialStateI {
-  allRecipes: recipesI[]
+  allRecipes: recipesI[],
+  toShow: recipesI[],
   allRecipesLoaded: boolean,
   showMain: boolean,
   indexChoosen: number,
@@ -23,6 +24,7 @@ interface initialStateI {
 
 const initialState: initialStateI = {
   allRecipes: [],
+  toShow: [],
   allRecipesLoaded: false,
   showMain: false,
   indexChoosen: 0,
@@ -53,12 +55,27 @@ const reducer = (state = initialState, action: {type: string; payload: any}) => 
       ))
       return {
         ...state,
-        allRecipes: parsedArr
+        allRecipes: parsedArr,
+        toShow: parsedArr
       };
     case 'ALL_RECIPES_LOADED':
       return {
         ...state,
         allRecipesLoaded: action.payload
+      };
+    case 'SORT_BY_DIET':
+      const copyArrayDiet = [...state.allRecipes]
+      let arrayToShow: recipesI[] = []
+      if (action.payload === "All Diets") arrayToShow = copyArrayDiet
+      else {
+         //let qq = copyArrayDiet.filter((e:any) => e.diets.includes(action.payload))
+         //arrayToShow = qq
+        arrayToShow = copyArrayDiet.filter((e:any) => e.diets.includes(action.payload))
+        //arrayToShow = qq
+      }
+      return {
+        ...state,
+        toShow: arrayToShow
       };
     case 'SORT_MORE_HEALTHY':
       const copyArrayMoreHealthy = [...state.allRecipes]
@@ -75,14 +92,18 @@ const reducer = (state = initialState, action: {type: string; payload: any}) => 
         allRecipes: sortedLess
       };
     case 'SORT_A_TO_Z':
+      const copyArrayAtoZ = [...state.allRecipes]
+      let sortedAZ = copyArrayAtoZ.sort((a, b) => a.title.localeCompare(b.title))
       return {
         ...state,
-        allRecipes: action.payload
+        allRecipes: sortedAZ
       };
     case 'SORT_Z_TO_A':
+      const copyArrayZtoA = [...state.allRecipes]
+      let sortedZA = copyArrayZtoA.sort((a, b) => b.title.localeCompare(a.title))
       return {
         ...state,
-        allRecipesLoaded: action.payload
+        allRecipes: sortedZA
       };
     case 'SET_SHOW_MAIN':
       return {

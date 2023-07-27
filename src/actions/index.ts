@@ -11,6 +11,13 @@ export function allRecipesLoaded(payload: any) {
   }
 };
 
+export function sortByDiet(payload: any) {
+  return {
+    type: 'SORT_BY_DIET',
+    payload: payload
+  }
+};
+
 export function sortMoreHealthy() {
   return {
     type: 'SORT_MORE_HEALTHY',
