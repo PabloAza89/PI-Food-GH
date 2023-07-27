@@ -1,9 +1,3 @@
-// import React from 'react';
-// import MainPage from './components/MainPage/MainPage';
-// import { useSelector } from 'react-redux';
-// import LandingPage from './components/LandingPage';
-
-// export default function App() {
 
 //   //const showMain = useSelector( state => state.showMain )
 //   // return (
@@ -14,20 +8,15 @@
 //   //   </div>
 //   // )
 
-
-
-
-// }
-
 import { useState, useEffect } from "react";
 import { useSelector } from 'react-redux';
 import { Route, Routes } from "react-router-dom";
 import './App.css';
 import { Box } from '@mui/material';
-import Cards from "./components/Cards.jsx";
+import Cards from "./components/CardsMapper/CardsMapper";
 import Detail from "./components/Detail.jsx";
 import Paginate from "./components/Paginate.jsx";
-import Nav from "./components/NavBar/NavBar";
+import NavBar from "./components/NavBar/NavBar";
 import Form from "./components/Form.jsx";
 import About from "./components/About.jsx";
 import toAvoidKey from './db/toAvoidKey.json';
@@ -45,8 +34,6 @@ function App() {
   //const english = useSelector((state: {english:boolean}) => state.english)
   const dispatch = useDispatch()
 
-  //let parsedArr = useSelector((state: {getAllRecipes: recipesI[]}) => state.getAllRecipes)
-
   interface recipesI {
     id: any,
     title: any,
@@ -58,7 +45,10 @@ function App() {
     dishTypes: any,
   }
 
-  let parsedArr: recipesI[] = []
+  // let parsedArr: recipesI[] = []
+
+  let parsedArr = useSelector((state: {getAllRecipes: recipesI[]}) => state.getAllRecipes)
+  
 
   const getActualState = async () => {
     parsedArr = store.getState().allRecipes
@@ -86,14 +76,14 @@ function App() {
   const [foods, setFoods] = useState<any>([]); // ALL MAIN FOODS
   const [diets, setDiets] = useState<any>([]); // ALL MAIN DIETS
 
-  useEffect(() => {
-    //setFoods((value).concat(parsedArr))
-    setFoods([/* value,  */...parsedArr])
-    //setDiets(diets)
-    setIsLoading({...isLoading, main :false})
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  //}, [isLoading, value]); // [] -> MEANS RUN ONCE !
-}, []); // [] -> MEANS RUN ONCE !
+//   useEffect(() => {
+//     //setFoods((value).concat(parsedArr))
+//     setFoods([/* value,  */...parsedArr])
+//     //setDiets(diets)
+//     setIsLoading({...isLoading, main :false})
+//     // eslint-disable-next-line react-hooks/exhaustive-deps
+//   //}, [isLoading, value]); // [] -> MEANS RUN ONCE !
+// }, []); // [] -> MEANS RUN ONCE !
 
   let dietsAndTitleFilter: any[] = [] // FIRST INSTANCE ARRAY TO FILTER: 1º DIETS --> 2º TITLE
   let toShow: any[] = [] // ARRAY SORTED BY HEALTH LEVEL OR A-Z TO SHOW
@@ -194,12 +184,7 @@ function App() {
   // .then(() => onHealthLevelFilter())
   // .then(() => onSortNameFilter())
 
-  //BBB()
-  //console.log("este", parsedArr)  
-  //store.getState().numberTimer
-  //console.log("este otro", store.getState().recipesFromAPI)
- // console.log("este", toAvoidKey)
-     
+      
     // ALL DIETS
     // "All Diets"
     // "Gluten Free"
@@ -216,36 +201,9 @@ function App() {
     // Promise.all([dispatch(fetchRecipesFromAPI())])
     // .then(() => getActualState())
 
-    
-
-
-    // useEffect(() => {
-    //   // dispatch(fetchRecipesFromAPI()) // FIRST STORE IN REDUX ALL RECIPES
-    //   // getActualState() // THEN GET THE STATE
-    //   //dispatch(allRecipesLoaded(true))
-    //   //console.log("este", parsedArr)
-    // //},[dispatch, getActualState, parsedArr])
-
-      
-      
-
-    // },[dispatch,getActualState])
-
-    //Promise.all([dispatch(fetchRecipesFromAPI()), getActualState()])
-      //.then(() => getActualState())
-    
-    // let qq =  new Promise((resolve, reject) => {
-    //   setTimeout(() => {
-    //     resolve(dispatch(fetchRecipesFromAPI()));
-    //   }, 0);
-
-    // })    
-    // qq.then(() => getActualState())
-
-
     try {
       dispatch(fetchRecipesFromAPI());
-      getActualState();
+      //getActualState();
       dispatch(allRecipesLoaded(true))
 
     } catch(e) {
@@ -260,16 +218,19 @@ function App() {
       <Box className='mainPage'>
         <Routes>
           <Route path="/" element={<>
-            <Nav
+            <NavBar
               diets={diets}
-              foods={foods}
+              //foods={foods}
               handleDietNameChange={handleDietNameChange}
               handleHealthLevelChange={handleHealthLevelChange}
               handleSortNameChange={handleSortNameChange}
               handleTitleMatchChange={handleTitleMatchChange}
             />
             <Paginate />
-            <Cards toShow={parsedArr}  />
+            {/* <Cards toShow={parsedArr}  /> */}
+            {/* <Cards toShow={foods}  /> */}
+            {/* <Cards toShow={parsedArr}  /> */}
+            <Cards />
           </>}/>
           <Route path="/:foodId" element={<>
             <Detail onFilterID={onFilterID} />

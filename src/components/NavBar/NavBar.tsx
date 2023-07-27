@@ -9,10 +9,10 @@ import dietss from '../../db/diets.json';
 //import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 interface NavBarI {
-  diets:any , foods:any, handleTitleMatchChange:any , handleDietNameChange:any, handleHealthLevelChange:any, handleSortNameChange:any
+  diets:any , /* foods:any, */ handleTitleMatchChange:any , handleDietNameChange:any, handleHealthLevelChange:any, handleSortNameChange:any
 }
 
-export default function Nav({diets , foods, handleTitleMatchChange , handleDietNameChange, handleHealthLevelChange, handleSortNameChange}: NavBarI) {
+export default function Nav({diets , /* foods, */ handleTitleMatchChange , handleDietNameChange, handleHealthLevelChange, handleSortNameChange}: NavBarI) {
 
   const dispatch = useDispatch()
 
@@ -27,7 +27,6 @@ export default function Nav({diets , foods, handleTitleMatchChange , handleDietN
     setHealthLevel(event.target.value as string);
   };
 
-  
   const sortAZHandler = (event: SelectChangeEvent) => {
     setHealthLevel('' as string);
     setSortAZ(event.target.value as string);
@@ -36,9 +35,6 @@ export default function Nav({diets , foods, handleTitleMatchChange , handleDietN
   const typeOfDietHandler = (event: SelectChangeEvent) => {
     setTypeOfDiet(event.target.value as string);
   };
-
-
-  
 
   let [healthSelected, setHealthSelected] = useState<any>("")
   let [aZSelected, setAZSelected] = useState<any>("")
@@ -128,8 +124,8 @@ export default function Nav({diets , foods, handleTitleMatchChange , handleDietN
               value={sortAZ}
               onChange={sortAZHandler}
             >
-              <MenuItem value={"More Healthy"}>More Healthy</MenuItem>
-              <MenuItem value={"Less Healthy"}>Less Healthy</MenuItem>
+              <MenuItem value={"More Healthy"}>A-Z</MenuItem>
+              <MenuItem value={"Less Healthy"}>Z-A</MenuItem>
             </Select>
           </FormControl>
         </div>

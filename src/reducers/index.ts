@@ -60,10 +60,24 @@ const reducer = (state = initialState, action: {type: string; payload: any}) => 
         ...state,
         allRecipesLoaded: action.payload
       };
+    case 'SORT_MORE_HEALTHY':
+      const copyArrayMoreHealthy = [...state.allRecipes]
+      let sortedMore = copyArrayMoreHealthy.sort((a,b) => b.healthScore - a.healthScore);
+      return {
+        ...state,
+        allRecipes: sortedMore
+      };
+    case 'SORT_LESS_HEALTHY':
+      const copyArrayLessHealthy = [...state.allRecipes]
+      let sortedLess = copyArrayLessHealthy.sort((a,b) => a.healthScore - b.healthScore);
+      return {
+        ...state,
+        allRecipes: sortedLess
+      };
     case 'SORT_A_TO_Z':
       return {
         ...state,
-        allRecipesLoaded: action.payload
+        allRecipes: action.payload
       };
     case 'SORT_Z_TO_A':
       return {

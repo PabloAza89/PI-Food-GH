@@ -1,18 +1,33 @@
 import React from "react";
-import '../styles/Cards.css';
-import Card from './Card.jsx';
+import '../../styles/Cards.css';
+import Card from '../Card/Card';
 import { useSelector , useDispatch } from 'react-redux';
-import { setAllIndexes } from '../actions';
+import { setAllIndexes } from '../../actions';
+import store from '../../store/store';
 
-export default function Cards({ toShow }) {
+export default function Cards(/* { toShow } */) {
 
-  const indexChoosen = useSelector( state => state.indexChoosen )
+  const indexChoosen = useSelector((state: {indexChoosen: number}) => state.indexChoosen )
 
-  const dispatch = useDispatch()  
+  const dispatch = useDispatch()
 
-  let arraySplitedBy9 = []
-  
-  let numberIndexToDisplay = indexChoosen  
+  interface recipesI {
+    id: any,
+    title: any,
+    diets: any,
+    healthScore: any,
+    summary: any,
+    analyzedInstructions: any,
+    image: any,
+    dishTypes: any,
+  }
+
+  //const toShow = useSelector((state: {allRecipes: recipesI[]}) => state.allRecipes )
+  const toShow = store.getState().allRecipes
+
+  let arraySplitedBy9: any[] = []
+
+  let numberIndexToDisplay = indexChoosen
 
   function firstFuncToCall() {
     for (let i = 0; i < toShow.length; i += 9) {
@@ -35,12 +50,14 @@ export default function Cards({ toShow }) {
   secondFuncToCall()
 
   dispatch(setAllIndexes(arraySplitedBy9.length))
+
+  console.log("toShow", toShow)
   
   return toShow[0] !== undefined ?
   (
     <div>
       <div className='cards'>              
-       {arr0to2.map(e => <Card
+       {arr0to2?.map(e => <Card
         key={e.id}
         id={e.id}
         title={e.title}
@@ -53,7 +70,7 @@ export default function Cards({ toShow }) {
         /> )} 
       </div>
       <div className='cards'>
-        {arr3to5.map(e => <Card
+        {arr3to5?.map(e => <Card
           key={e.id}
           id={e.id}
           title={e.title}
@@ -66,7 +83,7 @@ export default function Cards({ toShow }) {
           /> )}
       </div>
       <div className='cards'>
-        {arr6to8.map(e => <Card
+        {arr6to8?.map(e => <Card
           key={e.id}
           id={e.id}
           title={e.title}
