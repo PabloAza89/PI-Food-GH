@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Box, Button, TextField, Dialog, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material/';
 import { 
   setIndexChoosen, sortMoreHealthy, sortLessHealthy,
-  sortAtoZ, sortZtoA, sortByDietAndText
+  sortAtoZ, sortZtoA, sortByDietAndText, filter
 } from '../../actions';
 import dietss from '../../db/diets.json';
 //import Select, { SelectChangeEvent } from '@mui/material/Select';
@@ -36,6 +36,20 @@ export default function Nav({ handleTitleMatchChange }: NavBarI) {
       diet: 'All Diets',
       text: ''
      }
+    )
+
+  interface entireFilterI {
+    diet: string,
+    text: string,
+    alphaOrHealthy: string,
+  }
+
+  const [entireFilter, setEntireFilter] = useState<entireFilterI>(
+    { 
+      diet: 'All Diets',
+      text: '',
+      alphaOrHealthy: '',
+      }
     )
 
   const healthLevelHandler = (e: SelectChangeEvent) => {
@@ -69,10 +83,15 @@ export default function Nav({ handleTitleMatchChange }: NavBarI) {
     //dispatch(setIndexChoosen(0))
   };
 
+  // useEffect(() => {
+  //   dispatch(sortByDietAndText(typeOfDietAndText))
+  //   dispatch(setIndexChoosen(0))
+  // },[dispatch,typeOfDietAndText])
+
   useEffect(() => {
-    dispatch(sortByDietAndText(typeOfDietAndText))
+    dispatch(filter(entireFilter))
     dispatch(setIndexChoosen(0))
-  },[dispatch,typeOfDietAndText])
+  },[ dispatch, entireFilter ])
 
   //let [healthSelected, setHealthSelected] = useState<any>("")
   //let [aZSelected, setAZSelected] = useState<any>("")
@@ -141,7 +160,8 @@ export default function Nav({ handleTitleMatchChange }: NavBarI) {
               //onChange={(e) => console.log(e.target.value)}
               /* onChange={(e) => setTextToFilter(e.target.value)} */
               //onChange={(e) => dietAndTextHandler({diet:typeOfDiet, text: e.target.value})}
-              onChange={(e) => setTypeOfDietAndText({...typeOfDietAndText, text: e.target.value})}
+              //onChange={(e) => setTypeOfDietAndText({...typeOfDietAndText, text: e.target.value})}
+              onChange={(e) => setEntireFilter({...entireFilter, text: e.target.value})}
             />
             <Button
               className={`buttonPos`}
@@ -159,11 +179,12 @@ export default function Nav({ handleTitleMatchChange }: NavBarI) {
             <Select
               sx={{ width: '150px' }}
               //value={typeOfDiet}
-              value={typeOfDietAndText.diet}
+              value={entireFilter.diet}
               /* onChange={typeOfDietHandler} */
               //onChange={(e) => console.log("AA",e.target.value)}
               //onChange={(e) => dietAndTextHandler({diet:e.target.value, text: textToFilter})}
-              onChange={(e) => setTypeOfDietAndText({...typeOfDietAndText, diet:e.target.value})}
+              //onChange={(e) => setTypeOfDietAndText({...typeOfDietAndText, diet:e.target.value})}
+              onChange={(e) => setEntireFilter({...entireFilter, diet:e.target.value})}
             >
               { dietss.map(e => {
                 return (
@@ -181,7 +202,8 @@ export default function Nav({ handleTitleMatchChange }: NavBarI) {
               sx={{ width: '150px' }}
               label="Sort by Healthy"
               value={healthLevel}
-              onChange={healthLevelHandler}
+              //onChange={healthLevelHandler}
+              onChange={(e) => {setEntireFilter({...entireFilter, alphaOrHealthy: e.target.value}); healthLevelHandler(e)}}
             >
               <MenuItem value={"More Healthy"}>More Healthy</MenuItem>
               <MenuItem value={"Less Healthy"}>Less Healthy</MenuItem>
@@ -192,8 +214,10 @@ export default function Nav({ handleTitleMatchChange }: NavBarI) {
             <Select
               sx={{ width: '150px' }}
               label="Sort alphabetically"
+              //value={sortAlpha}
               value={sortAlpha}
-              onChange={sortAlphaHandler}
+              //onChange={sortAlphaHandler}
+              onChange={(e) => {setEntireFilter({...entireFilter, alphaOrHealthy: e.target.value}); sortAlphaHandler(e)}}
             >
               <MenuItem value={"A-Z"}>A-Z</MenuItem>
               <MenuItem value={"Z-A"}>Z-A</MenuItem>

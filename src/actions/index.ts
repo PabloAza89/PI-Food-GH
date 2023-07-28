@@ -23,6 +23,19 @@ export function sortByDietAndText(payload: sortByDietAndTextI) {
   }
 };
 
+interface filterI {
+  diet: string,
+  text: string,
+  alphaOrHealthy: string,
+}
+
+export function filter(payload: filterI) {
+  return {
+    type: 'FILTER',
+    payload: payload
+  }
+};
+
 export function sortMoreHealthy() {
   return {
     type: 'SORT_MORE_HEALTHY',

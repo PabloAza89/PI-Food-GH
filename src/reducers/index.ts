@@ -64,17 +64,57 @@ const reducer = (state = initialState, action: {type: string; payload: any}) => 
         allRecipesLoaded: action.payload
       };
     case 'SORT_BY_DIET_AND_TEXT':
+      // const copyArrayDiet = [...state.allRecipes]
+      // let arrayToShow: recipesI[] = []
+      // if (action.payload.diet === "All Diets") {
+      //   arrayToShow = copyArrayDiet // DIETS FILTER
+      //   let qq = arrayToShow.filter((e:any) => e.title.toLowerCase().includes(action.payload.text.toLowerCase())) // THEN TEXT FILTER
+      //   arrayToShow = qq
+      // } else {
+      //   arrayToShow = copyArrayDiet.filter((e:any) => e.diets.includes(action.payload.diet)) // DIETS FILTER
+      //   let qq = arrayToShow.filter((e:any) => e.title.toLowerCase().includes(action.payload.text.toLowerCase())) // THEN TEXT FILTER
+      //   arrayToShow = qq
+      // }
+      return {
+        ...state,
+        //toShow: arrayToShow
+        toShow: state.toShow
+      };
+    case 'FILTER':
       const copyArrayDiet = [...state.allRecipes]
       let arrayToShow: recipesI[] = []
       if (action.payload.diet === "All Diets") {
         arrayToShow = copyArrayDiet // DIETS FILTER
-        let qq = arrayToShow.filter((e:any) => e.title.toLowerCase().includes(action.payload.text.toLowerCase())) // THEN TEXT FILTER
-        arrayToShow = qq
+        //let qq = arrayToShow.filter((e:any) => e.title.toLowerCase().includes(action.payload.text.toLowerCase())) // THEN TEXT FILTER
+        //arrayToShow = qq
+        arrayToShow = arrayToShow.filter((e:any) => e.title.toLowerCase().includes(action.payload.text.toLowerCase())) // THEN TEXT FILTER
+
+
+
       } else {
         arrayToShow = copyArrayDiet.filter((e:any) => e.diets.includes(action.payload.diet)) // DIETS FILTER
-        let qq = arrayToShow.filter((e:any) => e.title.toLowerCase().includes(action.payload.text.toLowerCase())) // THEN TEXT FILTER
-        arrayToShow = qq
+        //let qq = arrayToShow.filter((e:any) => e.title.toLowerCase().includes(action.payload.text.toLowerCase())) // THEN TEXT FILTER
+        //arrayToShow = qq
+        arrayToShow = arrayToShow.filter((e:any) => e.title.toLowerCase().includes(action.payload.text.toLowerCase())) // THEN TEXT FILTER
       }
+      switch (action.payload.alphaOrHealthy) {
+        case 'More Healthy': 
+          arrayToShow = arrayToShow.sort((a,b) => b.healthScore - a.healthScore);
+          break;
+        case 'Less Healthy': 
+          arrayToShow = arrayToShow.sort((a,b) => a.healthScore - b.healthScore);
+          break;
+        case 'A-Z': 
+          arrayToShow = arrayToShow.sort((a, b) => a.title.localeCompare(b.title))
+          break;
+        case 'Z-A': 
+          arrayToShow = arrayToShow.sort((a, b) => b.title.localeCompare(a.title))
+          break;
+
+      }
+
+      //arrayToShow = []
+
       return {
         ...state,
         toShow: arrayToShow
