@@ -52,7 +52,7 @@ export default function Cards() {
 
   dispatch(setAllIndexes(arraySplitedBy9.length))
 
-  console.log("toShow", toShow)
+  //console.log("toShow", toShow)
 
   return toShow[0] !== undefined ?
   (

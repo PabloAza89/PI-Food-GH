@@ -63,47 +63,72 @@ const reducer = (state = initialState, action: {type: string; payload: any}) => 
         ...state,
         allRecipesLoaded: action.payload
       };
+    case 'FILTER_BY_TEXT':
+      return {
+        ...state,
+        toShow: action.payload
+      };
     case 'SORT_BY_DIET':
-      const copyArrayDiet = [...state.allRecipes]
-      let arrayToShow: recipesI[] = []
-      if (action.payload === "All Diets") arrayToShow = copyArrayDiet
+      const copyArrayDiett = [...state.allRecipes]
+      let arrayToShoww: recipesI[] = []
+      if (action.payload === "All Diets") arrayToShoww = copyArrayDiett
       else {
          //let qq = copyArrayDiet.filter((e:any) => e.diets.includes(action.payload))
          //arrayToShow = qq
-        arrayToShow = copyArrayDiet.filter((e:any) => e.diets.includes(action.payload))
+        arrayToShoww = copyArrayDiett.filter((e:any) => e.diets.includes(action.payload))
         //arrayToShow = qq
+      }
+      return {
+        ...state,
+        toShow: arrayToShoww
+      };
+    case 'SORT_BY_DIET_AND_TEXT':
+      const copyArrayDiet = [...state.allRecipes]
+      let arrayToShow: recipesI[] = []
+      if (action.payload.diet === "All Diets") {
+        arrayToShow = copyArrayDiet // DIETS FILTER
+        let qq = arrayToShow.filter((e:any) => e.title.toLowerCase().includes(action.payload.text.toLowerCase())) // THEN TEXT FILTER
+        arrayToShow = qq
+      }
+      else {
+         //let qq = copyArrayDiet.filter((e:any) => e.diets.includes(action.payload))
+         //arrayToShow = qq
+        arrayToShow = copyArrayDiet.filter((e:any) => e.diets.includes(action.payload.diet)) // DIETS FILTER
+        let qq = arrayToShow.filter((e:any) => e.title.toLowerCase().includes(action.payload.text.toLowerCase())) // THEN TEXT FILTER
+        arrayToShow = qq
+      //console.log("DEL REDUX", action.payload)
       }
       return {
         ...state,
         toShow: arrayToShow
       };
     case 'SORT_MORE_HEALTHY':
-      const copyArrayMoreHealthy = [...state.allRecipes]
+      const copyArrayMoreHealthy = [...state.toShow]
       let sortedMore = copyArrayMoreHealthy.sort((a,b) => b.healthScore - a.healthScore);
       return {
         ...state,
-        allRecipes: sortedMore
+        toShow: sortedMore
       };
     case 'SORT_LESS_HEALTHY':
-      const copyArrayLessHealthy = [...state.allRecipes]
+      const copyArrayLessHealthy = [...state.toShow]
       let sortedLess = copyArrayLessHealthy.sort((a,b) => a.healthScore - b.healthScore);
       return {
         ...state,
-        allRecipes: sortedLess
+        toShow: sortedLess
       };
     case 'SORT_A_TO_Z':
-      const copyArrayAtoZ = [...state.allRecipes]
+      const copyArrayAtoZ = [...state.toShow]
       let sortedAZ = copyArrayAtoZ.sort((a, b) => a.title.localeCompare(b.title))
       return {
         ...state,
-        allRecipes: sortedAZ
+        toShow: sortedAZ
       };
     case 'SORT_Z_TO_A':
-      const copyArrayZtoA = [...state.allRecipes]
+      const copyArrayZtoA = [...state.toShow]
       let sortedZA = copyArrayZtoA.sort((a, b) => b.title.localeCompare(a.title))
       return {
         ...state,
-        allRecipes: sortedZA
+        toShow: sortedZA
       };
     case 'SET_SHOW_MAIN':
       return {

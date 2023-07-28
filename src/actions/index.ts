@@ -11,9 +11,28 @@ export function allRecipesLoaded(payload: any) {
   }
 };
 
+export function filterByText(payload: any) {
+  return {
+    type: 'FILTER_BY_TEXT',
+    payload: payload
+  }
+};
+
 export function sortByDiet(payload: any) {
   return {
     type: 'SORT_BY_DIET',
+    payload: payload
+  }
+};
+
+interface sortByDietAndTextI {
+  diet: string,
+  text: string
+}
+
+export function sortByDietAndText(payload: sortByDietAndTextI) {
+  return {
+    type: 'SORT_BY_DIET_AND_TEXT',
     payload: payload
   }
 };

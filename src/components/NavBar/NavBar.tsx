@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import '../../styles/Nav.css';
 import { Link } from "react-router-dom";
 import logo from "../../images/logo.png";
 import { useDispatch, useSelector } from 'react-redux';
-import { Box, Dialog, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material/';
+import { Box, Button, TextField, Dialog, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material/';
 import { 
   setIndexChoosen, sortMoreHealthy, sortLessHealthy,
-  sortAtoZ, sortZtoA, sortByDiet
+  sortAtoZ, sortZtoA, sortByDiet, sortByDietAndText
 } from '../../actions';
 import dietss from '../../db/diets.json';
 //import Select, { SelectChangeEvent } from '@mui/material/Select';
@@ -24,6 +24,19 @@ export default function Nav({ handleTitleMatchChange }: NavBarI) {
   const [healthLevel, setHealthLevel] = useState<string>('');
   const [sortAlpha, setSortAlpha] = useState<string>('');
   const [typeOfDiet, setTypeOfDiet] = useState<string>('All Diets');
+  const [textToFilter, setTextToFilter] = useState<string>('');
+
+  interface typeOfDietAndTextI {
+    diet: string,
+    text: string,
+  }
+
+  const [typeOfDietAndText, setTypeOfDietAndText] = useState<typeOfDietAndTextI>(
+    { 
+      diet: 'All Diets',
+      text: ''
+     }
+    )
 
   const healthLevelHandler = (e: SelectChangeEvent) => {
     setSortAlpha('' as string);
@@ -39,16 +52,30 @@ export default function Nav({ handleTitleMatchChange }: NavBarI) {
     if (e.target.value === "Z-A") dispatch(sortZtoA())
   };
 
-  const typeOfDietHandler = (e: SelectChangeEvent) => {
-    setTypeOfDiet(e.target.value as string);
-    dispatch(sortByDiet(e.target.value))
+  interface dietAndTextHandlerI {
+    diet: string,
+    text: string,
+  }
+
+  const dietAndTextHandler = ({diet, text}: dietAndTextHandlerI) => {
+    //setTypeOfDiet(diet as string);
+    //setTextToFilter(text as string);
+    setTypeOfDietAndText({diet: diet,text: text})
+    //console.log("diet",diet)
+    //console.log("text",text)
+    //dispatch(sortByDiet(e.target.value))
+    dispatch(sortByDietAndText({ diet: diet, text: text}))
     //console.log("target", e.target.value)
   };
+
+  useEffect(() => {
+    dispatch(sortByDietAndText(typeOfDietAndText))
+  },[dispatch,typeOfDietAndText])
 
   //let [healthSelected, setHealthSelected] = useState<any>("")
   //let [aZSelected, setAZSelected] = useState<any>("")
 
-  const [foodSearch, setFoodSearch] = useState("");
+  //const [foodSearch, setFoodSearch] = useState("");
 
 
   // function defaultPaginateColor () {
@@ -62,8 +89,11 @@ export default function Nav({ handleTitleMatchChange }: NavBarI) {
   //console.log("AA", JSON.parse(diets))
   //console.log("AA", dietss)
   //console.log("target", typeOfDiet)
+  //console.log("textToFilter", textToFilter)
+  console.table(typeOfDietAndText)
+
   
-  
+
 
   return (
    <div className='main-nav-div'>
@@ -77,7 +107,7 @@ export default function Nav({ handleTitleMatchChange }: NavBarI) {
       </Link>
       <div className="main-right">
         <div className="right-upper">
-          <form className="search" onSubmit={(event) => {event.preventDefault(); handleTitleMatchChange(foodSearch) }}>
+          {/* <form className="search" onSubmit={(event) => {event.preventDefault(); handleTitleMatchChange(foodSearch) }}>
             <input className="findAdd"
                 type="text"
                 placeholder="Find recipe..."
@@ -88,32 +118,61 @@ export default function Nav({ handleTitleMatchChange }: NavBarI) {
             <input className="findAdd"
               type="submit" value="SEARCH !"
             />
-          </form>
+          </form> */}
+          <Box
+            component="form"
+            //onSubmit={(e: any) => { e.preventDefault(); onSearch(city) }}
+            //sx={s.background({ currentWidth })}
+          >
+            <TextField
+              className={`inputPos`}
+              //disabled={disabled}
+              type="text"
+              autoComplete='off'
+              placeholder={`FIND RECIPE..`}
+              //onFocus={() => setCity("")}
+              //value={city}
+              //InputLabelProps={{ style: s.labelStyle() }}
+              //InputProps={{ style: s.inputStyleProps() }}
+              //sx={s.input()}
+              //onChange={(e) => setCity(e.target.value)}
+              //onChange={(e) => console.log(e.target.value)}
+              /* onChange={(e) => setTextToFilter(e.target.value)} */
+              //onChange={(e) => dietAndTextHandler({diet:typeOfDiet, text: e.target.value})}
+              onChange={(e) => setTypeOfDietAndText({...typeOfDietAndText, text: e.target.value})}
+            />
+            <Button
+              className={`buttonPos`}
+              //disabled={disabled}
+              //sx={s.button()}
+              type="submit"
+            >{ `SEARCH !` }
+            </Button>
+          </Box>
           <Link to="/PI-Food-GH/create"> <button className="button">CREATE RECIPE !</button> </Link>
           <Link to="/PI-Food-GH/about"> <button className="button">ABOUT !</button> </Link>
         </div>
         <div className="right-lower">
           <FormControl>
-            {/* <InputLabel>Sort by Healthy</InputLabel> */}
             <Select
               sx={{ width: '150px' }}
-              //label="Sort by Healthy"
-              value={typeOfDiet}
-              onChange={typeOfDietHandler}
+              //value={typeOfDiet}
+              value={typeOfDietAndText.diet}
+              /* onChange={typeOfDietHandler} */
+              //onChange={(e) => console.log("AA",e.target.value)}
+              //onChange={(e) => dietAndTextHandler({diet:e.target.value, text: textToFilter})}
+              onChange={(e) => setTypeOfDietAndText({...typeOfDietAndText, diet:e.target.value})}
             >
-              {/* <MenuItem value={"All Diets"}>All Diets</MenuItem> */}
               { dietss.map(e => {
                 return (
-                  <MenuItem 
+                  <MenuItem
                     key={e.title}
                     value={`${e.title}`}
                   >{e.title}</MenuItem>
                 )
               }) }
-              
             </Select>
           </FormControl>
-          
           <FormControl>
             <InputLabel>Sort by Healthy</InputLabel>
             <Select
