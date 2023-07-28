@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Box, Button, TextField, Dialog, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material/';
 import { 
   setIndexChoosen, sortMoreHealthy, sortLessHealthy,
-  sortAtoZ, sortZtoA, sortByDiet, sortByDietAndText
+  sortAtoZ, sortZtoA, sortByDietAndText
 } from '../../actions';
 import dietss from '../../db/diets.json';
 //import Select, { SelectChangeEvent } from '@mui/material/Select';
@@ -66,10 +66,12 @@ export default function Nav({ handleTitleMatchChange }: NavBarI) {
     //dispatch(sortByDiet(e.target.value))
     dispatch(sortByDietAndText({ diet: diet, text: text}))
     //console.log("target", e.target.value)
+    //dispatch(setIndexChoosen(0))
   };
 
   useEffect(() => {
     dispatch(sortByDietAndText(typeOfDietAndText))
+    dispatch(setIndexChoosen(0))
   },[dispatch,typeOfDietAndText])
 
   //let [healthSelected, setHealthSelected] = useState<any>("")

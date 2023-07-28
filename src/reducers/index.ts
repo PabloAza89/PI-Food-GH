@@ -31,7 +31,7 @@ const initialState: initialStateI = {
   allIndexes: 0,
   addNew: []
 }
-  
+
 const reducer = (state = initialState, action: {type: string; payload: any}) => {
   switch (action.type) {
     case 'FETCH_RECIPES_FROM_API':
@@ -63,25 +63,6 @@ const reducer = (state = initialState, action: {type: string; payload: any}) => 
         ...state,
         allRecipesLoaded: action.payload
       };
-    case 'FILTER_BY_TEXT':
-      return {
-        ...state,
-        toShow: action.payload
-      };
-    case 'SORT_BY_DIET':
-      const copyArrayDiett = [...state.allRecipes]
-      let arrayToShoww: recipesI[] = []
-      if (action.payload === "All Diets") arrayToShoww = copyArrayDiett
-      else {
-         //let qq = copyArrayDiet.filter((e:any) => e.diets.includes(action.payload))
-         //arrayToShow = qq
-        arrayToShoww = copyArrayDiett.filter((e:any) => e.diets.includes(action.payload))
-        //arrayToShow = qq
-      }
-      return {
-        ...state,
-        toShow: arrayToShoww
-      };
     case 'SORT_BY_DIET_AND_TEXT':
       const copyArrayDiet = [...state.allRecipes]
       let arrayToShow: recipesI[] = []
@@ -89,14 +70,10 @@ const reducer = (state = initialState, action: {type: string; payload: any}) => 
         arrayToShow = copyArrayDiet // DIETS FILTER
         let qq = arrayToShow.filter((e:any) => e.title.toLowerCase().includes(action.payload.text.toLowerCase())) // THEN TEXT FILTER
         arrayToShow = qq
-      }
-      else {
-         //let qq = copyArrayDiet.filter((e:any) => e.diets.includes(action.payload))
-         //arrayToShow = qq
+      } else {
         arrayToShow = copyArrayDiet.filter((e:any) => e.diets.includes(action.payload.diet)) // DIETS FILTER
         let qq = arrayToShow.filter((e:any) => e.title.toLowerCase().includes(action.payload.text.toLowerCase())) // THEN TEXT FILTER
         arrayToShow = qq
-      //console.log("DEL REDUX", action.payload)
       }
       return {
         ...state,
@@ -150,12 +127,12 @@ const reducer = (state = initialState, action: {type: string; payload: any}) => 
         ...state,
         indexChoosen: action.payload
       };
-    case 'GET_INDEX_CHOOSEN': 
+    case 'GET_INDEX_CHOOSEN':
       return {
         ...state,
         response: state.indexChoosen
       };
-    case 'ADD_NEW': 
+    case 'ADD_NEW':
       return {
         ...state,
         addNew: [...state.addNew, action.payload]
