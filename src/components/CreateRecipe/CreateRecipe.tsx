@@ -9,10 +9,57 @@ import { addNew } from '../../actions';
 import { Box, Button, TextField, ListItemText, Checkbox, Dialog, Typography,FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material/';
 import dietss from '../../db/diets.json';
 import Tooltip from '@mui/joy/Tooltip';
+import InboxIcon from '@mui/icons-material/MoveToInbox';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
 
 export default function CreateRecipe({ GetAfterCreated }:any) {
 
   const dispatch = useDispatch()
+
+  const [open, setOpen] = useState(true);
+
+  const handleClick = () => {
+    setOpen(!open);
+  };
+
+ 
+
+  const [stepsState, setStepsState] = useState(['']);
+
+  interface handlerI {
+    index: number
+  }
+
+  const handlerDelete = ({ index }: handlerI) => {
+    let copy = [...stepsState]
+    copy.splice(index, 1)
+    setStepsState([...copy])
+  }
+
+  interface handlerAddI {
+    index: number,
+  }
+
+
+  const handlerAdd = ({ index }: handlerAddI) => {
+    let copy = [...stepsState]
+    copy.splice(index + 1, 0, "")
+    setStepsState([...copy])
+  }
+
+  interface handlerUpdateI {
+    index: number,
+    value: string
+  }
+
+  const handlerUpdate = ({ index, value }: handlerUpdateI) => {
+    let copy = [...stepsState]
+    copy.splice(index, 1, value)
+    setStepsState([...copy])
+  }
 
   const [dietsArray, setDietsArray] = useState<string[]>([]);
 
@@ -75,13 +122,13 @@ export default function CreateRecipe({ GetAfterCreated }:any) {
   }
 
   function handleSubmitButton() {
-    if (error.title || error.health.one || error.health.two || error.summary || error.instructions ||
-      // (document.getElementById("checkerTitle")&&document.getElementById("checkerTitle").value.length === 0) ||
-      // (document.getElementById("checkerHealth")&&document.getElementById("checkerHealth").value.length === 0) ||
-      // (document.getElementById("checkerSummary")&&document.getElementById("checkerSummary").value.length === 0) ||
-      // (document.getElementById("checkerInstructions")&&document.getElementById("checkerInstructions").value.length === 0) ||
-      uniqueNamesDiets.length === 0) return true
-    else return false
+    // if (error.title || error.health.one || error.health.two || error.summary || error.instructions ||
+    //   // (document.getElementById("checkerTitle")&&document.getElementById("checkerTitle").value.length === 0) ||
+    //   // (document.getElementById("checkerHealth")&&document.getElementById("checkerHealth").value.length === 0) ||
+    //   // (document.getElementById("checkerSummary")&&document.getElementById("checkerSummary").value.length === 0) ||
+    //   // (document.getElementById("checkerInstructions")&&document.getElementById("checkerInstructions").value.length === 0) ||
+    //   uniqueNamesDiets.length === 0) return true
+    // else return false
   }
 
    const handleSubmit = async (e:any) => {
@@ -243,8 +290,10 @@ export default function CreateRecipe({ GetAfterCreated }:any) {
 
   //console.log("abc", dietss)
   //console.log("summaryValue", summaryValue)
-  console.log("healthValue", healthValue)
-  console.log("error.health", error.health)
+  //console.log("healthValue", healthValue)
+  //console.log("error.health", error.health)
+  console.log("stepsState", stepsState)
+  
 
   return !firstInstance ?
     (
@@ -385,27 +434,59 @@ export default function CreateRecipe({ GetAfterCreated }:any) {
                         )
                       )}
                     </Select>
+
+                    <Box sx={{ background: 'gold', display: 'flex', flexDirection: 'column' }}>
+                      
+                      {stepsState.map((e, index) => (
+                        <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+                          <Box sx={s.text}>Step {index + 1}:</Box>
+                          <TextField //test
+                            //type="text"
+                            //id="summary"
+                            id={`${index}`}
+                            autoComplete='off'
+                            multiline
+                            value={stepsState[index]}
+                            //placeholder={summaryPlaceholder}
+                            placeholder={'test'}
+                            //onFocus={() => setSummaryPlaceholder("")}
+                            //onBlur={() => setSummaryPlaceholder(`e.g. Healthy pasta recipe`)}
+                            //onChange={(e) => { validator({ value: e.target.value, type: e.target.id }) }}
+                            //onChange={(e) => { console.log(e.target.value) }}
+                            onChange={(e) => { handlerUpdate({ index: parseInt((e.target as HTMLInputElement).id, 10), value: e.target.value }) }}
+                          />
+                          <Button 
+                            id={`${index}`}
+                            sx={{ background: 'green', color: 'white' }}
+                            //onClick={e => console.log("test", (e.target as HTMLInputElement).id)}
+                            onClick={(e) => handlerAdd({ index: parseInt((e.target as HTMLInputElement).id, 10) })}
+                            
+                            >V</Button>
+                          <Button
+                            disabled={stepsState.length === 1 ? true : false}
+                            id={`${index}`}
+                            sx={{ background: 'red' }}
+                            //onClick={e => console.log("test", (e.target as HTMLInputElement).id)}
+                            onClick={(e) => { console.log("index", index); handlerDelete({ index: parseInt((e.target as HTMLInputElement).id, 10) }) }}
+                            
+                            >X</Button>
+                        </Box>
+
+                      ))
+                      }
+                        
+                    </Box>
+                    
+
+                    
                   </FormControl>
+
+
+                  
                 </Box>
-
-
               </Box>
-
-
             </Box>
           </div>
-          <div className="dietAlign">
-            {uniqueNamesDiets[0]&&"Diets choosen: "}{uniqueNamesDiets.map(function(e) {
-                              if ((uniqueNamesDiets.indexOf(e) !== uniqueNamesDiets.length - 1)) {
-                                  return e + " + "
-                              } else return e
-                              })}
-          </div>
-          <input id="submmitButton" type="button" disabled={handleSubmitButton()} /* onClick={(event) => setFirstInstance(true) + handleSubmit(event)} */ value="CREATE !" />
-          <input id="createNewButton" type="button" onClick={() => {handleNewRecipe() ; createHandler() ; setFirstInstance(false)}} value="CREATE NEW RECIPE!" />
-          {[error.title , error.health.one, error.health.two ,  error.summary , error.instructions].map(e => (
-            e?<span key={e} className="alert">{e}</span>:null
-          ))}
         </form>
       </Box>
     )
