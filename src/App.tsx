@@ -7,10 +7,8 @@ import CardsMapper from "./components/CardsMapper/CardsMapper";
 import Detail from "./components/Detail.jsx";
 import Paginate from "./components/Paginate/Paginate";
 import NavBar from "./components/NavBar/NavBar";
-import Form from "./components/Form.jsx";
-import About from "./components/About.jsx";
-import toAvoidKey from './db/toAvoidKey.json';
-import dietss from './db/diets.json';
+import CreateRecipe from "./components/CreateRecipe/CreateRecipe";
+import About from "./components/About/About";
 import { useDispatch } from 'react-redux';
 import { fetchRecipesFromAPI, allRecipesLoaded } from './actions';
 import store from './store/store';
@@ -102,7 +100,7 @@ function App() {
             <Detail onFilterID={onFilterID} />
           </>}/>
           <Route path="/create" element={<>
-            <Form GetAfterCreated={GetAfterCreated} />
+            <CreateRecipe GetAfterCreated={GetAfterCreated} />
           </>}/>
           <Route path="/about" element={<>
             <About />

@@ -1,5 +1,4 @@
 import toAvoidKey from '../db/toAvoidKey.json';
-//import { allRecipesLoaded } from '../actions';
 
 interface recipesI {
   id: any,
@@ -38,19 +37,18 @@ const reducer = (state = initialState, action: {type: string; payload: any}) => 
       let parsedArr: recipesI[] = []
       toAvoidKey.results.map(e => parsedArr.push(
         {
-            id: e.id,
-            title: e.title,
-            summary: e.summary,
-            healthScore: e.healthScore,
-            analyzedInstructions:
-                e.analyzedInstructions[0] ? e.analyzedInstructions[0].steps.map(e=> e.step) : [],
-            image: e.image,
-            diets: e.diets.map(function(e) {
-                if ((e.indexOf(e) !== e.length - 1)) {
-                    return e.split(" ").map(e => e[0].toUpperCase() + e.slice(1)).join(" ")
-                } else return e.split(" ").map(e => e[0].toUpperCase() + e.slice(1)).join(" ")
-                }),
-            dishTypes: e.dishTypes
+          id: e.id,
+          title: e.title,
+          summary: e.summary,
+          healthScore: e.healthScore,
+          analyzedInstructions:
+              e.analyzedInstructions[0] ? e.analyzedInstructions[0].steps.map(e=> e.step) : [],
+          image: e.image,
+          diets: e.diets.map(function(e) {
+            if ((e.indexOf(e) !== e.length - 1)) return e.split(" ").map(e => e[0].toUpperCase() + e.slice(1)).join(" ")
+            else return e.split(" ").map(e => e[0].toUpperCase() + e.slice(1)).join(" ")
+          }),
+          dishTypes: e.dishTypes
         }
       ))
       return {
@@ -63,89 +61,33 @@ const reducer = (state = initialState, action: {type: string; payload: any}) => 
         ...state,
         allRecipesLoaded: action.payload
       };
-    case 'SORT_BY_DIET_AND_TEXT':
-      // const copyArrayDiet = [...state.allRecipes]
-      // let arrayToShow: recipesI[] = []
-      // if (action.payload.diet === "All Diets") {
-      //   arrayToShow = copyArrayDiet // DIETS FILTER
-      //   let qq = arrayToShow.filter((e:any) => e.title.toLowerCase().includes(action.payload.text.toLowerCase())) // THEN TEXT FILTER
-      //   arrayToShow = qq
-      // } else {
-      //   arrayToShow = copyArrayDiet.filter((e:any) => e.diets.includes(action.payload.diet)) // DIETS FILTER
-      //   let qq = arrayToShow.filter((e:any) => e.title.toLowerCase().includes(action.payload.text.toLowerCase())) // THEN TEXT FILTER
-      //   arrayToShow = qq
-      // }
-      return {
-        ...state,
-        //toShow: arrayToShow
-        toShow: state.toShow
-      };
     case 'FILTER':
       const copyArrayDiet = [...state.allRecipes]
       let arrayToShow: recipesI[] = []
       if (action.payload.diet === "All Diets") {
         arrayToShow = copyArrayDiet // DIETS FILTER
-        //let qq = arrayToShow.filter((e:any) => e.title.toLowerCase().includes(action.payload.text.toLowerCase())) // THEN TEXT FILTER
-        //arrayToShow = qq
         arrayToShow = arrayToShow.filter((e:any) => e.title.toLowerCase().includes(action.payload.text.toLowerCase())) // THEN TEXT FILTER
-
-
-
       } else {
         arrayToShow = copyArrayDiet.filter((e:any) => e.diets.includes(action.payload.diet)) // DIETS FILTER
-        //let qq = arrayToShow.filter((e:any) => e.title.toLowerCase().includes(action.payload.text.toLowerCase())) // THEN TEXT FILTER
-        //arrayToShow = qq
         arrayToShow = arrayToShow.filter((e:any) => e.title.toLowerCase().includes(action.payload.text.toLowerCase())) // THEN TEXT FILTER
       }
       switch (action.payload.alphaOrHealthy) {
-        case 'More Healthy': 
+        case 'More Healthy':
           arrayToShow = arrayToShow.sort((a,b) => b.healthScore - a.healthScore);
           break;
-        case 'Less Healthy': 
+        case 'Less Healthy':
           arrayToShow = arrayToShow.sort((a,b) => a.healthScore - b.healthScore);
           break;
-        case 'A-Z': 
+        case 'A-Z':
           arrayToShow = arrayToShow.sort((a, b) => a.title.localeCompare(b.title))
           break;
-        case 'Z-A': 
+        case 'Z-A':
           arrayToShow = arrayToShow.sort((a, b) => b.title.localeCompare(a.title))
           break;
-
       }
-
-      //arrayToShow = []
-
       return {
         ...state,
         toShow: arrayToShow
-      };
-    case 'SORT_MORE_HEALTHY':
-      const copyArrayMoreHealthy = [...state.toShow]
-      let sortedMore = copyArrayMoreHealthy.sort((a,b) => b.healthScore - a.healthScore);
-      return {
-        ...state,
-        toShow: sortedMore
-      };
-    case 'SORT_LESS_HEALTHY':
-      const copyArrayLessHealthy = [...state.toShow]
-      let sortedLess = copyArrayLessHealthy.sort((a,b) => a.healthScore - b.healthScore);
-      return {
-        ...state,
-        toShow: sortedLess
-      };
-    case 'SORT_A_TO_Z':
-      const copyArrayAtoZ = [...state.toShow]
-      let sortedAZ = copyArrayAtoZ.sort((a, b) => a.title.localeCompare(b.title))
-      return {
-        ...state,
-        toShow: sortedAZ
-      };
-    case 'SORT_Z_TO_A':
-      const copyArrayZtoA = [...state.toShow]
-      let sortedZA = copyArrayZtoA.sort((a, b) => b.title.localeCompare(a.title))
-      return {
-        ...state,
-        toShow: sortedZA
       };
     case 'SET_SHOW_MAIN':
       return {

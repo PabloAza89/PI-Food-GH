@@ -11,18 +11,6 @@ export function allRecipesLoaded(payload: any) {
   }
 };
 
-interface sortByDietAndTextI {
-  diet: string,
-  text: string
-}
-
-export function sortByDietAndText(payload: sortByDietAndTextI) {
-  return {
-    type: 'SORT_BY_DIET_AND_TEXT',
-    payload: payload
-  }
-};
-
 interface filterI {
   diet: string,
   text: string,
@@ -36,40 +24,9 @@ export function filter(payload: filterI) {
   }
 };
 
-export function sortMoreHealthy() {
-  return {
-    type: 'SORT_MORE_HEALTHY',
-  }
-};
-
-export function sortLessHealthy() {
-  return {
-    type: 'SORT_LESS_HEALTHY',
-  }
-};
-
-export function sortAtoZ() {
-  return {
-    type: 'SORT_A_TO_Z',
-  }
-};
-
-export function sortZtoA() {
-  return {
-    type: 'SORT_Z_TO_A',
-  }
-};
-
 export function setShowMain(payload: any) {
   return {
     type: 'SET_SHOW_MAIN',
-    payload: payload
-  }
-};
-
-export function setAllIndexes(payload: any) {
-  return {
-    type: 'SET_ALL_INDEXES',
     payload: payload
   }
 };
@@ -78,12 +35,6 @@ export function setIndexChoosen(payload: any) {
   return {
     type: 'SET_INDEX_CHOOSEN',
     payload: payload
-  }
-};
-
-export function getIndexChoosen() {
-  return {
-    type: 'GET_INDEX_CHOOSEN'
   }
 };
 
