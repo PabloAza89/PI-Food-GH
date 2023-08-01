@@ -17,15 +17,9 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 
 export default function CreateRecipe({ GetAfterCreated }:any) {
 
+  // onBlur={() => setInstructionsPlaceholder(`e.g. Cut pasta, fry tomatoes..`)}
+
   const dispatch = useDispatch()
-
-  const [open, setOpen] = useState(true);
-
-  const handleClick = () => {
-    setOpen(!open);
-  };
-
- 
 
   const [stepsState, setStepsState] = useState(['']);
 
@@ -149,40 +143,7 @@ export default function CreateRecipe({ GetAfterCreated }:any) {
       }
  };
 
-  // function validateTitle(value:any) {
-  //   if(/(!|¡|@|[?]|¡|<|>|[/]|[\\]|%|[[]|]|[|]|°|#|[$]|&|[()]|[)]|=|_|[*]|¿|[+]|~|{|}|`|\^)/.test(value) && value.length !== 0) {
-       //setError( error, error.title = 'Special characters not allowed in "Title" !');
-  //   } else { /* setError(error, error.title = '') */ }
-  //   setTitle(value);
-  // }
 
-  function validateHealthScore(value:any) {
-    //if (value.toString().length === 0 ) //setError( error, error.health.one = '', error.health.two = '');
-    //else {
-    //  if (!/^\d+$/.test(value)) //setError( error, error.health.one = 'Only numbers allowed in "Health Score" !', error.health.two = '');
-    //  else {
-        //setError( error, error.health.one = '');
-      //  if (value > 100 ) //setError( error, error.health.two = '', error.health.two = 'Allowed numbers are between 0 and 100 !');
-        //else /* setError( error, error.health.two = '', error.health.two = ''); */
-     // }
-  //  }
-    setHealthScore(value)
-  }
-
-  // const validateSummary = (value:string) => {
-  //   if (/(!|¡|@|[?]|¡|<|>|[/]|[\\]|%|[[]|]|[|]|°|#|[$]|&|[()]|[)]|=|_|[*]|¿|[+]|~|{|}|`|\^)/.test(value)/*  && summaryValue.length !== 0 */) setError({...error, summary: true})
-  //   else setError({...error, summary: false})
-  //   //setSummaryValue(value)
-  // }
-
-  // interface dynFuncI {
-  //   name: string,
-  //   arrayParams: string
-  // }
-
-  // function dynFunc({name, arrayParams}: dynFuncI){
-  //   return `set[${name}](${arrayParams})`
-  // }
 
 
   interface validateStringI {
@@ -228,21 +189,8 @@ export default function CreateRecipe({ GetAfterCreated }:any) {
         setSummaryValue(value);
       break;
     }
-
-    //setSummaryValue(string);
-
-    //setsummary(string);
-    //dynFunc({name:`set_${type}`, arrayParams:string})
-
-
   }
 
-  function validateAnalyzedInstructions(value:any) {
-    if(/(!|¡|@|[?]|¡|<|>|[/]|[\\]|%|[[]|]|[|]|°|#|[$]|&|[()]|[)]|=|_|[*]|¿|[+]|~|{|}|`|\^)/.test(value) && value.length !== 0) {
-      //setError( error, error.instructions = 'Special characters not allowed in "Instructions" !');
-    } else { /* setError( error, error.instructions = '') */ }
-    setAnalyzedInstructions(value)
-  }
 
   let [dietChoosen, setDietChoosen] = useState({
     name: "-- select an option --",
@@ -256,12 +204,6 @@ export default function CreateRecipe({ GetAfterCreated }:any) {
     })
   }
 
-  function createHandler() {
-    setDietChoosen({
-      name: "-- select an option --",
-      hidden: false
-    })
-  }
 
   const handleChange = (event: SelectChangeEvent<typeof dietsArray>) => {
     const {
@@ -273,48 +215,18 @@ export default function CreateRecipe({ GetAfterCreated }:any) {
     );
   };
 
-
-  // useEffect(() => {
-
-
-  //   if (/(!|¡|@|[?]|¡|<|>|[/]|[\\]|%|[[]|]|[|]|°|#|[$]|&|[()]|[)]|=|_|[*]|¿|[+]|~|{|}|`|\^)/.test(summaryValue)/*  && summaryValue.length !== 0 */) {
-  //     console.log("ERROR")
-  //     setError({...error, summary: true})
-  //   } else {
-  //     setError({...error, summary: false})
-  //   }
-
-
-
-  // //},[summaryValue, error])
-
-  //console.log("abc", dietss)
-  //console.log("summaryValue", summaryValue)
-  //console.log("healthValue", healthValue)
-  //console.log("error.health", error.health)
   console.log("stepsState", stepsState)
-  
 
   return !firstInstance ?
     (
-      <Box sx={s.background}>
-        <Link  id="iconImageDiv"  to="/" >
-          <img onClick={() => GetAfterCreated()} className="iconImageForm" src={logo} alt=""></img>
-        </Link>
-        <Link  id="iconText" to="/">
-          <h2 onClick={() => GetAfterCreated()} >Go Back !</h2>
-        </Link>
-        <form className="form" onSubmit={handleSubmit}>
-          <img className="image-form" src={noImage1} alt=""></img>
-          <div className="titleFormRecipe">Create your own recipe ! Please fill in all fields:</div>
-          <div className="options-main-align">
-            <Box sx={s.optionsRight}>
+
               <Box
                 component="form"
-                sx={{ display: 'flex', flexDirection: 'column' }}
-                //onSubmit={(e: any) => { e.preventDefault(); dispatch(filter(entireFilter)) }}
-              >
-                <Box sx={{ background: 'lightgray', display: 'flex', flexDirection: 'row' }}>
+                sx={s.form}
+              >   
+                <Box component="img" src={noImage1} />
+                <Typography >Create your own recipe ! Please fill in all fields:</Typography>
+                <Box sx={s.eachRow}>
                   <Box sx={s.text}>Title:</Box>
                   <Tooltip
                     enterDelay={500}
@@ -325,7 +237,7 @@ export default function CreateRecipe({ GetAfterCreated }:any) {
                     title={`Special characters not allowed in "Title" !`}
                   >
                     <TextField
-                      //className={`inputPos`}
+                      sx={s.input}
                       type="text"
                       autoComplete='off'
                       id="title"
@@ -336,17 +248,14 @@ export default function CreateRecipe({ GetAfterCreated }:any) {
                     />
                   </Tooltip>
                 </Box>
-                <Box sx={{ background: 'lightgray', display: 'flex', flexDirection: 'row' }}>
+                <Box sx={s.eachRow}>
                   <Box sx={s.text}>Health Score:</Box>
                   <Tooltip
                     enterDelay={500}
                     leaveDelay={200}
                     enterTouchDelay={0}
                     open={error.health.string || error.health.max}
-                    //open={error.health.string}
                     placement="bottom"
-                    //title={`Only numbers allowed in "Health Score" !`}
-                    //title={`Allowed numbers are between 0 and 100 !`}
                     title={
                       error.health.string ?
                       `Only numbers allowed in "Health Score" !` :
@@ -355,8 +264,8 @@ export default function CreateRecipe({ GetAfterCreated }:any) {
                   >
                     <TextField
                       className={`inputPos`}
-                      //type="text"
                       id="health"
+                      sx={s.input}
                       autoComplete='off'
                       placeholder={healthScorePlaceholder}
                       onFocus={() => setHealthScorePlaceholder("")}
@@ -365,7 +274,7 @@ export default function CreateRecipe({ GetAfterCreated }:any) {
                     />
                   </Tooltip>
                 </Box>
-                <Box sx={{ background: 'lightgray', display: 'flex', flexDirection: 'row' }}>
+                <Box sx={s.eachRow}>
                   <Box sx={s.text}>Summary:</Box>
                   <Tooltip
                     enterDelay={500}
@@ -376,9 +285,10 @@ export default function CreateRecipe({ GetAfterCreated }:any) {
                     title={`Special characters not allowed in "Summary" !`}
                   >
                     <TextField
-                      //type="text"
                       id="summary"
                       autoComplete='off'
+                      sx={s.input}
+                      multiline
                       placeholder={summaryPlaceholder}
                       onFocus={() => setSummaryPlaceholder("")}
                       onBlur={() => setSummaryPlaceholder(`e.g. Healthy pasta recipe`)}
@@ -386,23 +296,12 @@ export default function CreateRecipe({ GetAfterCreated }:any) {
                     />
                   </Tooltip>
                 </Box>
-                <Box sx={{ background: 'lightgray', display: 'flex', flexDirection: 'row' }}>
-                  <Box sx={s.text}>Instructions:</Box>
-                  <TextField
-                    className={`inputPos`}
-                    type="text"
-                    autoComplete='off'
-                    placeholder={instructionsPlaceholder}
-                    onFocus={() => setInstructionsPlaceholder("")}
-                    onBlur={() => setInstructionsPlaceholder(`e.g. Cut pasta, fry tomatoes..`)}
-                  />
-                </Box>
-                <Box sx={{ background: 'lightgray', display: 'flex', flexDirection: 'row' }}>
+                <Box sx={s.eachRow}>
                   <Box sx={s.text}>Diets:</Box>
                   <FormControl>
                     <InputLabel>Select Diets</InputLabel>
                     <Select
-                      sx={{ width: '150px' }}
+                      sx={s.input}
                       placeholder={`Select Diets`}
                       multiple
                       value={dietsArray}
@@ -410,85 +309,64 @@ export default function CreateRecipe({ GetAfterCreated }:any) {
                       onChange={handleChange}
                       renderValue={(selected) => selected.join(', ')}
                       MenuProps={ {PaperProps: { style: { maxHeight: `${48 * 4.5}px`, width: 300 }}}}
-                      //renderValue={(selected) => selected.join(', ')}
-                      //value={entireFilter.diet}
-                      //onChange={(e) => setEntireFilter({...entireFilter, diet:e.target.value})}
                     >
-                    {/*  {dietss.slice(1).map(e => {
-                        return (
-                          <MenuItem
-                            key={e.title}
-                            value={`${e.title}`}
-                          >{e.title}</MenuItem>
-                        )
-                      })} */}
                       {dietss.slice(1).map(e => (
-                          <MenuItem
-                            key={e.title}
-                            value={`${e.title}`}
-                          >
-                            <Checkbox checked={dietsArray.indexOf(e.title) > -1} />
-                            {/* {e.title} */}
-                            <ListItemText primary={e.title} />
-                          </MenuItem>
-                        )
-                      )}
+                        <MenuItem
+                          key={e.title}
+                          value={`${e.title}`}
+                        >
+                          <Checkbox checked={dietsArray.indexOf(e.title) > -1} />
+                          <ListItemText primary={e.title} />
+                        </MenuItem>
+                      ))}
                     </Select>
-
-                    <Box sx={{ background: 'gold', display: 'flex', flexDirection: 'column' }}>
-                      
-                      {stepsState.map((e, index) => (
-                        <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-                          <Box sx={s.text}>Step {index + 1}:</Box>
-                          <TextField //test
-                            //type="text"
-                            //id="summary"
-                            id={`${index}`}
-                            autoComplete='off'
-                            multiline
-                            value={stepsState[index]}
-                            //placeholder={summaryPlaceholder}
-                            placeholder={'test'}
-                            //onFocus={() => setSummaryPlaceholder("")}
-                            //onBlur={() => setSummaryPlaceholder(`e.g. Healthy pasta recipe`)}
-                            //onChange={(e) => { validator({ value: e.target.value, type: e.target.id }) }}
-                            //onChange={(e) => { console.log(e.target.value) }}
-                            onChange={(e) => { handlerUpdate({ index: parseInt((e.target as HTMLInputElement).id, 10), value: e.target.value }) }}
-                          />
-                          <Button 
-                            id={`${index}`}
-                            sx={{ background: 'green', color: 'white' }}
-                            //onClick={e => console.log("test", (e.target as HTMLInputElement).id)}
-                            onClick={(e) => handlerAdd({ index: parseInt((e.target as HTMLInputElement).id, 10) })}
-                            
-                            >V</Button>
-                          <Button
-                            disabled={stepsState.length === 1 ? true : false}
-                            id={`${index}`}
-                            sx={{ background: 'red' }}
-                            //onClick={e => console.log("test", (e.target as HTMLInputElement).id)}
-                            onClick={(e) => { console.log("index", index); handlerDelete({ index: parseInt((e.target as HTMLInputElement).id, 10) }) }}
-                            
-                            >X</Button>
-                        </Box>
-
-                      ))
-                      }
-                        
-                    </Box>
-                    
-
-                    
                   </FormControl>
+                </Box>
+                <Box sx={s.eachRow}>
+                  <Box sx={s.text}>Instructions:</Box>
+                  <Box sx={{ background: 'gold', display: 'flex', flexDirection: 'column' }}>
 
+                    {stepsState.map((e, index) => (
+                      <Box sx={{ display: 'flex', flexDirection: 'row', width: '68vw' }}>
+                        <Box sx={s.step}>Step {index + 1}:</Box>
+                        <TextField //test
+                          id={`${index}`}
+                          autoComplete='off'
+                          multiline
+                          value={stepsState[index]}
+                          placeholder={'test'}
+                          sx={s.inputStep}
+                          onChange={(e) => { handlerUpdate({ index: parseInt((e.target as HTMLInputElement).id, 10), value: e.target.value }) }}
+                        />
+                        <Button
+                          id={`${index}`}
+                          sx={s.buttonNew}
+                          onClick={(e) => handlerAdd({ index: parseInt((e.target as HTMLInputElement).id, 10) })}
+                        >New Step</Button>
+                        <Button
+                          disabled={stepsState.length === 1 ? true : false}
+                          id={`${index}`}
+                          sx={s.buttonDelete}
+                          onClick={(e) => { console.log("index", index); handlerDelete({ index: parseInt((e.target as HTMLInputElement).id, 10) }) }}
+                        >Detele Step</Button>
+                      </Box>
+                    ))}
 
-                  
+                  </Box>
+                </Box>
+                <Box sx={s.eachRow}>
+                  <Button
+                    variant="contained"
+                  >
+                    CLEAR
+                  </Button>
+                  <Button
+                    variant="contained"
+                  >
+                    SAVE RECIPE
+                  </Button>
                 </Box>
               </Box>
-            </Box>
-          </div>
-        </form>
-      </Box>
     )
     : !showAlert ?
     (
