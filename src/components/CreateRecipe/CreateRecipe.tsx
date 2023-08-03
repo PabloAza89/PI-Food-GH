@@ -28,20 +28,28 @@ export default function CreateRecipe({ GetAfterCreated }:any) {
   }
 
   const handlerDelete = ({ index }: handlerI) => {
-    let copy = [...stepsState]
-    copy.splice(index, 1)
-    setStepsState([...copy])
+    let copyState = [...stepsState]
+    copyState.splice(index, 1)
+    setStepsState([...copyState])
+
+    let copyError = {...error}
+    copyError.instructions.splice(index, 1)
+    setError(copyError)
   }
 
   interface handlerAddI {
     index: number,
   }
 
-
   const handlerAdd = ({ index }: handlerAddI) => {
-    let copy = [...stepsState]
-    copy.splice(index + 1, 0, "")
-    setStepsState([...copy])
+    let copyState = [...stepsState]
+    copyState.splice(index + 1, 0, "")
+    setStepsState([...copyState])
+
+    let copyError = {...error}
+    //copyError.instructions.splice(index + 1, 0, { [`${index}`]: false })
+    copyError.instructions.splice(index + 1, 0, { error: false })
+    setError(copyError)
   }
 
   interface handlerUpdateI {
@@ -87,11 +95,21 @@ export default function CreateRecipe({ GetAfterCreated }:any) {
     max?: boolean
   }
 
+  // interface instructionsI {
+  //   index: number,
+  //   error: boolean
+  // }
+
+  interface instructionsI {
+    //[index: number]: boolean,
+    error: boolean,
+  }
+
   interface errorI {
     title: boolean,
     health: healthI,
     summary: boolean,
-    instructions: boolean
+    instructions: instructionsI[]
   }
 
   const [error, setError] = useState<errorI>({
@@ -101,7 +119,9 @@ export default function CreateRecipe({ GetAfterCreated }:any) {
       max: false
     },
     summary: false,
-    instructions: false
+    instructions: [
+      { error: false }
+    ]
   });
 
   function handleNewRecipe() {
@@ -148,12 +168,14 @@ export default function CreateRecipe({ GetAfterCreated }:any) {
 
   interface validateStringI {
     type: string,
-    value: string
+    value: string,
+    index?: number,
   }
 
-  const validator = ({ type, value }: validateStringI) => {
+  const validator = ({ type, value, index }: validateStringI) => {
     console.log("value de adentro", value)
     switch (type) {
+      //let qq = type.replace(/[0-9]/g, '');
       case (`title`):
         if (/(!|¡|@|[?]|¡|<|>|[/]|[\\]|%|[[]|]|[|]|°|#|[$]|&|[()]|[)]|=|_|[*]|¿|[+]|~|{|}|`|\^)/.test(value)) setError({...error, [type]: true})
         else setError({...error, [type]: false});
@@ -171,6 +193,40 @@ export default function CreateRecipe({ GetAfterCreated }:any) {
         if (/(!|¡|@|[?]|¡|<|>|[/]|[\\]|%|[[]|]|[|]|°|#|[$]|&|[()]|[)]|=|_|[*]|¿|[+]|~|{|}|`|\^)/.test(value)) setError({...error, [type]: true})
         else setError({...error, [type]: false});
         setSummaryValue(value);
+      break;
+      //case (type.replace(/[0-9]/g, '') === `instructions`):
+      //case (qq):
+      case (`instructions`):
+        //if (/(!|¡|@|[?]|¡|<|>|[/]|[\\]|%|[[]|]|[|]|°|#|[$]|&|[()]|[)]|=|_|[*]|¿|[+]|~|{|}|`|\^)/.test(value)) setError({...error, instructions.push("Asd")  })
+        //setError({...error, instructions: [{ index: index, error: true }]  })
+        //setError({...error, instructions: [{ [`${index}`]: true }]  })
+
+        if (/(!|¡|@|[?]|¡|<|>|[/]|[\\]|%|[[]|]|[|]|°|#|[$]|&|[()]|[)]|=|_|[*]|¿|[+]|~|{|}|`|\^)/.test(value)) {
+          let copyObjj = {...error}
+          //copyObjj.instructions.splice(index, 1, { [`${index}`]: true }  )
+          copyObjj.instructions.splice(index!, 1, { error: true }  )
+          setError(copyObjj)
+        } else {
+          let copyObjj = {...error}
+          //copyObjj.instructions.splice(index, 1, { [`${index}`]: false }  )
+          copyObjj.instructions.splice(index!, 1, { error: false }  )
+        }
+
+        //let copyObjj = {...error}
+        //copyObjj.instructions.splice(index, 1, { [`${index}`]: true }  )
+
+        //else
+
+        //setError(copyObjj);
+
+        
+
+      // console.log("type", type)
+      // console.log("value", value)
+      // console.log("index", index)
+      //   //if (/(!|¡|@|[?]|¡|<|>|[/]|[\\]|%|[[]|]|[|]|°|#|[$]|&|[()]|[)]|=|_|[*]|¿|[+]|~|{|}|`|\^)/.test(value)) setError({...error, [type]: true})
+      //   //else setError({...error, [type]: false});
+      //   //setSummaryValue(value);
       break;
     }
   }
@@ -195,9 +251,11 @@ export default function CreateRecipe({ GetAfterCreated }:any) {
   };
 
   //console.log("stepsState", stepsState)
-  console.table(error)
-  console.log("healthValue", typeof healthValue)
-  console.log("healthValue.length", healthValue.length)
+  //console.table(error)
+  //console.log("error", error)
+  console.log(JSON.stringify(error, null, 4));
+  //console.log("healthValue", typeof healthValue)
+  //console.log("healthValue.length", healthValue.length)
 
   return !firstInstance ?
     (
@@ -211,6 +269,7 @@ export default function CreateRecipe({ GetAfterCreated }:any) {
                 <Box sx={s.eachRow}>
                   <Box sx={s.text}>Title:</Box>
                   <Tooltip
+                    arrow
                     enterDelay={500}
                     leaveDelay={200}
                     enterTouchDelay={0}
@@ -233,6 +292,7 @@ export default function CreateRecipe({ GetAfterCreated }:any) {
                 <Box sx={s.eachRow}>
                   <Box sx={s.text}>Health Score:</Box>
                   <Tooltip
+                    arrow
                     enterDelay={500}
                     leaveDelay={200}
                     enterTouchDelay={0}
@@ -259,6 +319,7 @@ export default function CreateRecipe({ GetAfterCreated }:any) {
                 <Box sx={s.eachRow}>
                   <Box sx={s.text}>Summary:</Box>
                   <Tooltip
+                    arrow
                     enterDelay={500}
                     leaveDelay={200}
                     enterTouchDelay={0}
@@ -309,17 +370,40 @@ export default function CreateRecipe({ GetAfterCreated }:any) {
                   <Box sx={{ background: 'gold', display: 'flex', flexDirection: 'column' }}>
 
                     {stepsState.map((e, index) => (
-                      <Box sx={{ display: 'flex', flexDirection: 'row', width: '68vw' }}>
+                      <Box key={index} sx={{ display: 'flex', flexDirection: 'row', width: '68vw' }}>
                         <Box sx={s.step}>Step {index + 1}:</Box>
-                        <TextField //test
-                          id={`${index}`}
-                          autoComplete='off'
-                          multiline
-                          value={stepsState[index]}
-                          placeholder={'test'}
-                          sx={s.inputStep}
-                          onChange={(e) => { handlerUpdate({ index: parseInt((e.target as HTMLInputElement).id, 10), value: e.target.value }) }}
-                        />
+
+                        <Tooltip
+                          key={index}
+                          arrow
+                          enterDelay={500}
+                          leaveDelay={200}
+                          enterTouchDelay={0}
+                          //open={error.instructions[`${index}`].error}
+                          open={error.instructions[`${index}`].error}
+                          placement="bottom"
+                          //title={`SOME ERROR !`}
+                          title={`Special characters not allowed on step ${index + 1} of "Instructions" !`}
+                          
+                        >
+                          <TextField //test
+                            id={`${index}instructions`}
+                            //className="bbb"
+                            autoComplete='off'
+                            multiline
+                            value={stepsState[index]}
+                            placeholder={'test'}
+                            sx={s.inputStep}
+                            onChange={(e) => {
+                              handlerUpdate({ index: parseInt((e.target as HTMLInputElement).id, 10), value: e.target.value });
+                              //validator({ value: e.target.value, type: e.target.id })
+                              validator({ value: e.target.value, type: e.target.id.replace(/[0-9]/g, ''), index: parseInt((e.target as HTMLInputElement).id, 10) })
+                              //console.log("a ver", e.target.className)
+                              //console.log("a ver", index)
+                            }}
+                          />
+                        </Tooltip>
+
                         <Button
                           id={`${index}`}
                           sx={s.buttonNew}
@@ -329,7 +413,7 @@ export default function CreateRecipe({ GetAfterCreated }:any) {
                           disabled={stepsState.length === 1 ? true : false}
                           id={`${index}`}
                           sx={s.buttonDelete}
-                          onClick={(e) => { console.log("index", index); handlerDelete({ index: parseInt((e.target as HTMLInputElement).id, 10) }) }}
+                          onClick={(e) => { handlerDelete({ index: parseInt((e.target as HTMLInputElement).id, 10) }) }}
                         >Detele Step</Button>
                       </Box>
                     ))}
