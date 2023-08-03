@@ -68,7 +68,7 @@ export default function CreateRecipe({ GetAfterCreated }:any) {
     //setDietSelected([...dietSelected, event])
   }
 
-  const [title, setTitle] = useState('');
+  const [title, setTitle] = useState("");
   const [healthScore, setHealthScore] = useState("");
   const [summary, setSummary] = useState("");
   const [analyzedInstructions, setAnalyzedInstructions] = useState("");
@@ -152,39 +152,23 @@ export default function CreateRecipe({ GetAfterCreated }:any) {
   }
 
   const validator = ({ type, value }: validateStringI) => {
+    console.log("value de adentro", value)
     switch (type) {
       case (`title`):
-        if (/(!|¡|@|[?]|¡|<|>|[/]|[\\]|%|[[]|]|[|]|°|#|[$]|&|[()]|[)]|=|_|[*]|¿|[+]|~|{|}|`|\^)/.test(value)/*  && summaryValue.length !== 0 */) setError({...error, [type]: true})
+        if (/(!|¡|@|[?]|¡|<|>|[/]|[\\]|%|[[]|]|[|]|°|#|[$]|&|[()]|[)]|=|_|[*]|¿|[+]|~|{|}|`|\^)/.test(value)) setError({...error, [type]: true})
         else setError({...error, [type]: false});
         setTitleValue(value);
       break;
       case (`health`):
-        if (!/^\d+$/.test(value) && value.length !== 0 ) {
-          let copyObj = {...error}
-          copyObj.health.string = true
-          setError({ ...copyObj })
-        }
-        if (parseInt(value, 10) > 100 ) {
-          let copyObj = {...error}
-          copyObj.health.max = true
-          setError({ ...copyObj })
-          //setError({ ...error, health: { max: true } })
-        }
-        if (/^\d+$/.test(value) && value.length !== 0 ) {
-          let copyObj = {...error}
-          copyObj.health.string = false
-          setError({ ...copyObj })
-        }
-        if (!(parseInt(value, 10) > 100)) {
-          let copyObj = {...error}
-          copyObj.health.max = false
-          setError({ ...copyObj })
-        }
-        //else setError({ ...error, health: { string: false, max: false } });
+        let copyObj = {...error}
+        if (!/^\d+$/.test(value) && value.length !== 0 ) { copyObj.health.string = true; setError({ ...copyObj })}
+        else { copyObj.health.string = false; setError({ ...copyObj })}
+        if (parseInt(value, 10) > 100 && value.length !== 0) {copyObj.health.max = true; setError({ ...copyObj })}
+        else { copyObj.health.max = false; setError({ ...copyObj })}
         setHealthValue(value);
       break;
       case (`summary`):
-        if (/(!|¡|@|[?]|¡|<|>|[/]|[\\]|%|[[]|]|[|]|°|#|[$]|&|[()]|[)]|=|_|[*]|¿|[+]|~|{|}|`|\^)/.test(value)/*  && summaryValue.length !== 0 */) setError({...error, [type]: true})
+        if (/(!|¡|@|[?]|¡|<|>|[/]|[\\]|%|[[]|]|[|]|°|#|[$]|&|[()]|[)]|=|_|[*]|¿|[+]|~|{|}|`|\^)/.test(value)) setError({...error, [type]: true})
         else setError({...error, [type]: false});
         setSummaryValue(value);
       break;
@@ -206,16 +190,14 @@ export default function CreateRecipe({ GetAfterCreated }:any) {
 
 
   const handleChange = (event: SelectChangeEvent<typeof dietsArray>) => {
-    const {
-      target: { value },
-    } = event;
-    setDietsArray(
-      // On autofill we get a stringified value.
-      typeof value === 'string' ? value.split(',') : value,
-    );
+    const { target: { value } } = event
+    setDietsArray( typeof value === 'string' ? value.split(',') : value );
   };
 
-  console.log("stepsState", stepsState)
+  //console.log("stepsState", stepsState)
+  console.table(error)
+  console.log("healthValue", typeof healthValue)
+  console.log("healthValue.length", healthValue.length)
 
   return !firstInstance ?
     (
