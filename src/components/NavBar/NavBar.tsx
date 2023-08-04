@@ -10,12 +10,7 @@ import {
 } from '../../actions';
 import dietss from '../../db/diets.json';
 
-
-interface NavBarI {
-  handleTitleMatchChange: any,
-}
-
-export default function Nav({ handleTitleMatchChange }: NavBarI) {
+const NavBar = () =>  {
 
   const dispatch = useDispatch()
 
@@ -25,7 +20,7 @@ export default function Nav({ handleTitleMatchChange }: NavBarI) {
   const [sortAlpha, setSortAlpha] = useState<string>('');
   const [typeOfDiet, setTypeOfDiet] = useState<string>('All Diets');
   const [textToFilter, setTextToFilter] = useState<string>('');
-  const [placeholder, setPlaceholder] = useState<string>('FIND RECIPE..');
+  const [placeholder, setPlaceholder] = useState<string>('Find recipe..');
 
 
   interface entireFilterI {
@@ -72,16 +67,17 @@ export default function Nav({ handleTitleMatchChange }: NavBarI) {
         <Link /* className="iconImage"  */to="/">
           <Box component="img" sx={s.logo} /* className="iconImage"  */src={logo} alt=""></Box>
         </Link>
-        <Link /* id="iconText"  */to="/">
+        <Link style={s.linkLink()}/* id="iconText"  */to="/">
           <Typography sx={s.linkText}>Foodify !</Typography>
         </Link>
       </Box>
       
-      <div className="main-right">
-        <div className="right-upper">
+      <Box sx={s.selectsAndButtons}>
+        <Box sx={s.upper}>
           <Box
             component="form"
             onSubmit={(e: any) => { e.preventDefault(); dispatch(filter(entireFilter)) }}
+            //sx={{ background: 'transparent' }}
           >
             <TextField
               className={`inputPos`}
@@ -91,28 +87,34 @@ export default function Nav({ handleTitleMatchChange }: NavBarI) {
               /* placeholder={`FIND RECIPE..`} */
               placeholder={placeholder}
               onFocus={() => setPlaceholder("")}
-              onBlur={() => setPlaceholder(`FIND RECIPE..`)}
+              onBlur={() => setPlaceholder(`Find recipe..`)}
               //value={city}
               //InputLabelProps={{ style: s.labelStyle() }}
-              //InputProps={{ style: s.inputStyleProps() }}
-              //sx={s.input()}
+              InputProps={{ style: s.inputProps() }}
+              sx={s.input()}
               onChange={(e) => setEntireFilter({...entireFilter, text: e.target.value})}
             />
             <Button
               className={`buttonPos`}
               //disabled={disabled}
               //sx={s.button()}
+              sx={s.button}
               type="submit"
             >{ `SEARCH !` }
             </Button>
           </Box>
-          <Link to="/create"> <button className="button">CREATE RECIPE !</button> </Link>
-          <Link to="/about"> <button className="button">ABOUT !</button> </Link>
-        </div>
-        <div className="right-lower">
+          <Link to="/create">
+            <Button sx={s.button} className="button">CREATE RECIPE !</Button>
+          </Link>
+          <Link to="/about">
+            <Button sx={s.button} className="button">ABOUT !</Button>
+          </Link>
+        </Box>
+        <Box /* className="right-lower" */ sx={s.lower}>
           <FormControl>
             <Select
-              sx={{ width: '150px' }}
+              //sx={{ width: '150px' }}
+              sx={s.diets}
               value={entireFilter.diet}
               onChange={(e) => setEntireFilter({...entireFilter, diet:e.target.value})}
             >
@@ -126,11 +128,13 @@ export default function Nav({ handleTitleMatchChange }: NavBarI) {
               })}
             </Select>
           </FormControl>
-          <FormControl>
-            <InputLabel>Sort by Healthy</InputLabel>
+          <FormControl
+            //InputLabelProps={{ style: s.labelStyle() }}
+
+          >
+            <InputLabel size="small" sx={s.label()}>  Sort by Healthy  </InputLabel>
             <Select
-              sx={{ width: '150px' }}
-              label="Sort by Healthy"
+              sx={s.health}
               value={healthLevel}
               onChange={(e) => {setEntireFilter({...entireFilter, alphaOrHealthy: e.target.value}); healthLevelHandler(e)}}
             >
@@ -139,9 +143,10 @@ export default function Nav({ handleTitleMatchChange }: NavBarI) {
             </Select>
           </FormControl>
           <FormControl>
-            <InputLabel>Sort alphabetically</InputLabel>
+            <InputLabel size="small" sx={s.label()}>  Sort alphabetically  </InputLabel>
             <Select
-              sx={{ width: '150px' }}
+              //sx={{ width: '150px' }}
+              sx={s.alpha}
               label="Sort alphabetically"
               value={sortAlpha}
               onChange={(e) => {setEntireFilter({...entireFilter, alphaOrHealthy: e.target.value}); sortAlphaHandler(e)}}
@@ -150,9 +155,10 @@ export default function Nav({ handleTitleMatchChange }: NavBarI) {
               <MenuItem value={"Z-A"}>Z-A</MenuItem>
             </Select>
           </FormControl>
-        </div>
-      </div>
+        </Box>
+      </Box>
     </Box>
   );
-
 }
+
+export default NavBar;

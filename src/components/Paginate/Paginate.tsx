@@ -1,6 +1,7 @@
 import { useSelector , useDispatch } from 'react-redux';
 import { setIndexChoosen } from '../../actions';
-import '../../styles/Paginate.css';
+//import '../../styles/Paginate.css';
+import * as s from '../../styles/PaginateSX';
 import { Box, Button, TextField, Dialog, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material/';
 import $ from 'jquery';
 
@@ -31,20 +32,21 @@ const Paginate = () => {
       let qq = $(`.Page${i}`).attr("value")
       if (indexChoosen === Number(qq)) {
         $(`.Page${indexChoosen}`)
-          .css("background", "green")
+          .css("background", "rgba(46, 230, 163, 0.377)")
       } else {
         $(`.Page${i}`)
-          .css("background", "red")
+          .css("background", "rgba(230, 46, 175, 0.363)")
       }
     })
   })
 
   return (
-    <Box className='paginate' >
+    <Box /* className='paginate' */ sx={s.background}>
       {[...Array(Math.ceil(toShow.length/9))].map((e, i) => {
           return (
             <Button
-              sx={{ background: 'red' }}
+              //sx={{ background: 'red' }}
+              sx={s.eachButton}
               className={`Page${i}`}
               key={i}
               value={i}

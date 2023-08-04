@@ -84,7 +84,6 @@ export default function CreateRecipe({ GetAfterCreated }:any) {
   const [titlePlaceholder, setTitlePlaceholder] = useState<string>('e.g. Pasta with tomatoes..');
   const [healthScorePlaceholder, setHealthScorePlaceholder] = useState<string>('e.g. 73');
   const [summaryPlaceholder, setSummaryPlaceholder] = useState<string>('e.g. Healthy pasta recipe');
-  const [instructionsPlaceholder, setInstructionsPlaceholder] = useState<string>('e.g. Cut pasta, fry tomatoes..');
 
   const [titleValue, setTitleValue] = useState<string>('');
   const [healthValue, setHealthValue] = useState<string>('');
@@ -125,12 +124,12 @@ export default function CreateRecipe({ GetAfterCreated }:any) {
   });
 
   function handleNewRecipe() {
-    setDietSelected([])
-    setCreated(0)
-    setTitle("")
-    setHealthScore("")
-    setSummary("")
-    setAnalyzedInstructions("")
+    // setDietSelected([])
+    // setCreated(0)
+    // setTitle("")
+    // setHealthScore("")
+    // setSummary("")
+    // setAnalyzedInstructions("")
     //setError(error, error.title = "", error.health.one = "", error.health.two = "", error.summary= "", error.instructions= "")
 
   }
@@ -248,12 +247,27 @@ export default function CreateRecipe({ GetAfterCreated }:any) {
   const handleChange = (event: SelectChangeEvent<typeof dietsArray>) => {
     const { target: { value } } = event
     setDietsArray( typeof value === 'string' ? value.split(',') : value );
+    
   };
 
-  //console.log("stepsState", stepsState)
+  const clearHandler = () => {
+    setTitleValue('');
+    setHealthValue('');
+    setSummaryValue('');
+    setDietsArray([]);
+    setStepsState(['']);
+    setError({
+      title: false,
+      health: { string: false, max: false },
+      summary: false,
+      instructions: [{ error: false }]
+    });
+  };
+
+  console.log("stepsState", stepsState)
   //console.table(error)
   //console.log("error", error)
-  console.log(JSON.stringify(error, null, 4));
+  //console.log(JSON.stringify(error, null, 4));
   //console.log("healthValue", typeof healthValue)
   //console.log("healthValue.length", healthValue.length)
 
@@ -282,6 +296,7 @@ export default function CreateRecipe({ GetAfterCreated }:any) {
                       type="text"
                       autoComplete='off'
                       id="title"
+                      value={titleValue}
                       placeholder={titlePlaceholder}
                       onFocus={() => setTitlePlaceholder("")}
                       onBlur={() => setTitlePlaceholder(`e.g. Pasta with tomatoes..`)}
@@ -308,6 +323,7 @@ export default function CreateRecipe({ GetAfterCreated }:any) {
                       className={`inputPos`}
                       id="health"
                       sx={s.input}
+                      value={healthValue}
                       autoComplete='off'
                       placeholder={healthScorePlaceholder}
                       onFocus={() => setHealthScorePlaceholder("")}
@@ -331,6 +347,7 @@ export default function CreateRecipe({ GetAfterCreated }:any) {
                       id="summary"
                       autoComplete='off'
                       sx={s.input}
+                      value={summaryValue}
                       multiline
                       placeholder={summaryPlaceholder}
                       onFocus={() => setSummaryPlaceholder("")}
@@ -392,7 +409,7 @@ export default function CreateRecipe({ GetAfterCreated }:any) {
                             autoComplete='off'
                             multiline
                             value={stepsState[index]}
-                            placeholder={'test'}
+                            placeholder={`e.g. Cut pasta, fry tomatoes..`}
                             sx={s.inputStep}
                             onChange={(e) => {
                               handlerUpdate({ index: parseInt((e.target as HTMLInputElement).id, 10), value: e.target.value });
@@ -405,6 +422,7 @@ export default function CreateRecipe({ GetAfterCreated }:any) {
                         </Tooltip>
 
                         <Button
+                          disabled={stepsState.length >= 10 ? true : false}
                           id={`${index}`}
                           sx={s.buttonNew}
                           onClick={(e) => handlerAdd({ index: parseInt((e.target as HTMLInputElement).id, 10) })}
@@ -423,6 +441,7 @@ export default function CreateRecipe({ GetAfterCreated }:any) {
                 <Box sx={s.eachRow}>
                   <Button
                     variant="contained"
+                    onClick={() => clearHandler()}
                   >
                     CLEAR
                   </Button>

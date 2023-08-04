@@ -1,11 +1,18 @@
 export const background = () => {
   return {
     display: 'flex',
+    position: 'relative',
     justifyContent: 'center',
-    background: 'gray',
+    background: 'lightblue', // dev
     flexWrap: 'wrap',
+    //maxWidth: '1250px',
+    maxWidth: '1300px',
     width: '100vw',
-    height: '90vh',
+    //minHeight: '900px !important',
+    //minHeight: '800px',
+    //height: '100vh',
+    //height: '90vh',
+    alignSelf: 'center',
   }
 }
 

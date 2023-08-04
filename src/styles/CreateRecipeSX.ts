@@ -33,9 +33,14 @@ export const eachRow = () => {
 
 export const text = () => {
   return {
+    display: 'flex',
+    flexDirection: 'row',
     color: 'black',
     width: '12vw',
     background: 'green',
+    justifyContent: 'center',
+    alignItems: 'center'
+
   }
 }
 
@@ -52,9 +57,13 @@ export const input = () => {
 
 
 export const step = () => {
-  return { 
+  return {
+    display: 'flex',
+    flexDirection: 'row',
     width: '6vw',
-    background: 'lightblue'
+    background: 'lightblue',
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 }
 

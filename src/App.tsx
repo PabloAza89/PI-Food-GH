@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useSelector } from 'react-redux';
 import { Route, Routes } from "react-router-dom";
-import './App.css';
+//import './App.css';
+import * as s from './styles/AppSX'
 import { Box } from '@mui/material';
 import CardsMapper from "./components/CardsMapper/CardsMapper";
 import Detail from "./components/Detail.jsx";
@@ -86,13 +87,10 @@ function App() {
     }
   
     return (
-      <Box className='mainPage'>
+      <Box sx={s.background}>
         <Routes>
           <Route path="/" element={<>
-            <NavBar
-
-              handleTitleMatchChange={handleTitleMatchChange}
-            />
+            <NavBar />
             <Paginate />
             <CardsMapper />
           </>}/>
