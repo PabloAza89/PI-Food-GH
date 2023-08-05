@@ -1,24 +1,40 @@
-import React from "react";
 import { useParams } from "react-router-dom";
-import "../styles/Detail.css";
-import noImage1 from "../images/noImage1.jpg";
-import noImage2 from "../images/noImage2.jpg";
-import noImage3 from "../images/noImage3.jpg";
+import { useSelector , useDispatch } from 'react-redux';
+import "../../styles/Detail.css";
+import noImage1 from "../../images/noImage1.jpg";
+import noImage2 from "../../images/noImage2.jpg";
+import noImage3 from "../../images/noImage3.jpg";
 import { Link } from "react-router-dom";
-import logo from "../images/logo.png";
+import logo from "../../images/logo.png";
 
-export default function Detail({onFilterID}) {
+export default function Detail(/* {onFilterID}: any */) {
 
     let arrImages = [noImage1, noImage2, noImage3]
 
     var params = useParams()
-    
-    var food = onFilterID(params.foodId)
 
-    function regexInSummary(text) {
+    interface recipesI {
+      id: any,
+      title: any,
+      diets: any,
+      healthScore: any,
+      summary: any,
+      analyzedInstructions: any,
+      image: any,
+      dishTypes: any,
+    }  
+    
+
+    const allRecipes = useSelector((state: { allRecipes: recipesI[] }) => state.allRecipes)
+
+    console.log("params", params)
+
+    //ar food = onFilterID(params.foodId)
+
+    function regexInSummary(text: any) {
         return text.replaceAll(/(<[/]b>|<b>|<[/]a>|<a\b[^>]*>|[/]a>)/g, '');
     }
-      
+
     if (food) {
         return (
             <div className="detail-body">
@@ -28,7 +44,7 @@ export default function Detail({onFilterID}) {
                             <img className="iconImageForm" src={logo} alt=""></img>
                         </Link>
                         <Link id="iconText" to="/PI-Food-GH">
-                            <h2>Go Back !</h2> 
+                            <h2>Go Back !</h2>
                         </Link>
                     </div>
                     <div className="main-upper-right">
@@ -38,22 +54,22 @@ export default function Detail({onFilterID}) {
                 <div className="main-lower">
                     <span className="text-smaller-stylee">
                         <span className="text-smaller-style"><b>Title: </b>{food.title}</span>
-                        <span className="text-smaller-style"><b>{food.diets[0]&&"Diets: "}</b>{food.diets.map(function(e) {
+                        <span className="text-smaller-style"><b>{food.diets[0]&&"Diets: "}</b>{food.diets.map(function(e: any) {
                             if ((food.diets.indexOf(e) !== food.diets.length - 1)) {
                                 return e + " + "
                             } else return e
                             })}</span>
-                        <span className="text-smaller-style"><b>Health Score: </b>{food.healthScore}</span>                    
-                        {food.dishTypes && <span className="text-smaller-style"><b>Dish Types: </b>{food.dishTypes.map(function(e) {
+                        <span className="text-smaller-style"><b>Health Score: </b>{food.healthScore}</span>
+                        {food.dishTypes && <span className="text-smaller-style"><b>Dish Types: </b>{food.dishTypes.map(function(e: any) {
                         if ((food.dishTypes.indexOf(e) !== food.dishTypes.length - 1)) {
-                            return e.split(" ").map(e => e[0].toUpperCase() + e.slice(1)).join("  ") + " + "
-                        } else return e.split(" ").map(e => e[0].toUpperCase() + e.slice(1)).join(" ")
-                        })}</span>}    
-                        
+                            return e.split(" ").map((e: any) => e[0].toUpperCase() + e.slice(1)).join("  ") + " + "
+                        } else return e.split(" ").map((e: any) => e[0].toUpperCase() + e.slice(1)).join(" ")
+                        })}</span>}
+
                         <span className="text-smaller-style" id="backgroundColor"><b>Summary: </b>{regexInSummary(food.summary)} </span>
                         {food.analyzedInstructions[0] ? <span className="text-smaller-style" id="backgroundColor"><b>Instructions: </b>{food.analyzedInstructions}</span> : <div></div>}
-                    </span>    
-                </div>   
+                    </span>
+                </div>
             </div>
         )
     } else if (params.foodId === "create" || params.foodId === "about") {
@@ -67,5 +83,5 @@ export default function Detail({onFilterID}) {
                     </Link>
                 </div>
              )
-    }    
+    }
 }

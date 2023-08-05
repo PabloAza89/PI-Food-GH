@@ -9,7 +9,7 @@ export const background = () => {
 export const eachButton = () => {
   return {
     display: 'flex',
-    paddingTop: '8px !important',
+    paddingTop: '8.49px !important',
     color: 'black',
     minWidth: '30px !important',
     width: '30px !important',

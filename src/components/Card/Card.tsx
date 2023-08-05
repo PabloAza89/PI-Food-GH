@@ -23,8 +23,8 @@ function Card({ id, image, title, healthScore , diets, dishTypes }: CardI) {
       <Link to={`/${id}`}>
         <Box component="img" sx={s.image} src={image.length > 1 ? image : arrImages[image] } alt="" />
       </Link>
-      <Link to={`/${id}`}>
-        <Typography sx={s.text} ><b >{title}</b></Typography>
+      <Link style={{ textDecoration: 'none' }} to={`/${id}`}>
+        <Typography sx={s.title}>{title}</Typography>
       </Link>
       <Typography sx={s.text}>
         <b>Diets: </b>

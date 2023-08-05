@@ -18,7 +18,17 @@ interface initialStateI {
   showMain: boolean,
   indexChoosen: number,
   allIndexes: number,
-  addNew: recipesI[]
+  addNew: recipesI[],
+  width: number,
+  height: number,
+  minPort: boolean,
+  minLand: boolean,
+  medPort: boolean,
+  medLand: boolean,
+  larPort: boolean,
+  larLand: boolean,
+  currentWidth: number,
+  percentageResizedHeight: number,
 }
 
 const initialState: initialStateI = {
@@ -28,7 +38,17 @@ const initialState: initialStateI = {
   showMain: false,
   indexChoosen: 0,
   allIndexes: 0,
-  addNew: []
+  addNew: [],
+  width: window.screen.width,
+  height: window.screen.height,
+  minPort: window.screen.width < 425 && window.matchMedia("(orientation: portrait)").matches ? true : false,
+  minLand: window.screen.height < 425 && !window.matchMedia("(orientation: portrait)").matches ? true : false,
+  medPort: window.screen.width >= 425 && window.screen.width <= 825 && window.matchMedia("(orientation: portrait)").matches ? true : false,
+  medLand: window.screen.height >= 425 && window.screen.height <= 825 && !window.matchMedia("(orientation: portrait)").matches ? true : false,
+  larPort: window.screen.width > 825 && window.matchMedia("(orientation: portrait)").matches ? true : false,
+  larLand: window.screen.height > 825 && !window.matchMedia("(orientation: portrait)").matches ? true : false,
+  currentWidth: window.innerWidth,
+  percentageResizedHeight: window.innerHeight / window.screen.height,
 }
 
 const reducer = (state = initialState, action: {type: string; payload: any}) => {
@@ -118,6 +138,56 @@ const reducer = (state = initialState, action: {type: string; payload: any}) => 
       return {
         ...state,
         addNew: [...state.addNew, action.payload]
+      };
+    case 'SET_WIDTH':
+      return {
+        ...state,
+        width: action.payload
+      };
+    case 'SET_HEIGHT':
+      return {
+        ...state,
+        height: action.payload
+      };
+    case 'MIN_PORT':
+      return {
+        ...state,
+        minPort: action.payload
+      };
+    case 'MIN_LAND':
+      return {
+        ...state,
+        minLand: action.payload
+      };
+    case 'MED_PORT':
+      return {
+        ...state,
+        medPort: action.payload
+      };
+    case 'MED_LAND':
+      return {
+        ...state,
+        medLand: action.payload
+      };
+    case 'LAR_PORT':
+      return {
+        ...state,
+        larPort: action.payload
+      };
+    case 'LAR_LAND':
+      return {
+        ...state,
+        larLand: action.payload
+      };
+    case 'CURRENT_WIDTH':
+      return {
+        ...state,
+        currentWidth: action.payload
+      };
+    case 'PERCENTAGE_RESIZED_HEIGHT':
+      return {
+        ...state,
+        percentageResizedHeight: action.payload
       };
     default:
       return state

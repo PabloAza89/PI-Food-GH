@@ -3,18 +3,19 @@ export const background = () => {
     display: 'flex',
     position: 'relative',
     justifyContent: 'center',
-    background: 'lightblue', // dev
+    zIndex: 1001,
+    //background: 'lightblue', // dev
     flexWrap: 'wrap',
-    //maxWidth: '1250px',
-    maxWidth: '1300px',
+    maxWidth: '1410px',
     width: '100vw',
-    //minHeight: '900px !important',
-    //minHeight: '800px',
-    //height: '100vh',
-    //height: '90vh',
     alignSelf: 'center',
   }
 }
+
+// each Card:
+// width 450px // 450 * 3 = 1350 // margins 18px (*3) + 6 (border) // 1410
+// height 225px
+// image 280px 115px
 
 export const notFound = () => {
   return {
@@ -22,13 +23,15 @@ export const notFound = () => {
     position: 'absolute',
     display: 'flex',
     flexDirection: 'column',
+    minWidth: '925px',
     width: '100vw',
-    height: '30vh',
+    //height: '30vh',
+    height: '260px',
     alignItems: 'center',
     justifyContent: 'center',
     color: 'rgba(240, 248, 255, 0.726)',
-    fontSize: '10vh',  
-    marginTop: '5vh',
-    marginBottom: '20vh',
+    //fontSize: '10vh',
+    fontSize: '87px',
+    textWrap: 'nowrap',
   }
 }

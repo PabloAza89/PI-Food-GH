@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import logo from "../../images/logo.png";
 import * as s from '../../styles/NavBarSX';
 import { useDispatch, useSelector } from 'react-redux';
+import MenuIcon from '@mui/icons-material/Menu';
 import { Box, Button, TextField, Dialog, Typography,FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material/';
 import { 
   setIndexChoosen, filter
@@ -21,6 +22,14 @@ const NavBar = () =>  {
   const [typeOfDiet, setTypeOfDiet] = useState<string>('All Diets');
   const [textToFilter, setTextToFilter] = useState<string>('');
   const [placeholder, setPlaceholder] = useState<string>('Find recipe..');
+
+
+
+  const currentWidth = useSelector((state: {currentWidth:number}) => state.currentWidth)
+
+  const [menuShow, setMenuShow] = useState<boolean>(false);
+
+  
 
 
   interface entireFilterI {
@@ -61,18 +70,33 @@ const NavBar = () =>  {
     dispatch(setIndexChoosen(0))
   },[ dispatch, entireFilter ])
 
+
+  useEffect(() => {
+    if (currentWidth > 800) setMenuShow(false)
+  },[ currentWidth ])
+
   return (
-   <Box sx={s.background}>
-      <Box sx={s.logoTextContainer}>
-        <Link /* className="iconImage"  */to="/">
-          <Box component="img" sx={s.logo} /* className="iconImage"  */src={logo} alt=""></Box>
-        </Link>
-        <Link style={s.linkLink()}/* id="iconText"  */to="/">
-          <Typography sx={s.linkText}>Foodify !</Typography>
-        </Link>
+   <Box sx={s.background({ menuShow })}>
+      <Box sx={s.logoAndMenuContainer}>
+        <Box sx={s.logoTextContainer}>
+          <Link to="/">
+            <Box component="img" sx={s.logo} src={logo} alt=""></Box>
+          </Link>
+          <Link style={s.linkLink()} to="/">
+            <Typography sx={s.linkText}>Foodify !</Typography>
+          </Link>
+        </Box>
+
+        <Button
+          onClick={() => setMenuShow(!menuShow) }
+          sx={s.menuButton({ currentWidth })}
+        >
+          <MenuIcon sx={{ fontSize: 60 }} />
+        </Button>
       </Box>
-      
-      <Box sx={s.selectsAndButtons}>
+      <Box
+        sx={s.selectsAndButtons({ menuShow, currentWidth }) }
+      >
         <Box sx={s.upper}>
           <Box
             component="form"

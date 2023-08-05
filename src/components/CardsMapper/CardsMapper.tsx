@@ -30,19 +30,23 @@ const CardsMapper = ()  => {
   return toShow[0] !== undefined ?
   (
     <Box sx={s.background}>
-      {arraySplitedBy9.map((e:any) => <Card
-      key={e.id}
-      id={e.id}
-      title={e.title}
-      healthScore={e.healthScore}
-      diets={e.diets}
-      image={e.image}
-      dishTypes={e.dishTypes}
-      /> )}
+      {arraySplitedBy9.map((e:any) =>
+        <Card
+          key={e.id}
+          id={e.id}
+          title={e.title}
+          healthScore={e.healthScore}
+          diets={e.diets}
+          image={e.image}
+          dishTypes={e.dishTypes}
+        />
+      )}
     </Box>
   )
   :
-  (<Box sx={s.notFound} >No recipe was found !</Box>)
+  (<Box>
+    <Box sx={s.notFound} >No recipe was found !</Box>
+  </Box>)
 
 }
 
