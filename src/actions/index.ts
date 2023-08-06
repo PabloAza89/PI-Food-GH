@@ -114,3 +114,32 @@ export function setPercentageResizedHeight(setPercentageResizedHeight:number) {
     payload: setPercentageResizedHeight
   }
 };
+
+export function setScrollWidth(setScrollWidth:number) {
+  return {
+    type: 'SET_SCROLL_WIDTH',
+    payload: setScrollWidth
+  }
+};
+
+export function setHasScroll(setHasScroll:boolean) {
+  return {
+    type: 'SET_HAS_SCROLL',
+    payload: setHasScroll
+  }
+};
+
+
+export function setScrollPosition(setScrollPosition:number) {
+  return {
+    type: 'SET_SCROLL_POSITION',
+    payload: setScrollPosition
+  }
+};
+
+export function setMenuShown(setMenuShown:boolean) {
+  return {
+    type: 'SET_MENU_SHOWN',
+    payload: setMenuShown
+  }
+};

@@ -9,11 +9,23 @@ export const background = () => {
     display: 'flex',
     flexDirection: 'column',
     //background: 'gray', // dev
+    alignItems: 'center',
+    alignSelf: 'center',
+  }
+}
+
+export const card = () => {
+  return {
+    display: 'flex',
+    flexDirection: 'column',
+    //background: 'gray', // dev
     width: '55vw',
     padding: '18px',
     alignItems: 'center',
     alignSelf: 'center',
     marginTop: '16px',
+    //paddingBottom: '5000px',
+    //marginBottom: '5000px',
     //margin: '16px 16px 16px 16px',
     background: 'linear-gradient(135deg, rgba(64, 117, 117, 0.1), rgba(64, 117, 117, 0))',
     '-webkit-backdrop-filter': 'blur(20px)',
@@ -89,6 +101,18 @@ export const eachStepContent = () => {
     color: 'antiquewhite',
     letterSpacing: 'normal',
     textWrap: 'wrap',
+  }
+}
+
+export const helperBottom = () => {
+  return {
+    //...noSelect,
+    display: 'flex',
+    //zIndex: 4000,
+    height: '16px', // marginTop: '16px',
+    //background: 'red', //dev
+    //width: '100vw',
+    width: '50vw',
   }
 }
 

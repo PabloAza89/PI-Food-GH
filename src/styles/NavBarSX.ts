@@ -5,28 +5,41 @@ import {
 } from './CommonsSX'; // ALL VARS
 
 interface backgroundI {
-  menuShow: boolean
+  menuShown: boolean
 }
 
-export const background = ({ menuShow }: backgroundI) => {
+export const background = ({ menuShown }: backgroundI) => {
   return {
     display: 'flex',
-    flexDirection: menuShow ? 'column' : 'row',
-    minHeight: menuShow ? '200px' : '100px',
-    height: menuShow ? '200px' : '100px',
+    flexDirection: menuShown ? 'column' : 'row',
+    minHeight: menuShown ? '200px' : '100px',
+    height: menuShown ? '200px' : '100px',
     width: '100vw',
+    //width: '600px',
     backgroundColor: 'rgba(0,255,255,.264)',
     //background: 'gray' // dev
   }
 }
 
-export const logoAndMenuContainer = () => {
+interface logoAndMenuContainerI {
+  currentWidth: number,
+  scrollWidth: number
+}
+
+export const logoAndMenuContainer = ({ currentWidth, scrollWidth }: logoAndMenuContainerI) => {
   return {
-    //background: 'red', // dev
+    background: 'red', // dev
     display: 'flex',
+    //width: '100vw',
+    
+    width: currentWidth <= 800 ? `calc(100vw - ${scrollWidth}px)` : '200px',
     flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   }
 }
+
+
 
 export const logoTextContainer = () => {
   return {
@@ -43,21 +56,34 @@ export const logoTextContainer = () => {
 }
 
 interface selectsAndButtonsI {
-  menuShow: boolean,
+  menuShown: boolean,
   currentWidth: number,
+  scrollWidth: number,
 }
 
-export const selectsAndButtons = ({ menuShow, currentWidth }: selectsAndButtonsI) => {
+export const selectsAndButtons = ({ menuShown, currentWidth, scrollWidth }: selectsAndButtonsI) => {
   return {
     //display: menuShow ? 'flex' : 'none',
-    display: currentWidth <= 800 && !menuShow ? 'none' : 'flex',
+    marginRight: `17px`,
+    display: currentWidth <= 800 && !menuShown ? 'none' : 'flex',
     //display: 'flex',
     flexDirection: 'column',
-    minWidth: '560px',
-    width: 'calc(100vw - 200px)',
+    minWidth: '570px',
+    //width: 'calc(100vw - 200px)',
+    //width: `calc(100vw - ${scrollWidth}px)`,
+    width: `95vw`,
+    height: '100px',
+    //width: 'calc(100% - 200px - 17px)',
     justifyContent: 'space-around',
     background: 'blue', // dev
+    alignItems: 'center',
+    alignSelf: 'center',
+    //paddingRight: '100px',
+    //marginRight: '50px',
+    //padding: currentWidth <= 800 ? `0px 90px 0px 1px` : `0px 300px`,
     //padding: '0px 300px'
+    // marginLeft: '7px',
+    // marginRight: '27px',
   }
 }
 
@@ -173,25 +199,47 @@ export const test = () => {
   }
 }
 
-export const upper = () => {
+interface upperI {
+  currentWidth: number,
+  scrollWidth: number,
+}
+
+export const upper = ({ currentWidth, scrollWidth }: upperI) => {
   return {
     //background: 'gray', // dev
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    //marginLeft: '15vw',
-    //marginRight: '15vw',
+    //padding: currentWidth <= 800 ? '0px 7px' : '0px 20%',
+    //width: currentWidth <= 800 ? `calc(100vw - ${scrollWidth}px)` : '50vw',
+    width: currentWidth <= 800 ? `95vw` : '50vw',
+    minWidth: currentWidth <= 800 ? 'unset' : '570px',
+    // marginLeft: '7px',
+    // marginRight: '7px',
   }
 }
 
-export const lower = () => {
+interface lowerI {
+  currentWidth: number,
+  scrollWidth: number,
+}
+
+export const lower = ({ currentWidth, scrollWidth }: lowerI) => {
   return {
-    //background: 'red', // dev
+    //zIndex: 1000501,
+    background: 'red', // dev
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignContent: 'center',
+    //padding: '0px 7px',
+    //padding: currentWidth <= 800 ? '0px 7px' : '0px 20px',
+    //width: currentWidth <= 800 ? `calc(100vw - ${scrollWidth}px)` : '50vw',
+    width: currentWidth <= 800 ? `95vw` : '50vw',
+    minWidth: currentWidth <= 800 ? 'unset' : '570px',
+    //paddingLeft: 'max(1px, 10vw)',
+    //paddingRight: '1vw',
     //marginLeft: '15vw',
     //marginRight: '15vw',
   }
@@ -224,9 +272,13 @@ export const menuButton = ({ currentWidth }: menuButtonI) => {
     display: currentWidth <= 800 ? 'flex' : 'none',
     //background: 'blue', // dev
     background: 'gray',
+    ':hover': { background: 'darkgray' },
+    marginRight: '18px',
     //background: '#F0F0F0',
     color: 'black',
-    height: '35px',
+    height: '45px',
+    minWidth: '55px !important',
+    width: '55px !important',
     fontFamily: 'Arial',
     fontWeight: '400',
     fontSize: '13.33px',

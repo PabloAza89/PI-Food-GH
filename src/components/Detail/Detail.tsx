@@ -36,44 +36,47 @@ export default function Detail() {
   if (recipe) {
     return (
       <Box sx={s.background}>
-        <Box component="img" sx={s.image} src={recipe.image.length > 1 ? recipe.image : arrImages[recipe.image] } alt="" />
-        <Typography sx={s.text}><b>Title: </b>{recipe.title}</Typography>
-        <Typography sx={s.text}>
-          <b>Diets: </b>
-          {recipe.diets[0] && recipe.diets.map((e:any) => {
-            if ((recipe.diets.indexOf(e) !== recipe.diets.length - 1)) return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ") + " + "
-            else return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ")
-          })}
-        </Typography>
-        <Typography sx={s.text}>
-          <b>Healt Score: </b>{recipe.healthScore}
-        </Typography>
-        <Typography sx={s.text}>
-          <b>Dish Types: </b>
-          {recipe.dishTypes && recipe.dishTypes.map((e:any) => {
-            if ((recipe.dishTypes.indexOf(e) !== recipe.dishTypes.length - 1)) return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join("  ") + " + "
-            else return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ")
-          })}
-        </Typography>
-        <Typography sx={s.text}>
-          <b>Summary: </b>
-          {regexInSummary(recipe.summary)}
-        </Typography>
-        <Box sx={s.instructions}>
-          <Typography sx={s.text}><b>{recipe.analyzedInstructions[0] ? `Instructions: ` : null}</b></Typography>
-            {recipe.analyzedInstructions && recipe.analyzedInstructions.map((e: any, index: any) => {
-              return (
-                <Box sx={s.eachStep}>
-                  <Typography sx={s.eachStepTitle}>
-                    <b>Step {++index}: </b>
-                  </Typography>
-                  <Typography sx={s.eachStepContent}>
-                    {e}
-                  </Typography>
-                </Box>
-              )
+        <Box sx={s.card}>
+          <Box component="img" sx={s.image} src={recipe.image.length > 1 ? recipe.image : arrImages[recipe.image] } alt="" />
+          <Typography sx={s.text}><b>Title: </b>{recipe.title}</Typography>
+          <Typography sx={s.text}>
+            <b>Diets: </b>
+            {recipe.diets[0] && recipe.diets.map((e:any) => {
+              if ((recipe.diets.indexOf(e) !== recipe.diets.length - 1)) return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ") + " + "
+              else return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ")
             })}
+          </Typography>
+          <Typography sx={s.text}>
+            <b>Healt Score: </b>{recipe.healthScore}
+          </Typography>
+          <Typography sx={s.text}>
+            <b>Dish Types: </b>
+            {recipe.dishTypes && recipe.dishTypes.map((e:any) => {
+              if ((recipe.dishTypes.indexOf(e) !== recipe.dishTypes.length - 1)) return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join("  ") + " + "
+              else return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ")
+            })}
+          </Typography>
+          <Typography sx={s.text}>
+            <b>Summary: </b>
+            {regexInSummary(recipe.summary)}
+          </Typography>
+          <Box sx={s.instructions}>
+            <Typography sx={s.text}><b>{recipe.analyzedInstructions[0] ? `Instructions: ` : null}</b></Typography>
+              {recipe.analyzedInstructions && recipe.analyzedInstructions.map((e: any, index: any) => {
+                return (
+                  <Box sx={s.eachStep}>
+                    <Typography sx={s.eachStepTitle}>
+                      <b>Step {++index}: </b>
+                    </Typography>
+                    <Typography sx={s.eachStepContent}>
+                      {e}
+                    </Typography>
+                  </Box>
+                )
+              })}
+          </Box>
         </Box>
+        <Box sx={s.helperBottom}></Box>
       </Box>
     )
   } else return (

@@ -3,12 +3,56 @@ export const background = () => {
     display: 'flex',
     position: 'relative',
     justifyContent: 'center',
-    zIndex: 1001,
-    //background: 'lightblue', // dev
-    flexWrap: 'wrap',
-    maxWidth: '1410px',
+    //zIndex: 1001,
+    background: 'brown', // dev
     width: '100vw',
+    //width: 'calc(100vw - 50px)',
+    //height: '100vh',
+    //height: '800px',
+    
+    //minWidth: '1410px',
+    //margin: 0,
+    
     alignSelf: 'center',
+    //justifyContent: 'space-around',
+  }
+}
+
+interface backgrounddI {
+  scrollWidth: number,
+  scrollPosition: number,
+  menuShown: boolean,
+}
+
+export const backgroundd = ({ scrollWidth, scrollPosition, menuShown }: backgrounddI) => {
+  return {
+    zIndex: -1,
+    marginRight: `${scrollWidth}px`,
+    display: 'flex',
+    position: 'relative',
+    justifyContent: 'center',
+    //zIndex: 1001,
+    background: 'lightblue', // dev
+    flexWrap: 'wrap',
+    //marginTop: '37px',
+    //marginTop: scrollPosition >= 100 ? '37px' : '0px',
+
+    marginTop: menuShown && scrollPosition >= 200 ? '37px' : !menuShown && scrollPosition >= 100 ? '37px' : '0px',
+
+
+
+    //width: 'calc(100vw - 50px)',
+    //maxWidth: '1410px', // 1356 // 452 * 3
+    //maxWidth: '1356px', // 1356 // 452 * 3
+    //width: '100vw',
+    width: `calc(100vw - ${scrollWidth}px)`,
+    //height: '500px',
+    
+    //minWidth: '1410px',
+    //margin: 0,
+    
+    alignSelf: 'center',
+    //justifyContent: 'space-around',
   }
 }
 

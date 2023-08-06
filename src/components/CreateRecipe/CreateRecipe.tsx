@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useDispatch } from 'react-redux';
-import "../../styles/Form.css";
+//import "../../styles/Form.css";
 import * as s from "../../styles/CreateRecipeSX";
 import noImage1 from "../../images/noImage1.jpg";
 import logo from "../../images/logo.png";

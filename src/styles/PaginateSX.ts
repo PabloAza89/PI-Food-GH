@@ -1,8 +1,23 @@
-export const background = () => {
+interface backgroundI {
+  scrollWidth: number,
+  scrollPosition: number,
+  menuShown: boolean,
+}
+
+export const background = ({ scrollWidth, scrollPosition, menuShown }: backgroundI) => {
   return {
     display: 'flex',
+    //position: 'relative',
+    //top: '0px',
+    //top: '100px',
+    //position: scrollPosition >= 100 ? 'fixed' : 'relative',
+    position: menuShown && scrollPosition >= 200 ? 'fixed' :  !menuShown && scrollPosition >= 100 ? 'fixed' : 'relative',
+    //position: 'fixed',
+    //zIndex: 1500,
     justifyContent: 'center',
     padding: '8px 0px',
+    width: `calc(100vw - ${scrollWidth}px)`,
+    background: 'darkblue', // dev
   }
 }
 

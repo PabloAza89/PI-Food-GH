@@ -10,7 +10,7 @@ ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter basename="/PI-Food-GH">
-        <App />
+        <App/>
       </BrowserRouter>
     </Provider>
   </React.StrictMode>,

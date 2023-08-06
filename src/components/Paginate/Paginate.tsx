@@ -8,6 +8,9 @@ import $ from 'jquery';
 const Paginate = () => {
 
   const indexChoosen = useSelector((state: {indexChoosen: number}) => state.indexChoosen )
+  const scrollWidth = useSelector((state: {scrollWidth: number}) => state.scrollWidth)
+  const scrollPosition = useSelector((state: {scrollPosition: number}) => state.scrollPosition)
+  const menuShown = useSelector((state: {menuShown: boolean}) => state.menuShown)
 
   const dispatch = useDispatch()
 
@@ -24,11 +27,8 @@ const Paginate = () => {
 
   const toShow = useSelector((state: { toShow: recipesI[] }) => state.toShow)
 
-  console.log("toShow.length", toShow.length)
-  console.log("how many buttons", Math.ceil(toShow.length/9))
-
   $(function() {
-    [...Array(Math.ceil(toShow.length/9))].map((e, i) => {
+    [...Array(Math.ceil(toShow.length/9))].forEach((e, i) => {
       let qq = $(`.Page${i}`).attr("value")
       if (indexChoosen === Number(qq)) {
         $(`.Page${indexChoosen}`)
@@ -41,11 +41,10 @@ const Paginate = () => {
   })
 
   return (
-    <Box /* className='paginate' */ sx={s.background}>
+    <Box sx={s.background({ scrollWidth, scrollPosition, menuShown })}>
       {[...Array(Math.ceil(toShow.length/9))].map((e, i) => {
           return (
             <Button
-              //sx={{ background: 'red' }}
               sx={s.eachButton}
               className={`Page${i}`}
               key={i}

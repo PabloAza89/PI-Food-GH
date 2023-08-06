@@ -6,16 +6,18 @@ import * as s from '../../styles/NavBarSX';
 import { useDispatch, useSelector } from 'react-redux';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Box, Button, TextField, Dialog, Typography,FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material/';
-import { 
-  setIndexChoosen, filter
+import {
+  setIndexChoosen, filter, setMenuShown
 } from '../../actions';
 import dietss from '../../db/diets.json';
+import $ from 'jquery';
 
 const NavBar = () =>  {
 
   const dispatch = useDispatch()
 
   const allRecipesLoaded = useSelector((state: {allRecipesLoaded: boolean}) => state.allRecipesLoaded)
+  const scrollWidth = useSelector((state: {scrollWidth: number}) => state.scrollWidth)
 
   const [healthLevel, setHealthLevel] = useState<string>('');
   const [sortAlpha, setSortAlpha] = useState<string>('');
@@ -24,13 +26,10 @@ const NavBar = () =>  {
   const [placeholder, setPlaceholder] = useState<string>('Find recipe..');
 
 
-
   const currentWidth = useSelector((state: {currentWidth:number}) => state.currentWidth)
+  const menuShown = useSelector((state: {menuShown:boolean}) => state.menuShown)
 
-  const [menuShow, setMenuShow] = useState<boolean>(false);
-
-  
-
+  //const [menuShown, setMenuShown] = useState<boolean>(false);
 
   interface entireFilterI {
     diet: string,
@@ -39,7 +38,7 @@ const NavBar = () =>  {
   }
 
   const [entireFilter, setEntireFilter] = useState<entireFilterI>(
-    { 
+    {
       diet: 'All Diets',
       text: '',
       alphaOrHealthy: '',
@@ -49,15 +48,11 @@ const NavBar = () =>  {
   const healthLevelHandler = (e: SelectChangeEvent) => {
     setSortAlpha('' as string);
     setHealthLevel(e.target.value as string);
-    //if (e.target.value === "More Healthy") dispatch(sortMoreHealthy())
-    //if (e.target.value === "Less Healthy") dispatch(sortLessHealthy())
   };
 
   const sortAlphaHandler = (e: SelectChangeEvent) => {
     setHealthLevel('' as string);
     setSortAlpha(e.target.value as string);
-    //if (e.target.value === "A-Z") dispatch(sortAtoZ())
-    //if (e.target.value === "Z-A") dispatch(sortZtoA())
   };
 
   interface dietAndTextHandlerI {
@@ -72,12 +67,14 @@ const NavBar = () =>  {
 
 
   useEffect(() => {
-    if (currentWidth > 800) setMenuShow(false)
-  },[ currentWidth ])
+    if (currentWidth > 800) dispatch(setMenuShown(false))
+  },[ currentWidth, dispatch ])
+
+  console.log("AAA", menuShown)
 
   return (
-   <Box sx={s.background({ menuShow })}>
-      <Box sx={s.logoAndMenuContainer}>
+    <Box sx={s.background({ menuShown })}>
+      <Box sx={s.logoAndMenuContainer({ currentWidth, scrollWidth })}>
         <Box sx={s.logoTextContainer}>
           <Link to="/">
             <Box component="img" sx={s.logo} src={logo} alt=""></Box>
@@ -86,42 +83,32 @@ const NavBar = () =>  {
             <Typography sx={s.linkText}>Foodify !</Typography>
           </Link>
         </Box>
-
         <Button
-          onClick={() => setMenuShow(!menuShow) }
+          onClick={() => dispatch(setMenuShown(!menuShown))}
           sx={s.menuButton({ currentWidth })}
         >
-          <MenuIcon sx={{ fontSize: 60 }} />
+          <MenuIcon sx={{ fontSize: 40 }} />
         </Button>
       </Box>
-      <Box
-        sx={s.selectsAndButtons({ menuShow, currentWidth }) }
-      >
-        <Box sx={s.upper}>
+      <Box sx={s.selectsAndButtons({ menuShown, currentWidth, scrollWidth })}>
+        <Box sx={s.upper({ currentWidth, scrollWidth })}>
           <Box
             component="form"
             onSubmit={(e: any) => { e.preventDefault(); dispatch(filter(entireFilter)) }}
-            //sx={{ background: 'transparent' }}
           >
             <TextField
               className={`inputPos`}
-              //disabled={disabled}
               type="text"
               autoComplete='off'
-              /* placeholder={`FIND RECIPE..`} */
               placeholder={placeholder}
               onFocus={() => setPlaceholder("")}
               onBlur={() => setPlaceholder(`Find recipe..`)}
-              //value={city}
-              //InputLabelProps={{ style: s.labelStyle() }}
               InputProps={{ style: s.inputProps() }}
               sx={s.input()}
               onChange={(e) => setEntireFilter({...entireFilter, text: e.target.value})}
             />
             <Button
               className={`buttonPos`}
-              //disabled={disabled}
-              //sx={s.button()}
               sx={s.button}
               type="submit"
             >{ `SEARCH !` }
@@ -134,10 +121,9 @@ const NavBar = () =>  {
             <Button sx={s.button} className="button">ABOUT !</Button>
           </Link>
         </Box>
-        <Box /* className="right-lower" */ sx={s.lower}>
+        <Box sx={s.lower({ currentWidth, scrollWidth })}>
           <FormControl>
             <Select
-              //sx={{ width: '150px' }}
               sx={s.diets}
               value={entireFilter.diet}
               onChange={(e) => setEntireFilter({...entireFilter, diet:e.target.value})}
@@ -152,10 +138,7 @@ const NavBar = () =>  {
               })}
             </Select>
           </FormControl>
-          <FormControl
-            //InputLabelProps={{ style: s.labelStyle() }}
-
-          >
+          <FormControl>
             <InputLabel size="small" sx={s.label()}>  Sort by Healthy  </InputLabel>
             <Select
               sx={s.health}
@@ -169,7 +152,6 @@ const NavBar = () =>  {
           <FormControl>
             <InputLabel size="small" sx={s.label()}>  Sort alphabetically  </InputLabel>
             <Select
-              //sx={{ width: '150px' }}
               sx={s.alpha}
               label="Sort alphabetically"
               value={sortAlpha}

@@ -29,6 +29,10 @@ interface initialStateI {
   larLand: boolean,
   currentWidth: number,
   percentageResizedHeight: number,
+  scrollWidth: number,
+  hasScroll: boolean,
+  scrollPosition: number,
+  menuShown: boolean,
 }
 
 const initialState: initialStateI = {
@@ -49,6 +53,10 @@ const initialState: initialStateI = {
   larLand: window.screen.height > 825 && !window.matchMedia("(orientation: portrait)").matches ? true : false,
   currentWidth: window.innerWidth,
   percentageResizedHeight: window.innerHeight / window.screen.height,
+  scrollWidth: 0,
+  hasScroll: false,
+  scrollPosition: 0,
+  menuShown: false,
 }
 
 const reducer = (state = initialState, action: {type: string; payload: any}) => {
@@ -188,6 +196,26 @@ const reducer = (state = initialState, action: {type: string; payload: any}) => 
       return {
         ...state,
         percentageResizedHeight: action.payload
+      };
+    case 'SET_SCROLL_WIDTH':
+      return {
+        ...state,
+        scrollWidth: action.payload
+      };
+    case 'SET_HAS_SCROLL':
+      return {
+        ...state,
+        hasScroll: action.payload
+      };
+    case 'SET_SCROLL_POSITION':
+      return {
+        ...state,
+        scrollPosition: action.payload
+      };
+    case 'SET_MENU_SHOWN':
+      return {
+        ...state,
+        menuShown: action.payload
       };
     default:
       return state

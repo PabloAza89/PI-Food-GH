@@ -3,10 +3,13 @@ import bgImage from '../images/bgImage.webp';
 export const background = () => {
   return {
     display: 'flex',
+    //margin: 0,
     position: 'relative',
     flexDirection : 'column',
+    //width: 'calc(100vw - 17px)',
     width: '100vw',
     height: '100vh',
+    
   }
 }
 
