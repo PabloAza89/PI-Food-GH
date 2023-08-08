@@ -249,6 +249,8 @@ export const button = () => {
     fontWeight: '400',
     fontSize: '13.33px',
     alignItems: 'baseline',
+    paddingLeft: '11px',
+    paddingRight: '11px',
   }
 }
 

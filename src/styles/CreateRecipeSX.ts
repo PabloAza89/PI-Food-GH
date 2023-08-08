@@ -23,7 +23,8 @@ export const form = () => {
 
 export const eachRow = () => {
   return { 
-    background: 'lightgray',
+    background: 'gray', // dev
+    margin: '6px 0px',
     display: 'flex',
     flexDirection: 'row',
     width: '80vw',
@@ -37,6 +38,7 @@ export const text = () => {
     flexDirection: 'row',
     color: 'black',
     width: '12vw',
+    height: '56px',
     background: 'green',
     justifyContent: 'center',
     alignItems: 'center'
@@ -51,12 +53,30 @@ export const input = () => {
   }
 }
 
+export const stepsContainer = () => {
+  return {
+    background: 'gold',
+    display: 'flex',
+    flexDirection: 'column'
+  }
+}
+
+export const eachStep = () => {
+  return {
+    display: 'flex',
+    flexDirection: 'row',
+    width: '68vw',
+    marginBottom: '12px',
+    ':last-child': {  marginBottom: '0px' }
+  }
+}
+
 // eachRow 80vw
 // (text) 12vw + 68vw (input)
 // (text) 12vw + 6vw (step) + 48vw (input) + 7vw (button) + 7vw (button)
 
 
-export const step = () => {
+export const stepTitle = () => {
   return {
     display: 'flex',
     flexDirection: 'row',
@@ -79,7 +99,11 @@ export const buttonNew = () => {
     width: '7vw',
     background: 'green',
     color: 'white',
-    height: '100%',
+    //height: '100%',
+    height: '36.5px',
+    alignSelf: 'center',
+    marginLeft: '5px',
+    marginRight: '5px',
   }
 }
 
@@ -88,7 +112,11 @@ export const buttonDelete = () => {
     width: '7vw',
     background: 'red',
     color: 'white',
-    height: '100%',
+    //height: '100%',
+    height: '36.5px',
+    alignSelf: 'center',
+    //marginLeft: '5px',
+    marginRight: '5px',
   }
 }
 
@@ -106,5 +134,12 @@ export const optionsRight = () => {
   return {
     display: 'flex',
     flexDirection: 'column',
+  }
+}
+
+export const buttonClearSave = () => {
+  return {
+    margin: '0px 7px',
+    //alignItems: 'baseline',
   }
 }

@@ -47,7 +47,6 @@ export default function CreateRecipe(/* { GetAfterCreated }:any */) {
     setStepsState([...copyState])
 
     let copyError = {...error}
-    //copyError.instructions.splice(index + 1, 0, { [`${index}`]: false })
     copyError.instructions.splice(index + 1, 0, { error: false })
     setError(copyError)
   }
@@ -172,9 +171,7 @@ export default function CreateRecipe(/* { GetAfterCreated }:any */) {
   }
 
   const validator = ({ type, value, index }: validateStringI) => {
-    console.log("value de adentro", value)
     switch (type) {
-      //let qq = type.replace(/[0-9]/g, '');
       case (`title`):
         if (/(!|¡|@|[?]|¡|<|>|[/]|[\\]|%|[[]|]|[|]|°|#|[$]|&|[()]|[)]|=|_|[*]|¿|[+]|~|{|}|`|\^)/.test(value)) setError({...error, [type]: true})
         else setError({...error, [type]: false});
@@ -193,39 +190,15 @@ export default function CreateRecipe(/* { GetAfterCreated }:any */) {
         else setError({...error, [type]: false});
         setSummaryValue(value);
       break;
-      //case (type.replace(/[0-9]/g, '') === `instructions`):
-      //case (qq):
       case (`instructions`):
-        //if (/(!|¡|@|[?]|¡|<|>|[/]|[\\]|%|[[]|]|[|]|°|#|[$]|&|[()]|[)]|=|_|[*]|¿|[+]|~|{|}|`|\^)/.test(value)) setError({...error, instructions.push("Asd")  })
-        //setError({...error, instructions: [{ index: index, error: true }]  })
-        //setError({...error, instructions: [{ [`${index}`]: true }]  })
-
         if (/(!|¡|@|[?]|¡|<|>|[/]|[\\]|%|[[]|]|[|]|°|#|[$]|&|[()]|[)]|=|_|[*]|¿|[+]|~|{|}|`|\^)/.test(value)) {
-          let copyObjj = {...error}
-          //copyObjj.instructions.splice(index, 1, { [`${index}`]: true }  )
-          copyObjj.instructions.splice(index!, 1, { error: true }  )
-          setError(copyObjj)
+          let copyObj = {...error}
+          copyObj.instructions.splice(index!, 1, { error: true }  )
+          setError(copyObj)
         } else {
-          let copyObjj = {...error}
-          //copyObjj.instructions.splice(index, 1, { [`${index}`]: false }  )
-          copyObjj.instructions.splice(index!, 1, { error: false }  )
+          let copyObj = {...error}
+          copyObj.instructions.splice(index!, 1, { error: false }  )
         }
-
-        //let copyObjj = {...error}
-        //copyObjj.instructions.splice(index, 1, { [`${index}`]: true }  )
-
-        //else
-
-        //setError(copyObjj);
-
-        
-
-      // console.log("type", type)
-      // console.log("value", value)
-      // console.log("index", index)
-      //   //if (/(!|¡|@|[?]|¡|<|>|[/]|[\\]|%|[[]|]|[|]|°|#|[$]|&|[()]|[)]|=|_|[*]|¿|[+]|~|{|}|`|\^)/.test(value)) setError({...error, [type]: true})
-      //   //else setError({...error, [type]: false});
-      //   //setSummaryValue(value);
       break;
     }
   }
@@ -384,11 +357,11 @@ export default function CreateRecipe(/* { GetAfterCreated }:any */) {
                 </Box>
                 <Box sx={s.eachRow}>
                   <Box sx={s.text}>Instructions:</Box>
-                  <Box sx={{ background: 'gold', display: 'flex', flexDirection: 'column' }}>
+                  <Box sx={s.stepsContainer}>
 
                     {stepsState.map((e, index) => (
-                      <Box key={index} sx={{ display: 'flex', flexDirection: 'row', width: '68vw' }}>
-                        <Box sx={s.step}>Step {index + 1}:</Box>
+                      <Box key={index} sx={s.eachStep}>
+                        <Box sx={s.stepTitle}>Step {index + 1}:</Box>
 
                         <Tooltip
                           key={index}
@@ -396,16 +369,12 @@ export default function CreateRecipe(/* { GetAfterCreated }:any */) {
                           enterDelay={500}
                           leaveDelay={200}
                           enterTouchDelay={0}
-                          //open={error.instructions[`${index}`].error}
                           open={error.instructions[`${index}`].error}
                           placement="bottom"
-                          //title={`SOME ERROR !`}
                           title={`Special characters not allowed on step ${index + 1} of "Instructions" !`}
-                          
                         >
-                          <TextField //test
+                          <TextField
                             id={`${index}instructions`}
-                            //className="bbb"
                             autoComplete='off'
                             multiline
                             value={stepsState[index]}
@@ -413,10 +382,7 @@ export default function CreateRecipe(/* { GetAfterCreated }:any */) {
                             sx={s.inputStep}
                             onChange={(e) => {
                               handlerUpdate({ index: parseInt((e.target as HTMLInputElement).id, 10), value: e.target.value });
-                              //validator({ value: e.target.value, type: e.target.id })
                               validator({ value: e.target.value, type: e.target.id.replace(/[0-9]/g, ''), index: parseInt((e.target as HTMLInputElement).id, 10) })
-                              //console.log("a ver", e.target.className)
-                              //console.log("a ver", index)
                             }}
                           />
                         </Tooltip>
@@ -440,12 +406,14 @@ export default function CreateRecipe(/* { GetAfterCreated }:any */) {
                 </Box>
                 <Box sx={s.eachRow}>
                   <Button
+                    sx={s.buttonClearSave}
                     variant="contained"
                     onClick={() => clearHandler()}
                   >
                     CLEAR
                   </Button>
                   <Button
+                    sx={s.buttonClearSave}
                     variant="contained"
                   >
                     SAVE RECIPE
