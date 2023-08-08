@@ -142,55 +142,48 @@ export const inputProps = () => {
   }
 }
 
-export const diets = () => {
+interface labelHealthI {
+  healthLabelShown: boolean,
+}
+
+export const labelHealth = ({ healthLabelShown }: labelHealthI) => {
   return {
-    width: '180px',
-    height: '35px',
-    background: '#FFFFFF',
-    marginTop: '3px',
+    //background: 'red', // dev
+    background: '#FFFFFF !important',
+    borderRadius: '4px 4px 0px 0px ',
+    marginLeft: '-8px',
+    //width: healthLabelShown || alphaLabelShown ? 'unset' : '82%',
+    width: healthLabelShown ? 'unset' : '82%',
+    marginTop: '-3px',
   }
 }
 
-export const health = () => {
+interface labelAlphaI {
+  alphaLabelShown: boolean,
+}
+
+export const labelAlpha = ({ alphaLabelShown }: labelAlphaI) => {
   return {
-    width: '180px',
-    height: '35px',
-    background: '#FFFFFF',
-    marginLeft: '8px',
-    marginTop: '3px',
+    //background: 'red', // dev
+    background: '#FFFFFF !important',
+    borderRadius: '4px 4px 0px 0px ',
+    marginLeft: '-8px',
+    //width: healthLabelShown || alphaLabelShown ? 'unset' : '82%',
+    width: alphaLabelShown ? 'unset' : '82%',
+    marginTop: '-3px',
   }
 }
 
-export const labelHealth = () => {
+export const selectDietsHealthAlpha = () => {
   return {
     //width: '180px',
-    //height: '2px !important',
-    //fontSize: '1px !important',
-    //background: 'yellow',
-  }
-}
-
-
-export const label = () => {
-  return {
-    background: '#FFFFFF !important',
-    borderRadius: '4px 4px 0px 0px '
-  }
-}
-
-
-export const alpha = () => {
-  return {
-    // width: '180px',
-    // height: '35px',
-    // background: '#FFFFFF',
-    width: '180px',
+    minWidth: '155px',
+    width: '11vw',
     height: '35px',
     background: '#FFFFFF',
-    marginLeft: '8px',
-    marginTop: '3px',
   }
 }
+
 
 export const test = () => {
   return {
@@ -206,7 +199,7 @@ interface upperI {
 
 export const upper = ({ currentWidth, scrollWidth }: upperI) => {
   return {
-    //background: 'gray', // dev
+    background: 'red', // dev
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -242,6 +235,7 @@ export const lower = ({ currentWidth, scrollWidth }: lowerI) => {
     //paddingRight: '1vw',
     //marginLeft: '15vw',
     //marginRight: '15vw',
+    alignItems: 'flex-end',
   }
 }
 
@@ -254,12 +248,7 @@ export const button = () => {
     fontFamily: 'Arial',
     fontWeight: '400',
     fontSize: '13.33px',
-    /* display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignContent: 'center', */
-    //marginLeft: '15vw',
-    //marginRight: '15vw',
+    alignItems: 'baseline',
   }
 }
 

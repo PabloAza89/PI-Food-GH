@@ -8,7 +8,9 @@ export const background = () => {
     flexDirection : 'column',
     //width: 'calc(100vw - 17px)',
     width: '100vw',
-    height: '100vh',
+    height: '0vh',
+    //height: '100vh',
+    //height: '100vh',
     
   }
 }

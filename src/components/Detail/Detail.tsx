@@ -64,7 +64,7 @@ export default function Detail() {
             <Typography sx={s.text}><b>{recipe.analyzedInstructions[0] ? `Instructions: ` : null}</b></Typography>
               {recipe.analyzedInstructions && recipe.analyzedInstructions.map((e: any, index: any) => {
                 return (
-                  <Box sx={s.eachStep}>
+                  <Box key={index} sx={s.eachStep}>
                     <Typography sx={s.eachStepTitle}>
                       <b>Step {++index}: </b>
                     </Typography>

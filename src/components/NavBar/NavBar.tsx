@@ -20,10 +20,15 @@ const NavBar = () =>  {
   const scrollWidth = useSelector((state: {scrollWidth: number}) => state.scrollWidth)
 
   const [healthLevel, setHealthLevel] = useState<string>('');
+  const [healthLabelShown, setHealthLabelShown] = useState<boolean>(false);
   const [sortAlpha, setSortAlpha] = useState<string>('');
+  const [alphaLabelShown, setAlphaLabelShown] = useState<boolean>(false);
+  const [labelShown, setLabelShown] = useState<boolean>(false);
   const [typeOfDiet, setTypeOfDiet] = useState<string>('All Diets');
   const [textToFilter, setTextToFilter] = useState<string>('');
   const [placeholder, setPlaceholder] = useState<string>('Find recipe..');
+
+  const [test, setTest] = useState<boolean>(false);
 
 
   const currentWidth = useSelector((state: {currentWidth:number}) => state.currentWidth)
@@ -48,11 +53,13 @@ const NavBar = () =>  {
   const healthLevelHandler = (e: SelectChangeEvent) => {
     setSortAlpha('' as string);
     setHealthLevel(e.target.value as string);
+    setAlphaLabelShown(false)
   };
 
   const sortAlphaHandler = (e: SelectChangeEvent) => {
     setHealthLevel('' as string);
     setSortAlpha(e.target.value as string);
+    setHealthLabelShown(false)
   };
 
   interface dietAndTextHandlerI {
@@ -69,8 +76,11 @@ const NavBar = () =>  {
   useEffect(() => {
     if (currentWidth > 800) dispatch(setMenuShown(false))
   },[ currentWidth, dispatch ])
+  
 
-  console.log("AAA", menuShown)
+  console.log("healthLabelShown", healthLabelShown)
+  console.log("alphaLabelShown", alphaLabelShown)
+  
 
   return (
     <Box sx={s.background({ menuShown })}>
@@ -107,12 +117,12 @@ const NavBar = () =>  {
               sx={s.input()}
               onChange={(e) => setEntireFilter({...entireFilter, text: e.target.value})}
             />
-            <Button
+{/*             <Button
               className={`buttonPos`}
               sx={s.button}
               type="submit"
             >{ `SEARCH !` }
-            </Button>
+            </Button> */}
           </Box>
           <Link to="/create">
             <Button sx={s.button} className="button">CREATE RECIPE !</Button>
@@ -124,7 +134,7 @@ const NavBar = () =>  {
         <Box sx={s.lower({ currentWidth, scrollWidth })}>
           <FormControl>
             <Select
-              sx={s.diets}
+              sx={s.selectDietsHealthAlpha}
               value={entireFilter.diet}
               onChange={(e) => setEntireFilter({...entireFilter, diet:e.target.value})}
             >
@@ -139,9 +149,14 @@ const NavBar = () =>  {
             </Select>
           </FormControl>
           <FormControl>
-            <InputLabel size="small" sx={s.label()}>  Sort by Healthy  </InputLabel>
+            <InputLabel size="small" sx={s.labelHealth({ healthLabelShown })}>  Sort by Healthy  </InputLabel>
             <Select
-              sx={s.health}
+              sx={s.selectDietsHealthAlpha}
+              
+              onFocus={() => setHealthLabelShown(true)}
+              
+              inputProps={{ style: { background: 'red' }}}
+              
               value={healthLevel}
               onChange={(e) => {setEntireFilter({...entireFilter, alphaOrHealthy: e.target.value}); healthLevelHandler(e)}}
             >
@@ -150,9 +165,12 @@ const NavBar = () =>  {
             </Select>
           </FormControl>
           <FormControl>
-            <InputLabel size="small" sx={s.label()}>  Sort alphabetically  </InputLabel>
+            <InputLabel size="small" sx={s.labelAlpha({ alphaLabelShown })}>  Sort alphabetically  </InputLabel>
             <Select
-              sx={s.alpha}
+
+              onFocus={() => setAlphaLabelShown(true)}
+
+              sx={s.selectDietsHealthAlpha}
               label="Sort alphabetically"
               value={sortAlpha}
               onChange={(e) => {setEntireFilter({...entireFilter, alphaOrHealthy: e.target.value}); sortAlphaHandler(e)}}

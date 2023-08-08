@@ -1,30 +1,10 @@
-export const background = () => {
-  return {
-    display: 'flex',
-    position: 'relative',
-    justifyContent: 'center',
-    //zIndex: 1001,
-    background: 'brown', // dev
-    width: '100vw',
-    //width: 'calc(100vw - 50px)',
-    //height: '100vh',
-    //height: '800px',
-    
-    //minWidth: '1410px',
-    //margin: 0,
-    
-    alignSelf: 'center',
-    //justifyContent: 'space-around',
-  }
-}
-
-interface backgrounddI {
+interface backgroundI {
   scrollWidth: number,
   scrollPosition: number,
   menuShown: boolean,
 }
 
-export const backgroundd = ({ scrollWidth, scrollPosition, menuShown }: backgrounddI) => {
+export const background = ({ scrollWidth, scrollPosition, menuShown }: backgroundI) => {
   return {
     zIndex: -1,
     marginRight: `${scrollWidth}px`,

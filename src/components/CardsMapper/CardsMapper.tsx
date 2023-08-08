@@ -49,7 +49,7 @@ const CardsMapper = ()  => {
   return toShow[0] !== undefined ?
   (
     
-      <Box sx={s.backgroundd({ scrollWidth, scrollPosition, menuShown })}>
+      <Box sx={s.background({ scrollWidth, scrollPosition, menuShown })}>
         {arraySplitedBy9.map((e:any) =>
           <Card
             key={e.id}

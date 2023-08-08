@@ -8,7 +8,8 @@ export const background = () => {
   return {
     display: 'flex',
     flexDirection: 'column',
-    zIndex: 1002,
+    //zIndex: 5000,
+    //zIndex: 1002,
     alignItems: 'center',
     width: '450px',
     height: '225px',

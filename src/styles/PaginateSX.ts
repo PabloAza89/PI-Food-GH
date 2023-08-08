@@ -13,6 +13,8 @@ export const background = ({ scrollWidth, scrollPosition, menuShown }: backgroun
     //position: scrollPosition >= 100 ? 'fixed' : 'relative',
     position: menuShown && scrollPosition >= 200 ? 'fixed' :  !menuShown && scrollPosition >= 100 ? 'fixed' : 'relative',
     //position: 'fixed',
+    //top: '0px',
+    //position: 'fixed',
     //zIndex: 1500,
     justifyContent: 'center',
     padding: '8px 0px',
