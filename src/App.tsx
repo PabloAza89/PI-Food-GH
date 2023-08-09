@@ -10,6 +10,7 @@ import GoBack from "./components/GoBack/GoBack";
 import Paginate from "./components/Paginate/Paginate";
 import NavBar from "./components/NavBar/NavBar";
 import GoUp from "./components/GoUp/GoUp";
+import Error from './components/Error/Error';
 import CreateRecipe from "./components/CreateRecipe/CreateRecipe";
 import About from "./components/About/About";
 import { useDispatch } from 'react-redux';
@@ -27,9 +28,6 @@ function App() {
 
   const dispatch = useDispatch()
 
-  //const [ scrollWidth, setScrollWidth ] = useState<number>(0)
-  //const [ scrollPosition, setScrollPosition ] = useState<number>(0)
-
   useEffect(() => {
     function handleResize() {
       dispatch(setWidth(window.screen.width))
@@ -42,15 +40,10 @@ function App() {
       dispatch(setLarLand(window.screen.height > 825 && !window.matchMedia("(orientation: portrait)").matches ? true : false))
       dispatch(setCurrentWidth(window.innerWidth))
       dispatch(setPercentageResizedHeight(window.innerHeight / window.screen.height))
-      //dispatch(setScrollWidth($(document).width()! - $(window).width()!))
-      //dispatch(setHasScroll($(document).width()! > $(window).width()! ? true : false))
     }
     function scrollHandler() {
-      //let qq = $(window).scrollTop()
       console.log($(window).scrollTop())
-      //$(window).scrollTop() && setScrollPosition($(window).scrollTop()!)
       dispatch(setScrollPosition($(window).scrollTop()!))
-      //setScrollPosition(qq!)
     }
     window.addEventListener("scroll", scrollHandler);
     window.addEventListener("resize", handleResize);
@@ -59,8 +52,6 @@ function App() {
       window.removeEventListener("scroll", scrollHandler);
     }
   });
-
-
 
   useEffect(() => {
     $(function() {
@@ -75,29 +66,9 @@ function App() {
     })
 
   },[dispatch])
-
   
 
-  // useEffect(() => {
-  //   function scrollHandler() {
-  //     //console.log($(window).scrollTop())
-  //     //$(window).scrollTop() && setScrollPosition($(window).scrollTop()!)
-  //     //setScrollPosition($(document).scrollTop())
-  //   }
-  //   window.addEventListener("scroll", scrollHandler);
-  //   return () => window.removeEventListener("scroll", scrollHandler);
-  // },[]);
-
   const currentWidth = useSelector((state: {currentWidth:number}) => state.currentWidth)
-
-  // useEffect(() => {
-
-
-  // dispatch(setHasScroll($(document).width()! > $(window).width()! ? true : false))
-
-  // }, [currentWidth, dispatch])
-
-  //console.log("scrollWidth", scrollWidth)
 
   const [isLoading, setIsLoading] = useState({
     main: true,
@@ -111,51 +82,49 @@ function App() {
       setIsLoading({...isLoading , main: false})
     }
   }
-      
 
-    try {
-      dispatch(fetchRecipesFromAPI());
-      //getActualState();
-      dispatch(allRecipesLoaded(true))
+  // try {
+  //   dispatch(fetchRecipesFromAPI());
+  //   dispatch(allRecipesLoaded(true))
 
-    } catch(e) {
-      console.log(e)
-    }
-
-    // useEffect(() => {
-    //   console.log("scrollTTop", $(document).scrollTop())
-    //   console.log("scrollTop", $(window).scrollTop())
-
-    // },[document])
-
-    //console.log("scrollTop", $('#asd').scrollTop())
-    //console.log("scrollTop", $(your_selector).scrollTop())
-    //console.log("scrollPosition", scrollPosition)
+  // } catch(e) {
+  //   console.log(e)
+  // }
+const aa = async () => {
+  dispatch(fetchRecipesFromAPI())
   
-    return (
-      <Box sx={s.background}>
-        <Box sx={s.wallpaperBody} />
-        <Routes>
-          <Route path="/" element={<>
-            <NavBar />
-            <Paginate />
-            <CardsMapper />
-            <GoUp />
-          </>}/>
-          <Route path="/:recipeId" element={<>
-            <GoBack />
-            <Detail />
-          </>}/>
-          <Route path="/create" element={<>
-            <GoBack />
-            <CreateRecipe />
-          </>}/>
-          <Route path="/about" element={<>
-            <About />
-          </>}/>
-        </Routes>
-      </Box>
-    )
+}
+  
+aa().then(() => dispatch(allRecipesLoaded(true)))
+
+  return (
+    <Box sx={s.background}>
+      <Box sx={s.wallpaperBody} />
+      <Routes>
+        <Route path="/" element={<>
+          <NavBar />
+          <Paginate />
+          <CardsMapper />
+          <GoUp />
+        </>}/>
+        <Route path="/:recipeId" element={<>
+          <GoBack />
+          <Detail />
+        </>}/>
+        <Route path="/create" element={<>
+          <GoBack />
+          <CreateRecipe />
+        </>}/>
+        <Route path="/about" element={<>
+          <About />
+        </>}/>
+        <Route path="*" element={<>
+          <GoBack />
+          <Error />
+        </>}/>
+      </Routes>
+    </Box>
+  )
 }
 
 export default App;

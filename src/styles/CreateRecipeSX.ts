@@ -15,6 +15,13 @@ export const form = () => {
     width: '100vw',
     height: '100vh',
     alignItems: 'center',
+    marginTop: '16px',
+  }
+}
+
+export const genericTooltip = () => {
+  return {
+    zIndex: 1,
   }
 }
 

@@ -5,7 +5,6 @@ import store from '../../store/store';
 import { Box } from '@mui/material';
 import $ from 'jquery';
 import { useEffect } from 'react';
-import { setCurrentWidth } from '../../actions';
 
 const CardsMapper = ()  => {
 
@@ -42,27 +41,61 @@ const CardsMapper = ()  => {
   // console.log("$(document).innerwidth()", $(document).innerWidth())
   // console.log("$(window).width()", $(window).width())
   // console.log("$(window).innerwidth()", $(window).innerWidth())
-  //console.log("aVer", aVer)
+  // console.log("aVer", aVer)
 
-  
+  // arraySplitedBy9.map(e => e.media).flat().forEach(r => {
+  //   $(`.extraPXImage${array.map(e => e.media).flat().indexOf(r)}`) // when hover image, extra pixels helper on right
+  //   .on( "mouseenter", function(){
+  //     $(`.extraPXSolid`)
+  //       .css("transition", "all .2s ease-in-out")
+  //       .width( minPort || minLand ? `calc((${array.map(e => e.media).flat().length} * 414px) + 3px)` : `calc((${array.map(e => e.media).flat().length} * 564px) + 3px)` )
+  //     $(`.extraPXCenterStripe`)
+  //       .css("transition", "all .2s ease-in-out")
+  //       .width( minPort || minLand ? `calc((${array.map(e => e.media).flat().length} * 414px) + 3px)` : `calc((${array.map(e => e.media).flat().length} * 564px) + 3px)` )
+  //   })
+  //   .on( "mouseleave", function(){
+  //     $(`.extraPXSolid`)
+  //       .width( minPort || minLand ? `calc(${array.map(e => e.media).flat().length} * 414px)` : `calc(${array.map(e => e.media).flat().length} * 564px)` )
+  //     $(`.extraPXCenterStripe`)
+  //       .width( minPort || minLand ? `calc(${array.map(e => e.media).flat().length} * 414px)` : `calc(${array.map(e => e.media).flat().length} * 564px)` )
+  //   })
+  // })
+
+  // arraySplitedBy9.map(e => e.media).flat().forEach(r => {
+  //   $(`.extraPXImage${arraySplitedBy9.map(e => e.media).flat().indexOf(r)}`) // when hover image, extra pixels helper on right
+  //   .on( "mouseenter", function(){
+  //     $(`.extraPXSolid`)
+        
+      
+  //   })
+  //   .on( "mouseleave", function(){
+  //     $(`.extraPXSolid`)
+        
+      
+  //   })
+  // })
+
+
+
+  //console.log("test", arraySplitedBy9.map(e => e.media).flat().indexOf(e))
+  //console.log("test", arraySplitedBy9.map(e => e))
+  console.log("test", arraySplitedBy9.map((e, index) => index))
 
   return toShow[0] !== undefined ?
   (
-    
-      <Box sx={s.background({ scrollWidth, scrollPosition, menuShown })}>
-        {arraySplitedBy9.map((e:any) =>
-          <Card
-            key={e.id}
-            id={e.id}
-            title={e.title}
-            healthScore={e.healthScore}
-            diets={e.diets}
-            image={e.image}
-            dishTypes={e.dishTypes}
-          />
-        )}
-      </Box>
-    
+    <Box sx={s.background({ scrollWidth, scrollPosition, menuShown })}>
+      {arraySplitedBy9.map((e:any) =>
+        <Card
+          key={e.id}
+          id={e.id}
+          title={e.title}
+          healthScore={e.healthScore}
+          diets={e.diets}
+          image={e.image}
+          dishTypes={e.dishTypes}
+        />
+      )}
+    </Box>
   )
   :
   (<Box>

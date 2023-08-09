@@ -119,12 +119,12 @@ export const helperBottom = () => {
 
 export const errorCard = () => {
   return {
+    //background: 'gray', // dev
     display: 'flex',
     //position: 'relative',
     position: 'fixed',
     flexDirection: 'column',
     color: 'antiquewhite',
-    //background: 'gray', // dev
     width: '55vw',
     //height: '15vh',
     height: '150px',
@@ -132,15 +132,11 @@ export const errorCard = () => {
     alignItems: 'center',
     alignSelf: 'center',
     justifyContent: 'space-evenly',
-    //marginTop: '16px',
-    //margin: '16px 16px 16px 16px',
     background: 'linear-gradient(135deg, rgba(64, 117, 117, 0.1), rgba(64, 117, 117, 0))',
-    //'-webkit-backdrop-filter': 'blur(20px)',
     WebkitBackdropFilter: 'blur(20px)',
     backdropFilter: 'blur(20px)',
     boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
     border: '1px solid rgb(255, 255, 255, 0.18)',
-    //borderRadius: '4px',
   }
 }
 
@@ -166,10 +162,13 @@ export const button = () => {
 
 export const backgroundError = () => {
   return {
+    //marginTop: '90px',
     display: 'flex',
+    position: 'fixed',
     width: '100vw',
     height: '100vh',
     //background: 'blue', // dev
+    //zIndex: '50000 !important',
     justifyContent: 'center',
   }
 }

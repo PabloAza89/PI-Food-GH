@@ -3,36 +3,101 @@ import noImage1 from "../../images/noImage1.jpg";
 import noImage2 from "../../images/noImage2.jpg";
 import noImage3 from "../../images/noImage3.jpg";
 import { Box, Typography } from '@mui/material';
+import Tooltip from '@mui/joy/Tooltip';
 import * as s from "../../styles/CardSX";
+import $ from 'jquery';
 
 interface CardI {
-  id: any,
-  image: any,
-  title: any,
-  healthScore: any,
+  id: string,
+  image: string,
+  title: string,
+  healthScore: number,
   diets: any,
   dishTypes: any
 }
 
-function Card({ id, image, title, healthScore , diets, dishTypes }: CardI) {
+const Card = ({ id, image, title, healthScore , diets, dishTypes }: CardI) => {
 
   let arrImages = [noImage1, noImage2, noImage3]
+
+/*   function isEllipsisActive(e) {
+    //return (e.offsetWidth < e.scrollWidth);
+    console.log(e.offsetWidth < e.scrollWidth)
+  } */
+
+  //console.log(".dietsCard", $(`.dietsCard716426`).width())
+  //console.log(".innerWidth", $(`.dietsCard716426`).innerWidth())
+  //console.log(".innerWidth", $(`.dietsCard716426`).innerWidth())
+  //console.log(".scrollWidth", $(`.dietsCard716426`).scrollWidth())
+  //console.log(".offsetWidth", $(`.dietsCard716426`).offsetWidth())
+  //console.log(".offset", $(`.dietsCard716426`).offset())
+  //console.log(".dietsCard", $(`.dietsCard716426`).width())
+
+  //console.log(".innerWidth", $(`.dietsCard716426`).innerWidth())
+  //console.log(".scrollWidth", $(`.dietsCard716426`).prop(`scrollWidth`))
+
+  //console.log(".innerWidth", $(`.dietsCard716437`).innerWidth())
+  //console.log(".scrollWidth", $(`.dietsCard716437`).prop(`scrollWidth`))
+
+  
+  //console.log(".outerWidth()", $(`.dietsCard716426`).outerWidth())
+  
+  
+  //console.log(".innerWidthASD", $(`.dietsCard716426`))
+
+    // arraySplitedBy9.map(e => e.media).flat().forEach(r => {
+  //   $(`.extraPXImage${arraySplitedBy9.map(e => e.media).flat().indexOf(r)}`) // when hover image, extra pixels helper on right
+  //   .on( "mouseenter", function(){
+  //     $(`.extraPXSolid`)
+        
+      
+  //   })
+  //   .on( "mouseleave", function(){
+  //     $(`.extraPXSolid`)
+        
+      
+  //   })
+  // })
+  
+
 
   return (
     <Box sx={s.background}>
       <Link to={`/${id}`}>
-        <Box component="img" sx={s.image} src={image.length > 1 ? image : arrImages[image] } alt="" />
+        {/* <Box component="img" sx={s.image} src={image.length > 1 ? image : arrImages[image] } alt="" /> */}
+        <Box component="img" sx={s.image} src={image} alt="" />
       </Link>
       <Link style={{ textDecoration: 'none' }} to={`/${id}`}>
         <Typography sx={s.title}>{title}</Typography>
       </Link>
-      <Typography sx={s.text}>
-        <b>Diets: </b>
-        {diets[0] && diets.map((e:any) => {
-          if ((diets.indexOf(e) !== diets.length - 1)) return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ") + " + "
-          else return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ")
-        })}
-      </Typography>
+      <Tooltip
+        //sx={s.genericTooltip}
+        arrow
+        enterDelay={1000}
+        enterNextDelay={1000}
+        leaveDelay={200}
+        enterTouchDelay={0}
+        //open={error.title}
+        placement="bottom"
+        //title={`Special characters not allowed in "Title" !`}
+        title={
+          <Box>
+            <b>Diets: </b>
+            {diets[0] && diets.map((e:any) => {
+              if ((diets.indexOf(e) !== diets.length - 1)) return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ") + " + "
+              else return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ")
+            })}
+          </Box>
+        }
+      >
+        <Typography className={`dietsCard${id}`} sx={s.text}>
+          <b>Diets: </b>
+          {diets[0] && diets.map((e:any) => {
+            if ((diets.indexOf(e) !== diets.length - 1)) return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ") + " + "
+            else return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ")
+          })}
+        </Typography>
+      </Tooltip>
       <Typography sx={s.text}>
         <b>Healt Score: </b>{healthScore}
       </Typography>

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useDispatch } from 'react-redux';
 //import "../../styles/Form.css";
 import * as s from "../../styles/CreateRecipeSX";
+import "../../styles/CreateRecipeSX.css";
 import noImage1 from "../../images/noImage1.jpg";
 import logo from "../../images/logo.png";
 import { Link } from "react-router-dom";
@@ -9,13 +10,9 @@ import { addNew } from '../../actions';
 import { Box, Button, TextField, ListItemText, Checkbox, Dialog, Typography,FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material/';
 import dietss from '../../db/diets.json';
 import Tooltip from '@mui/joy/Tooltip';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
+import Swal from 'sweetalert2';
 
-export default function CreateRecipe(/* { GetAfterCreated }:any */) {
+export default function CreateRecipe() {
 
   // onBlur={() => setInstructionsPlaceholder(`e.g. Cut pasta, fry tomatoes..`)}
 
@@ -237,6 +234,33 @@ export default function CreateRecipe(/* { GetAfterCreated }:any */) {
     });
   };
 
+
+  const clearFieldsNotif = () => {
+
+    Swal.fire({
+      title: 'Do you want to clear all fields ?',
+      text: 'No undo.',
+      icon: 'info',
+      showDenyButton: true,
+      showCancelButton: false,
+      confirmButtonText: 'CLEAR',
+      denyButtonText: `CANCEL`,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        clearHandler()
+          Swal.fire({
+            title: 'All cleared !',
+            showConfirmButton: false,
+            icon: 'success',
+            timer: 1000,
+          })
+        
+
+      }
+    })
+
+  }
+
   console.log("stepsState", stepsState)
   //console.table(error)
   //console.log("error", error)
@@ -256,6 +280,7 @@ export default function CreateRecipe(/* { GetAfterCreated }:any */) {
                 <Box sx={s.eachRow}>
                   <Box sx={s.text}>Title:</Box>
                   <Tooltip
+                    sx={s.genericTooltip}
                     arrow
                     enterDelay={500}
                     leaveDelay={200}
@@ -280,6 +305,7 @@ export default function CreateRecipe(/* { GetAfterCreated }:any */) {
                 <Box sx={s.eachRow}>
                   <Box sx={s.text}>Health Score:</Box>
                   <Tooltip
+                    sx={s.genericTooltip}
                     arrow
                     enterDelay={500}
                     leaveDelay={200}
@@ -308,6 +334,7 @@ export default function CreateRecipe(/* { GetAfterCreated }:any */) {
                 <Box sx={s.eachRow}>
                   <Box sx={s.text}>Summary:</Box>
                   <Tooltip
+                    sx={s.genericTooltip}
                     arrow
                     enterDelay={500}
                     leaveDelay={200}
@@ -364,6 +391,7 @@ export default function CreateRecipe(/* { GetAfterCreated }:any */) {
                         <Box sx={s.stepTitle}>Step {index + 1}:</Box>
 
                         <Tooltip
+                          sx={s.genericTooltip}
                           key={index}
                           arrow
                           enterDelay={500}
@@ -408,7 +436,8 @@ export default function CreateRecipe(/* { GetAfterCreated }:any */) {
                   <Button
                     sx={s.buttonClearSave}
                     variant="contained"
-                    onClick={() => clearHandler()}
+                    //onClick={() => clearHandler()}
+                    onClick={() => clearFieldsNotif()}
                   >
                     CLEAR
                   </Button>
