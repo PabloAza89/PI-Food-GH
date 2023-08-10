@@ -43,6 +43,7 @@ export const image = () => {
     display: 'flex',
     width: '400px',
     height: '260px',
+    marginBottom: '16px',
   }
 }
 
@@ -58,6 +59,14 @@ export const text = () => {
     textAlign: 'center',
     letterSpacing: 'normal',
     textWrap: 'wrap',
+  }
+}
+
+export const divider = () => {
+  return {
+    width: '100%',
+    margin: '10px 0px',
+    background: 'antiquewhite'
   }
 }
 

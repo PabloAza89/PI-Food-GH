@@ -7,7 +7,7 @@ import noImage2 from "../../images/noImage2.jpg";
 import noImage3 from "../../images/noImage3.jpg";
 import { Link } from "react-router-dom";
 import logo from "../../images/logo.png";
-import { Box, Button, TextField, Dialog, Typography, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material/';
+import { Box, Button, TextField, Dialog, Divider, Typography, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material/';
 
 export default function Detail() {
 
@@ -56,10 +56,12 @@ export default function Detail() {
               else return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ")
             })}
           </Typography>
+          <Divider sx={s.divider}/>
           <Typography sx={s.text}>
             <b>Summary: </b>
             {regexInSummary(recipe.summary)}
           </Typography>
+          <Divider sx={s.divider}/>
           <Box sx={s.instructions}>
             <Typography sx={s.text}><b>{recipe.analyzedInstructions[0] ? `Instructions: ` : null}</b></Typography>
               {recipe.analyzedInstructions && recipe.analyzedInstructions.map((e: any, index: any) => {

@@ -3,7 +3,7 @@ import { useState } from 'react';
 import noImage1 from "../../images/noImage1.jpg";
 import noImage2 from "../../images/noImage2.jpg";
 import noImage3 from "../../images/noImage3.jpg";
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, Divider } from '@mui/material';
 import Tooltip from '@mui/joy/Tooltip';
 import * as s from "../../styles/CardSX";
 import $ from 'jquery';
@@ -40,40 +40,42 @@ const Card = ({ id, image, title, healthScore , diets, dishTypes }: CardI) => {
   //console.log(".innerWidth", $(`.dietsCard716408`).innerWidth())
   //console.log(".scrollWidth", $(`.dietsCard716408`).prop(`scrollWidth`))
 
-  
+
   //console.log(".outerWidth()", $(`.dietsCard716426`).outerWidth())
-  
-  
+
+
   //console.log(".innerWidthASD", $(`.dietsCard716426`))
 
     // arraySplitedBy9.map(e => e.media).flat().forEach(r => {
   //   $(`.extraPXImage${arraySplitedBy9.map(e => e.media).flat().indexOf(r)}`) // when hover image, extra pixels helper on right
   //   .on( "mouseenter", function(){
   //     $(`.extraPXSolid`)
-        
-      
+
+
   //   })
   //   .on( "mouseleave", function(){
   //     $(`.extraPXSolid`)
-        
-      
+
+
   //   })
   // })
-  
-  const [ fit, setFit ] = useState<boolean>(true)
+
+  const [ fitTitle, setFitTitle ] = useState<boolean>(true)
+  const [ fitDiet, setFitDiet ] = useState<boolean>(true)
+  const [ fitDish, setFitDish ] = useState<boolean>(true)
 
   //console.log("fit", fit, "id", id)
-  
+
   // $(`.dietsCard${id}`)
   // .on( "mouseenter", function(){
   //   $(`.dietsCard${id}`)
-    
-    
+
+
   // })
   // .on( "mouseleave", function(){
   //   $(`.dietsCard${id}`)
-      
-    
+
+
   // })
 
   // $(`.dietsCard${id}`)
@@ -83,18 +85,20 @@ const Card = ({ id, image, title, healthScore , diets, dishTypes }: CardI) => {
 
 
   $(function(){
-    $(`.dietsCard${id}`).prop(`scrollWidth`) > $(`.dietsCard${id}`).innerWidth()! ? setFit(false) : setFit(true)
+    $(`.dietCard${id}`).prop(`scrollWidth`) > $(`.dietCard${id}`).innerWidth()! ? setFitDiet(false) : setFitDiet(true)
+    $(`.titleCard${id}`).prop(`scrollWidth`) > $(`.titleCard${id}`).innerWidth()! ? setFitTitle(false) : setFitTitle(true)
+    $(`.dishCard${id}`).prop(`scrollWidth`) > $(`.dishCard${id}`).innerWidth()! ? setFitDish(false) : setFitDish(true)
     //$(`.dietsCard716426`).prop(`scrollWidth`) > $(`.dietsCard716426`).innerWidth()! ? setFit(false) : setFit(true)
-    
+
 
     //console.log(".scrollWidth", $(`.dietsCard644387`).prop(`scrollWidth`))
     //console.log(".innerWidth", $(`.dietsCard644387`).innerWidth())
-    
+
     //console.log(".dietsCard716408", $(`.dietsCard716426`))
     // card 2 716408
   })
 
-  console.log("fit", fit, "id", id)
+  //console.log("fit", fitDiet, "id", id)
   //console.log("fit", fit)
 
   return (
@@ -104,18 +108,31 @@ const Card = ({ id, image, title, healthScore , diets, dishTypes }: CardI) => {
         <Box component="img" sx={s.image} src={image} alt="" />
       </Link>
       <Link style={{ textDecoration: 'none' }} to={`/${id}`}>
-        <Typography sx={s.title}>{title}</Typography>
+        <Tooltip
+          arrow
+          enterDelay={700}
+          enterNextDelay={700}
+          leaveDelay={200}
+          enterTouchDelay={0}
+          disableFocusListener={fitTitle}
+          disableHoverListener={fitTitle}
+          keepMounted={false}
+          placement="bottom"
+          title={title}
+        >
+          <Typography className={`titleCard${id}`} sx={s.title}>{title}</Typography>
+        </Tooltip>
       </Link>
       <Tooltip
-        //sx={s.genericTooltip}
         arrow
-        enterDelay={1000}
-        enterNextDelay={1000}
+        enterDelay={700}
+        enterNextDelay={700}
         leaveDelay={200}
         enterTouchDelay={0}
-        //open={error.title}
+        disableFocusListener={fitDiet}
+        disableHoverListener={fitDiet}
+        keepMounted={false}
         placement="bottom"
-        //title={`Special characters not allowed in "Title" !`}
         title={
           <Box>
             <b>Diets: </b>
@@ -127,7 +144,7 @@ const Card = ({ id, image, title, healthScore , diets, dishTypes }: CardI) => {
         }
       >
         <Typography
-          className={`dietsCard${id}`}
+          className={`dietCard${id}`}
           sx={s.text}
         >
           <b>Diets: </b>
@@ -140,13 +157,37 @@ const Card = ({ id, image, title, healthScore , diets, dishTypes }: CardI) => {
       <Typography sx={s.text}>
         <b>Healt Score: </b>{healthScore}
       </Typography>
-      <Typography sx={s.text}>
-        <b>Dish Types: </b>
-        {dishTypes && dishTypes.map((e:any) => {
-          if ((dishTypes.indexOf(e) !== dishTypes.length - 1)) return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join("  ") + " + "
-          else return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ")
-        })}
-      </Typography>
+      <Tooltip
+          arrow
+          enterDelay={700}
+          enterNextDelay={700}
+          leaveDelay={200}
+          enterTouchDelay={0}
+          disableFocusListener={fitDish}
+          disableHoverListener={fitDish}
+          keepMounted={false}
+          placement="bottom"
+          title={
+            <Box>
+              <b>Dish Types: </b>
+              {dishTypes && dishTypes.map((e:any) => {
+                if ((dishTypes.indexOf(e) !== dishTypes.length - 1)) return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join("  ") + " + "
+                else return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ")
+              })}
+            </Box>
+          }
+      >
+        <Typography
+          className={`dishCard${id}`}
+          sx={s.text}
+        >
+          <b>Dish Types: </b>
+          {dishTypes && dishTypes.map((e:any) => {
+            if ((dishTypes.indexOf(e) !== dishTypes.length - 1)) return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join("  ") + " + "
+            else return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ")
+          })}
+        </Typography>
+      </Tooltip>
     </Box>
   );
 }

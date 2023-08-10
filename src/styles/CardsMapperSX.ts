@@ -43,7 +43,8 @@ export const background = ({ scrollWidth, scrollPosition, menuShown }: backgroun
 
 export const notFound = () => {
   return {
-    backgroundColor: 'rgba(138, 179, 179, 0.171)',
+    //background: 'gray', // dev
+    background: 'rgba(138, 179, 179, 0.171)',
     position: 'absolute',
     display: 'flex',
     flexDirection: 'column',
@@ -57,5 +58,6 @@ export const notFound = () => {
     //fontSize: '10vh',
     fontSize: '87px',
     textWrap: 'nowrap',
+    marginTop: '16px',
   }
 }
