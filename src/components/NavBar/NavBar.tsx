@@ -67,19 +67,28 @@ const NavBar = () =>  {
     text: string,
   }
 
+  // useEffect(() => {
+  //   dispatch(filter(entireFilter))
+  //   dispatch(setIndexChoosen(0))
+  // },[ dispatch, entireFilter ])
+
+
+  // useEffect(() => {
+  //   if (currentWidth > 800) dispatch(setMenuShown(false))
+  // },[ currentWidth, dispatch ])
+
   useEffect(() => {
     dispatch(filter(entireFilter))
-    dispatch(setIndexChoosen(0))
-  },[ dispatch, entireFilter ])
-
-
-  useEffect(() => {
+    //dispatch(setIndexChoosen(0))
     if (currentWidth > 800) dispatch(setMenuShown(false))
-  },[ currentWidth, dispatch ])
-  
+  },[ dispatch, entireFilter, currentWidth ])
 
   //console.log("healthLabelShown", healthLabelShown)
   //console.log("alphaLabelShown", alphaLabelShown)
+  //console.log("entireFilter", entireFilter)
+  console.log(JSON.stringify(entireFilter, null, 4))
+
+  
   
 
   return (
@@ -115,7 +124,7 @@ const NavBar = () =>  {
               onBlur={() => setPlaceholder(`Find recipe..`)}
               InputProps={{ style: s.inputProps() }}
               sx={s.input()}
-              onChange={(e) => setEntireFilter({...entireFilter, text: e.target.value})}
+              onChange={(e) => {setEntireFilter({...entireFilter, text: e.target.value}); dispatch(setIndexChoosen(0))}}
             />
 {/*             <Button
               className={`buttonPos`}
