@@ -42,7 +42,7 @@ function App() {
       dispatch(setPercentageResizedHeight(window.innerHeight / window.screen.height))
     }
     function scrollHandler() {
-      console.log($(window).scrollTop())
+      //console.log($(window).scrollTop())
       dispatch(setScrollPosition($(window).scrollTop()!))
     }
     window.addEventListener("scroll", scrollHandler);

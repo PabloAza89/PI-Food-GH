@@ -78,8 +78,8 @@ const NavBar = () =>  {
   },[ currentWidth, dispatch ])
   
 
-  console.log("healthLabelShown", healthLabelShown)
-  console.log("alphaLabelShown", alphaLabelShown)
+  //console.log("healthLabelShown", healthLabelShown)
+  //console.log("alphaLabelShown", alphaLabelShown)
   
 
   return (

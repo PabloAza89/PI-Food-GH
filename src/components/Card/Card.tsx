@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useState } from 'react';
 import noImage1 from "../../images/noImage1.jpg";
 import noImage2 from "../../images/noImage2.jpg";
 import noImage3 from "../../images/noImage3.jpg";
@@ -36,8 +37,8 @@ const Card = ({ id, image, title, healthScore , diets, dishTypes }: CardI) => {
   //console.log(".innerWidth", $(`.dietsCard716426`).innerWidth())
   //console.log(".scrollWidth", $(`.dietsCard716426`).prop(`scrollWidth`))
 
-  //console.log(".innerWidth", $(`.dietsCard716437`).innerWidth())
-  //console.log(".scrollWidth", $(`.dietsCard716437`).prop(`scrollWidth`))
+  //console.log(".innerWidth", $(`.dietsCard716408`).innerWidth())
+  //console.log(".scrollWidth", $(`.dietsCard716408`).prop(`scrollWidth`))
 
   
   //console.log(".outerWidth()", $(`.dietsCard716426`).outerWidth())
@@ -59,7 +60,42 @@ const Card = ({ id, image, title, healthScore , diets, dishTypes }: CardI) => {
   //   })
   // })
   
+  const [ fit, setFit ] = useState<boolean>(true)
 
+  //console.log("fit", fit, "id", id)
+  
+  // $(`.dietsCard${id}`)
+  // .on( "mouseenter", function(){
+  //   $(`.dietsCard${id}`)
+    
+    
+  // })
+  // .on( "mouseleave", function(){
+  //   $(`.dietsCard${id}`)
+      
+    
+  // })
+
+  // $(`.dietsCard${id}`)
+  // .on(function(){
+  //   $(`.dietsCard${id}`).prop(`scrollWidth`) > $(`.dietsCard${id}`).innerWidth()! ? setFit(false) : setFit(true)
+  // })
+
+
+  $(function(){
+    $(`.dietsCard${id}`).prop(`scrollWidth`) > $(`.dietsCard${id}`).innerWidth()! ? setFit(false) : setFit(true)
+    //$(`.dietsCard716426`).prop(`scrollWidth`) > $(`.dietsCard716426`).innerWidth()! ? setFit(false) : setFit(true)
+    
+
+    //console.log(".scrollWidth", $(`.dietsCard644387`).prop(`scrollWidth`))
+    //console.log(".innerWidth", $(`.dietsCard644387`).innerWidth())
+    
+    //console.log(".dietsCard716408", $(`.dietsCard716426`))
+    // card 2 716408
+  })
+
+  console.log("fit", fit, "id", id)
+  //console.log("fit", fit)
 
   return (
     <Box sx={s.background}>
@@ -90,7 +126,10 @@ const Card = ({ id, image, title, healthScore , diets, dishTypes }: CardI) => {
           </Box>
         }
       >
-        <Typography className={`dietsCard${id}`} sx={s.text}>
+        <Typography
+          className={`dietsCard${id}`}
+          sx={s.text}
+        >
           <b>Diets: </b>
           {diets[0] && diets.map((e:any) => {
             if ((diets.indexOf(e) !== diets.length - 1)) return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ") + " + "

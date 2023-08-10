@@ -61,10 +61,16 @@ const CardsMapper = ()  => {
   //   })
   // })
 
-  // arraySplitedBy9.map(e => e.media).flat().forEach(r => {
-  //   $(`.extraPXImage${arraySplitedBy9.map(e => e.media).flat().indexOf(r)}`) // when hover image, extra pixels helper on right
+
+
+  //console.log("test", arraySplitedBy9.map(e => e.media).flat().indexOf(e))
+  //console.log("test", arraySplitedBy9.map(e => e))
+  //console.log("test", arraySplitedBy9.map((e, index) => index))
+
+  // arraySplitedBy9.map(e => e.id).forEach(r => {
+  //   $(`.dietsCard${r}`)
   //   .on( "mouseenter", function(){
-  //     $(`.extraPXSolid`)
+  //     $(`.dietsCard${r}`)
         
       
   //   })
@@ -74,12 +80,9 @@ const CardsMapper = ()  => {
       
   //   })
   // })
+  
 
-
-
-  //console.log("test", arraySplitedBy9.map(e => e.media).flat().indexOf(e))
-  //console.log("test", arraySplitedBy9.map(e => e))
-  console.log("test", arraySplitedBy9.map((e, index) => index))
+  //console.log("test", arraySplitedBy9.map((e) => e.id))
 
   return toShow[0] !== undefined ?
   (
