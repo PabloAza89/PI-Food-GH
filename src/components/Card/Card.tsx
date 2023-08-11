@@ -88,14 +88,6 @@ const Card = ({ id, image, title, healthScore , diets, dishTypes }: CardI) => {
     $(`.dietCard${id}`).prop(`scrollWidth`) > $(`.dietCard${id}`).innerWidth()! ? setFitDiet(false) : setFitDiet(true)
     $(`.titleCard${id}`).prop(`scrollWidth`) > $(`.titleCard${id}`).innerWidth()! ? setFitTitle(false) : setFitTitle(true)
     $(`.dishCard${id}`).prop(`scrollWidth`) > $(`.dishCard${id}`).innerWidth()! ? setFitDish(false) : setFitDish(true)
-    //$(`.dietsCard716426`).prop(`scrollWidth`) > $(`.dietsCard716426`).innerWidth()! ? setFit(false) : setFit(true)
-
-
-    //console.log(".scrollWidth", $(`.dietsCard644387`).prop(`scrollWidth`))
-    //console.log(".innerWidth", $(`.dietsCard644387`).innerWidth())
-
-    //console.log(".dietsCard716408", $(`.dietsCard716426`))
-    // card 2 716408
   })
 
   //console.log("fit", fitDiet, "id", id)
@@ -116,7 +108,6 @@ const Card = ({ id, image, title, healthScore , diets, dishTypes }: CardI) => {
           enterTouchDelay={0}
           disableFocusListener={fitTitle}
           disableHoverListener={fitTitle}
-          keepMounted={false}
           placement="bottom"
           title={title}
         >
@@ -131,7 +122,6 @@ const Card = ({ id, image, title, healthScore , diets, dishTypes }: CardI) => {
         enterTouchDelay={0}
         disableFocusListener={fitDiet}
         disableHoverListener={fitDiet}
-        keepMounted={false}
         placement="bottom"
         title={
           <Box>
@@ -165,7 +155,6 @@ const Card = ({ id, image, title, healthScore , diets, dishTypes }: CardI) => {
           enterTouchDelay={0}
           disableFocusListener={fitDish}
           disableHoverListener={fitDish}
-          keepMounted={false}
           placement="bottom"
           title={
             <Box>

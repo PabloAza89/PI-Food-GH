@@ -11,6 +11,7 @@ import { Box, Button, TextField, ListItemText, Checkbox, Dialog, Typography,Form
 import dietss from '../../db/diets.json';
 import Tooltip from '@mui/joy/Tooltip';
 import Swal from 'sweetalert2';
+import $ from 'jquery';
 
 export default function CreateRecipe() {
 
@@ -19,6 +20,8 @@ export default function CreateRecipe() {
   const dispatch = useDispatch()
 
   const [stepsState, setStepsState] = useState(['']);
+  const [buttonDeleteStepLast, setButtonDeleteStepLast] = useState<boolean>(true);
+
 
   interface handlerI {
     index: number
@@ -217,7 +220,7 @@ export default function CreateRecipe() {
   const handleChange = (event: SelectChangeEvent<typeof dietsArray>) => {
     const { target: { value } } = event
     setDietsArray( typeof value === 'string' ? value.split(',') : value );
-    
+
   };
 
   const clearHandler = () => {
@@ -254,12 +257,69 @@ export default function CreateRecipe() {
             icon: 'success',
             timer: 1000,
           })
-        
+
 
       }
     })
 
   }
+
+  // $(function(){
+  //   $(`.dietCard${id}`).prop(`scrollWidth`) > $(`.dietCard${id}`).innerWidth()! ? setFitDiet(false) : setFitDiet(true)
+  //   $(`.titleCard${id}`).prop(`scrollWidth`) > $(`.titleCard${id}`).innerWidth()! ? setFitTitle(false) : setFitTitle(true)
+  //   $(`.dishCard${id}`).prop(`scrollWidth`) > $(`.dishCard${id}`).innerWidth()! ? setFitDish(false) : setFitDish(true)
+  // })
+
+  // $(function(){
+
+  //   $(`.buttonDeleteStep`)
+  //     .on( "mouseenter", function(){
+  //       //if ()setButtonDeleteStepLast()
+  //       //stepsState.length === 1 ? setButtonDeleteStepLast(true) : setButtonDeleteStepLast(false)
+  //       console.log("enter")
+
+  //   })
+  //   .on( "mouseleave", function(){
+  //     //stepsState.length === 1 ? setButtonDeleteStepLast(true) : setButtonDeleteStepLast(false)
+  //     //setButtonDeleteStepLast(false)
+  //     console.log("leave")
+  //   })
+
+  // })
+
+  //   $(function(){
+
+  //   $(`.buttonDeleteStep`)
+  //     .on( "mouseenter", function(){
+  //       //if ()setButtonDeleteStepLast()
+  //       //stepsState.length === 1 ? setButtonDeleteStepLast(true) : setButtonDeleteStepLast(false)
+  //       console.log("enter")
+
+  //   })
+  //   .on( "mouseleave", function(){
+  //     //stepsState.length === 1 ? setButtonDeleteStepLast(true) : setButtonDeleteStepLast(false)
+  //     //setButtonDeleteStepLast(false)
+  //     console.log("leave")
+  //   })
+
+  // })
+
+
+  // $(`.buttonDeleteStep`)
+  //   .on( "mouseenter", function(){
+  //     //if ()setButtonDeleteStepLast()
+  //     //stepsState.length === 1 ? setButtonDeleteStepLast(true) : setButtonDeleteStepLast(false)
+  //     console.log("enter")
+
+  //   })
+  //   .on( "mouseleave", function(){
+  //     //stepsState.length === 1 ? setButtonDeleteStepLast(true) : setButtonDeleteStepLast(false)
+  //     //setButtonDeleteStepLast(false)
+  //     console.log("leave")
+  //   })
+
+
+
 
   console.log("stepsState", stepsState)
   //console.table(error)
@@ -274,7 +334,7 @@ export default function CreateRecipe() {
               <Box
                 component="form"
                 sx={s.form}
-              >   
+              >
                 <Box component="img" src={noImage1} />
                 <Typography >Create your own recipe ! Please fill in all fields:</Typography>
                 <Box sx={s.eachRow}>
@@ -415,18 +475,63 @@ export default function CreateRecipe() {
                           />
                         </Tooltip>
 
-                        <Button
-                          disabled={stepsState.length >= 10 ? true : false}
-                          id={`${index}`}
-                          sx={s.buttonNew}
-                          onClick={(e) => handlerAdd({ index: parseInt((e.target as HTMLInputElement).id, 10) })}
-                        >New Step</Button>
-                        <Button
-                          disabled={stepsState.length === 1 ? true : false}
-                          id={`${index}`}
-                          sx={s.buttonDelete}
-                          onClick={(e) => { handlerDelete({ index: parseInt((e.target as HTMLInputElement).id, 10) }) }}
-                        >Detele Step</Button>
+                        <Tooltip
+                          arrow
+                          enterDelay={700}
+                          enterNextDelay={700}
+                          leaveDelay={200}
+                          enterTouchDelay={0}
+                          disableFocusListener={stepsState.length >= 10 ? false : true}
+                          disableHoverListener={stepsState.length >= 10 ? false : true}
+                          placement="bottom"
+                          title={
+                            <Box sx={s.newStepTooltip}>
+                              <Box>Max steps {`<`}10{`>`} reached !</Box>
+                              <Box>Please, delete some old step to add new one.</Box>
+                            </Box>
+                          }
+                        >
+                          <Button
+                            disableRipple={stepsState.length >= 10 ? true : false}
+                            sx={s.buttonNewHelper}
+                          >
+                            <Button
+                              variant="contained"
+                              disabled={stepsState.length >= 10 ? true : false}
+                              id={`${index}`}
+                              sx={s.buttonNew}
+                              onClick={(e) => handlerAdd({ index: parseInt((e.target as HTMLInputElement).id, 10) })}
+                            >New Step
+                            </Button>
+                          </Button>
+                        </Tooltip>
+
+                        <Tooltip
+                          arrow
+                          enterDelay={700}
+                          enterNextDelay={700}
+                          leaveDelay={200}
+                          enterTouchDelay={0}
+                          disableFocusListener={stepsState.length === 1 ? false : true}
+                          disableHoverListener={stepsState.length === 1 ? false : true}
+                          placement="bottom"
+                          title={"You can't delete first step !"}
+                        >
+                          <Button
+                            disableRipple={stepsState.length === 1 ? true : false}
+                            sx={s.buttonDeleteHelper}
+                          >
+                            <Button
+                              className={`buttonDeleteStep`}
+                              variant="contained"
+                              disabled={stepsState.length === 1 ? true : false}
+                              id={`${index}`}
+                              sx={s.buttonDelete}
+                              onClick={(e) => { handlerDelete({ index: parseInt((e.target as HTMLInputElement).id, 10) }) }}
+                            >Detele Step
+                            </Button>
+                          </Button>
+                        </Tooltip>
                       </Box>
                     ))}
 

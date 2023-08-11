@@ -126,12 +126,6 @@ const NavBar = () =>  {
               sx={s.input()}
               onChange={(e) => {setEntireFilter({...entireFilter, text: e.target.value}); dispatch(setIndexChoosen(0))}}
             />
-{/*             <Button
-              className={`buttonPos`}
-              sx={s.button}
-              type="submit"
-            >{ `SEARCH !` }
-            </Button> */}
           </Box>
           <Link to="/create">
             <Button sx={s.button} className="button">CREATE RECIPE !</Button>

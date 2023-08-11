@@ -101,32 +101,72 @@ export const inputStep = () => {
   }
 }
 
-export const buttonNew = () => {
-  return { 
-    width: '7vw',
-    background: 'green',
-    color: 'white',
-    //height: '100%',
+export const newStepTooltip = () => {
+  return {
+    display: 'flex',
+    flexDirection: 'column',
+    textAlign: 'center'
+  }
+}
+
+
+export const buttonNewHelper = () => {
+  return {
+    minWidth: '122px',
+    width: '122px',
     height: '36.5px',
+    //background: 'green',
+    //background: 'gray', // dev
+    //background: 'transparent', // dev
+    //':hover': { background: 'darkgreen' },
+    color: 'white',
     alignSelf: 'center',
     marginLeft: '5px',
     marginRight: '5px',
   }
 }
 
-export const buttonDelete = () => {
-  return { 
-    width: '7vw',
-    background: 'red',
-    color: 'white',
-    //height: '100%',
+export const buttonNew = () => {
+  return {
+    minWidth: '122px',
+    width: '122px',
     height: '36.5px',
+    background: 'green',
+    //background: 'red', // dev
+    //background: 'transparent', // dev
+    ':hover': { background: 'darkgreen' },
+    color: 'white',
     alignSelf: 'center',
     //marginLeft: '5px',
+    //marginRight: '5px',
+  }
+}
+
+export const buttonDeleteHelper = () => {
+  return {
+    minWidth: '122px',
+    width: '122px',
+    height: '36.5px',
+    color: 'white',
+    alignSelf: 'center',
+    padding: '0px !important',
     marginRight: '5px',
   }
 }
 
+export const buttonDelete = () => {
+  return {
+    minWidth: '122px',
+    width: '122px',
+    height: '36.5px',
+    //background: 'blue', // dev
+    background: 'red',
+    ':hover': { background: 'darkred' },
+    color: 'white',
+    alignSelf: 'center',
+    padding: '0px !important',
+  }
+}
 
 export const optionsLeft = () => {
   return {
