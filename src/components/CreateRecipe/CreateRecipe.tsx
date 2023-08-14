@@ -11,6 +11,7 @@ import { Box, Button, TextField, ListItemText, Checkbox, Dialog, Typography,Form
 import dietss from '../../db/diets.json';
 import Tooltip from '@mui/joy/Tooltip';
 import Swal from 'sweetalert2';
+import dicEs from '../../dictionary/es.json';
 import $ from 'jquery';
 
 export default function CreateRecipe() {
@@ -321,7 +322,14 @@ export default function CreateRecipe() {
 
 
 
-  console.log("stepsState", stepsState)
+  //console.log("stepsState", stepsState)
+  //let qq = "estupido de mierda"
+  let qq = "estupido"
+  //console.log("dicEs", dicEs)
+
+  //qq.map(e => ww.search(e))
+  console.log("resultado", dicEs.map(e => qq.search(e)))
+
   //console.table(error)
   //console.log("error", error)
   //console.log(JSON.stringify(error, null, 4));
@@ -483,7 +491,7 @@ export default function CreateRecipe() {
                           enterTouchDelay={0}
                           disableFocusListener={stepsState.length >= 10 ? false : true}
                           disableHoverListener={stepsState.length >= 10 ? false : true}
-                          placement="bottom"
+                          placement="bottom-end"
                           title={
                             <Box sx={s.newStepTooltip}>
                               <Box>Max steps {`<`}10{`>`} reached !</Box>
@@ -491,8 +499,8 @@ export default function CreateRecipe() {
                             </Box>
                           }
                         >
-                          <Button
-                            disableRipple={stepsState.length >= 10 ? true : false}
+                          <Box
+                            //disableRipple={stepsState.length >= 10 ? true : false}
                             sx={s.buttonNewHelper}
                           >
                             <Button
@@ -503,7 +511,7 @@ export default function CreateRecipe() {
                               onClick={(e) => handlerAdd({ index: parseInt((e.target as HTMLInputElement).id, 10) })}
                             >New Step
                             </Button>
-                          </Button>
+                          </Box>
                         </Tooltip>
 
                         <Tooltip
@@ -514,11 +522,11 @@ export default function CreateRecipe() {
                           enterTouchDelay={0}
                           disableFocusListener={stepsState.length === 1 ? false : true}
                           disableHoverListener={stepsState.length === 1 ? false : true}
-                          placement="bottom"
+                          placement="bottom-end"
                           title={"You can't delete first step !"}
                         >
-                          <Button
-                            disableRipple={stepsState.length === 1 ? true : false}
+                          <Box
+                            //disableRipple={stepsState.length === 1 ? true : false}
                             sx={s.buttonDeleteHelper}
                           >
                             <Button
@@ -530,7 +538,7 @@ export default function CreateRecipe() {
                               onClick={(e) => { handlerDelete({ index: parseInt((e.target as HTMLInputElement).id, 10) }) }}
                             >Detele Step
                             </Button>
-                          </Button>
+                          </Box>
                         </Tooltip>
                       </Box>
                     ))}

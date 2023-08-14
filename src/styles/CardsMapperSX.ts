@@ -7,25 +7,24 @@ interface backgroundI {
 export const background = ({ scrollWidth, scrollPosition, menuShown }: backgroundI) => {
   return {
     zIndex: -1,
+    //zIndex: 5,
     marginRight: `${scrollWidth}px`,
     display: 'flex',
     position: 'relative',
     justifyContent: 'center',
-    //zIndex: 1001,
-    background: 'lightblue', // dev
+    //background: 'lightblue', // dev
     flexWrap: 'wrap',
-    //marginTop: '37px',
-    //marginTop: scrollPosition >= 100 ? '37px' : '0px',
-
-    marginTop: menuShown && scrollPosition >= 200 ? '37px' : !menuShown && scrollPosition >= 100 ? '37px' : '0px',
-
-
+    marginTop:
+      menuShown && scrollPosition >= 209 ? '46px' :
+      !menuShown && scrollPosition >= 109 ? '46px' :
+      '0px',
 
     //width: 'calc(100vw - 50px)',
     //maxWidth: '1410px', // 1356 // 452 * 3
     //maxWidth: '1356px', // 1356 // 452 * 3
     //width: '100vw',
     width: `calc(100vw - ${scrollWidth}px)`,
+    
     //height: '500px',
     
     //minWidth: '1410px',
@@ -58,6 +57,6 @@ export const notFound = () => {
     //fontSize: '10vh',
     fontSize: '87px',
     textWrap: 'nowrap',
-    marginTop: '16px',
+    marginTop: '7px',
   }
 }

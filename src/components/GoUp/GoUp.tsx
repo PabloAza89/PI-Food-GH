@@ -19,6 +19,7 @@ const GoUp = () =>  {
 
   return (
     <Button
+      variant="contained"
       onClick={() => $(window).scrollTop(0)}
       sx={s.button({ scrollPosition })}
     >

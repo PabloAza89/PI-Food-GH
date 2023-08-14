@@ -62,13 +62,27 @@ export const text = () => {
   }
 }
 
-export const divider = () => {
+export const dividerTop = () => {
   return {
     width: '100%',
     margin: '10px 0px',
     background: 'antiquewhite'
   }
 }
+
+interface dividerBottomI {
+  show: boolean
+}
+
+export const dividerBottom = ({ show }: dividerBottomI) => {
+  return {
+    display: show ? 'flex' : 'none',
+    width: '100%',
+    margin: '10px 0px',
+    background: 'antiquewhite'
+  }
+}
+
 
 export const instructions = () => {
   return {
@@ -151,21 +165,23 @@ export const errorCard = () => {
 
 export const button = () => {
   return {
-    display: 'flex',
-    flexDirection: 'column',
-    color: 'antiquewhite',
-    //color: 'red',
-    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif',
-    fontWeight: 650,
-    background: '#94b38a',
-    boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
-    ':hover': { background: '#859e7d' }
-    //background: 'gray', // dev
-    //width: '55vw',
-    //padding: '18px',
-    //alignItems: 'center',
-    //alignSelf: 'center',
+    //marginTop: '40px',
+    minWidth: '122px',
+    width: '122px',
+    height: '36.5px',
+    //background: 'green',
+    //background: '#41b1b1',
 
+    background: '#859e7d',
+    //background: 'red', // dev
+
+    //background: 'transparent', // dev
+    ':hover': { background: '#7b9174' },
+    //color: 'white',
+    color: 'antiquewhite',
+    alignSelf: 'center',
+    //marginLeft: '5px',
+    //marginRight: '5px',
   }
 }
 

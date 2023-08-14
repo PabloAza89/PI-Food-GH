@@ -9,6 +9,7 @@ import { Box, Button, TextField, Dialog, Typography,FormControl, InputLabel, Men
 import {
   setIndexChoosen, filter, setMenuShown
 } from '../../actions';
+import Tooltip from '@mui/joy/Tooltip';
 import dietss from '../../db/diets.json';
 import $ from 'jquery';
 
@@ -67,29 +68,12 @@ const NavBar = () =>  {
     text: string,
   }
 
-  // useEffect(() => {
-  //   dispatch(filter(entireFilter))
-  //   dispatch(setIndexChoosen(0))
-  // },[ dispatch, entireFilter ])
-
-
-  // useEffect(() => {
-  //   if (currentWidth > 800) dispatch(setMenuShown(false))
-  // },[ currentWidth, dispatch ])
-
   useEffect(() => {
     dispatch(filter(entireFilter))
-    //dispatch(setIndexChoosen(0))
     if (currentWidth > 800) dispatch(setMenuShown(false))
   },[ dispatch, entireFilter, currentWidth ])
 
-  //console.log("healthLabelShown", healthLabelShown)
-  //console.log("alphaLabelShown", alphaLabelShown)
-  //console.log("entireFilter", entireFilter)
-  console.log(JSON.stringify(entireFilter, null, 4))
-
-  
-  
+  //console.log(JSON.stringify(entireFilter, null, 4))
 
   return (
     <Box sx={s.background({ menuShown })}>
@@ -102,12 +86,23 @@ const NavBar = () =>  {
             <Typography sx={s.linkText}>Foodify !</Typography>
           </Link>
         </Box>
-        <Button
-          onClick={() => dispatch(setMenuShown(!menuShown))}
-          sx={s.menuButton({ currentWidth })}
+        <Tooltip
+          arrow
+          enterDelay={500}
+          leaveDelay={200}
+          enterTouchDelay={0}
+          placement="bottom-end"
+          title={`Show/Hide Menu`}
         >
-          <MenuIcon sx={{ fontSize: 40 }} />
-        </Button>
+          <Button
+            variant="contained"
+            onClick={() => dispatch(setMenuShown(!menuShown))}
+            sx={s.menuButton({ currentWidth })}
+          >
+        
+            <MenuIcon sx={{ fontSize: 40 }} />
+          </Button>
+        </Tooltip>
       </Box>
       <Box sx={s.selectsAndButtons({ menuShown, currentWidth, scrollWidth })}>
         <Box sx={s.upper({ currentWidth, scrollWidth })}>
@@ -115,7 +110,9 @@ const NavBar = () =>  {
             component="form"
             onSubmit={(e: any) => { e.preventDefault(); dispatch(filter(entireFilter)) }}
           >
+          
             <TextField
+            //variant="contained"
               className={`inputPos`}
               type="text"
               autoComplete='off'
@@ -126,12 +123,23 @@ const NavBar = () =>  {
               sx={s.input()}
               onChange={(e) => {setEntireFilter({...entireFilter, text: e.target.value}); dispatch(setIndexChoosen(0))}}
             />
+            
           </Box>
           <Link to="/create">
-            <Button sx={s.button} className="button">CREATE RECIPE !</Button>
+            <Button
+              variant="contained"
+              disableElevation
+              sx={s.button}
+              className="button"
+            >CREATE RECIPE !</Button>
           </Link>
           <Link to="/about">
-            <Button sx={s.button} className="button">ABOUT !</Button>
+            <Button
+              variant="contained"
+              disableElevation
+              sx={s.button}
+              className="button"
+            >ABOUT !</Button>
           </Link>
         </Box>
         <Box sx={s.lower({ currentWidth, scrollWidth })}>
@@ -155,11 +163,8 @@ const NavBar = () =>  {
             <InputLabel size="small" sx={s.labelHealth({ healthLabelShown })}>  Sort by Healthy  </InputLabel>
             <Select
               sx={s.selectDietsHealthAlpha}
-              
               onFocus={() => setHealthLabelShown(true)}
-              
               inputProps={{ style: { background: 'red' }}}
-              
               value={healthLevel}
               onChange={(e) => {setEntireFilter({...entireFilter, alphaOrHealthy: e.target.value}); healthLevelHandler(e)}}
             >

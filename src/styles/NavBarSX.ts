@@ -18,6 +18,7 @@ export const background = ({ menuShown }: backgroundI) => {
     //width: '600px',
     backgroundColor: 'rgba(0,255,255,.264)',
     //background: 'gray' // dev
+    //marginBottom: '10px',
   }
 }
 
@@ -28,7 +29,7 @@ interface logoAndMenuContainerI {
 
 export const logoAndMenuContainer = ({ currentWidth, scrollWidth }: logoAndMenuContainerI) => {
   return {
-    background: 'red', // dev
+    //background: 'red', // dev
     display: 'flex',
     //width: '100vw',
     
@@ -75,7 +76,7 @@ export const selectsAndButtons = ({ menuShown, currentWidth, scrollWidth }: sele
     height: '100px',
     //width: 'calc(100% - 200px - 17px)',
     justifyContent: 'space-around',
-    background: 'blue', // dev
+    //background: 'blue', // dev
     alignItems: 'center',
     alignSelf: 'center',
     //paddingRight: '100px',
@@ -127,8 +128,13 @@ export const input = () => {
   return {
     //width: '180px',
     height: '35px',
-    background: '#FFFFFF',
+    //background: '#FFFFFF',
+    background: 'yellow', // dev
+    borderRadius: '4px',
     //marginTop: '3px',
+    fieldset: {
+      border: '2px solid rgb(190, 190, 174)',
+    }
   }
 }
 
@@ -137,7 +143,8 @@ export const inputProps = () => {
     //width: '180px',
     height: '35px',
     background: '#FFFFFF',
-    borderRadius: '4px',
+    //background: 'red', // dev
+    //borderRadius: '4px',
     //marginTop: '3px',
   }
 }
@@ -153,7 +160,9 @@ export const labelHealth = ({ healthLabelShown }: labelHealthI) => {
     borderRadius: '4px 4px 0px 0px ',
     marginLeft: '-8px',
     //width: healthLabelShown || alphaLabelShown ? 'unset' : '82%',
-    width: healthLabelShown ? 'unset' : '82%',
+    //width: healthLabelShown ? 'unset' : '82%',
+    //width: healthLabelShown ? 'calc(fit-content + 8px)' : '80%',
+    width: healthLabelShown ? '130px' : '80%',
     marginTop: '-3px',
   }
 }
@@ -168,8 +177,13 @@ export const labelAlpha = ({ alphaLabelShown }: labelAlphaI) => {
     background: '#FFFFFF !important',
     borderRadius: '4px 4px 0px 0px ',
     marginLeft: '-8px',
+    //paddingRight: '8px',
     //width: healthLabelShown || alphaLabelShown ? 'unset' : '82%',
-    width: alphaLabelShown ? 'unset' : '82%',
+    //width: alphaLabelShown ? 'unset' : '80%',
+    //width: alphaLabelShown ? 'calc(fit-content + 8px)' : '80%',
+    //width: alphaLabelShown ? 'fit-content' : '80%',
+    width: alphaLabelShown ? '155px' : '80%',
+    //width: alphaLabelShown ? 'calc(fit-content + 8px)' : '80%',
     marginTop: '-3px',
   }
 }
@@ -181,6 +195,9 @@ export const selectDietsHealthAlpha = () => {
     width: '11vw',
     height: '35px',
     background: '#FFFFFF',
+    fieldset: {
+      border: '2px solid rgb(190, 190, 174)',
+    }
   }
 }
 
@@ -199,7 +216,7 @@ interface upperI {
 
 export const upper = ({ currentWidth, scrollWidth }: upperI) => {
   return {
-    background: 'red', // dev
+    //background: 'red', // dev
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -220,21 +237,13 @@ interface lowerI {
 
 export const lower = ({ currentWidth, scrollWidth }: lowerI) => {
   return {
-    //zIndex: 1000501,
-    background: 'red', // dev
+    //background: 'red', // dev
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignContent: 'center',
-    //padding: '0px 7px',
-    //padding: currentWidth <= 800 ? '0px 7px' : '0px 20px',
-    //width: currentWidth <= 800 ? `calc(100vw - ${scrollWidth}px)` : '50vw',
     width: currentWidth <= 800 ? `95vw` : '50vw',
     minWidth: currentWidth <= 800 ? 'unset' : '570px',
-    //paddingLeft: 'max(1px, 10vw)',
-    //paddingRight: '1vw',
-    //marginLeft: '15vw',
-    //marginRight: '15vw',
     alignItems: 'flex-end',
   }
 }
@@ -243,14 +252,24 @@ export const button = () => {
   return {
     //background: 'blue', // dev
     background: '#F0F0F0',
+    ':hover': { background: '#e8e8e8' },
     color: 'black',
     height: '35px',
-    fontFamily: 'Arial',
+    //fontFamily: 'Arial',
     fontWeight: '400',
     fontSize: '13.33px',
-    alignItems: 'baseline',
+    //alignItems: 'baseline',
     paddingLeft: '11px',
     paddingRight: '11px',
+    paddingTop: '0px',
+    paddingBottom: '0px',
+    
+    border: '2px solid rgb(190, 190, 174)',
+    alignItems: 'center',
+    lineHeight: 'unset', // very important, makes button unaligned.
+    //inlineSize: '150px',
+    fontFamily: 'Roboto',
+
   }
 }
 
@@ -262,10 +281,9 @@ export const menuButton = ({ currentWidth }: menuButtonI) => {
   return {
     display: currentWidth <= 800 ? 'flex' : 'none',
     //background: 'blue', // dev
-    background: 'gray',
-    ':hover': { background: 'darkgray' },
+    background: '#F0F0F0',
+    ':hover': { background: '#e8e8e8' },
     marginRight: '18px',
-    //background: '#F0F0F0',
     color: 'black',
     height: '45px',
     minWidth: '55px !important',
@@ -273,12 +291,6 @@ export const menuButton = ({ currentWidth }: menuButtonI) => {
     fontFamily: 'Arial',
     fontWeight: '400',
     fontSize: '13.33px',
-    /* display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignContent: 'center', */
-    //marginLeft: '15vw',
-    //marginRight: '15vw',
   }
 }
 

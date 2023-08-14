@@ -12,13 +12,23 @@ export const button = ({ scrollPosition }: buttonI) => {
   return {
     display: scrollPosition >= 270 ? 'flex' : 'none',
     position: 'fixed',
-    background: 'gray',
+    //background: 'gray',
     transform: 'rotate(90deg)',
-    ':hover': { background: 'darkgray', },
+    
     bottom: '10px',
+    //backdropFilter: 'blur(40px)',
+    //background: 'rgba(128, 128, 128, .5)',
+    background: 'darkorchid',
+    //':hover': { background: '#962ec9', },
+    ':hover': { background: '#9030bf', },
+    
+    //backdropFilter: 'blur(40px)',
+    //boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
+    boxShadow: '0 4px 16px 0 rgba(0, 0, 0, 0.37)',
+    color: 'antiquewhite',
     right: '10px',
-    minWidth: '45px !important',
-    width: '45px !important',
-    height: '45px',
+    minWidth: '43px !important',
+    width: '43px !important',
+    height: '43px',
   }
 }

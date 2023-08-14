@@ -21,77 +21,15 @@ const Card = ({ id, image, title, healthScore , diets, dishTypes }: CardI) => {
 
   let arrImages = [noImage1, noImage2, noImage3]
 
-/*   function isEllipsisActive(e) {
-    //return (e.offsetWidth < e.scrollWidth);
-    console.log(e.offsetWidth < e.scrollWidth)
-  } */
-
-  //console.log(".dietsCard", $(`.dietsCard716426`).width())
-  //console.log(".innerWidth", $(`.dietsCard716426`).innerWidth())
-  //console.log(".innerWidth", $(`.dietsCard716426`).innerWidth())
-  //console.log(".scrollWidth", $(`.dietsCard716426`).scrollWidth())
-  //console.log(".offsetWidth", $(`.dietsCard716426`).offsetWidth())
-  //console.log(".offset", $(`.dietsCard716426`).offset())
-  //console.log(".dietsCard", $(`.dietsCard716426`).width())
-
-  //console.log(".innerWidth", $(`.dietsCard716426`).innerWidth())
-  //console.log(".scrollWidth", $(`.dietsCard716426`).prop(`scrollWidth`))
-
-  //console.log(".innerWidth", $(`.dietsCard716408`).innerWidth())
-  //console.log(".scrollWidth", $(`.dietsCard716408`).prop(`scrollWidth`))
-
-
-  //console.log(".outerWidth()", $(`.dietsCard716426`).outerWidth())
-
-
-  //console.log(".innerWidthASD", $(`.dietsCard716426`))
-
-    // arraySplitedBy9.map(e => e.media).flat().forEach(r => {
-  //   $(`.extraPXImage${arraySplitedBy9.map(e => e.media).flat().indexOf(r)}`) // when hover image, extra pixels helper on right
-  //   .on( "mouseenter", function(){
-  //     $(`.extraPXSolid`)
-
-
-  //   })
-  //   .on( "mouseleave", function(){
-  //     $(`.extraPXSolid`)
-
-
-  //   })
-  // })
-
   const [ fitTitle, setFitTitle ] = useState<boolean>(true)
   const [ fitDiet, setFitDiet ] = useState<boolean>(true)
   const [ fitDish, setFitDish ] = useState<boolean>(true)
-
-  //console.log("fit", fit, "id", id)
-
-  // $(`.dietsCard${id}`)
-  // .on( "mouseenter", function(){
-  //   $(`.dietsCard${id}`)
-
-
-  // })
-  // .on( "mouseleave", function(){
-  //   $(`.dietsCard${id}`)
-
-
-  // })
-
-  // $(`.dietsCard${id}`)
-  // .on(function(){
-  //   $(`.dietsCard${id}`).prop(`scrollWidth`) > $(`.dietsCard${id}`).innerWidth()! ? setFit(false) : setFit(true)
-  // })
-
 
   $(function(){
     $(`.dietCard${id}`).prop(`scrollWidth`) > $(`.dietCard${id}`).innerWidth()! ? setFitDiet(false) : setFitDiet(true)
     $(`.titleCard${id}`).prop(`scrollWidth`) > $(`.titleCard${id}`).innerWidth()! ? setFitTitle(false) : setFitTitle(true)
     $(`.dishCard${id}`).prop(`scrollWidth`) > $(`.dishCard${id}`).innerWidth()! ? setFitDish(false) : setFitDish(true)
   })
-
-  //console.log("fit", fitDiet, "id", id)
-  //console.log("fit", fit)
 
   return (
     <Box sx={s.background}>

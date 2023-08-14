@@ -8,23 +8,19 @@ export const background = () => {
   return {
     display: 'flex',
     flexDirection: 'column',
-    //zIndex: 5000,
-    //zIndex: 1002,
     alignItems: 'center',
     width: '450px',
     height: '225px',
     margin: '9px 9px 9px 9px',
-    //padding: '9px 9px 9px 9px',
     justifyContent: 'center',
-
-    backgroundColor: 'rgba(196, 34, 147, 0.253)',
-
-    // background: 'linear-gradient(135deg, rgba(196, 34, 147, 0.1), rgba(196, 34, 147, 0))',
-    // WebkitBackdropFilter: 'blur(20px)',
-    // backdropFilter: 'blur(20px)',
-    // boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
-    // border: '1px solid rgb(255, 255, 255, 0.18)',
-    // borderRadius: '4px',
+    //backgroundColor: 'rgba(196, 34, 147, 0.253)', // dev
+    background: 'linear-gradient(135deg, rgba(196, 34, 147, 0.1), rgba(196, 34, 147, 0))',
+    //WebkitBackdropFilter: 'blur(20px)',
+    backdropFilter: 'blur(20px)',
+    //filter: 'blur(3px)',
+    boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
+    border: '1px solid rgb(255, 255, 255, 0.18)',
+    borderRadius: '4px',
   }
 }
 

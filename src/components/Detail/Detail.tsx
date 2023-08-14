@@ -33,6 +33,8 @@ export default function Detail() {
       return text.replaceAll(/(<[/]b>|<b>|<[/]a>|<a\b[^>]*>|[/]a>)/g, '');
   }
 
+  //console.log("recipe.analyzedInstructions[0]", !!recipe.analyzedInstructions[0])
+
   if (recipe) {
     return (
       <Box sx={s.background}>
@@ -56,12 +58,12 @@ export default function Detail() {
               else return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ")
             })}
           </Typography>
-          <Divider sx={s.divider}/>
+          <Divider sx={s.dividerTop}/>
           <Typography sx={s.text}>
             <b>Summary: </b>
             {regexInSummary(recipe.summary)}
           </Typography>
-          <Divider sx={s.divider}/>
+          <Divider sx={s.dividerBottom({ show: recipe.analyzedInstructions[0] })}/>
           <Box sx={s.instructions}>
             <Typography sx={s.text}><b>{recipe.analyzedInstructions[0] ? `Instructions: ` : null}</b></Typography>
               {recipe.analyzedInstructions && recipe.analyzedInstructions.map((e: any, index: any) => {
@@ -86,7 +88,11 @@ export default function Detail() {
       <Box sx={s.errorCard}>
         <b>THERE ARE NO MATCHING RECIPES WITH THAT ID !</b>
         <Link to="/" style={{ textDecoration: 'none' }}>
-          <Button sx={s.button} className="button">GO BACK !</Button>
+          <Button
+            variant="contained"
+            sx={s.button}
+          >GO BACK !
+          </Button>
         </Link>
       </Box>
     </Box>
