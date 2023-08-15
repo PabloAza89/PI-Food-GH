@@ -224,13 +224,21 @@ export default function CreateRecipe() {
         //let ww = dicEs.map(function(e, indx) {return dicEs.indexOf(value.search(e) !== -1)})
         //let ww = dicEs.map(function(e, indx) { return (value.search(e) !== -1) ? true : null })
         //let ww = dicEs.map(function(e, indx) { return (value.search(e) !== -1) ? dicEs.indexOf(e) : -1 })
-        let indexOfBadWordsInDicEs = dicEs.map(function(e, indx) { return (value.toLowerCase().search(e) !== -1) ? dicEs.indexOf(e) : -1 }).filter(e => e !== -1) // ok
+        let indexOfBadWordsInDicEs = dicEs.map((e, indx) => { return (value.toLowerCase().search(e) !== -1) ? dicEs.indexOf(e) : -1 }).filter(e => e !== -1) // only for one word
+        // let indexOfBadWordsInDicEs = dicEs.map((e, indx) => {
+        //   //return (value.toLowerCase().search(e) !== -1) ? dicEs.indexOf(e) : -1
+        //   return (value.toLowerCase().search(e) !== -1) ? dicEs.indexOf(e) : -1
+
+        // }).filter(e => e !== -1) // testing
         //let ww = dicEs.find((e, indx) => value.search(e))
         //let ww = dicEs.indexOf(value)
         
         
         //console.log("resultado", indexOfBadWordsInDicEs) // ok
         let arrayOfBadWords = indexOfBadWordsInDicEs.map(e => dicEs[e])
+        console.log("indexOfBadWordsInDicEs", indexOfBadWordsInDicEs)
+        console.log("arrayOfBadWords", arrayOfBadWords)
+        
         //console.log("resultado", indexOfBadWordsInDicEs.map(e => dicEs[e])) // ok
 
 

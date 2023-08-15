@@ -54,7 +54,7 @@ export const text = () => {
 }
 
 export const input = () => {
-  return { 
+  return {
     width: '68vw',
     background: 'lightblue',
     //color: 'red', // dev
