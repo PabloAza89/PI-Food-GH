@@ -171,12 +171,76 @@ export default function CreateRecipe() {
     index?: number,
   }
 
+  // const validator = ({ type, value, index }: validateStringI) => {
+  //   switch (type) {
+  //     case (`title`):
+  //       if (/(!|¡|@|[?]|¡|<|>|[/]|[\\]|%|[[]|]|[|]|°|#|[$]|&|[()]|[)]|=|_|[*]|¿|[+]|~|{|}|`|\^)/.test(value)) setError({...error, [type]: true})
+  //       else setError({...error, [type]: false});
+  //       setTitleValue(value);
+  //     break;
+  //     case (`health`):
+  //       let copyObj = {...error}
+  //       if (!/^\d+$/.test(value) && value.length !== 0 ) { copyObj.health.string = true; setError({ ...copyObj })}
+  //       else { copyObj.health.string = false; setError({ ...copyObj })}
+  //       if (parseInt(value, 10) > 100 && value.length !== 0) {copyObj.health.max = true; setError({ ...copyObj })}
+  //       else { copyObj.health.max = false; setError({ ...copyObj })}
+  //       setHealthValue(value);
+  //     break;
+  //     case (`summary`):
+  //       if (/(!|¡|@|[?]|¡|<|>|[/]|[\\]|%|[[]|]|[|]|°|#|[$]|&|[()]|[)]|=|_|[*]|¿|[+]|~|{|}|`|\^)/.test(value)) setError({...error, [type]: true})
+  //       else setError({...error, [type]: false});
+  //       setSummaryValue(value);
+  //     break;
+  //     case (`instructions`):
+  //       if (/(!|¡|@|[?]|¡|<|>|[/]|[\\]|%|[[]|]|[|]|°|#|[$]|&|[()]|[)]|=|_|[*]|¿|[+]|~|{|}|`|\^)/.test(value)) {
+  //         let copyObj = {...error}
+  //         copyObj.instructions.splice(index!, 1, { error: true }  )
+  //         setError(copyObj)
+  //       } else {
+  //         let copyObj = {...error}
+  //         copyObj.instructions.splice(index!, 1, { error: false }  )
+  //       }
+  //     break;
+  //   }
+  // }
+
   const validator = ({ type, value, index }: validateStringI) => {
     switch (type) {
       case (`title`):
         if (/(!|¡|@|[?]|¡|<|>|[/]|[\\]|%|[[]|]|[|]|°|#|[$]|&|[()]|[)]|=|_|[*]|¿|[+]|~|{|}|`|\^)/.test(value)) setError({...error, [type]: true})
         else setError({...error, [type]: false});
         setTitleValue(value);
+
+        // abadol abejarruca
+        //let ww = dicEs.return((e, index) => return {value.search(e)})
+        //let ww = dicEs.map((e, index) => value.search(e)).filter((e, indexx) => e !== -1)
+        //let ww = dicEs.map((e, indx) => value.search(e)).indexOf(0)
+        //let ww = dicEs.filter((e, indx) => value.search(e))
+        //let ww = dicEs.reduce((e, indx) => value.search(e))
+        //let ww = dicEs.find((e, indx) => value.search(e))
+        //let ww = dicEs.find(value)
+        //let ww = dicEs.map(function(e, indx) {return value.search(e)})
+        //let ww = dicEs.map(function(e, indx) {return value.search(e)})
+        //let ww = dicEs.map(function(e, indx) {return dicEs.indexOf(value.search(e) !== -1)})
+        //let ww = dicEs.map(function(e, indx) { return (value.search(e) !== -1) ? true : null })
+        //let ww = dicEs.map(function(e, indx) { return (value.search(e) !== -1) ? dicEs.indexOf(e) : -1 })
+        let ww = dicEs.map(function(e, indx) { return (value.search(e) !== -1) ? dicEs.indexOf(e) : -1 }).filter(e => e !== -1)
+        //let ww = dicEs.find((e, indx) => value.search(e))
+        //let ww = dicEs.indexOf(value)
+        
+        
+        console.log("resultado", ww)
+        //console.log("resultado", ww.filter(e => ww.reduce(r => e !== -1)))
+        //let ww = dicEs.indexOf(dicEs.map((e, indx) => value.search(e)))
+        //console.log("resultado", ww)
+        //console.log("resultado", ww.filter((e, indexx) => e !== -1))
+        //console.log("resultado", dicEs.filter(e => dicEs.reduce(r => e !== -1)))
+
+        //let qq = [0, 5, -1, -1, -1, 3, -1, -1, -1, -1, -1, -1, -1]
+
+        //qq.filter(e => qq.reduce(r => e !== -1)) // ganador
+
+
       break;
       case (`health`):
         let copyObj = {...error}
@@ -324,11 +388,14 @@ export default function CreateRecipe() {
 
   //console.log("stepsState", stepsState)
   //let qq = "estupido de mierda"
-  let qq = "estupido"
+  //let qq = "11ab2dol"
+  //let qq = "este es un pelotuda, bob"
   //console.log("dicEs", dicEs)
 
   //qq.map(e => ww.search(e))
-  console.log("resultado", dicEs.map(e => qq.search(e)))
+  //let ww = dicEs.map(e => qq.search(e))
+  //console.log("resultado", ww)
+  //console.log("resultado", ww.filter(e => e !== -1))
 
   //console.table(error)
   //console.log("error", error)
