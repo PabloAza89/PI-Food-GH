@@ -56,7 +56,9 @@ export const text = () => {
 export const input = () => {
   return { 
     width: '68vw',
-    background: 'lightblue'
+    background: 'lightblue',
+    //color: 'red', // dev
+    //background: 'gray' // dev
   }
 }
 

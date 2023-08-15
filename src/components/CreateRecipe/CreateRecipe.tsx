@@ -224,12 +224,30 @@ export default function CreateRecipe() {
         //let ww = dicEs.map(function(e, indx) {return dicEs.indexOf(value.search(e) !== -1)})
         //let ww = dicEs.map(function(e, indx) { return (value.search(e) !== -1) ? true : null })
         //let ww = dicEs.map(function(e, indx) { return (value.search(e) !== -1) ? dicEs.indexOf(e) : -1 })
-        let ww = dicEs.map(function(e, indx) { return (value.search(e) !== -1) ? dicEs.indexOf(e) : -1 }).filter(e => e !== -1)
+        let indexOfBadWordsInDicEs = dicEs.map(function(e, indx) { return (value.toLowerCase().search(e) !== -1) ? dicEs.indexOf(e) : -1 }).filter(e => e !== -1) // ok
         //let ww = dicEs.find((e, indx) => value.search(e))
         //let ww = dicEs.indexOf(value)
         
         
-        console.log("resultado", ww)
+        //console.log("resultado", indexOfBadWordsInDicEs) // ok
+        let arrayOfBadWords = indexOfBadWordsInDicEs.map(e => dicEs[e])
+        //console.log("resultado", indexOfBadWordsInDicEs.map(e => dicEs[e])) // ok
+
+
+        //console.log("value split", value.split(""))
+        
+        //
+
+        $(function(){
+          // $(`#title`)
+          //   .css("color", "blue")
+          //if ()
+        })
+
+        //
+
+        //console.log("resultado", ww.forEach(e => dicEs[e]))
+        //console.log("resultado", dicEs[0])
         //console.log("resultado", ww.filter(e => ww.reduce(r => e !== -1)))
         //let ww = dicEs.indexOf(dicEs.map((e, indx) => value.search(e)))
         //console.log("resultado", ww)
@@ -403,6 +421,23 @@ export default function CreateRecipe() {
   //console.log("healthValue", typeof healthValue)
   //console.log("healthValue.length", healthValue.length)
 
+  // $(function(){
+  //   $(`.testTitle`)
+  //     .css("color", "red")
+  // })
+
+  // $(function(){
+  //   $(`#title`)
+  //     .css("color", "red")
+  // })
+
+  // $(function(){
+  //   $(`.testTitle`)
+  //     .css("color", "red")
+  // })
+  
+  
+
   return !firstInstance ?
     (
 
@@ -425,6 +460,7 @@ export default function CreateRecipe() {
                     title={`Special characters not allowed in "Title" !`}
                   >
                     <TextField
+                      className={`testTitle`}
                       sx={s.input}
                       type="text"
                       autoComplete='off'
