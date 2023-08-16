@@ -224,20 +224,41 @@ export default function CreateRecipe() {
         //let ww = dicEs.map(function(e, indx) {return dicEs.indexOf(value.search(e) !== -1)})
         //let ww = dicEs.map(function(e, indx) { return (value.search(e) !== -1) ? true : null })
         //let ww = dicEs.map(function(e, indx) { return (value.search(e) !== -1) ? dicEs.indexOf(e) : -1 })
-        let indexOfBadWordsInDicEs = dicEs.map((e, indx) => { return (value.toLowerCase().search(e) !== -1) ? dicEs.indexOf(e) : -1 }).filter(e => e !== -1) // only for one word
-        // let indexOfBadWordsInDicEs = dicEs.map((e, indx) => {
+        //let indexOfBadWordsInDicEs = dicEs.map((e, indx) => { return (value.toLowerCase().search(e) !== -1) ? dicEs.indexOf(e) : -1 }).filter(e => e !== -1) // only for one word
+
+        // let indexOfBadWordsInDicEs = dicEs.map((e, idx) => {
         //   //return (value.toLowerCase().search(e) !== -1) ? dicEs.indexOf(e) : -1
-        //   return (value.toLowerCase().search(e) !== -1) ? dicEs.indexOf(e) : -1
+        //   return (value.toLowerCase().search(e) !== -1) ? {"index": idx, "value": e} : -1
+        //   //return (value.toLowerCase().search(RegExp(("^" + e) || (e + "[^a-z]") || (e + "$"), "g")) !== -1) ? {"index": idx, "value": e} : -1
 
         // }).filter(e => e !== -1) // testing
+
         //let ww = dicEs.find((e, indx) => value.search(e))
         //let ww = dicEs.indexOf(value)
         
+        //let qq = [...qq.matchAll(/bobo[^a-z]/g)].map((e) => {return {"target": e.toString().replace(/[^A-Za-z0-9]/g, ""),"start": e.index, "end": e.index + e[0].replace(/[^A-Za-z0-9]/g, "").length}})
+        // [...qq.matchAll(/bobo[^a-z]/g)].map((e) => {return {"target": e.toString().replace(/[^A-Za-z0-9]/g, ""),"start": e.index, "end": e.index + e[0].replace(/[^A-Za-z0-9]/g, "").length}})
+        // let qq = "aaboboso bobos bobo"
+
+        // qq.search(/bobos[^a-z]|^bobos[^a-z]|bobos$/g) target regex !
+
+        dicEs.map((e, idx) => { return e})
+
+        let qq = value.search(/bobos[^a-z]|^bobos[^a-z]|bobos$/g)
+        // let qq = "boboso bobo bobos"
         
+
+        // qq.search(/bobo[^a-z]/)
+        // [...qq.matchAll(/^bobos|bobos[^a-z]|bobos$/g)]
+        // [...qq.matchAll(/^bobos|bobos[^a-z]|bobos$/g)]
+        // let qq = [...value.matchAll(/bobo[^a-z]/g)]
+        
+        // console.log("resultado", qq) // ok
         //console.log("resultado", indexOfBadWordsInDicEs) // ok
-        let arrayOfBadWords = indexOfBadWordsInDicEs.map(e => dicEs[e])
-        console.log("indexOfBadWordsInDicEs", indexOfBadWordsInDicEs)
-        console.log("arrayOfBadWords", arrayOfBadWords)
+        //let arrayOfBadWords = indexOfBadWordsInDicEs.map(e => dicEs[e])
+        //console.log("indexOfBadWordsInDicEs", indexOfBadWordsInDicEs)
+        //console.log(JSON.stringify(indexOfBadWordsInDicEs, null, 4))
+        //console.log("arrayOfBadWords", arrayOfBadWords)
         
         //console.log("resultado", indexOfBadWordsInDicEs.map(e => dicEs[e])) // ok
 
