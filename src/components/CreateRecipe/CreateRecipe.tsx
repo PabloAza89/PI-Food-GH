@@ -144,7 +144,7 @@ export default function CreateRecipe() {
     // else return false
   }
 
-   const handleSubmit = async (e:any) => {
+  const handleSubmit = async (e:any) => {
     e.preventDefault();
       if (created === 0) {
         dispatch(addNew({
@@ -160,7 +160,7 @@ export default function CreateRecipe() {
       } else {
         setShowAlert(true)
       }
- };
+  };
 
 
 
@@ -207,7 +207,9 @@ export default function CreateRecipe() {
   const validator = ({ type, value, index }: validateStringI) => {
     switch (type) {
       case (`title`):
-        if (/(!|¡|@|[?]|¡|<|>|[/]|[\\]|%|[[]|]|[|]|°|#|[$]|&|[()]|[)]|=|_|[*]|¿|[+]|~|{|}|`|\^)/.test(value)) setError({...error, [type]: true})
+        //if (/(!|¡|@|[?]|¡|<|>|[/]|[\\]|%|[[]|]|[|]|°|#|[$]|&|[()]|[)]|=|_|[*]|¿|[+]|~|{|}|`|\^)/.test(value)) setError({...error, [type]: true})
+        if (/([^a-zA-Z0-9-,;.:¡!¿?'"()[\] ])/g.test(value) && value.length !== 0) setError({...error, [type]: true}) // NEW REGEX !
+        // ALLOWED CHARACTERS: , ; . : - ! ¡ ¿ ? ' " (11)
         else setError({...error, [type]: false});
         setTitleValue(value);
 
@@ -228,10 +230,87 @@ export default function CreateRecipe() {
         //let regex = new RegExp(e + "[^a-z]" || "^" + e + "[^a-z]" || e + "$", "g");
         //let indexOfBadWordsInDicEs = dicEs.map((e, indx) => { return (value.toLowerCase().search(RegExp(e + "[^a-z]" || "^" + e + "[^a-z]" || e + "$", "g")) !== -1) ? dicEs.indexOf(e) : -1 }).filter(e => e !== -1) // only for one word
         //let indexOfBadWordsInDicEs = dicEs.map((e, indx) => { return (value.toLowerCase().search(RegExp("^" + e + "|" + e + "$", "g")) !== -1) ? dicEs.indexOf(e) : -1 }).filter(e => e !== -1) // only for one word
-        let indexOfBadWordsInDicEs = dicEs.map((e, indx) => { return (value.toLowerCase().search(RegExp(e + "[^a-z]|^" + e + "[^a-z]|" + e + "$", "g")) !== -1) ? dicEs.indexOf(e) : -1 }).filter(e => e !== -1) //  excellent ! 
+        //let indexOfBadWordsInDicEs = dicEs.map((e, idx) => { return (value.toLowerCase().search(RegExp( e + "|" + e + "[^a-z0-9]|" + e + "$", "g")) !== -1) ? { "target": e, "index": idx } : -1 }).filter(e => e !== -1) //  excellent !
+        //let indexOfBadWordsInDicEs = dicEs.map((e, idx) => { return (value.toLowerCase().search(RegExp( "^" + e + "|" + e + "[^a-z0-9]|[^a-z0-9]|" + e + "$")) !== -1) ? { "target": e, "index": idx } : -1 }).filter(e => e !== -1) //  excellent !
+        //let indexOfBadWordsInDicEs = dicEs.map((e, idx) => { return (value.toLowerCase().search(RegExp( "^" + e + "|" + e + "[^a-z0-9]|[^a-z0-9]|" + e + "$", "g")) !== -1) ? { "target": e, "index": idx } : -1 }).filter(e => e !== -1) //  excellent !
+
+
+        //let indexOfBadWordsInDicEs = dicEs.map((e, idx) => { return (value.toLowerCase().search(RegExp( "^" +  e + "$" + "|^" + e + "[^a-z0-9]" + "|" + "^" + e + "$", "g")) !== -1) ? { "target": e, "index": idx } : -1 }).filter(e => e !== -1) //  excellent !
+
+
+        //  if (/([^a-zA-Z0-9-,;.:¡!¿?'"()[\] ])/g.test(value)
+
+
+        let badWordsInDicEs = dicEs.map((e, idx) => {
+          return (value.toLowerCase().search(RegExp(
+            `^` + e + `$|` + // MATCH UNIQUE STRING WITH NOTHING AT START OR END
+            `[-,;.:¡!¿?'"()\\][ ]` + e + `$|` + // ALLOWED CHARACTERS AT BEGGINING // TEST
+            `^` + e + `[-,;.:¡!¿?'"()\\][ ]|` + // ALLOWED CHARACTERS AT END // TEST
+            `[-,;.:¡!¿?'"()\\][ ]` + e + `[-,;.:¡!¿?'"()\\][ ]`  //+ `|` + // ALLOWED CHARACTERS AT START & END // TEST
+
+            , "g" )) !== -1) ? { "target": e, "index": idx } : -1
+        }).filter(e => e !== -1) //  excellent !
+
+        //  "^" +  e + "$" // ONLY STRING WITH NOTHING AT START OF END
+
+        // e + "[^a-z0-9]" // OK MIDDEL // TEST
+
+        // "^" + e // OK START
+
+        // "^" + e + "$" // OK END
+
+
         //let indexOfBadWordsInDicEs = "123"
 
-        console.log("resultado", indexOfBadWordsInDicEs) // ok
+        console.log(JSON.stringify(badWordsInDicEs, null, 4)) // ok
+
+        //let asd = "bobo bobos bobito"
+        //let www = [...asd.matchAll(RegExp("bobo" , "g"))]
+        //console.log("test", www )//.forEach((e) => { return { e }}))
+
+        let array: any = []
+
+        //let qq = [...value.matchAll(/bobo/g)].map((e) => {return {"target": e.toString().replace(/[^A-Za-z0-9]/g, ""),"start": e.index, "end": e.index + e[0].replace(/[^A-Za-z0-9]/g, "").length}})
+        badWordsInDicEs?.filter(e => e !== -1)?.forEach((rr) => {
+          //return e !== -1 ? e : -1
+          // [...value.matchAll(RegExp(rr, "g"))].map((e) => {return {"target": e.toString().replace(/[^A-Za-z0-9]/g, ""),"start": e.index, "end": e.index + e[0].replace(/[^A-Za-z0-9]/g, "").length}})
+          //let regex = new RegExp(rr, "g")
+          //[...value.matchAll(RegExp(rr, "g"))].map((e) => { return { "target": e }})
+
+          //return rr
+
+          //let aqq = rr
+
+          //let regex = new RegExp(aqq, "g")
+          //let regex = new RegExp(rr?.target?, "g")
+
+          //array.push({ "target": [...value.matchAll(RegExp(rr?.target, "g"))][0][0] })//.forEach((e) => { return { e }})
+          //array.push({ "target": [...value.matchAll(RegExp("bobo", "g"))] })//.forEach((e) => { return { e }})
+          //array.push({ "target": [...value.matchAll(RegExp("bobo", "g"))].map(e => e.index) })//.forEach((e) => { return { e }})
+
+          // if (rr !== -1) [...value.matchAll(RegExp(rr.target, "g"))].forEach((e) => {
+          //   array.push({ "target": e[0], "start": e.index, "end": e.index! + e[0].length})
+          // })
+
+          if (rr !== -1) [...value.matchAll(RegExp(
+
+             `^` + rr.target + `$|` + // MATCH UNIQUE STRING WITH NOTHING AT START OR END
+            `[-,;.:¡!¿?'"()\\][ ]` + rr.target + `$|` + // ALLOWED CHARACTERS AT BEGGINING // TEST
+            `^` + rr.target + `[-,;.:¡!¿?'"()\\][ ]|` + // ALLOWED CHARACTERS AT END // TEST
+            `[-,;.:¡!¿?'"()\\][ ]` + rr.target + `[-,;.:¡!¿?'"()\\][ ]`  //+ `|` + // ALLOWED CHARACTERS AT START & END // TEST
+            
+            
+            , "g"))].forEach((e) => {
+            array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "start": e.index, "end": e.index! + e[0].length})
+          })
+
+          //return [...value.matchAll(RegExp(rr?.target, "g"))]//.forEach((e) => { return { e }}
+
+
+        })
+
+        console.log(JSON.stringify(array, null, 4)) // ok
+
         // let indexOfBadWordsInDicEs = dicEs.map((e, idx) => {
         //   //return (value.toLowerCase().search(e) !== -1) ? dicEs.indexOf(e) : -1
         //   return (value.toLowerCase().search(e) !== -1) ? {"index": idx, "value": e} : -1
@@ -239,10 +318,10 @@ export default function CreateRecipe() {
 
         // }).filter(e => e !== -1) // testing
 
-        //let ww = dicEs.find((e, indx) => value.search(e))
-        //let ww = dicEs.indexOf(value)
-        
-        //let qq = [...qq.matchAll(/bobo[^a-z]/g)].map((e) => {return {"target": e.toString().replace(/[^A-Za-z0-9]/g, ""),"start": e.index, "end": e.index + e[0].replace(/[^A-Za-z0-9]/g, "").length}})
+        // let ww = dicEs.find((e, indx) => value.search(e))
+        // let ww = dicEs.indexOf(value)
+
+        // let qq = [...qq.matchAll(/bobo[^a-z]/g)].map((e) => {return {"target": e.toString().replace(/[^A-Za-z0-9]/g, ""),"start": e.index, "end": e.index + e[0].replace(/[^A-Za-z0-9]/g, "").length}})
         // [...qq.matchAll(/bobo[^a-z]/g)].map((e) => {return {"target": e.toString().replace(/[^A-Za-z0-9]/g, ""),"start": e.index, "end": e.index + e[0].replace(/[^A-Za-z0-9]/g, "").length}})
         // let qq = "aaboboso bobos bobo"
 
@@ -252,25 +331,25 @@ export default function CreateRecipe() {
 
         //let qq = value.search(/bobos[^a-z]|^bobos[^a-z]|bobos$/g) // target
         // let qq = "boboso bobo bobos"
-        
+
 
         // qq.search(/bobo[^a-z]/)
         // [...qq.matchAll(/^bobos|bobos[^a-z]|bobos$/g)]
         // [...qq.matchAll(/^bobos|bobos[^a-z]|bobos$/g)]
         // let qq = [...value.matchAll(/bobo[^a-z]/g)]
-        
+
         //console.log("resultado", qq) // ok
-        
+
         //let arrayOfBadWords = indexOfBadWordsInDicEs.map(e => dicEs[e])
         //console.log("indexOfBadWordsInDicEs", indexOfBadWordsInDicEs)
         //console.log(JSON.stringify(indexOfBadWordsInDicEs, null, 4))
         //console.log("arrayOfBadWords", arrayOfBadWords)
-        
+
         //console.log("resultado", indexOfBadWordsInDicEs.map(e => dicEs[e])) // ok
 
 
         //console.log("value split", value.split(""))
-        
+
         //
 
         $(function(){
@@ -470,8 +549,8 @@ export default function CreateRecipe() {
   //   $(`.testTitle`)
   //     .css("color", "red")
   // })
-  
-  
+
+
 
   return !firstInstance ?
     (
@@ -491,8 +570,17 @@ export default function CreateRecipe() {
                     leaveDelay={200}
                     enterTouchDelay={0}
                     open={error.title}
+                    //open={true}
                     placement="bottom"
-                    title={`Special characters not allowed in "Title" !`}
+                    variant="outlined"
+                    size="lg"
+                    title={
+                      <Box sx={{ display: 'flex', flexDirection: 'column', color: '#25252d', background: '#f5f5f9', fontFamily: 'Roboto'}}>
+                        <Box sx={{ fontWeight: '400', fontSize: '17px' }}>Special characters not allowed in "Title" !</Box>
+                        <Box sx={{ color: '#42424f' }}>Allowed characters: <b>, ; . : - ! ¡ ¿ ? ' " ( ) [ ]</b> [15]</Box>
+                        <Box sx={{ fontWeight: '400' }}><em>Please, <u>remove unallowed characters</u>.</em></Box>
+                      </Box>
+                    }
                   >
                     <TextField
                       className={`testTitle`}
