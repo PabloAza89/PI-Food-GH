@@ -213,32 +213,7 @@ export default function CreateRecipe() {
         else setError({...error, [type]: false});
         setTitleValue(value);
 
-        // abadol abejarruca
-        //let ww = dicEs.return((e, index) => return {value.search(e)})
-        //let ww = dicEs.map((e, index) => value.search(e)).filter((e, indexx) => e !== -1)
-        //let ww = dicEs.map((e, indx) => value.search(e)).indexOf(0)
-        //let ww = dicEs.filter((e, indx) => value.search(e))
-        //let ww = dicEs.reduce((e, indx) => value.search(e))
-        //let ww = dicEs.find((e, indx) => value.search(e))
-        //let ww = dicEs.find(value)
-        //let ww = dicEs.map(function(e, indx) {return value.search(e)})
-        //let ww = dicEs.map(function(e, indx) {return value.search(e)})
-        //let ww = dicEs.map(function(e, indx) {return dicEs.indexOf(value.search(e) !== -1)})
-        //let ww = dicEs.map(function(e, indx) { return (value.search(e) !== -1) ? true : null })
-        //let ww = dicEs.map(function(e, indx) { return (value.search(e) !== -1) ? dicEs.indexOf(e) : -1 })
-        //let indexOfBadWordsInDicEs = dicEs.map((e, indx) => { return (value.toLowerCase().search(e) !== -1) ? dicEs.indexOf(e) : -1 }).filter(e => e !== -1) // only for one word
-        //let regex = new RegExp(e + "[^a-z]" || "^" + e + "[^a-z]" || e + "$", "g");
-        //let indexOfBadWordsInDicEs = dicEs.map((e, indx) => { return (value.toLowerCase().search(RegExp(e + "[^a-z]" || "^" + e + "[^a-z]" || e + "$", "g")) !== -1) ? dicEs.indexOf(e) : -1 }).filter(e => e !== -1) // only for one word
-        //let indexOfBadWordsInDicEs = dicEs.map((e, indx) => { return (value.toLowerCase().search(RegExp("^" + e + "|" + e + "$", "g")) !== -1) ? dicEs.indexOf(e) : -1 }).filter(e => e !== -1) // only for one word
-        //let indexOfBadWordsInDicEs = dicEs.map((e, idx) => { return (value.toLowerCase().search(RegExp( e + "|" + e + "[^a-z0-9]|" + e + "$", "g")) !== -1) ? { "target": e, "index": idx } : -1 }).filter(e => e !== -1) //  excellent !
-        //let indexOfBadWordsInDicEs = dicEs.map((e, idx) => { return (value.toLowerCase().search(RegExp( "^" + e + "|" + e + "[^a-z0-9]|[^a-z0-9]|" + e + "$")) !== -1) ? { "target": e, "index": idx } : -1 }).filter(e => e !== -1) //  excellent !
-        //let indexOfBadWordsInDicEs = dicEs.map((e, idx) => { return (value.toLowerCase().search(RegExp( "^" + e + "|" + e + "[^a-z0-9]|[^a-z0-9]|" + e + "$", "g")) !== -1) ? { "target": e, "index": idx } : -1 }).filter(e => e !== -1) //  excellent !
 
-
-        //let indexOfBadWordsInDicEs = dicEs.map((e, idx) => { return (value.toLowerCase().search(RegExp( "^" +  e + "$" + "|^" + e + "[^a-z0-9]" + "|" + "^" + e + "$", "g")) !== -1) ? { "target": e, "index": idx } : -1 }).filter(e => e !== -1) //  excellent !
-
-
-        //  if (/([^a-zA-Z0-9-,;.:¡!¿?'"()[\] ])/g.test(value)
 
 
         let badWordsInDicEs = dicEs.map((e, idx) => {
@@ -251,57 +226,39 @@ export default function CreateRecipe() {
             , "g" )) !== -1) ? { "target": e, "index": idx } : -1
         }).filter(e => e !== -1) //  excellent !
 
-        //  "^" +  e + "$" // ONLY STRING WITH NOTHING AT START OF END
-
-        // e + "[^a-z0-9]" // OK MIDDEL // TEST
-
-        // "^" + e // OK START
-
-        // "^" + e + "$" // OK END
-
-
-        //let indexOfBadWordsInDicEs = "123"
 
         console.log(JSON.stringify(badWordsInDicEs, null, 4)) // ok
 
-        //let asd = "bobo bobos bobito"
-        //let www = [...asd.matchAll(RegExp("bobo" , "g"))]
-        //console.log("test", www )//.forEach((e) => { return { e }}))
+
 
         let array: any = []
 
         //let qq = [...value.matchAll(/bobo/g)].map((e) => {return {"target": e.toString().replace(/[^A-Za-z0-9]/g, ""),"start": e.index, "end": e.index + e[0].replace(/[^A-Za-z0-9]/g, "").length}})
-        badWordsInDicEs?.filter(e => e !== -1)?.forEach((rr) => {
-          //return e !== -1 ? e : -1
-          // [...value.matchAll(RegExp(rr, "g"))].map((e) => {return {"target": e.toString().replace(/[^A-Za-z0-9]/g, ""),"start": e.index, "end": e.index + e[0].replace(/[^A-Za-z0-9]/g, "").length}})
-          //let regex = new RegExp(rr, "g")
-          //[...value.matchAll(RegExp(rr, "g"))].map((e) => { return { "target": e }})
+        badWordsInDicEs?.filter(e => e !== -1)?.forEach((rr, idx) => {
 
-          //return rr
-
-          //let aqq = rr
-
-          //let regex = new RegExp(aqq, "g")
-          //let regex = new RegExp(rr?.target?, "g")
-
-          //array.push({ "target": [...value.matchAll(RegExp(rr?.target, "g"))][0][0] })//.forEach((e) => { return { e }})
-          //array.push({ "target": [...value.matchAll(RegExp("bobo", "g"))] })//.forEach((e) => { return { e }})
-          //array.push({ "target": [...value.matchAll(RegExp("bobo", "g"))].map(e => e.index) })//.forEach((e) => { return { e }})
-
-          // if (rr !== -1) [...value.matchAll(RegExp(rr.target, "g"))].forEach((e) => {
-          //   array.push({ "target": e[0], "start": e.index, "end": e.index! + e[0].length})
-          // })
 
           if (rr !== -1) [...value.matchAll(RegExp(
 
-             `^` + rr.target + `$|` + // MATCH UNIQUE STRING WITH NOTHING AT START OR END
+            `^` + rr.target + `$|` + // MATCH UNIQUE STRING WITH NOTHING AT START OR END
             `[-,;.:¡!¿?'"()\\][ ]` + rr.target + `$|` + // ALLOWED CHARACTERS AT BEGGINING // TEST
             `^` + rr.target + `[-,;.:¡!¿?'"()\\][ ]|` + // ALLOWED CHARACTERS AT END // TEST
             `[-,;.:¡!¿?'"()\\][ ]` + rr.target + `[-,;.:¡!¿?'"()\\][ ]`  //+ `|` + // ALLOWED CHARACTERS AT START & END // TEST
             
             
             , "g"))].forEach((e) => {
-            array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "start": e.index, "end": e.index! + e[0].length})
+            //array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "test": idx, "start": e.index, "end": e.index! + e[0].length})
+            /* if (rr.length! === e[0].length)  */ //array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "test": idx, "start": e.index, "end": e.index! + e[0].length})
+            //if (rr.target[0] !== e[0]) array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "test": idx, "start": e.index, "end": e.index! + e[0].length})
+            //if (rr.target[0] !== e[0]) console.log("AAA")
+            if (rr.target[0] === e[0][0] && rr.target.length === e[0].length) array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "test": idx, "start": e.index, "end": e.index! + e[0].length }) // START ARE EQUAL
+            if (rr.target[0] === e[0][0] && rr.target.length !== e[0].length) array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "test": idx, "start": e.index, "end": e.index! + e[0].length - 1 }) // START ARE EQUAL
+            if (rr.target[0] !== e[0][0] && rr.target.length +1 === e[0].length) array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "test": idx, "start": e.index! + 1, "end": e.index! + e[0].length }) // START ARE EQUAL
+            if (rr.target[0] === e[0][0] && rr.target.length === e[0].length + 2) array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "test": idx, "start": e.index, "end": e.index! + e[0].length - 1 }) // START ARE EQUAL
+            //else array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "test": idx, "start": e.index! + 1, "end": e.index! + e[0].length})
+            console.log(rr.target[0]) // start bobo // retrieve b
+            console.log(e[0][0]) // start bobo retrieve b
+            console.log(rr.target.length) // start bobo // retrieve b
+            console.log(e[0].length) // start bobo retrieve b
           })
 
           //return [...value.matchAll(RegExp(rr?.target, "g"))]//.forEach((e) => { return { e }}
