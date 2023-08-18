@@ -234,31 +234,34 @@ export default function CreateRecipe() {
         let array: any = []
 
         //let qq = [...value.matchAll(/bobo/g)].map((e) => {return {"target": e.toString().replace(/[^A-Za-z0-9]/g, ""),"start": e.index, "end": e.index + e[0].replace(/[^A-Za-z0-9]/g, "").length}})
-        badWordsInDicEs?.filter(e => e !== -1)?.forEach((rr, idx) => {
+        badWordsInDicEs?.filter(e => e !== -1)?.forEach((x, idx) => {
 
 
-          if (rr !== -1) [...value.matchAll(RegExp(
+          if (x !== -1) [...value.matchAll(RegExp(
 
-            `^` + rr.target + `$|` + // MATCH UNIQUE STRING WITH NOTHING AT START OR END
-            `[-,;.:¡!¿?'"()\\][ ]` + rr.target + `$|` + // ALLOWED CHARACTERS AT BEGGINING // TEST
-            `^` + rr.target + `[-,;.:¡!¿?'"()\\][ ]|` + // ALLOWED CHARACTERS AT END // TEST
-            `[-,;.:¡!¿?'"()\\][ ]` + rr.target + `[-,;.:¡!¿?'"()\\][ ]`  //+ `|` + // ALLOWED CHARACTERS AT START & END // TEST
+            `^` + x.target + `$|` + // MATCH UNIQUE STRING WITH NOTHING AT START OR END
+            `[-,;.:¡!¿?'"()\\][ ]` + x.target + `$|` + // ALLOWED CHARACTERS AT BEGGINING // TEST
+            `^` + x.target + `[-,;.:¡!¿?'"()\\][ ]|` + // ALLOWED CHARACTERS AT END // TEST
+            `[-,;.:¡!¿?'"()\\][ ]` + x.target + `[-,;.:¡!¿?'"()\\][ ]`  //+ `|` + // ALLOWED CHARACTERS AT START & END // TEST
             
             
             , "g"))].forEach((e) => {
             //array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "test": idx, "start": e.index, "end": e.index! + e[0].length})
             /* if (rr.length! === e[0].length)  */ //array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "test": idx, "start": e.index, "end": e.index! + e[0].length})
-            //if (rr.target[0] !== e[0]) array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "test": idx, "start": e.index, "end": e.index! + e[0].length})
-            //if (rr.target[0] !== e[0]) console.log("AAA")
-            if (rr.target[0] === e[0][0] && rr.target.length === e[0].length) array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "test": idx, "start": e.index, "end": e.index! + e[0].length }) // START ARE EQUAL
-            if (rr.target[0] === e[0][0] && rr.target.length !== e[0].length) array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "test": idx, "start": e.index, "end": e.index! + e[0].length - 1 }) // START ARE EQUAL
-            if (rr.target[0] !== e[0][0] && rr.target.length +1 === e[0].length) array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "test": idx, "start": e.index! + 1, "end": e.index! + e[0].length }) // START ARE EQUAL
-            if (rr.target[0] === e[0][0] && rr.target.length === e[0].length + 2) array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "test": idx, "start": e.index, "end": e.index! + e[0].length - 1 }) // START ARE EQUAL
+            //if (x.target[0] !== e[0]) array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "test": idx, "start": e.index, "end": e.index! + e[0].length})
+            //if (x.target[0] !== e[0]) console.log("AAA")
+            if (x.target[0] === e[0][0] && x.target.length === e[0].length) array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "test": idx, "start": e.index, "end": e.index! + e[0].length }) // START AND END ARE EQUAL
+            if (x.target[0] !== e[0][0] && x.target.length === e[0].length - 1) array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "test": idx, "start": e.index! + 1, "end": e.index! + e[0].length }) // FIRST LETTER IS DIFFERENT
+            if (x.target[0] !== e[0][0] && x.target.length === e[0].length - 2) array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "test": idx, "start": e.index! + 1, "end": e.index! + e[0].length - 1 }) // FIRST LETTER IS DIFFERENT
+            if (x.target[0] === e[0][0] && x.target.length === e[0].length - 1) array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "test": idx, "start": e.index! , "end": e.index! + e[0].length - 1 }) // FIRST LETTER IS DIFFERENT
+            
+            //if (x.target[0] !== e[0][0] && x.target.length +1 === e[0].length) array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "test": idx, "start": e.index! + 1, "end": e.index! + e[0].length }) // START ARE EQUAL
+            //if (x.target[0] === e[0][0] && x.target.length === e[0].length + 2) array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "test": idx, "start": e.index, "end": e.index! + e[0].length - 1 }) // START ARE EQUAL
             //else array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "test": idx, "start": e.index! + 1, "end": e.index! + e[0].length})
-            console.log(rr.target[0]) // start bobo // retrieve b
-            console.log(e[0][0]) // start bobo retrieve b
-            console.log(rr.target.length) // start bobo // retrieve b
-            console.log(e[0].length) // start bobo retrieve b
+            console.log("in diceES", x.target[0]) // start bobo // retrieve b
+            console.log("written", e[0][0]) // start bobo retrieve b
+            console.log("in diceES", x.target.length) // start bobo // retrieve b
+            console.log("written", e[0].length) // start bobo retrieve b
           })
 
           //return [...value.matchAll(RegExp(rr?.target, "g"))]//.forEach((e) => { return { e }}
