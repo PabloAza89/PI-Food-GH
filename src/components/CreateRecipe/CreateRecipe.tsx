@@ -229,18 +229,29 @@ export default function CreateRecipe() {
 
         let array: any = []
 
+        
+        //console.log(JSON.stringify(badWordsInDicEs, null, 4)) // ok
+
         badWordsInDicEs?.filter(e => e !== -1)?.forEach((x, idx) => {
 
-          if (x !== -1) [...value.matchAll(RegExp(x.target, "g"))].forEach((e) => {
+          if (x !== -1) [...value.matchAll(RegExp(
+            `^` + x.target + `$|` + // UNIQUE WORD WITH NOTHING AT START OR END
+            `^` + x.target + `[-,;.:¡!¿?'"()\\][ ]|` + // START WORD WITH ALLOWED CHARACTER AT END
+            `[-,;.:¡!¿?'"()\\][ ]` + x.target + `$|` + // ALLOWED CHARACTER AT BEGGINING AND NOTHING AT END
+            x.target + `$|` + // WORD AT END
+            x.target + `[-,;.:¡!¿?'"()\\][ ]` // WORD CONTINUED WITH ALLOWED CHARACTERS
+            , "g")
+          )].forEach((e) => {
+
             if (x.target[0] === e[0][0] && x.target.length === e[0].length) array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "test": idx, "start": e.index, "end": e.index! + e[0].length }) // EQUAL = START AND END ARE EQUAL
             if (x.target[0] !== e[0][0] && x.target.length === e[0].length - 1) array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "test": idx, "start": e.index! + 1, "end": e.index! + e[0].length }) // "SPACE" AT BEGGINING = FIRST LETTER IS DIFFERENT // + 1 LENGTH IN e[0].length
             if (x.target[0] !== e[0][0] && x.target.length === e[0].length - 2) array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "test": idx, "start": e.index! + 1, "end": e.index! + e[0].length - 1 }) // "SPACE" AT BEGGINING AND END = FIRST LETTER IS DIFFERENT // + 2 LENGTH IN e[0].length
             if (x.target[0] === e[0][0] && x.target.length === e[0].length - 1) array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "test": idx, "start": e.index! , "end": e.index! + e[0].length - 1 }) // "SPACE" AT END = FIRST LETTER ARE EQUAL // + 1 LENGTH IN e[0].length
 
-            // console.log("in diceES", x.target[0])
-            // console.log("written", e[0][0])
-            // console.log("in diceES", x.target.length)
-            // console.log("written", e[0].length)
+            console.log("in diceES", x.target[0])
+            console.log("written", e[0][0])
+            console.log("in diceES", x.target.length)
+            console.log("written", e[0].length)
 
           })
 
