@@ -57,8 +57,8 @@ export const input = () => {
   return {
     width: '68vw',
     background: 'lightblue',
-    //color: 'red', // dev
-    //background: 'gray' // dev
+    color: 'red', // dev
+    //background: 'blue' // dev
   }
 }
 

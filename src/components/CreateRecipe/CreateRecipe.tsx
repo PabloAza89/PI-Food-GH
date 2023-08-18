@@ -243,15 +243,15 @@ export default function CreateRecipe() {
             , "g")
           )].forEach((e) => {
 
-            if (x.target[0] === e[0][0] && x.target.length === e[0].length) array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "test": idx, "start": e.index, "end": e.index! + e[0].length }) // EQUAL = START AND END ARE EQUAL
-            if (x.target[0] !== e[0][0] && x.target.length === e[0].length - 1) array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "test": idx, "start": e.index! + 1, "end": e.index! + e[0].length }) // "SPACE" AT BEGGINING = FIRST LETTER IS DIFFERENT // + 1 LENGTH IN e[0].length
-            if (x.target[0] !== e[0][0] && x.target.length === e[0].length - 2) array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "test": idx, "start": e.index! + 1, "end": e.index! + e[0].length - 1 }) // "SPACE" AT BEGGINING AND END = FIRST LETTER IS DIFFERENT // + 2 LENGTH IN e[0].length
-            if (x.target[0] === e[0][0] && x.target.length === e[0].length - 1) array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "test": idx, "start": e.index! , "end": e.index! + e[0].length - 1 }) // "SPACE" AT END = FIRST LETTER ARE EQUAL // + 1 LENGTH IN e[0].length
+            if (x.target[0] === e[0][0] && x.target.length === e[0].length) array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "start": e.index, "end": e.index! + e[0].length }) // EQUAL = START AND END ARE EQUAL
+            if (x.target[0] !== e[0][0] && x.target.length === e[0].length - 1) array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "start": e.index! + 1, "end": e.index! + e[0].length }) // "SPACE" AT BEGGINING = FIRST LETTER IS DIFFERENT // + 1 LENGTH IN e[0].length
+            if (x.target[0] !== e[0][0] && x.target.length === e[0].length - 2) array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "start": e.index! + 1, "end": e.index! + e[0].length - 1 }) // "SPACE" AT BEGGINING AND END = FIRST LETTER IS DIFFERENT // + 2 LENGTH IN e[0].length
+            if (x.target[0] === e[0][0] && x.target.length === e[0].length - 1) array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "start": e.index! , "end": e.index! + e[0].length - 1 }) // "SPACE" AT END = FIRST LETTER ARE EQUAL // + 1 LENGTH IN e[0].length
 
-            console.log("in diceES", x.target[0])
-            console.log("written", e[0][0])
-            console.log("in diceES", x.target.length)
-            console.log("written", e[0].length)
+            // console.log("in diceES", x.target[0])
+            // console.log("written", e[0][0])
+            // console.log("in diceES", x.target.length)
+            // console.log("written", e[0].length)
 
           })
 
@@ -261,10 +261,58 @@ export default function CreateRecipe() {
 
 
 
+        // $(function(){
+        //   $("#title").each(function() {               // ***
+        //     $(this).data("original", $(this).text()); // ***
+        //     //console.log("this", this)
+        //   })                                            // ***
+          
+          
+        //     $('#title').each(function() {
+        //         var text = $(this).data("original"),      // ***
+        //         textL = text.toLowerCase(),
+        //         index = textL.indexOf(this);         // ***
+        //         //console.log("text", text)
+          
+        //       if (index !== -1) {
+        //         //var htmlR = text.substr(0, index) + '<b>' + text.substr(index, text.length) + '</b>' + text.substr(index + text.length); // ***
+        //         var htmlR = text.substr(0, 1) + '<p style="color:red">' + text.substr(1, 2) + '</p>' + text.substr(4); // ***
+                
+        //         //$(this).html(htmlR).show()
+        //         $(this).html(htmlR)//.show()
+        //       }/*  else {
+        //         $(this).hide();
+        //       } */
+        //     });
+         
+              
+
+        // })
+
         $(function(){
-          // $(`#title`)
-          //   .css("color", "blue")
-          //if ()
+          $("#title").each(function() {               // ***
+            let qq = $("#title").data("original", $("#title").text()); // ***
+            //console.log("this", this)
+
+            //var text = this.value
+            
+              //console.log("text", text)
+              console.log("qq", qq[0] && qq[0]!.value!)
+              //console.log("this", (this as HTMLElement).value)
+            
+              var htmlR = qq[0]!.value!.substr(0, 1) + '<input style="color:red">' + qq[0]!.value!.substr(1, 2) + '</input>' + qq[0]!.value!.substr(4);
+              //$("#title").html(htmlR)
+              $("#title").replaceWith(htmlR)
+              
+
+
+
+          })                                            // ***
+          
+          
+         
+              
+
         })
 
 
@@ -480,6 +528,7 @@ export default function CreateRecipe() {
                   >
                     <TextField
                       className={`testTitle`}
+                      //id={`testTitle`}
                       sx={s.input}
                       type="text"
                       autoComplete='off'
