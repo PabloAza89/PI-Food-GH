@@ -207,9 +207,8 @@ export default function CreateRecipe() {
   const validator = ({ type, value, index }: validateStringI) => {
     switch (type) {
       case (`title`):
-        //if (/(!|¡|@|[?]|¡|<|>|[/]|[\\]|%|[[]|]|[|]|°|#|[$]|&|[()]|[)]|=|_|[*]|¿|[+]|~|{|}|`|\^)/.test(value)) setError({...error, [type]: true})
         if (/([^a-zA-Z0-9-,;.:¡!¿?'"()[\] ])/g.test(value) && value.length !== 0) setError({...error, [type]: true}) // NEW REGEX !
-        // ALLOWED CHARACTERS: , ; . : - ! ¡ ¿ ? ' " (11)
+        // ALLOWED CHARACTERS: , ; . : - ! ¡ ¿ ? ' " () [] (15)
         else setError({...error, [type]: false});
         setTitleValue(value);
 
@@ -224,93 +223,32 @@ export default function CreateRecipe() {
             `[-,;.:¡!¿?'"()\\][ ]` + e + `[-,;.:¡!¿?'"()\\][ ]`  //+ `|` + // ALLOWED CHARACTERS AT START & END // TEST
 
             , "g" )) !== -1) ? { "target": e, "index": idx } : -1
-        }).filter(e => e !== -1) //  excellent !
+        }).filter(e => e !== -1)
 
-
-        console.log(JSON.stringify(badWordsInDicEs, null, 4)) // ok
-
-
+        // console.log(JSON.stringify(badWordsInDicEs, null, 4)) // ok
 
         let array: any = []
 
-        //let qq = [...value.matchAll(/bobo/g)].map((e) => {return {"target": e.toString().replace(/[^A-Za-z0-9]/g, ""),"start": e.index, "end": e.index + e[0].replace(/[^A-Za-z0-9]/g, "").length}})
         badWordsInDicEs?.filter(e => e !== -1)?.forEach((x, idx) => {
 
+          if (x !== -1) [...value.matchAll(RegExp(x.target, "g"))].forEach((e) => {
+            if (x.target[0] === e[0][0] && x.target.length === e[0].length) array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "test": idx, "start": e.index, "end": e.index! + e[0].length }) // EQUAL = START AND END ARE EQUAL
+            if (x.target[0] !== e[0][0] && x.target.length === e[0].length - 1) array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "test": idx, "start": e.index! + 1, "end": e.index! + e[0].length }) // "SPACE" AT BEGGINING = FIRST LETTER IS DIFFERENT // + 1 LENGTH IN e[0].length
+            if (x.target[0] !== e[0][0] && x.target.length === e[0].length - 2) array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "test": idx, "start": e.index! + 1, "end": e.index! + e[0].length - 1 }) // "SPACE" AT BEGGINING AND END = FIRST LETTER IS DIFFERENT // + 2 LENGTH IN e[0].length
+            if (x.target[0] === e[0][0] && x.target.length === e[0].length - 1) array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "test": idx, "start": e.index! , "end": e.index! + e[0].length - 1 }) // "SPACE" AT END = FIRST LETTER ARE EQUAL // + 1 LENGTH IN e[0].length
 
-          if (x !== -1) [...value.matchAll(RegExp(
+            // console.log("in diceES", x.target[0])
+            // console.log("written", e[0][0])
+            // console.log("in diceES", x.target.length)
+            // console.log("written", e[0].length)
 
-            `^` + x.target + `$|` + // MATCH UNIQUE STRING WITH NOTHING AT START OR END
-            `[-,;.:¡!¿?'"()\\][ ]` + x.target + `$|` + // ALLOWED CHARACTERS AT BEGGINING // TEST
-            `^` + x.target + `[-,;.:¡!¿?'"()\\][ ]|` + // ALLOWED CHARACTERS AT END // TEST
-            `[-,;.:¡!¿?'"()\\][ ]` + x.target + `[-,;.:¡!¿?'"()\\][ ]`  //+ `|` + // ALLOWED CHARACTERS AT START & END // TEST
-            
-            
-            , "g"))].forEach((e) => {
-            //array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "test": idx, "start": e.index, "end": e.index! + e[0].length})
-            /* if (rr.length! === e[0].length)  */ //array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "test": idx, "start": e.index, "end": e.index! + e[0].length})
-            //if (x.target[0] !== e[0]) array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "test": idx, "start": e.index, "end": e.index! + e[0].length})
-            //if (x.target[0] !== e[0]) console.log("AAA")
-            if (x.target[0] === e[0][0] && x.target.length === e[0].length) array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "test": idx, "start": e.index, "end": e.index! + e[0].length }) // START AND END ARE EQUAL
-            if (x.target[0] !== e[0][0] && x.target.length === e[0].length - 1) array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "test": idx, "start": e.index! + 1, "end": e.index! + e[0].length }) // FIRST LETTER IS DIFFERENT
-            if (x.target[0] !== e[0][0] && x.target.length === e[0].length - 2) array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "test": idx, "start": e.index! + 1, "end": e.index! + e[0].length - 1 }) // FIRST LETTER IS DIFFERENT
-            if (x.target[0] === e[0][0] && x.target.length === e[0].length - 1) array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "test": idx, "start": e.index! , "end": e.index! + e[0].length - 1 }) // FIRST LETTER IS DIFFERENT
-            
-            //if (x.target[0] !== e[0][0] && x.target.length +1 === e[0].length) array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "test": idx, "start": e.index! + 1, "end": e.index! + e[0].length }) // START ARE EQUAL
-            //if (x.target[0] === e[0][0] && x.target.length === e[0].length + 2) array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "test": idx, "start": e.index, "end": e.index! + e[0].length - 1 }) // START ARE EQUAL
-            //else array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "test": idx, "start": e.index! + 1, "end": e.index! + e[0].length})
-            console.log("in diceES", x.target[0]) // start bobo // retrieve b
-            console.log("written", e[0][0]) // start bobo retrieve b
-            console.log("in diceES", x.target.length) // start bobo // retrieve b
-            console.log("written", e[0].length) // start bobo retrieve b
           })
-
-          //return [...value.matchAll(RegExp(rr?.target, "g"))]//.forEach((e) => { return { e }}
-
 
         })
 
         console.log(JSON.stringify(array, null, 4)) // ok
 
-        // let indexOfBadWordsInDicEs = dicEs.map((e, idx) => {
-        //   //return (value.toLowerCase().search(e) !== -1) ? dicEs.indexOf(e) : -1
-        //   return (value.toLowerCase().search(e) !== -1) ? {"index": idx, "value": e} : -1
-        //   //return (value.toLowerCase().search(RegExp(("^" + e) || (e + "[^a-z]") || (e + "$"), "g")) !== -1) ? {"index": idx, "value": e} : -1
 
-        // }).filter(e => e !== -1) // testing
-
-        // let ww = dicEs.find((e, indx) => value.search(e))
-        // let ww = dicEs.indexOf(value)
-
-        // let qq = [...qq.matchAll(/bobo[^a-z]/g)].map((e) => {return {"target": e.toString().replace(/[^A-Za-z0-9]/g, ""),"start": e.index, "end": e.index + e[0].replace(/[^A-Za-z0-9]/g, "").length}})
-        // [...qq.matchAll(/bobo[^a-z]/g)].map((e) => {return {"target": e.toString().replace(/[^A-Za-z0-9]/g, ""),"start": e.index, "end": e.index + e[0].replace(/[^A-Za-z0-9]/g, "").length}})
-        // let qq = "aaboboso bobos bobo"
-
-        // qq.search(/bobos[^a-z]|^bobos[^a-z]|bobos$/g) target regex !
-
-        //dicEs.map((e, idx) => { return e })
-
-        //let qq = value.search(/bobos[^a-z]|^bobos[^a-z]|bobos$/g) // target
-        // let qq = "boboso bobo bobos"
-
-
-        // qq.search(/bobo[^a-z]/)
-        // [...qq.matchAll(/^bobos|bobos[^a-z]|bobos$/g)]
-        // [...qq.matchAll(/^bobos|bobos[^a-z]|bobos$/g)]
-        // let qq = [...value.matchAll(/bobo[^a-z]/g)]
-
-        //console.log("resultado", qq) // ok
-
-        //let arrayOfBadWords = indexOfBadWordsInDicEs.map(e => dicEs[e])
-        //console.log("indexOfBadWordsInDicEs", indexOfBadWordsInDicEs)
-        //console.log(JSON.stringify(indexOfBadWordsInDicEs, null, 4))
-        //console.log("arrayOfBadWords", arrayOfBadWords)
-
-        //console.log("resultado", indexOfBadWordsInDicEs.map(e => dicEs[e])) // ok
-
-
-        //console.log("value split", value.split(""))
-
-        //
 
         $(function(){
           // $(`#title`)
@@ -318,19 +256,6 @@ export default function CreateRecipe() {
           //if ()
         })
 
-        //
-
-        //console.log("resultado", ww.forEach(e => dicEs[e]))
-        //console.log("resultado", dicEs[0])
-        //console.log("resultado", ww.filter(e => ww.reduce(r => e !== -1)))
-        //let ww = dicEs.indexOf(dicEs.map((e, indx) => value.search(e)))
-        //console.log("resultado", ww)
-        //console.log("resultado", ww.filter((e, indexx) => e !== -1))
-        //console.log("resultado", dicEs.filter(e => dicEs.reduce(r => e !== -1)))
-
-        //let qq = [0, 5, -1, -1, -1, 3, -1, -1, -1, -1, -1, -1, -1]
-
-        //qq.filter(e => qq.reduce(r => e !== -1)) // ganador
 
 
       break;
