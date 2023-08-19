@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useDispatch } from 'react-redux';
 //import "../../styles/Form.css";
 import * as s from "../../styles/CreateRecipeSX";
@@ -7,16 +7,19 @@ import noImage1 from "../../images/noImage1.jpg";
 import logo from "../../images/logo.png";
 import { Link } from "react-router-dom";
 import { addNew } from '../../actions';
-import { Box, Button, TextField, ListItemText, Checkbox, Dialog, Typography,FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material/';
+import { Box, Button, OutlinedInput, TextField, ListItemText, Checkbox, Dialog, Typography,FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material/';
 import dietss from '../../db/diets.json';
 import Tooltip from '@mui/joy/Tooltip';
 import Swal from 'sweetalert2';
 import dicEs from '../../dictionary/es.json';
 import $ from 'jquery';
+import parse from 'html-react-parser';
 
 export default function CreateRecipe() {
 
   // onBlur={() => setInstructionsPlaceholder(`e.g. Cut pasta, fry tomatoes..`)}
+
+  let textInput = useRef(null)
 
   const dispatch = useDispatch()
 
@@ -86,6 +89,7 @@ export default function CreateRecipe() {
   const [summaryPlaceholder, setSummaryPlaceholder] = useState<string>('e.g. Healthy pasta recipe');
 
   const [titleValue, setTitleValue] = useState<string>('');
+  //const [titleValue, setTitleValue] = useState<string>('<strong>ASDASDASD</strong>');
   const [healthValue, setHealthValue] = useState<string>('');
   const [summaryValue, setSummaryValue] = useState<string>('');
 
@@ -259,6 +263,25 @@ export default function CreateRecipe() {
 
         console.log(JSON.stringify(array, null, 4)) // ok
 
+        // $(function(){
+        //   let qq = $("#title").select(function(){
+        //     //alert("Text marked!");
+        //     console.log("qq", qq)
+        //   })
+        // })
+
+        //console.log("ACAA") // ok
+        //console.log("value", value) // ok
+
+      $(function(){
+          $(".testTitle")///.each(function() {               // ***
+                .attr('unselectable', 'on')
+                 .css('user-select', 'none')
+                 .on('selectstart', false);
+            //$(this).data("original", $(this).text()); // ***
+            //console.log("this", this)
+          //})
+      })  
 
 
         // $(function(){
@@ -289,31 +312,86 @@ export default function CreateRecipe() {
 
         // })
 
-        $(function(){
-          $("#title").each(function() {               // ***
-            let qq = $("#title").data("original", $("#title").text()); // ***
-            //console.log("this", this)
+        // $(function(){
+        //   $("#title").each(function() {               // ***
+        //     let qq = $("#title").data("original", $("#title").text()); // ***
+        //     //console.log("this", this)
+        //     //if (qq) console.log("qq", (qq[0] as HTMLInputElement).value)
+        //     //console.log("qq", (qq[0] as HTMLInputElement).value)
 
-            //var text = this.value
+        //     let ww = (qq[0] as HTMLInputElement).value
+
+        //     //$("#title").css('font-weight', 'bold');
+        //     //$("#title:first-letter").css('font-weight', 'bold');
+        //    // $("#title").each(function(){     
+        //       // if(ww.substr(0,1).toUpperCase() === 'B'){
+        //       //   //$(this).addClass('someclass')
+        //       //   var select = <p>333</p>
+        //       //   $(this).css('font-weight', 'bold')//.add(select);
+        //       // }
+              
+        //         //$(this).addClass('someclass')
+        //         //$("#title").data("original", $("#title").text()).substring(0,1).css('font-weight', 'bold')
+                
+              
+        //      })
             
-              //console.log("text", text)
-              console.log("qq", qq[0] && qq[0]!.value!)
-              //console.log("this", (this as HTMLElement).value)
+        //     //$("#title").append($("<p>").css("color", "red").text("*"));
+        //     //$("#title").append($("<p>").css("color", "red").text("*"));
             
-              var htmlR = qq[0]!.value!.substr(0, 1) + '<input style="color:red">' + qq[0]!.value!.substr(1, 2) + '</input>' + qq[0]!.value!.substr(4);
-              //$("#title").html(htmlR)
-              $("#title").replaceWith(htmlR)
+        //     //$("#title").html("<i>This is my italic text</i>");
+        //     //let ww = (qq[0] as HTMLInputElement)
+        //     //let ww = (qq[0] as HTMLInputElement)
+        //     //ww.wrapInner("<strong />")
+        //     //$("#title").text($("#title").text().replace("Bye"));
+        //     // console.log("ww", ww[0])
+        //     // let aa = '<b>' + ww[0] + '</b>';
+        //     // let bb = ww[1]
+        //     // let cc = aa + bb
+        //     //  $("#title")
+        //     //    .val(cc);
+        //     //console.log("ww.innerHTML", ww.innerHTML)
+
+        //     //$("#title").css('font-weight', 'bold');
+        //     //$("#title")
+        //     //$("#title[input]:last-child")
+        //     //$("#title")
+        //       //.css('font-weight', 'bold');
+        //     //: {  marginBottom: '0px' }
+            
+
+        //     //var text = this.value
+            
+        //       //console.log("text", text)
+              
+        //       //console.log("this", (this as HTMLElement).value)
+             
+            
+
+
+
+        //       // var htmlR = <input>{ww.substring(0,1)} + <p style={{ color: "red" }}> + {ww.substring(1, 3)} + </p> + {ww.substring(3)}</input>
+        //       //var htmlR = <Box>ASDASD</Box>
+
+        //       //var htmlR = <input > + {ww.substring(0, 1)} + <p style="color:red"> {ww.substring(1, ww.length - 1)} </p> </input>
+
+        //       //var htmlR = <TextField>ww.substring(0,1) + ww.substring(1, 3) + ww.substring(3)</TextField>
+        //       //$("#title").html(htmlR)
+
+        //       //$("#title").replaceWith(htmlR)
+
+             
               
 
 
 
-          })                                            // ***
+        //   })                                  
           
           
          
               
 
-        })
+     //   })
 
 
 
@@ -516,6 +594,7 @@ export default function CreateRecipe() {
                     open={error.title}
                     //open={true}
                     placement="bottom"
+                    //onKeyDown={(e) => e.stopPropagation()}
                     variant="outlined"
                     size="lg"
                     title={
@@ -526,19 +605,71 @@ export default function CreateRecipe() {
                       </Box>
                     }
                   >
-                    <TextField
-                      className={`testTitle`}
-                      //id={`testTitle`}
-                      sx={s.input}
-                      type="text"
-                      autoComplete='off'
-                      id="title"
-                      value={titleValue}
-                      placeholder={titlePlaceholder}
-                      onFocus={() => setTitlePlaceholder("")}
-                      onBlur={() => setTitlePlaceholder(`e.g. Pasta with tomatoes..`)}
-                      onChange={(e) => { validator({ value: e.target.value, type: e.target.id }) }}
-                    />
+
+                    {/* <Box onKeyDown={(e) => e.stopPropagation()}> */}
+                      {/* <InputLabel size="small" shrink={false} value={titleValue} sx={{ zIndex: 4000 }}>  AAAAAA  </InputLabel> */}
+                      {/* <InputLabel shrink={false} size="small" sx={s.test4}></InputLabel> */}
+                      <TextField
+                        //contentEditable='true'
+                        label={titleValue}
+                        //label={<><strong>"AAA"</strong> "AAA"<strong>"AAA"</strong></>}
+                        //label={<strong>"AAA"</strong>}
+                        //label={"AAA"}
+                        //label={"AAAAAAAAAAAAAAAAAAAAAAAADASDASDASDWQqwe21sadfsdfsdfsdfsdf"}
+                        
+                        //label={'margin="none"'}
+                        //shrink={false}
+                        //hiddenLabel={false}
+                        //label={'margin="none"'}
+                        //InputLabelProps={{ shrink: false, focused: false, style: { color: 'black' } }}
+                        //InputLabelProps={{ shrink: false, focused: false, style: { color: 'red', paddingTop: '0.5px', } }}
+                        InputLabelProps={{ shrink: false, focused: false, style: s.test1() }}
+                        //LabelProps={{ shrink: false, focused: false, style: s.test1() }}
+                        //onKeyDown={(e) => e.stopPropagation()}
+                        //InputProps={{ color: 'red' }}
+                        InputProps={{ style: s.test2()/* , readOnly: true */ } }
+                        //InputProps={{ style: { color: 'blue', WebkitTouchCallout: 'none', WebkitUserSelect: 'none', khtmlUserSelect: 'none', MozUserSelect: 'none', MsUserSelect: 'none', UserSelect: 'none' } }}
+                       
+                        //InputProps={{ style: { color: 'black', userSelect: 'none' } }}
+                        //InputProps={{ style: s.test() }}
+                        //input={"ASDASD"}
+                        //input={titleValue}
+                        //placeholder={`ASDASD`}
+                        //input={<OutlinedInput />}
+                        
+                        
+                        className={`testTitle`}
+                        //id={`testTitle`}
+                        sx={s.input}
+                        //sx={{label: s.test3}}
+                        inputRef={textInput}
+                        //type="text"
+                        autoComplete='off'
+                        id="title"
+                        value={titleValue}
+                        //value={parse('<strong>' + 'AAA' + '</strong>')}
+                        //value={parse('<strong>' + 'AAA' + '</strong>')}
+                        //value={parse(`<strong>${titleValue}</strong>`)}
+                        
+                        //value="&lt;b&gt;Some text&lt;b/&gt;"
+                        //value="&quot;<b>http://sansoftmax.blogspot.com/</b>&quot;"
+                        // InputProps={{
+                        //   readOnly: true,
+                        // }}
+                        //value={<strong>"AAA"</strong>}
+                        //value={<strong>"AAA"</strong>}
+                        //value={JSON.parse(<strong>"AAA"</strong>)}
+                        
+                        //placeholder={<strong>"AAA"</strong>}
+                        //placeholder={<strong>`BBBBBB`</strong>}
+                        //placeholder={titlePlaceholder}
+                        onFocus={() => setTitlePlaceholder("")}
+                        onBlur={() => setTitlePlaceholder(`e.g. Pasta with tomatoes..`)}
+                        onChange={(e) => { validator({ value: e.target.value, type: e.target.id }) }}
+                      //>{titleValue} + <strong>AAA</strong></TextField>
+                      ></TextField>
+                    {/* </Box> */}
+
                   </Tooltip>
                 </Box>
                 <Box sx={s.eachRow}>

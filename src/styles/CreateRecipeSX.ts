@@ -1,3 +1,9 @@
+import {
+  flex, relative, absolute, fixed, column, pointer,
+  row, aic, aifs, asc, jcc, jcfe, jcfs, jcsa,
+  jcsb, jcse, jsc, jic, noDeco, mix, noSelect
+} from './CommonsSX';
+
 export const background = () => {
   return {
     display: 'flex',
@@ -9,6 +15,7 @@ export const background = () => {
 
 export const form = () => {
   return {
+    ...noSelect,
     display: 'flex',
     flexDirection: 'column',
     background: 'darkred', // dev
@@ -30,6 +37,7 @@ export const genericTooltip = () => {
 
 export const eachRow = () => {
   return { 
+    ...noSelect,
     background: 'gray', // dev
     margin: '6px 0px',
     display: 'flex',
@@ -53,12 +61,79 @@ export const text = () => {
   }
 }
 
+export const test1 = () => {
+  return {
+    ...noSelect,
+    display: 'flex',
+    color: 'black',
+    paddingTop: '0.5px',
+    ':selection': {
+      //background: #9cff2e;
+      //background: 'transparent'
+      background: 'red',
+      backgroundColor: 'red',
+
+    }
+  }
+}
+
+export const test2 = () => {
+  return {
+    ...noSelect,
+    display: 'flex',
+    color: 'transparent',
+    //color: 'blue',
+    /* WebkitTouchCallout: 'none !important',
+    WebkitUserSelect: 'none !important',
+    khtmlUserSelect: 'none !important',
+    MozUserSelect: 'none !important',
+    MsUserSelect: 'none !important',
+    UserSelect: 'none !important' */
+    // ':selection': {
+    //   //background: #9cff2e;
+    //   //background: 'transparent'
+    //   background: 'red',
+    //   backgroundColor: 'red',
+
+    // }
+  }
+}
+
+export const test3 = () => {
+  return {
+    ...noSelect,
+    //color: 'transparent',
+  }
+}
+
+export const test4 = () => {
+  return {
+    ...noSelect,
+    //color: 'transparent',
+  }
+}
+
+
 export const input = () => {
   return {
+    display: 'flex',
+    ...noSelect,
     width: '68vw',
     background: 'lightblue',
-    color: 'red', // dev
+    ':selection': {
+      //background: #9cff2e;
+      //background: 'transparent'
+      background: 'red',
+      backgroundColor: 'red',
+
+    }
+    //color: 'transparent', // dev
+
+    //color: 'red', // dev
     //background: 'blue' // dev
+    // fieldset: {
+    //   ...noSelect,
+    // }
   }
 }
 
