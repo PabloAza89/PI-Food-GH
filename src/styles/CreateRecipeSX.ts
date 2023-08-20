@@ -129,7 +129,11 @@ export const inputLabelContainer = () => {
     //minWidth: '68vw !important',
     //width: '68vw',
     //width: '68vw',
+    //cursor: 'text',
     //height: '100px',
+    //height: '23px',
+    //height: '100%',
+    //height: '23px !important',
     width: 'calc(68vw - 28px)',
     //width: '60vw',
     //position: 'relative',
@@ -141,8 +145,14 @@ export const inputLabelContainer = () => {
     //zIndex: '40000 !important',
     //height: '101px',
     //height: '80px',
-    color: 'green !important',
-    background: 'yellow',
+    
+    //color: 'rgba(0, 0, 0, 0.87) !important',
+    //color: 'yellow !important',
+    color: 'yellow', // IF SETTING TO !IMPORTANT, JQUERY CANNOT OVERRIDE STYLE !
+    //caretColor: 'blue',
+    //caretColor: 'rgba(0, 0, 0, 0.87) !important',
+    //color: 'green !important',
+    //background: 'yellow',
     //zIndex: '100001 !important',
     //zIndex: '500000',
     //overflowX: 'auto',
@@ -151,33 +161,6 @@ export const inputLabelContainer = () => {
   }
 }
 
-export const textFieldInsideLabel = () => {
-  return {
-    /* ...noSelect, */
-    display: 'flex',
-    width: '68vw !important',
-    //minWidth: '68vw !important',
-    //width: '68vw !important',
-    //position: 'relative',
-    //position: 'absolute',
-    //color: 'transparent',
-    //zIndex: '40000 !important',
-    //height: '101px',
-    //height: '80px',
-    color: 'green !important',
-    input: {
-      //color: 'green'
-    },
-    label: {
-      color: 'green'
-    },
-
-    //background: 'yellow',
-    //zIndex: '100001 !important',
-    //zIndex: '500000',
-    //background: 'transparent',
-  }
-}
 
 export const input = () => {
   return {
@@ -195,49 +178,13 @@ export const input = () => {
     //color: 'red !important',
     //color: 'transparent !important',
     /* input: { color: 'red' }, */
-    //userSelect: "text",
-    
-    //userSelect: 'text',
-
-    // label: {
-    //   pointerEvents: 'auto',
-    //   cursor: 'text',
-    //   userSelect: "auto",
-    //   color: 'red !important',
-    //   //userSelect: 'text',
-    //   '::selection': {
-    //     // color: 'red !important',
-    //     // background: 'red !important',
-    //      color: 'yellow !important',
-    //     background: 'red !important',
-    //     //color: 'rgba(255, 255, 255, 0) !important', // PERFECT
-    //     //background: 'rgba(255, 255, 255, 0) !important', // PERFECT
-    //     //color: 'yellow !important',
-    //     /* background: 'red !important',
-    //     backgroundColor: 'red !important', */
-  
-    //   }
-    // },
-    // label: {
-    //   color: 'red !important',
-    //   zIndex: '4000000 !important',
-    //   //userSelect: 'text',
-    //   '::selection': {
-    //     // color: 'red !important',
-    //     // background: 'red !important',
-    //      color: 'yellow !important',
-    //     background: 'red !important',
-    //     //color: 'rgba(255, 255, 255, 0) !important', // PERFECT
-    //     //background: 'rgba(255, 255, 255, 0) !important', // PERFECT
-    //     //color: 'yellow !important',
-    //     /* background: 'red !important',
-    //     backgroundColor: 'red !important', */
-  
-    //   }
-    // },
     
     input: {
       //color: 'transparent !important',
+      caretColor: 'rgba(0, 0, 0, 0.87) !important',
+      color: 'red !important',
+      //caretColor: 'blue',
+      //cursor: 'text',
       //color: 'red',
       /* color: 'linear gradient(to left, white, black)', */
       /* color: 'radial-gradient(120% 120%, green 30%, #000)', */

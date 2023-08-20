@@ -12,9 +12,9 @@ import dietss from '../../db/diets.json';
 import Tooltip from '@mui/joy/Tooltip';
 import Swal from 'sweetalert2';
 import dicEs from '../../dictionary/es.json';
-import $ from 'jquery';
+import $, { isWindow } from 'jquery';
 import parse from 'html-react-parser';
-import Highlighter from "react-highlight-words";
+//import Highlighter from "react-highlight-words";
 
 export default function CreateRecipe() {
 
@@ -264,6 +264,14 @@ export default function CreateRecipe() {
 
         console.log(JSON.stringify(array, null, 4)) // ok
 
+        console.log("value", value) // ok
+
+        $("#targetVVV")
+          //console.log("AA", $("#targetVVV").html())
+          //.html(`<plaintext style="color:blue">${titleValue}`).css("color", "blue")
+          //.html(`<div style="color:blue">${titleValue}</div>`).css("color", "blue")
+          .html(`<div style="color:blue">${value}</div>`).css("color", "blue")
+
         // $(function(){
         //   // let qq = $("#title").select(function(){
         //   //   //alert("Text marked!");
@@ -283,7 +291,24 @@ export default function CreateRecipe() {
         //console.log("value", value) // ok
 
       // $(function(){
-      //     $("#title")///.each(function() {               // ***
+      //     //$("#title")
+      //     $("#targetVVV")
+      //     //console.log("AA", $("#targetVVV").html())
+      //     //.html(`<plaintext style="color:blue">${titleValue}`).css("color", "blue")
+      //     .html(`${titleValue}`).css("color", "blue")
+      //     //.text("new text");
+      //     // .text(function(){
+      //     //   $(this).css("color", "blue")
+      //     // })
+      //     //.html(`${titleValue}`)//.css("fontSize", "55px");
+      //     //.html(`<string style="color:blue">${titleValue}</string>`).css("color", "green");
+      //     //.html(`<span style="color:blue">${titleValue}</span>`)//.css("fontSize", "55px");
+          
+      //     //.text("<strong>new text</strong>");
+      //     //.text("<strong>new text</strong>");
+      //     //.text(<strong> + "new text" + </strong>);
+      //     //.val("<p>" + "AA" + "</p>")
+      //     ///.each(function() {               // ***
       //      // .css("color", "red")
       //       //.val("AAA").css("color", "blue")
             
@@ -319,28 +344,70 @@ export default function CreateRecipe() {
         // })
 
         // $(function(){
-        //   $("#title").each(function() {               // ***
-        //     let qq = $("#title").data("original", $("#title").text()); // ***
-        //     //console.log("this", this)
-        //     //if (qq) console.log("qq", (qq[0] as HTMLInputElement).value)
-        //     //console.log("qq", (qq[0] as HTMLInputElement).value)
-
-        //     let ww = (qq[0] as HTMLInputElement).value
-
-        //     //$("#title").css('font-weight', 'bold');
-        //     //$("#title:first-letter").css('font-weight', 'bold');
-        //    // $("#title").each(function(){     
-        //       // if(ww.substr(0,1).toUpperCase() === 'B'){
-        //       //   //$(this).addClass('someclass')
-        //       //   var select = <p>333</p>
-        //       //   $(this).css('font-weight', 'bold')//.add(select);
-        //       // }
+        //   //$("#targetVVV")//.each(function() {               // ***
+        //     //.val("ASDASD")
+        //     //.text("<strong>" + "new text" + "</strong>")
+        //     //let origin = $("#targetVVV").text()
+        //     //$("#targetVVV").text(origin)
+        //     //console.log($("#targetVVV").val())
+        //     $("#targetVVV").val()
+        //     //.val("AAA")
+        //     //$("#title").append($("#title").css("color", "red"));
+        //     //$("#targetVVV").replaceWith(<InputLabel id={"targetVVV"} shrink={false} sx={s.inputLabelContainer}>{titleValue}</InputLabel>);
+        //   //   $("#targetVVV").on("mouseenter",function () {
+        //   //     $(this).find('aa').css("color", "blue");
+        //   // })//.trigger('change');
+            
+        // })     
               
-        //         //$(this).addClass('someclass')
-        //         //$("#title").data("original", $("#title").text()).substring(0,1).css('font-weight', 'bold')
+          
+              //.css("color", "red")
+              
+              //.css("color", "red")
+              //.css("fontWeight", "bold")
+              //.css("color", "red")
+              //.val("AA")
+              //.css("background", "red")
+              //.css("color", "green")
+            //console.log("#targetVVV", $("#targetVVV"))
+              //$("#targetVVV>").css('color', 'green');
+              //$("#targetVVV").animate({color:'black'},1000);
+
+            //console.log("#targetVVV", $("#targetVVV").text())
+            //let qq = $("#otherTest").data("original", $("#otherTest").text()); // ***
+            //console.log("this", this)
+            //if (qq) console.log("qq", (qq[0] as HTMLInputElement).value)
+            //console.log("qq", (qq[0] as HTMLInputElement).value)
+
+            //let ww = (qq[0] as HTMLInputElement)//.value
+            //console.log("ww", ww)
+
+              //var htmlR = <input>{ww.substring(0,1)} + <p style={{ color: "red" }}> + {ww.substring(1, 3)} + </p> + {ww.substring(3)}</input>
+              //var htmlR = <Box>ASDASD</Box>
+
+              //var htmlR = <input > + {ww.substring(0, 1)} + <p style="color:red"> {ww.substring(1, ww.length - 1)} </p> </input>
+              //var htmlR = <Box id="otherTest"><strong>{titleValue}</strong></Box>
+
+              //var htmlR = <TextField>ww.substring(0,1) + ww.substring(1, 3) + ww.substring(3)</TextField>
+              //$("#title").html(htmlR)
+
+              //$("#title").replaceWith(htmlR)
+
+            //$("#title").css('font-weight', 'bold');
+            //$("#title:first-letter").css('font-weight', 'bold');
+           // $("#title").each(function(){     
+              // if(ww.substr(0,1).toUpperCase() === 'B'){
+              //   //$(this).addClass('someclass')
+              //   var select = <p>333</p>
+              //   $(this).css('font-weight', 'bold')//.add(select);
+              // }
+              
+                //$(this).addClass('someclass')
+                //$("#title").data("original", $("#title").text()).substring(0,1).css('font-weight', 'bold')
                 
               
-        //      })
+             //})
+         //   })     
             
         //     //$("#title").append($("<p>").css("color", "red").text("*"));
         //     //$("#title").append($("<p>").css("color", "red").text("*"));
@@ -579,8 +646,25 @@ export default function CreateRecipe() {
   // })
 
   $(function(){
-    $("#title").scroll(function(e) {
+    $("#title").on("scroll",function(e) {
+      
       $("#targetVVV").scrollLeft($("#title").scrollLeft()!)
+      // $("#targetVVV")
+      //     //console.log("AA", $("#targetVVV").html())
+      //     //.html(`<plaintext style="color:blue">${titleValue}`).css("color", "blue")
+      //     //.html(`<div style="color:blue">${titleValue}</div>`)
+      //     .html(function() {
+      //       //var emphasis = "<em>" + $( "p" ).length + " paragraphs!</em>";
+      //       // var emphasis = "<em>" + " paragraphs!</em>";
+      //       // return "<p>All new content for " + emphasis + "</p>";
+      //       var emphasis = "<em>" + " paragraphs!</em>";
+      //       return "<p>All new content for " + emphasis + "</p>";
+      //     })
+          //.css("color", "blue")
+      // $("#targetVVV")
+      //     //console.log("AA", $("#targetVVV").html())
+      //     //.html(`<plaintext style="color:blue">${titleValue}`).css("color", "blue")
+      //     .html(`${titleValue}`).css("color", "blue")
     })
     
    })
@@ -625,7 +709,7 @@ export default function CreateRecipe() {
                       {/* <InputLabel shrink={false} sx={s.inputLabelContainer} ><TextField>{<strong>${titleValue}</strong>}</TextField></InputLabel> */}
                       {/* <InputLabel shrink={false} sx={s.inputLabelContainer} >{<strong>${titleValue}</strong>}</InputLabel> */}
                       {/* <InputLabel id={"targetVVV"} shrink={false} sx={s.inputLabelContainer} >{RegExp(titleValue, "g")}</InputLabel> */}
-                      <InputLabel id={"targetVVV"} shrink={false} sx={s.inputLabelContainer} >{`${titleValue}`}</InputLabel>
+                      <InputLabel id={"targetVVV"} shrink={false} sx={s.inputLabelContainer}>{titleValue}</InputLabel>
                       {/* <p contentEditable="true" style={s.inputLabelContainer()}><strong>{titleValue}</strong></p> */}
                       {/* {titleValue} */}
                       <TextField
