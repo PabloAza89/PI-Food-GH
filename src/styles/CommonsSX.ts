@@ -20,12 +20,12 @@ export const noDeco = { textDecoration: 'none' }
 export const mix = { mixBlendMode: 'difference' }
 export const pointer = { cursor: 'pointer' }
 export const noSelect: any = {
-  WebkitTouchCallout: 'none',
-  WebkitUserSelect: 'none',
-  khtmlUserSelect: 'none',
-  MozUserSelect: 'none',
-  MsUserSelect: 'none',
-  UserSelect: 'none'
+  WebkitTouchCallout: 'none !important',
+  WebkitUserSelect: 'none !important',
+  khtmlUserSelect: 'none !important',
+  MozUserSelect: 'none !important',
+  MsUserSelect: 'none !important',
+  UserSelect: 'none !important'
 }
 
 // import {

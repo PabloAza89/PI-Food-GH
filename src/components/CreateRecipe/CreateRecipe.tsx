@@ -581,7 +581,7 @@ export default function CreateRecipe() {
                 component="form"
                 sx={s.form}
               >
-                <Box component="img" src={noImage1} />
+                {/* <Box component="img" src={noImage1} /> */}
                 <Typography >Create your own recipe ! Please fill in all fields:</Typography>
                 <Box sx={s.eachRow}>
                   <Box sx={s.text}>Title:</Box>
@@ -606,12 +606,12 @@ export default function CreateRecipe() {
                     }
                   >
 
-                    {/* <Box onKeyDown={(e) => e.stopPropagation()}> */}
+                    {/* <Box> */}
                       {/* <InputLabel size="small" shrink={false} value={titleValue} sx={{ zIndex: 4000 }}>  AAAAAA  </InputLabel> */}
-                      {/* <InputLabel shrink={false} size="small" sx={s.test4}></InputLabel> */}
+                      <InputLabel shrink={false} sx={s.test3}>{/* <TextField>{titleValue}</TextField> */}
+                      {/* {titleValue} */}
                       <TextField
-                        //contentEditable='true'
-                        label={titleValue}
+                        //label={titleValue}
                         //label={<><strong>"AAA"</strong> "AAA"<strong>"AAA"</strong></>}
                         //label={<strong>"AAA"</strong>}
                         //label={"AAA"}
@@ -623,11 +623,14 @@ export default function CreateRecipe() {
                         //label={'margin="none"'}
                         //InputLabelProps={{ shrink: false, focused: false, style: { color: 'black' } }}
                         //InputLabelProps={{ shrink: false, focused: false, style: { color: 'red', paddingTop: '0.5px', } }}
-                        InputLabelProps={{ shrink: false, focused: false, style: s.test1() }}
+
+                        //InputLabelProps={{ /* sx: { userSelect: "text" }, */ shrink: true, focused: true, style: s.textFieldLabel() }}
+
+                        //InputLabelProps={{ sx: { userSelect: "text" } }}
                         //LabelProps={{ shrink: false, focused: false, style: s.test1() }}
                         //onKeyDown={(e) => e.stopPropagation()}
                         //InputProps={{ color: 'red' }}
-                        InputProps={{ style: s.test2()/* , readOnly: true */ } }
+                        //InputProps={{ style: s.textFieldInput()/* , readOnly: true */ } }
                         //InputProps={{ style: { color: 'blue', WebkitTouchCallout: 'none', WebkitUserSelect: 'none', khtmlUserSelect: 'none', MozUserSelect: 'none', MsUserSelect: 'none', UserSelect: 'none' } }}
                        
                         //InputProps={{ style: { color: 'black', userSelect: 'none' } }}
@@ -667,7 +670,9 @@ export default function CreateRecipe() {
                         onBlur={() => setTitlePlaceholder(`e.g. Pasta with tomatoes..`)}
                         onChange={(e) => { validator({ value: e.target.value, type: e.target.id }) }}
                       //>{titleValue} + <strong>AAA</strong></TextField>
-                      ></TextField>
+                      >{titleValue}</TextField>
+                      
+                      </InputLabel>
                     {/* </Box> */}
 
                   </Tooltip>
