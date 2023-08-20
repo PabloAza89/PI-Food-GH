@@ -264,13 +264,28 @@ export default function CreateRecipe() {
 
         console.log(JSON.stringify(array, null, 4)) // ok
 
-        console.log("value", value) // ok
+        //console.log("value", value) // ok
 
         $("#targetVVV")
           //console.log("AA", $("#targetVVV").html())
           //.html(`<plaintext style="color:blue">${titleValue}`).css("color", "blue")
           //.html(`<div style="color:blue">${titleValue}</div>`).css("color", "blue")
-          .html(`<div style="color:blue">${value}</div>`).css("color", "blue")
+          //.html(`<div style="color:blue">${value}</div>`)//.css("color", "blue")
+          //.html(`<div>${value}</div>`)//.css("color", "blue")
+          //.html(`<div><div>${value}</div></div>`)//.css("color", "blue")
+          //.html(`<div style="color:blue">${value.substring(0,1)}</div><mark style="color:green">${value.substring(1)}</mark>`)//.css("color", "blue")
+          // .html(function() {
+          //   var emphasis = "<em>" + " paragraphs!</em>";
+          //   return "<p>All new content for " + emphasis + "</p>";
+          // })
+          .html(function() {
+            return array.map((e) => {
+              return "<mark>" + value.substring(e.start, e.end) + "</mark>" + value.substring(e.end)
+            })
+            
+            //var emphasis = "<em>" + " paragraphs!</em>";
+            //return "<p>All new content for " + emphasis + "</p>";
+          })
 
         // $(function(){
         //   // let qq = $("#title").select(function(){

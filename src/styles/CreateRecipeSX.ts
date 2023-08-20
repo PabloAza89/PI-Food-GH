@@ -180,9 +180,9 @@ export const input = () => {
     /* input: { color: 'red' }, */
     
     input: {
-      //color: 'transparent !important',
+      color: 'transparent !important',
+      //color: 'red !important',
       caretColor: 'rgba(0, 0, 0, 0.87) !important',
-      color: 'red !important',
       //caretColor: 'blue',
       //cursor: 'text',
       //color: 'red',
