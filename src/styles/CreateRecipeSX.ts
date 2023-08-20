@@ -119,74 +119,65 @@ export const textFieldInput = () => {
   }
 }
 
-export const test3 = () => {
+export const inputLabelContainer = () => {
   return {
     /* ...noSelect, */
     display: 'flex',
+    whiteSpace: 'pre',
+    //whiteSpace: 'pre-wrap',
+    //display: 'none',
+    //minWidth: '68vw !important',
+    //width: '68vw',
+    //width: '68vw',
+    //height: '100px',
+    width: 'calc(68vw - 28px)',
+    //width: '60vw',
     //position: 'relative',
+    marginLeft: '14px',
+    padding: '16.5px 0px 16.5px 0px',
     position: 'absolute',
+    //textOverflow: 'clip',
     //color: 'transparent',
     //zIndex: '40000 !important',
-    height: '101px',
+    //height: '101px',
+    //height: '80px',
+    color: 'green !important',
     background: 'yellow',
     //zIndex: '100001 !important',
-    zIndex: '500000',
+    //zIndex: '500000',
+    //overflowX: 'auto',
+    //writingMode: 'horizontal-tb !important',
     //background: 'transparent',
   }
 }
 
-export const test4 = () => {
+export const textFieldInsideLabel = () => {
   return {
-    //display: 'flex',
+    /* ...noSelect, */
+    display: 'flex',
+    width: '68vw !important',
+    //minWidth: '68vw !important',
+    //width: '68vw !important',
+    //position: 'relative',
     //position: 'absolute',
-    //zIndex: 400000,
-    width: '68vw',
-    //height: '100px',
-    color: 'green',
-    //width: '90vw',
-    background: 'blue !important',
-    //width: 'calc(68vw - 42px)',
-    //textAlign: 'start',
-    //width: '100px',
-    //height: '100px',
-    // maxWidth: '68vw',
-    // minWidth: '68vw',
-    //maxWidth: '100px',
-    //minWidth: '100px',
-    // minWidth: '68vw',
-    //minHeight: '0px',
-    //maxHeight: '0px',
-    //textOverflow: 'clip',
-    //width: '68vw',
+    //color: 'transparent',
+    //zIndex: '40000 !important',
+    //height: '101px',
+    //height: '80px',
+    color: 'green !important',
+    input: {
+      //color: 'green'
+    },
+    label: {
+      color: 'green'
+    },
 
-    // font: 'inherit',
-    // //letterSpacing: 'inherit',
-    // color: 'currentColor',
-    // //padding: 0,
-    // border: 0,
-    // boxSizing: 'content-box',
-    // //background: none;
-    // //height: auto;
-    // margin: 0,
-    // '-webkit-tap-highlight-color': 'transparent',
-    // display: 'block',
-    // minWidth: 0,
-    // width: '100%',
-    // '-webkit-animation-name': 'mui-auto-fill-cancel',
-    // 'animation-name': 'mui-auto-fill-cancel',
-    // '-webkit-animation-duration': '10ms',
-    // 'animation-duration': '10ms',
-    // resize: 'none',
-    // //paddingTop: 0,
-    //padding: '16.5px 14px',
-    //fontFamily: 'Roboto',
-    //fontSize: '16px',
-    // blockSize: '23px',
-    // letterSpacing: '0.15008px',
-    // lineHeight: '23px',
+    //background: 'yellow',
+    //zIndex: '100001 !important',
+    //zIndex: '500000',
+    //background: 'transparent',
   }
 }
-
 
 export const input = () => {
   return {
@@ -195,16 +186,18 @@ export const input = () => {
     position: 'relative',
     //position: 'absolute',
     //zIndex: '10000 !important',
-    zIndex: '0',
+    //zIndex: '-1',
+    //zIndex: '1',
     width: '68vw',
-    background: 'lightblue',
+    //background: 'lightblue',
     //zIndex: '-0 !important',
     /* color: 'black !important', */
-    color: 'red !important',
+    //color: 'red !important',
+    //color: 'transparent !important',
     /* input: { color: 'red' }, */
     //userSelect: "text",
     
-    userSelect: 'text',
+    //userSelect: 'text',
 
     // label: {
     //   pointerEvents: 'auto',
@@ -225,8 +218,33 @@ export const input = () => {
   
     //   }
     // },
+    // label: {
+    //   color: 'red !important',
+    //   zIndex: '4000000 !important',
+    //   //userSelect: 'text',
+    //   '::selection': {
+    //     // color: 'red !important',
+    //     // background: 'red !important',
+    //      color: 'yellow !important',
+    //     background: 'red !important',
+    //     //color: 'rgba(255, 255, 255, 0) !important', // PERFECT
+    //     //background: 'rgba(255, 255, 255, 0) !important', // PERFECT
+    //     //color: 'yellow !important',
+    //     /* background: 'red !important',
+    //     backgroundColor: 'red !important', */
+  
+    //   }
+    // },
     
     input: {
+      //color: 'transparent !important',
+      //color: 'red',
+      /* color: 'linear gradient(to left, white, black)', */
+      /* color: 'radial-gradient(120% 120%, green 30%, #000)', */
+      //color: 'linear-gradient(to right, white 0%, white 14%, red 14%, red 100%)',
+      /* 'background-clip': 'text',
+      'text-fill-color': 'transparent', */
+   
       /* color: 'transparent', */
       '::selection': {
         // color: 'red !important',

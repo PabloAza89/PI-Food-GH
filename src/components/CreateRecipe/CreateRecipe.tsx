@@ -7,13 +7,14 @@ import noImage1 from "../../images/noImage1.jpg";
 import logo from "../../images/logo.png";
 import { Link } from "react-router-dom";
 import { addNew } from '../../actions';
-import { Box, Button, OutlinedInput, TextField, ListItemText, Checkbox, Dialog, Typography,FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material/';
+import { Box, Button, OutlinedInput, Input, InputBase, TextField, ListItemText, Checkbox, Dialog, Typography,FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material/';
 import dietss from '../../db/diets.json';
 import Tooltip from '@mui/joy/Tooltip';
 import Swal from 'sweetalert2';
 import dicEs from '../../dictionary/es.json';
 import $ from 'jquery';
 import parse from 'html-react-parser';
+import Highlighter from "react-highlight-words";
 
 export default function CreateRecipe() {
 
@@ -264,24 +265,29 @@ export default function CreateRecipe() {
         console.log(JSON.stringify(array, null, 4)) // ok
 
         // $(function(){
-        //   let qq = $("#title").select(function(){
-        //     //alert("Text marked!");
-        //     console.log("qq", qq)
-        //   })
+        //   // let qq = $("#title").select(function(){
+        //   //   //alert("Text marked!");
+        //   //   console.log("qq", qq)
+        //   // })
+        //   $("#targetVVV").scrollLeft($("#title").scrollLeft()!)
+        //   // $("#title").each(function() {               // ***
+        //   //       let qq = $(this).data("original", $(this).text()); // ***
+        //   //       console.log("qq", qq)
+        //   //     })
+        //   //$("#title").scrollLeft(0)
+          
+        //       //console.log(".scrollLeft()", $("#title").scrollLeft())
         // })
 
         //console.log("ACAA") // ok
         //console.log("value", value) // ok
 
-      $(function(){
-          $(".testTitle")///.each(function() {               // ***
-                .attr('unselectable', 'on')
-                 .css('user-select', 'none')
-                 .on('selectstart', false);
-            //$(this).data("original", $(this).text()); // ***
-            //console.log("this", this)
-          //})
-      })  
+      // $(function(){
+      //     $("#title")///.each(function() {               // ***
+      //      // .css("color", "red")
+      //       //.val("AAA").css("color", "blue")
+            
+      // })
 
 
         // $(function(){
@@ -572,6 +578,12 @@ export default function CreateRecipe() {
   //     .css("color", "red")
   // })
 
+  $(function(){
+    $("#title").scroll(function(e) {
+      $("#targetVVV").scrollLeft($("#title").scrollLeft()!)
+    })
+    
+   })
 
 
   return !firstInstance ?
@@ -606,9 +618,15 @@ export default function CreateRecipe() {
                     }
                   >
 
-                    {/* <Box> */}
+                    <Box>
                       {/* <InputLabel size="small" shrink={false} value={titleValue} sx={{ zIndex: 4000 }}>  AAAAAA  </InputLabel> */}
-                      <InputLabel shrink={false} sx={s.test3}>{/* <TextField>{titleValue}</TextField> */}
+                      {/* <InputLabel shrink={false} sx={s.inputLabelContainer} ><TextField sx={s.textFieldInsideLabel}>{titleValue}</TextField></InputLabel> */}
+                      {/* <InputLabel shrink={false} sx={s.inputLabelContainer} ><TextField sx={s.textFieldInsideLabel}>{<strong>${titleValue}</strong>}</TextField></InputLabel> */}
+                      {/* <InputLabel shrink={false} sx={s.inputLabelContainer} ><TextField>{<strong>${titleValue}</strong>}</TextField></InputLabel> */}
+                      {/* <InputLabel shrink={false} sx={s.inputLabelContainer} >{<strong>${titleValue}</strong>}</InputLabel> */}
+                      {/* <InputLabel id={"targetVVV"} shrink={false} sx={s.inputLabelContainer} >{RegExp(titleValue, "g")}</InputLabel> */}
+                      <InputLabel id={"targetVVV"} shrink={false} sx={s.inputLabelContainer} >{`${titleValue}`}</InputLabel>
+                      {/* <p contentEditable="true" style={s.inputLabelContainer()}><strong>{titleValue}</strong></p> */}
                       {/* {titleValue} */}
                       <TextField
                         //label={titleValue}
@@ -645,7 +663,7 @@ export default function CreateRecipe() {
                         //id={`testTitle`}
                         sx={s.input}
                         //sx={{label: s.test3}}
-                        inputRef={textInput}
+                        //inputRef={textInput}
                         //type="text"
                         autoComplete='off'
                         id="title"
@@ -655,6 +673,7 @@ export default function CreateRecipe() {
                         //value={parse(`<strong>${titleValue}</strong>`)}
                         
                         //value="&lt;b&gt;Some text&lt;b/&gt;"
+                        //value={"AAA".replace(new RegExp('(^|)(' + "AAA" + ')(|$)','ig'), '$1<b>$2</b>$3')}
                         //value="&quot;<b>http://sansoftmax.blogspot.com/</b>&quot;"
                         // InputProps={{
                         //   readOnly: true,
@@ -666,14 +685,18 @@ export default function CreateRecipe() {
                         //placeholder={<strong>"AAA"</strong>}
                         //placeholder={<strong>`BBBBBB`</strong>}
                         //placeholder={titlePlaceholder}
+                        //placeholder={titleValue}
+                        //onScroll={(e) => {$("#targetVVV").scrollLeft($("#title").scrollLeft()!)}}
                         onFocus={() => setTitlePlaceholder("")}
                         onBlur={() => setTitlePlaceholder(`e.g. Pasta with tomatoes..`)}
                         onChange={(e) => { validator({ value: e.target.value, type: e.target.id }) }}
-                      //>{titleValue} + <strong>AAA</strong></TextField>
-                      >{titleValue}</TextField>
                       
-                      </InputLabel>
-                    {/* </Box> */}
+                      />
+                      
+                      
+                      
+                      
+                    </Box>
 
                   </Tooltip>
                 </Box>
