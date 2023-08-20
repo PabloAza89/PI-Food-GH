@@ -279,10 +279,29 @@ export default function CreateRecipe() {
           //   return "<p>All new content for " + emphasis + "</p>";
           // })
           .html(function() {
-            return array.map((e) => {
-              return "<mark>" + value.substring(e.start, e.end) + "</mark>" + value.substring(e.end)
+
+            let parsedToReturn:string[] = []
+
+             if (array[0]) array.map((e:any, arrayIdx:any) => {
+              //return "<mark>" + value.substring(e.start, e.end) + "</mark>" + value.substring(e.end)
+              //if (arrayIdx === 0) return "<mark>" + value.substring(e.start, e.end) + "</mark>" + value.substring(e.end)
+              //else return value.substring(0, e.start) + "<mark>" + value.substring(e.start, e.end) + "</mark>"
+              //if (e.start === 0) return "<mark>" + value.substring(0, e.end) + "</mark>" + value.substring(e.end)
+              //if (e.start === 0) parsedToReturn.push("<mark>" + value.substring(0, e.end) + "</mark>")
+              if (e.start === 0 && array[arrayIdx + 1]?.end === undefined) parsedToReturn.push("<mark>" + value.substring(0, e.end) + "</mark>" + "<div>" + value.substring(e.end) + "</div>") // ONLY ONE e AND ITS AT THE BEGINNING OF value
+              //if (e.start > 0 && array[arrayIdx + 1]?.end === undefined) parsedToReturn.push(value.substring(0, e.start) + "<mark>" + value.substring(e.start, e.end) + "</mark>" + value.substring(e.end)) // ONLY ONE e AND IT IS NOT AT THE BEGINNING OF value
+              if (e.start > 0 && array[arrayIdx + 1]?.end === undefined) parsedToReturn.push("<div>" + value.substring(0, e.start) + "</div>" + "<mark>" + value.substring(e.start, e.end) + "</mark>" + value.substring(e.end)) // ONLY ONE e AND IT IS NOT AT THE BEGINNING OF value
+
+              //if (e.start > 0) return value.substring(0, e.start) + "<mark>" + value.substring(e.start, e.end) + "</mark>" + value.substring(e.end)
+              //console.log(array[arrayIdx + 1]?.end) // '?' PREVENTS APPLICATION EXPLODES.
+              
+              
+              //else return value
             })
             
+            //return array[0] ? qq : value
+            console.log("parsedToReturn", parsedToReturn)
+            return array[0] ? parsedToReturn.join("") : value
             //var emphasis = "<em>" + " paragraphs!</em>";
             //return "<p>All new content for " + emphasis + "</p>";
           })
