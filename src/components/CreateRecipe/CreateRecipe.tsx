@@ -282,26 +282,68 @@ export default function CreateRecipe() {
 
             let parsedToReturn:string[] = []
 
-             if (array[0]) array.map((e:any, arrayIdx:any) => {
+            
+
+            //if (array[0]) value.split("").splice(1, 0, "g")
+            if (array[0]) array.sort((a: any, b: any) => a.start - b.start).map((e:any, actualIndex:any) => { // SORT TO LEFT TO RIGHT PARSE
+
+              
               //return "<mark>" + value.substring(e.start, e.end) + "</mark>" + value.substring(e.end)
-              //if (arrayIdx === 0) return "<mark>" + value.substring(e.start, e.end) + "</mark>" + value.substring(e.end)
+              //if (actualIndex === 0) return "<mark>" + value.substring(e.start, e.end) + "</mark>" + value.substring(e.end)
               //else return value.substring(0, e.start) + "<mark>" + value.substring(e.start, e.end) + "</mark>"
               //if (e.start === 0) return "<mark>" + value.substring(0, e.end) + "</mark>" + value.substring(e.end)
               //if (e.start === 0) parsedToReturn.push("<mark>" + value.substring(0, e.end) + "</mark>")
-              if (e.start === 0 && array[arrayIdx + 1]?.end === undefined) parsedToReturn.push("<mark>" + value.substring(0, e.end) + "</mark>" + "<div>" + value.substring(e.end) + "</div>") // ONLY ONE e AND ITS AT THE BEGINNING OF value
-              //if (e.start > 0 && array[arrayIdx + 1]?.end === undefined) parsedToReturn.push(value.substring(0, e.start) + "<mark>" + value.substring(e.start, e.end) + "</mark>" + value.substring(e.end)) // ONLY ONE e AND IT IS NOT AT THE BEGINNING OF value
-              if (e.start > 0 && array[arrayIdx + 1]?.end === undefined) parsedToReturn.push("<div>" + value.substring(0, e.start) + "</div>" + "<mark>" + value.substring(e.start, e.end) + "</mark>" + value.substring(e.end)) // ONLY ONE e AND IT IS NOT AT THE BEGINNING OF value
+              //
+              //
+
+              // if (e.start === 0 && array.length === 1) parsedToReturn.push(
+              //   "<mark>" + value.substring(0, e.end) + "</mark>" + // ONLY ONE e, AND ITS AT THE BEGINNING OF value
+              //   "<div>" + value.substring(e.end) + "</div>") // i.e.: "dumb"
+              // if (e.start > 0 && array.length === 1) parsedToReturn.push(
+              //   "<div>" + value.substring(0, e.start) + "</div>" +
+              //   "<mark>" + value.substring(e.start, e.end) + "</mark>" + // ONLY ONE e, AND IT IS NOT AT THE BEGINNING OF value
+              //   "<div>" + value.substring(e.end) + "</div>") // i.e.: "¿dumb" | " dumb"
+              // if (e.start === 0 && array.length > 1) parsedToReturn.push(
+              //   "<mark>" + value.substring(0, e.end) + "</mark>" + // TWO OR MORE e, e ITS AT BEGINNING OF value
+              //   "<div>" + value.substring(e.end, array[actualIndex + 1]?.start) + "</div>") // TRIMS STRING FOR NEXT LOOP
+              // if (e.start > 0 && array.length > 1) parsedToReturn.push(
+              //   "<div>" + value.substring(0, e.start) + "</div>" +
+              //   "<mark>" + value.substring(e.start, e.end) + "</mark>" + //
+              //   "<div>" + value.substring(e.end, array[actualIndex + 1]?.start) + "</div>") //
+
+
+              if (array.length === 1) parsedToReturn.push(
+                "<div>" + value.substring(0, e.start) + "</div>" + // OPTIONAL STRING
+                "<mark>" + value.substring(e.start, e.end) + "</mark>" + // ONLY ONE e
+                "<div>" + value.substring(e.end) + "</div>") // i.e.: "¿dumb" | " dumb"
+              if (array.length > 1) parsedToReturn.push(
+                "<div>" + (actualIndex === 0 ? value.substring(0, e.start) : value.substring(array[actualIndex - 1]?.end, e.start)) + "</div>" +
+                "<mark>" + value.substring(e.start, e.end) + "</mark>" + //
+                "<div>" + (actualIndex === 0 ? "" : !array[actualIndex + 1 ]?.end ? value.substring(e.end) : "") + "</div>")
+                //"<div>" + (actualIndex === 0 ? "" : "") + "</div>")
+                //"<div>" + (actualIndex === 0 ? "" : value.substring(e.start, e.end)) + "</div>")
+                //"<div>" + (actualIndex === 0 ? value.substring(e.end, array[actualIndex + 1]?.start) : value.substring(e.start, e.end)) + "</div>")
+
+
+              //if (e.start > 0 && array[arrayIdx + 1]?.end !== undefined) parsedToReturn.push("<div>" + value.substring(0, e.start) + "</div>" + "<mark>" + value.substring(e.start, e.end) + "</mark>" + "<div>" + value.substring(e.end) + "</div>") // ONLY ONE e AND IT IS NOT AT THE BEGINNING OF value
+              //if (e.start > 0 && array[arrayIdx + 1]?.end !== undefined) parsedToReturn.push("<div>" + value.substring(0, e.start) + "</div>" + "<mark>" + value.substring(e.start, e.end) + "</mark>" + "<div>" + value.substring(e.end) + "</div>") // ONLY ONE e AND IT IS NOT AT THE BEGINNING OF value
 
               //if (e.start > 0) return value.substring(0, e.start) + "<mark>" + value.substring(e.start, e.end) + "</mark>" + value.substring(e.end)
               //console.log(array[arrayIdx + 1]?.end) // '?' PREVENTS APPLICATION EXPLODES.
-              
+              //qq.split("").toSpliced(1, 0, "g")
+              //qq.split("").splice(1, 0, "g")
+              //qq.split("").toSpliced(1, 0, "g").join("")
               
               //else return value
             })
             
             //return array[0] ? qq : value
             console.log("parsedToReturn", parsedToReturn)
+            //return array[0] ? value.split("").splice(1, 0, "g").join("") : value
+            //return array[0] ? value.split("").splice(1, 0, "g").join("") : value
+            
             return array[0] ? parsedToReturn.join("") : value
+            //return value
             //var emphasis = "<em>" + " paragraphs!</em>";
             //return "<p>All new content for " + emphasis + "</p>";
           })
