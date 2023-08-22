@@ -20,6 +20,12 @@ export default function CreateRecipe() {
 
   // onBlur={() => setInstructionsPlaceholder(`e.g. Cut pasta, fry tomatoes..`)}
 
+  interface E {
+    target: string,
+    start: number,
+    end: number
+  }
+
   let textInput = useRef(null)
 
   const dispatch = useDispatch()
@@ -209,6 +215,8 @@ export default function CreateRecipe() {
   //   }
   // }
 
+
+
   const validator = ({ type, value, index }: validateStringI) => {
     switch (type) {
       case (`title`):
@@ -232,85 +240,94 @@ export default function CreateRecipe() {
 
         // console.log(JSON.stringify(badWordsInDicEs, null, 4)) // ok
 
-        let array: any = []
 
-        
+        let preParsedArray: any = []
+
+       
         //console.log(JSON.stringify(badWordsInDicEs, null, 4)) // ok
+        console.log("badWordsInDicEs", badWordsInDicEs) // ok
+
 
         badWordsInDicEs?.filter(e => e !== -1)?.forEach((x, idx) => {
 
-          if (x !== -1) [...value.matchAll(RegExp(
-            `^` + x.target + `$|` + // UNIQUE WORD WITH NOTHING AT START OR END
-            `^` + x.target + `[-,;.:¡!¿?'"()\\][ ]|` + // START WORD WITH ALLOWED CHARACTER AT END
-            `[-,;.:¡!¿?'"()\\][ ]` + x.target + `$|` + // ALLOWED CHARACTER AT BEGGINING AND NOTHING AT END
-            x.target + `$|` + // WORD AT END
-            x.target + `[-,;.:¡!¿?'"()\\][ ]` // WORD CONTINUED WITH ALLOWED CHARACTERS
+          if (x !== -1) [...value.toLowerCase().matchAll(RegExp(
+
+            // `^` + x.target + `$|` + // UNIQUE WORD WITH NOTHING AT START OR END
+            // `^` + x.target + `[-,;.:¡!¿?'"()\\][ ]|` + // START WORD WITH ALLOWED CHARACTER AT END
+            // `[-,;.:¡!¿?'"()\\][ ]` + x.target + `$|` + // ALLOWED CHARACTER AT BEGGINING AND NOTHING AT END
+            // x.target + `$|` + // WORD AT END
+            // //x.target + `[-,;.:¡!¿?'"()\\][]|` + // WORD CONTINUED WITH ALLOWED CHARACTERS
+            // x.target + `$`  // WORD CONTINUED WITH ALLOWED CHARACTERS
+
+            //`^` + x.target + `$|` + // UNIQUE WORD WITH NOTHING AT START OR END
+            //`^` + x.target + `[-,;.:¡!¿?'"()\\][ ]|` + // START WORD WITH ALLOWED CHARACTER AT END
+            //`([-,;.:¡!¿?'"()\\][ ]|^)` + x.target + `([-,;.:¡!¿?'"()\\][ ]|$)`  // ALLOWED CHARACTER AT BEGGINING AND NOTHING AT END
+            //`([-,;.:¡!¿?'"()\\][ ]|^)` + x.target // OK
+
+            //`(^|[-,;.:¡!¿?'"()\\][ ])` + x.target + `([-,;.:¡!¿?'"()\\][ ]|$)` // + // OK
+            x.target
+
+            //`([-,;.:¡!¿?'"()\\][ ]|^)` + x.target + `[-,;.:¡!¿?'"()\\][ ]`// OK
+            
+            //x.target + `$|` + // WORD AT END
+            //x.target + `[-,;.:¡!¿?'"()\\][]|` + // WORD CONTINUED WITH ALLOWED CHARACTERS
+            //x.target + `$`  // WORD CONTINUED WITH ALLOWED CHARACTERS
+
             , "g")
-          )].forEach((e) => {
+          )].forEach((e, gg) => {
 
-            if (x.target[0] === e[0][0] && x.target.length === e[0].length) array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "start": e.index, "end": e.index! + e[0].length }) // EQUAL = START AND END ARE EQUAL
-            if (x.target[0] !== e[0][0] && x.target.length === e[0].length - 1) array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "start": e.index! + 1, "end": e.index! + e[0].length }) // "SPACE" AT BEGGINING = FIRST LETTER IS DIFFERENT // + 1 LENGTH IN e[0].length
-            if (x.target[0] !== e[0][0] && x.target.length === e[0].length - 2) array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "start": e.index! + 1, "end": e.index! + e[0].length - 1 }) // "SPACE" AT BEGGINING AND END = FIRST LETTER IS DIFFERENT // + 2 LENGTH IN e[0].length
-            if (x.target[0] === e[0][0] && x.target.length === e[0].length - 1) array.push({ "target": e[0].replace(/[^A-Za-z0-9]/g, ""), "start": e.index! , "end": e.index! + e[0].length - 1 }) // "SPACE" AT END = FIRST LETTER ARE EQUAL // + 1 LENGTH IN e[0].length
+            console.log("x.target", x.target)
+            console.log("gg", gg)
+            console.log("e", e)
 
-            // console.log("in diceES", x.target[0])
-            // console.log("written", e[0][0])
-            // console.log("in diceES", x.target.length)
-            // console.log("written", e[0].length)
+            
+            //RegExp("[-,;.:¡!¿?'"()\\][ ]", "g").test(qq[4])
+            //RegExp("[)]", "g").test(qq[4])
+
+            //console.log("target", x.target)
+            console.log("value", value)
+            console.log("RegExp VALUE", value[e.index! + e[0].length ])
+            console.log("RegExp", value[e.index! + e[0].length ] !== (undefined && `-` && `,` && `;` && `.` && `:` && `¡` && `!` && `¿` && `?` && `'` && `"` && `(`  && `)` && `]` && `[` && " "))
+            //console.log("RegExp", RegExp(`[a-z]`, `g`).test(value[e.index! + e[0].length ]) )
+            //console.log("RegExp", value[e.index! + e[0].length ] === undefined)
+            
+
+            if (x.target[0] === e[0][0] && x.target.length === e[0].length && RegExp(`[-,;.:¡!¿?'"()\\][ ]|^`, `g`).test(value[e.index! - 1])  ) preParsedArray.push({ "target": e[0].trim().replace(/[^A-Za-z0-9 ]/g, ""), "start": e.index, "end": e.index! + e[0].length }) // EQUAL = START AND END ARE EQUAL
+            //if (x.target[0] !== e[0][0] && x.target.length === e[0].length - 1) preParsedArray.push({ "target": e[0].trim().replace(/[^A-Za-z0-9 ]/g, ""), "start": e.index! + 1, "end": e.index! + e[0].length }) // "SPACE" AT BEGGINING = FIRST LETTER IS DIFFERENT // + 1 LENGTH IN e[0].length
+            //if (x.target[0] !== e[0][0] && x.target.length === e[0].length - 2) preParsedArray.push({ "target": e[0].trim().replace(/[^A-Za-z0-9 ]/g, ""), "start": e.index! + 1, "end": e.index! + e[0].length - 1 }) // "SPACE" AT BEGGINING AND END = FIRST LETTER IS DIFFERENT // + 2 LENGTH IN e[0].length
+           //if (x.target[0] === e[0][0] && x.target.length === e[0].length - 1) preParsedArray.push({ "target": e[0].trim().replace(/[^A-Za-z0-9 ]/g, ""), "start": e.index! , "end": e.index! + e[0].length - 1 }) // "SPACE" AT END = FIRST LETTER ARE EQUAL // + 1 LENGTH IN e[0].length
+
+            console.log("x.target[0]", x.target[0])
+            console.log("e[0][0]", e[0][0])
+            console.log("x.target.length", x.target.length)
+            console.log("e[0].length", e[0].length)
 
           })
 
         })
 
-        console.log(JSON.stringify(array, null, 4)) // ok
+        //console.log(JSON.stringify(array, null, 4)) // ok
 
-        //console.log("value", value) // ok
+       
+        let aaa1 = preParsedArray.sort((a: E, b: E) => a.start - b.start)
+
+        console.log("preParsedArray", preParsedArray)
+
+        let aaa2 = aaa1.filter((e: any, index: any) => {
+          if (e.start < aaa1[index - 1]?.end || e.start < aaa1[index - 2]?.end || e.start < aaa1[index - 3]?.end || e.start < aaa1[index - 4]?.end || e.start < aaa1[index - 5]?.end) return null;
+          return e
+        })
+       
+        let array: any = aaa2
 
         $("#targetVVV")
-          //console.log("AA", $("#targetVVV").html())
-          //.html(`<plaintext style="color:blue">${titleValue}`).css("color", "blue")
-          //.html(`<div style="color:blue">${titleValue}</div>`).css("color", "blue")
-          //.html(`<div style="color:blue">${value}</div>`)//.css("color", "blue")
-          //.html(`<div>${value}</div>`)//.css("color", "blue")
-          //.html(`<div><div>${value}</div></div>`)//.css("color", "blue")
-          //.html(`<div style="color:blue">${value.substring(0,1)}</div><mark style="color:green">${value.substring(1)}</mark>`)//.css("color", "blue")
-          // .html(function() {
-          //   var emphasis = "<em>" + " paragraphs!</em>";
-          //   return "<p>All new content for " + emphasis + "</p>";
-          // })
           .html(function() {
-
             let parsedToReturn:string[] = []
-
             
-
-            //if (array[0]) value.split("").splice(1, 0, "g")
-            if (array[0]) array.sort((a: any, b: any) => a.start - b.start).map((e:any, actualIndex:any) => { // SORT TO LEFT TO RIGHT PARSE
-
+              if (array[0]) array
+                .forEach((e:any, actualIndex:any) => { // SORT TO LEFT TO RIGHT PARSE
               
-              //return "<mark>" + value.substring(e.start, e.end) + "</mark>" + value.substring(e.end)
-              //if (actualIndex === 0) return "<mark>" + value.substring(e.start, e.end) + "</mark>" + value.substring(e.end)
-              //else return value.substring(0, e.start) + "<mark>" + value.substring(e.start, e.end) + "</mark>"
-              //if (e.start === 0) return "<mark>" + value.substring(0, e.end) + "</mark>" + value.substring(e.end)
-              //if (e.start === 0) parsedToReturn.push("<mark>" + value.substring(0, e.end) + "</mark>")
-              //
-              //
-
-              // if (e.start === 0 && array.length === 1) parsedToReturn.push(
-              //   "<mark>" + value.substring(0, e.end) + "</mark>" + // ONLY ONE e, AND ITS AT THE BEGINNING OF value
-              //   "<div>" + value.substring(e.end) + "</div>") // i.e.: "dumb"
-              // if (e.start > 0 && array.length === 1) parsedToReturn.push(
-              //   "<div>" + value.substring(0, e.start) + "</div>" +
-              //   "<mark>" + value.substring(e.start, e.end) + "</mark>" + // ONLY ONE e, AND IT IS NOT AT THE BEGINNING OF value
-              //   "<div>" + value.substring(e.end) + "</div>") // i.e.: "¿dumb" | " dumb"
-              // if (e.start === 0 && array.length > 1) parsedToReturn.push(
-              //   "<mark>" + value.substring(0, e.end) + "</mark>" + // TWO OR MORE e, e ITS AT BEGINNING OF value
-              //   "<div>" + value.substring(e.end, array[actualIndex + 1]?.start) + "</div>") // TRIMS STRING FOR NEXT LOOP
-              // if (e.start > 0 && array.length > 1) parsedToReturn.push(
-              //   "<div>" + value.substring(0, e.start) + "</div>" +
-              //   "<mark>" + value.substring(e.start, e.end) + "</mark>" + //
-              //   "<div>" + value.substring(e.end, array[actualIndex + 1]?.start) + "</div>") //
-
+                    console.log("e", e)
 
               if (array.length === 1) parsedToReturn.push(
                 "<div>" + value.substring(0, e.start) + "</div>" + // OPTIONAL STRING
@@ -319,230 +336,15 @@ export default function CreateRecipe() {
               if (array.length > 1) parsedToReturn.push(
                 "<div>" + (actualIndex === 0 ? value.substring(0, e.start) : value.substring(array[actualIndex - 1]?.end, e.start)) + "</div>" +
                 "<mark>" + value.substring(e.start, e.end) + "</mark>" + //
-                "<div>" + (actualIndex === 0 ? "" : !array[actualIndex + 1 ]?.end ? value.substring(e.end) : "") + "</div>")
-                //"<div>" + (actualIndex === 0 ? "" : "") + "</div>")
-                //"<div>" + (actualIndex === 0 ? "" : value.substring(e.start, e.end)) + "</div>")
-                //"<div>" + (actualIndex === 0 ? value.substring(e.end, array[actualIndex + 1]?.start) : value.substring(e.start, e.end)) + "</div>")
+                "<div>" + (actualIndex === 0 ? "" : !array[actualIndex + 1 ]?.end ? value.substring(e.end) :"") + "</div>")
 
-
-              //if (e.start > 0 && array[arrayIdx + 1]?.end !== undefined) parsedToReturn.push("<div>" + value.substring(0, e.start) + "</div>" + "<mark>" + value.substring(e.start, e.end) + "</mark>" + "<div>" + value.substring(e.end) + "</div>") // ONLY ONE e AND IT IS NOT AT THE BEGINNING OF value
-              //if (e.start > 0 && array[arrayIdx + 1]?.end !== undefined) parsedToReturn.push("<div>" + value.substring(0, e.start) + "</div>" + "<mark>" + value.substring(e.start, e.end) + "</mark>" + "<div>" + value.substring(e.end) + "</div>") // ONLY ONE e AND IT IS NOT AT THE BEGINNING OF value
-
-              //if (e.start > 0) return value.substring(0, e.start) + "<mark>" + value.substring(e.start, e.end) + "</mark>" + value.substring(e.end)
-              //console.log(array[arrayIdx + 1]?.end) // '?' PREVENTS APPLICATION EXPLODES.
-              //qq.split("").toSpliced(1, 0, "g")
-              //qq.split("").splice(1, 0, "g")
-              //qq.split("").toSpliced(1, 0, "g").join("")
-              
-              //else return value
             })
-            
-            //return array[0] ? qq : value
-            console.log("parsedToReturn", parsedToReturn)
-            //return array[0] ? value.split("").splice(1, 0, "g").join("") : value
-            //return array[0] ? value.split("").splice(1, 0, "g").join("") : value
+
+            console.table(parsedToReturn)
             
             return array[0] ? parsedToReturn.join("") : value
-            //return value
-            //var emphasis = "<em>" + " paragraphs!</em>";
-            //return "<p>All new content for " + emphasis + "</p>";
+
           })
-
-        // $(function(){
-        //   // let qq = $("#title").select(function(){
-        //   //   //alert("Text marked!");
-        //   //   console.log("qq", qq)
-        //   // })
-        //   $("#targetVVV").scrollLeft($("#title").scrollLeft()!)
-        //   // $("#title").each(function() {               // ***
-        //   //       let qq = $(this).data("original", $(this).text()); // ***
-        //   //       console.log("qq", qq)
-        //   //     })
-        //   //$("#title").scrollLeft(0)
-          
-        //       //console.log(".scrollLeft()", $("#title").scrollLeft())
-        // })
-
-        //console.log("ACAA") // ok
-        //console.log("value", value) // ok
-
-      // $(function(){
-      //     //$("#title")
-      //     $("#targetVVV")
-      //     //console.log("AA", $("#targetVVV").html())
-      //     //.html(`<plaintext style="color:blue">${titleValue}`).css("color", "blue")
-      //     .html(`${titleValue}`).css("color", "blue")
-      //     //.text("new text");
-      //     // .text(function(){
-      //     //   $(this).css("color", "blue")
-      //     // })
-      //     //.html(`${titleValue}`)//.css("fontSize", "55px");
-      //     //.html(`<string style="color:blue">${titleValue}</string>`).css("color", "green");
-      //     //.html(`<span style="color:blue">${titleValue}</span>`)//.css("fontSize", "55px");
-          
-      //     //.text("<strong>new text</strong>");
-      //     //.text("<strong>new text</strong>");
-      //     //.text(<strong> + "new text" + </strong>);
-      //     //.val("<p>" + "AA" + "</p>")
-      //     ///.each(function() {               // ***
-      //      // .css("color", "red")
-      //       //.val("AAA").css("color", "blue")
-            
-      // })
-
-
-        // $(function(){
-        //   $("#title").each(function() {               // ***
-        //     $(this).data("original", $(this).text()); // ***
-        //     //console.log("this", this)
-        //   })                                            // ***
-          
-          
-        //     $('#title').each(function() {
-        //         var text = $(this).data("original"),      // ***
-        //         textL = text.toLowerCase(),
-        //         index = textL.indexOf(this);         // ***
-        //         //console.log("text", text)
-          
-        //       if (index !== -1) {
-        //         //var htmlR = text.substr(0, index) + '<b>' + text.substr(index, text.length) + '</b>' + text.substr(index + text.length); // ***
-        //         var htmlR = text.substr(0, 1) + '<p style="color:red">' + text.substr(1, 2) + '</p>' + text.substr(4); // ***
-                
-        //         //$(this).html(htmlR).show()
-        //         $(this).html(htmlR)//.show()
-        //       }/*  else {
-        //         $(this).hide();
-        //       } */
-        //     });
-         
-              
-
-        // })
-
-        // $(function(){
-        //   //$("#targetVVV")//.each(function() {               // ***
-        //     //.val("ASDASD")
-        //     //.text("<strong>" + "new text" + "</strong>")
-        //     //let origin = $("#targetVVV").text()
-        //     //$("#targetVVV").text(origin)
-        //     //console.log($("#targetVVV").val())
-        //     $("#targetVVV").val()
-        //     //.val("AAA")
-        //     //$("#title").append($("#title").css("color", "red"));
-        //     //$("#targetVVV").replaceWith(<InputLabel id={"targetVVV"} shrink={false} sx={s.inputLabelContainer}>{titleValue}</InputLabel>);
-        //   //   $("#targetVVV").on("mouseenter",function () {
-        //   //     $(this).find('aa').css("color", "blue");
-        //   // })//.trigger('change');
-            
-        // })     
-              
-          
-              //.css("color", "red")
-              
-              //.css("color", "red")
-              //.css("fontWeight", "bold")
-              //.css("color", "red")
-              //.val("AA")
-              //.css("background", "red")
-              //.css("color", "green")
-            //console.log("#targetVVV", $("#targetVVV"))
-              //$("#targetVVV>").css('color', 'green');
-              //$("#targetVVV").animate({color:'black'},1000);
-
-            //console.log("#targetVVV", $("#targetVVV").text())
-            //let qq = $("#otherTest").data("original", $("#otherTest").text()); // ***
-            //console.log("this", this)
-            //if (qq) console.log("qq", (qq[0] as HTMLInputElement).value)
-            //console.log("qq", (qq[0] as HTMLInputElement).value)
-
-            //let ww = (qq[0] as HTMLInputElement)//.value
-            //console.log("ww", ww)
-
-              //var htmlR = <input>{ww.substring(0,1)} + <p style={{ color: "red" }}> + {ww.substring(1, 3)} + </p> + {ww.substring(3)}</input>
-              //var htmlR = <Box>ASDASD</Box>
-
-              //var htmlR = <input > + {ww.substring(0, 1)} + <p style="color:red"> {ww.substring(1, ww.length - 1)} </p> </input>
-              //var htmlR = <Box id="otherTest"><strong>{titleValue}</strong></Box>
-
-              //var htmlR = <TextField>ww.substring(0,1) + ww.substring(1, 3) + ww.substring(3)</TextField>
-              //$("#title").html(htmlR)
-
-              //$("#title").replaceWith(htmlR)
-
-            //$("#title").css('font-weight', 'bold');
-            //$("#title:first-letter").css('font-weight', 'bold');
-           // $("#title").each(function(){     
-              // if(ww.substr(0,1).toUpperCase() === 'B'){
-              //   //$(this).addClass('someclass')
-              //   var select = <p>333</p>
-              //   $(this).css('font-weight', 'bold')//.add(select);
-              // }
-              
-                //$(this).addClass('someclass')
-                //$("#title").data("original", $("#title").text()).substring(0,1).css('font-weight', 'bold')
-                
-              
-             //})
-         //   })     
-            
-        //     //$("#title").append($("<p>").css("color", "red").text("*"));
-        //     //$("#title").append($("<p>").css("color", "red").text("*"));
-            
-        //     //$("#title").html("<i>This is my italic text</i>");
-        //     //let ww = (qq[0] as HTMLInputElement)
-        //     //let ww = (qq[0] as HTMLInputElement)
-        //     //ww.wrapInner("<strong />")
-        //     //$("#title").text($("#title").text().replace("Bye"));
-        //     // console.log("ww", ww[0])
-        //     // let aa = '<b>' + ww[0] + '</b>';
-        //     // let bb = ww[1]
-        //     // let cc = aa + bb
-        //     //  $("#title")
-        //     //    .val(cc);
-        //     //console.log("ww.innerHTML", ww.innerHTML)
-
-        //     //$("#title").css('font-weight', 'bold');
-        //     //$("#title")
-        //     //$("#title[input]:last-child")
-        //     //$("#title")
-        //       //.css('font-weight', 'bold');
-        //     //: {  marginBottom: '0px' }
-            
-
-        //     //var text = this.value
-            
-        //       //console.log("text", text)
-              
-        //       //console.log("this", (this as HTMLElement).value)
-             
-            
-
-
-
-        //       // var htmlR = <input>{ww.substring(0,1)} + <p style={{ color: "red" }}> + {ww.substring(1, 3)} + </p> + {ww.substring(3)}</input>
-        //       //var htmlR = <Box>ASDASD</Box>
-
-        //       //var htmlR = <input > + {ww.substring(0, 1)} + <p style="color:red"> {ww.substring(1, ww.length - 1)} </p> </input>
-
-        //       //var htmlR = <TextField>ww.substring(0,1) + ww.substring(1, 3) + ww.substring(3)</TextField>
-        //       //$("#title").html(htmlR)
-
-        //       //$("#title").replaceWith(htmlR)
-
-             
-              
-
-
-
-        //   })                                  
-          
-          
-         
-              
-
-     //   })
-
-
 
       break;
       case (`health`):
