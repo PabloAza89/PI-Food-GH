@@ -287,12 +287,20 @@ export default function CreateRecipe() {
             //console.log("target", x.target)
             console.log("value", value)
             console.log("RegExp VALUE", value[e.index! + e[0].length ])
-            console.log("RegExp", value[e.index! + e[0].length ] !== (undefined && `-` && `,` && `;` && `.` && `:` && `¡` && `!` && `¿` && `?` && `'` && `"` && `(`  && `)` && `]` && `[` && " "))
+            //console.log("RegExp", value[e.index! + e[0].length ] !== (undefined && `-` && `,` && `;` && `.` && `:` && `¡` && `!` && `¿` && `?` && `'` && `"` && `(`  && `)` && `]` && `[` && " "))
+            //console.log("RegExp", RegExp(`[-,;.:¡!¿?'"()\\][ ]`, `g`).test(value[e.index! + e[0].length]))
+            
             //console.log("RegExp", RegExp(`[a-z]`, `g`).test(value[e.index! + e[0].length ]) )
             //console.log("RegExp", value[e.index! + e[0].length ] === undefined)
+            console.log("RegExp", value[e.index! - 1 ] )
             
 
-            if (x.target[0] === e[0][0] && x.target.length === e[0].length && RegExp(`[-,;.:¡!¿?'"()\\][ ]|^`, `g`).test(value[e.index! - 1])  ) preParsedArray.push({ "target": e[0].trim().replace(/[^A-Za-z0-9 ]/g, ""), "start": e.index, "end": e.index! + e[0].length }) // EQUAL = START AND END ARE EQUAL
+            if (
+              x.target[0] === e[0][0] &&
+              x.target.length === e[0].length &&
+              ( RegExp(`[-,;.:¡!¿?'"()\\][ ]`, `g`).test(value[e.index! + e[0].length]) || value[e.index! + e[0].length] === undefined ) && 
+              ( RegExp(`[-,;.:¡!¿?'"()\\][ ]`, `g`).test(value[e.index! - 1 ]) || value[e.index! -1] === undefined )
+            ) preParsedArray.push({ "target": e[0].trim().replace(/[^A-Za-z0-9 ]/g, ""), "start": e.index, "end": e.index! + e[0].length }) // EQUAL = START AND END ARE EQUAL
             //if (x.target[0] !== e[0][0] && x.target.length === e[0].length - 1) preParsedArray.push({ "target": e[0].trim().replace(/[^A-Za-z0-9 ]/g, ""), "start": e.index! + 1, "end": e.index! + e[0].length }) // "SPACE" AT BEGGINING = FIRST LETTER IS DIFFERENT // + 1 LENGTH IN e[0].length
             //if (x.target[0] !== e[0][0] && x.target.length === e[0].length - 2) preParsedArray.push({ "target": e[0].trim().replace(/[^A-Za-z0-9 ]/g, ""), "start": e.index! + 1, "end": e.index! + e[0].length - 1 }) // "SPACE" AT BEGGINING AND END = FIRST LETTER IS DIFFERENT // + 2 LENGTH IN e[0].length
            //if (x.target[0] === e[0][0] && x.target.length === e[0].length - 1) preParsedArray.push({ "target": e[0].trim().replace(/[^A-Za-z0-9 ]/g, ""), "start": e.index! , "end": e.index! + e[0].length - 1 }) // "SPACE" AT END = FIRST LETTER ARE EQUAL // + 1 LENGTH IN e[0].length
