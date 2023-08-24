@@ -220,22 +220,26 @@ export default function CreateRecipe() {
   const validator = ({ type, value, index }: validateStringI) => {
     switch (type) {
       case (`title`):
-        if (/([^a-zA-Z0-9-,;.:¡!¿?'"()[\] ])/g.test(value) && value.length !== 0) setError({...error, [type]: true}) // NEW REGEX !
+        if (/[^A-Za-z0-9-(áÁéÉíÍóÓúÚüÜñÑ),;.:¡!¿?'"()[\] ]/g.test(value) && value.length !== 0) setError({...error, [type]: true}) // NEW REGEX !
         // ALLOWED CHARACTERS: , ; . : - ! ¡ ¿ ? ' " () [] (15)
         else setError({...error, [type]: false});
         setTitleValue(value);
 
-
-
-
         let badWordsInDicEs = dicEs.map((e, idx) => {
-          return (value.toLowerCase().search(RegExp(
-            `^` + e + `$|` + // MATCH UNIQUE STRING WITH NOTHING AT START OR END
-            `[-,;.:¡!¿?'"()\\][ ]` + e + `$|` + // ALLOWED CHARACTERS AT BEGGINING // TEST
-            `^` + e + `[-,;.:¡!¿?'"()\\][ ]|` + // ALLOWED CHARACTERS AT END // TEST
-            `[-,;.:¡!¿?'"()\\][ ]` + e + `[-,;.:¡!¿?'"()\\][ ]`  //+ `|` + // ALLOWED CHARACTERS AT START & END // TEST
-
-            , "g" )) !== -1) ? { "target": e, "index": idx } : -1
+          return (
+            value
+              .replaceAll("á", "a").replaceAll("Á", "A")
+              .replaceAll("é", "e").replaceAll("É", "E")
+              .replaceAll("í", "i").replaceAll("Í", "I")
+              .replaceAll("ó", "o").replaceAll("Ó", "O")
+              .replaceAll("ú", "u").replaceAll("Ú", "U")
+              .replaceAll("ü", "u").replaceAll("Ü", "U")
+              .toLowerCase().search(RegExp(
+                `^` + e + `$|` + // MATCH UNIQUE STRING WITH NOTHING AT START OR END
+                `[-,;.:¡!¿?'"()\\][ ]` + e + `$|` + // ALLOWED CHARACTERS AT BEGGINING // TEST
+                `^` + e + `[-,;.:¡!¿?'"()\\][ ]|` + // ALLOWED CHARACTERS AT END // TEST
+                `[-,;.:¡!¿?'"()\\][ ]` + e + `[-,;.:¡!¿?'"()\\][ ]`  //+ `|` + // ALLOWED CHARACTERS AT START & END // TEST
+              , "g" )) !== -1) ? { "target": e, "index": idx } : -1
         }).filter(e => e !== -1)
 
         // console.log(JSON.stringify(badWordsInDicEs, null, 4)) // ok
@@ -243,14 +247,21 @@ export default function CreateRecipe() {
 
         let preParsedArray: any = []
 
-       
+
         //console.log(JSON.stringify(badWordsInDicEs, null, 4)) // ok
         console.log("badWordsInDicEs", badWordsInDicEs) // ok
 
 
         badWordsInDicEs?.filter(e => e !== -1)?.forEach((x, idx) => {
 
-          if (x !== -1) [...value.toLowerCase().matchAll(RegExp(
+          if (x !== -1) [...value
+            .replaceAll("á", "a").replaceAll("Á", "A")
+            .replaceAll("é", "e").replaceAll("É", "E")
+            .replaceAll("í", "i").replaceAll("Í", "I")
+            .replaceAll("ó", "o").replaceAll("Ó", "O")
+            .replaceAll("ú", "u").replaceAll("Ú", "U")
+            .replaceAll("ü", "u").replaceAll("Ü", "U")
+            .toLowerCase().matchAll(RegExp(
 
             // `^` + x.target + `$|` + // UNIQUE WORD WITH NOTHING AT START OR END
             // `^` + x.target + `[-,;.:¡!¿?'"()\\][ ]|` + // START WORD WITH ALLOWED CHARACTER AT END
@@ -268,7 +279,7 @@ export default function CreateRecipe() {
             x.target
 
             //`([-,;.:¡!¿?'"()\\][ ]|^)` + x.target + `[-,;.:¡!¿?'"()\\][ ]`// OK
-            
+
             //x.target + `$|` + // WORD AT END
             //x.target + `[-,;.:¡!¿?'"()\\][]|` + // WORD CONTINUED WITH ALLOWED CHARACTERS
             //x.target + `$`  // WORD CONTINUED WITH ALLOWED CHARACTERS
@@ -280,7 +291,7 @@ export default function CreateRecipe() {
             console.log("gg", gg)
             console.log("e", e)
 
-            
+
             //RegExp("[-,;.:¡!¿?'"()\\][ ]", "g").test(qq[4])
             //RegExp("[)]", "g").test(qq[4])
 
@@ -289,18 +300,18 @@ export default function CreateRecipe() {
             console.log("RegExp VALUE", value[e.index! + e[0].length ])
             //console.log("RegExp", value[e.index! + e[0].length ] !== (undefined && `-` && `,` && `;` && `.` && `:` && `¡` && `!` && `¿` && `?` && `'` && `"` && `(`  && `)` && `]` && `[` && " "))
             //console.log("RegExp", RegExp(`[-,;.:¡!¿?'"()\\][ ]`, `g`).test(value[e.index! + e[0].length]))
-            
+
             //console.log("RegExp", RegExp(`[a-z]`, `g`).test(value[e.index! + e[0].length ]) )
             //console.log("RegExp", value[e.index! + e[0].length ] === undefined)
             console.log("RegExp", value[e.index! - 1 ] )
-            
+
 
             if (
               x.target[0] === e[0][0] &&
               x.target.length === e[0].length &&
-              ( RegExp(`[-,;.:¡!¿?'"()\\][ ]`, `g`).test(value[e.index! + e[0].length]) || value[e.index! + e[0].length] === undefined ) && 
+              ( RegExp(`[-,;.:¡!¿?'"()\\][ ]`, `g`).test(value[e.index! + e[0].length]) || value[e.index! + e[0].length] === undefined ) &&
               ( RegExp(`[-,;.:¡!¿?'"()\\][ ]`, `g`).test(value[e.index! - 1 ]) || value[e.index! -1] === undefined )
-            ) preParsedArray.push({ "target": e[0].trim().replace(/[^A-Za-z0-9 ]/g, ""), "start": e.index, "end": e.index! + e[0].length }) // EQUAL = START AND END ARE EQUAL
+            ) preParsedArray.push({ "target": e[0].trim().replaceAll(/[^A-Za-z0-9 ]/g, ""), "start": e.index, "end": e.index! + e[0].length }) // EQUAL = START AND END ARE EQUAL
             //if (x.target[0] !== e[0][0] && x.target.length === e[0].length - 1) preParsedArray.push({ "target": e[0].trim().replace(/[^A-Za-z0-9 ]/g, ""), "start": e.index! + 1, "end": e.index! + e[0].length }) // "SPACE" AT BEGGINING = FIRST LETTER IS DIFFERENT // + 1 LENGTH IN e[0].length
             //if (x.target[0] !== e[0][0] && x.target.length === e[0].length - 2) preParsedArray.push({ "target": e[0].trim().replace(/[^A-Za-z0-9 ]/g, ""), "start": e.index! + 1, "end": e.index! + e[0].length - 1 }) // "SPACE" AT BEGGINING AND END = FIRST LETTER IS DIFFERENT // + 2 LENGTH IN e[0].length
            //if (x.target[0] === e[0][0] && x.target.length === e[0].length - 1) preParsedArray.push({ "target": e[0].trim().replace(/[^A-Za-z0-9 ]/g, ""), "start": e.index! , "end": e.index! + e[0].length - 1 }) // "SPACE" AT END = FIRST LETTER ARE EQUAL // + 1 LENGTH IN e[0].length
@@ -316,7 +327,7 @@ export default function CreateRecipe() {
 
         //console.log(JSON.stringify(array, null, 4)) // ok
 
-       
+
         let aaa1 = preParsedArray.sort((a: E, b: E) => a.start - b.start)
 
         console.log("preParsedArray", preParsedArray)
@@ -325,16 +336,16 @@ export default function CreateRecipe() {
           if (e.start < aaa1[index - 1]?.end || e.start < aaa1[index - 2]?.end || e.start < aaa1[index - 3]?.end || e.start < aaa1[index - 4]?.end || e.start < aaa1[index - 5]?.end) return null;
           return e
         })
-       
+
         let array: any = aaa2
 
         $("#targetVVV")
           .html(function() {
             let parsedToReturn:string[] = []
-            
+
               if (array[0]) array
                 .forEach((e:any, actualIndex:any) => { // SORT TO LEFT TO RIGHT PARSE
-              
+
                     console.log("e", e)
 
               if (array.length === 1) parsedToReturn.push(
@@ -349,7 +360,7 @@ export default function CreateRecipe() {
             })
 
             console.table(parsedToReturn)
-            
+
             return array[0] ? parsedToReturn.join("") : value
 
           })
@@ -533,7 +544,7 @@ export default function CreateRecipe() {
 
   $(function(){
     $("#title").on("scroll",function(e) {
-      
+
       $("#targetVVV").scrollLeft($("#title").scrollLeft()!)
       // $("#targetVVV")
       //     //console.log("AA", $("#targetVVV").html())
@@ -552,7 +563,7 @@ export default function CreateRecipe() {
       //     //.html(`<plaintext style="color:blue">${titleValue}`).css("color", "blue")
       //     .html(`${titleValue}`).css("color", "blue")
     })
-    
+
    })
 
 
@@ -604,7 +615,7 @@ export default function CreateRecipe() {
                         //label={<strong>"AAA"</strong>}
                         //label={"AAA"}
                         //label={"AAAAAAAAAAAAAAAAAAAAAAAADASDASDASDWQqwe21sadfsdfsdfsdfsdf"}
-                        
+
                         //label={'margin="none"'}
                         //shrink={false}
                         //hiddenLabel={false}
@@ -620,15 +631,15 @@ export default function CreateRecipe() {
                         //InputProps={{ color: 'red' }}
                         //InputProps={{ style: s.textFieldInput()/* , readOnly: true */ } }
                         //InputProps={{ style: { color: 'blue', WebkitTouchCallout: 'none', WebkitUserSelect: 'none', khtmlUserSelect: 'none', MozUserSelect: 'none', MsUserSelect: 'none', UserSelect: 'none' } }}
-                       
+
                         //InputProps={{ style: { color: 'black', userSelect: 'none' } }}
                         //InputProps={{ style: s.test() }}
                         //input={"ASDASD"}
                         //input={titleValue}
                         //placeholder={`ASDASD`}
                         //input={<OutlinedInput />}
-                        
-                        
+
+
                         className={`testTitle`}
                         //id={`testTitle`}
                         sx={s.input}
@@ -641,7 +652,7 @@ export default function CreateRecipe() {
                         //value={parse('<strong>' + 'AAA' + '</strong>')}
                         //value={parse('<strong>' + 'AAA' + '</strong>')}
                         //value={parse(`<strong>${titleValue}</strong>`)}
-                        
+
                         //value="&lt;b&gt;Some text&lt;b/&gt;"
                         //value={"AAA".replace(new RegExp('(^|)(' + "AAA" + ')(|$)','ig'), '$1<b>$2</b>$3')}
                         //value="&quot;<b>http://sansoftmax.blogspot.com/</b>&quot;"
@@ -651,7 +662,7 @@ export default function CreateRecipe() {
                         //value={<strong>"AAA"</strong>}
                         //value={<strong>"AAA"</strong>}
                         //value={JSON.parse(<strong>"AAA"</strong>)}
-                        
+
                         //placeholder={<strong>"AAA"</strong>}
                         //placeholder={<strong>`BBBBBB`</strong>}
                         //placeholder={titlePlaceholder}
@@ -660,12 +671,12 @@ export default function CreateRecipe() {
                         onFocus={() => setTitlePlaceholder("")}
                         onBlur={() => setTitlePlaceholder(`e.g. Pasta with tomatoes..`)}
                         onChange={(e) => { validator({ value: e.target.value, type: e.target.id }) }}
-                      
+
                       />
-                      
-                      
-                      
-                      
+
+
+
+
                     </Box>
 
                   </Tooltip>
