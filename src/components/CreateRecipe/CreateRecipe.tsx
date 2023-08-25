@@ -189,6 +189,90 @@ export default function CreateRecipe() {
       }
   };
 
+  interface highlighterI {
+    value: string,
+    type: string,
+  }
+
+  function highlighter({value, type}: highlighterI) {
+
+    let badWordsInDicEsSummary = dicEs.map((e, idx) => {
+      return (
+        value
+          .replaceAll("á", "a").replaceAll("Á", "A")
+          .replaceAll("é", "e").replaceAll("É", "E")
+          .replaceAll("í", "i").replaceAll("Í", "I")
+          .replaceAll("ó", "o").replaceAll("Ó", "O")
+          .replaceAll("ú", "u").replaceAll("Ú", "U")
+          .replaceAll("ü", "u").replaceAll("Ü", "U")
+          .toLowerCase().search(RegExp(
+            `^` + e + `$|` + // MATCH UNIQUE STRING WITH NOTHING AT START OR END
+            `[-,;.:¡!¿?'"()\\][ ]` + e + `$|` + // ALLOWED CHARACTERS AT BEGGINING // TEST
+            `^` + e + `[-,;.:¡!¿?'"()\\][ ]|` + // ALLOWED CHARACTERS AT END // TEST
+            `[-,;.:¡!¿?'"()\\][ ]` + e + `[-,;.:¡!¿?'"()\\][ ]`  //+ `|` + // ALLOWED CHARACTERS AT START & END // TEST
+          , "g" )) !== -1) ? { "target": e, "index": idx } : -1
+    }).filter(e => e !== -1)
+
+
+    let firstArrayFilterSummary: any = []
+
+    badWordsInDicEsSummary?.filter(e => e !== -1)?.forEach((x, idx) => {
+      if (x !== -1) [...value
+        .replaceAll("á", "a").replaceAll("Á", "A")
+        .replaceAll("é", "e").replaceAll("É", "E")
+        .replaceAll("í", "i").replaceAll("Í", "I")
+        .replaceAll("ó", "o").replaceAll("Ó", "O")
+        .replaceAll("ú", "u").replaceAll("Ú", "U")
+        .replaceAll("ü", "u").replaceAll("Ü", "U")
+        .toLowerCase().matchAll(RegExp(x.target, "g")
+      )].forEach((e, gg) => {
+        if (
+          x.target[0] === e[0][0] &&
+          x.target.length === e[0].length &&
+          ( RegExp(`[-,;.:¡!¿?'"()\\][ ]`, `g`).test(value[e.index! + e[0].length]) || value[e.index! + e[0].length] === undefined ) &&
+          ( RegExp(`[-,;.:¡!¿?'"()\\][ ]`, `g`).test(value[e.index! - 1 ]) || value[e.index! -1] === undefined )
+        ) firstArrayFilterSummary.push({ "target": e[0].trim().replaceAll(/[^A-Za-z0-9 ]/g, ""), "start": e.index, "end": e.index! + e[0].length })
+      })
+    })
+
+    let secondArrayFilterSummary = firstArrayFilterSummary.sort((a: E, b: E) => a.start - b.start)
+
+    let arraySummary = secondArrayFilterSummary.filter((e: any, index: any) => {
+      if (e.start < secondArrayFilterSummary[index - 1]?.end || e.start < secondArrayFilterSummary[index - 2]?.end || e.start < secondArrayFilterSummary[index - 3]?.end || e.start < secondArrayFilterSummary[index - 4]?.end || e.start < secondArrayFilterSummary[index - 5]?.end) return null;
+      return e
+    })
+
+    if (arraySummary[0]) {
+      let copyObjSummary = {...error}
+      copyObjSummary.summary.badWord = true
+      setError({ ...copyObjSummary })
+    } else {
+      let copyObjSummary = {...error}
+      copyObjSummary.summary.badWord = false
+      setError({ ...copyObjSummary })
+    }
+
+    //$("#targetSummary")
+    $(`#target${type.slice(0,1).toUpperCase() + type.slice(1)}`)
+      .html(function() {
+        let parsedToReturnSummary:string[] = []
+          if (arraySummary[0]) arraySummary.forEach((e:any, actualIndex:any) => {
+              if (arraySummary.length === 1) parsedToReturnSummary.push(
+                value.substring(0, e.start) + // OPTIONAL STRING
+                "<mark>" + value.substring(e.start, e.end) + "</mark>" + // ONLY ONE e
+                 value.substring(e.end)) // i.e.: "¿dumb" | " dumb"
+              if (arraySummary.length > 1) parsedToReturnSummary.push(
+                (actualIndex === 0 ? value.substring(0, e.start) : value.substring(arraySummary[actualIndex - 1]?.end, e.start)) +
+                "<mark>" + value.substring(e.start, e.end) + "</mark>" + //
+                (actualIndex === 0 ? "" : !arraySummary[actualIndex + 1 ]?.end ? value.substring(e.end) :""))
+          })
+          parsedToReturnSummary.unshift("<div>")
+          parsedToReturnSummary.push("</div>")
+
+        return arraySummary[0] ? parsedToReturnSummary.join("") : value
+      })
+  }
+
 
 
 
@@ -206,69 +290,7 @@ export default function CreateRecipe() {
         else { copyObjTitle[type].character = false; setError({ ...copyObjTitle })}
         setTitleValue(value);
 
-        let badWordsInDicEsTitle = dicEs.map((e, idx) => {
-          return (
-            value
-              .replaceAll("á", "a").replaceAll("Á", "A")
-              .replaceAll("é", "e").replaceAll("É", "E")
-              .replaceAll("í", "i").replaceAll("Í", "I")
-              .replaceAll("ó", "o").replaceAll("Ó", "O")
-              .replaceAll("ú", "u").replaceAll("Ú", "U")
-              .replaceAll("ü", "u").replaceAll("Ü", "U")
-              .toLowerCase().search(RegExp(
-                `^` + e + `$|` + // MATCH UNIQUE STRING WITH NOTHING AT START OR END
-                `[-,;.:¡!¿?'"()\\][ ]` + e + `$|` + // ALLOWED CHARACTERS AT BEGGINING // TEST
-                `^` + e + `[-,;.:¡!¿?'"()\\][ ]|` + // ALLOWED CHARACTERS AT END // TEST
-                `[-,;.:¡!¿?'"()\\][ ]` + e + `[-,;.:¡!¿?'"()\\][ ]`  //+ `|` + // ALLOWED CHARACTERS AT START & END // TEST
-              , "g" )) !== -1) ? { "target": e, "index": idx } : -1
-        }).filter(e => e !== -1)
-
-        let firstArrayFilterTitle: any = []
-
-        badWordsInDicEsTitle?.filter(e => e !== -1)?.forEach((x, idx) => {
-          if (x !== -1) [...value
-            .replaceAll("á", "a").replaceAll("Á", "A")
-            .replaceAll("é", "e").replaceAll("É", "E")
-            .replaceAll("í", "i").replaceAll("Í", "I")
-            .replaceAll("ó", "o").replaceAll("Ó", "O")
-            .replaceAll("ú", "u").replaceAll("Ú", "U")
-            .replaceAll("ü", "u").replaceAll("Ü", "U")
-            .toLowerCase().matchAll(RegExp(x.target, "g")
-          )].forEach((e, gg) => {
-            if (
-              x.target[0] === e[0][0] &&
-              x.target.length === e[0].length &&
-              ( RegExp(`[-,;.:¡!¿?'"()\\][ ]`, `g`).test(value[e.index! + e[0].length]) || value[e.index! + e[0].length] === undefined ) &&
-              ( RegExp(`[-,;.:¡!¿?'"()\\][ ]`, `g`).test(value[e.index! - 1 ]) || value[e.index! -1] === undefined )
-            ) firstArrayFilterTitle.push({ "target": e[0].trim().replaceAll(/[^A-Za-z0-9 ]/g, ""), "start": e.index, "end": e.index! + e[0].length })
-          })
-        })
-
-        let secondArrayFilterTitle = firstArrayFilterTitle.sort((a: E, b: E) => a.start - b.start)
-
-        let arrayTitle = secondArrayFilterTitle.filter((e: any, index: any) => {
-          if (e.start < secondArrayFilterTitle[index - 1]?.end || e.start < secondArrayFilterTitle[index - 2]?.end || e.start < secondArrayFilterTitle[index - 3]?.end || e.start < secondArrayFilterTitle[index - 4]?.end || e.start < secondArrayFilterTitle[index - 5]?.end) return null;
-          return e
-        })
-
-        if (arrayTitle[0]) { copyObjTitle[type].badWord = true; setError({ ...copyObjTitle })}
-        else { copyObjTitle[type].badWord = false; setError({ ...copyObjTitle })}
-
-        $("#targetTitle")
-          .html(function() {
-            let parsedToReturnTitle:string[] = []
-              if (arrayTitle[0]) arrayTitle.forEach((e:any, actualIndex:any) => {
-                if (arrayTitle.length === 1) parsedToReturnTitle.push(
-                  "<div>" + value.substring(0, e.start) + "</div>" + // OPTIONAL STRING
-                  "<mark>" + value.substring(e.start, e.end) + "</mark>" + // ONLY ONE e
-                  "<div>" + value.substring(e.end) + "</div>") // i.e.: "¿dumb" | " dumb"
-                if (arrayTitle.length > 1) parsedToReturnTitle.push(
-                  "<div>" + (actualIndex === 0 ? value.substring(0, e.start) : value.substring(arrayTitle[actualIndex - 1]?.end, e.start)) + "</div>" +
-                  "<mark>" + value.substring(e.start, e.end) + "</mark>" + //
-                  "<div>" + (actualIndex === 0 ? "" : !arrayTitle[actualIndex + 1 ]?.end ? value.substring(e.end) :"") + "</div>")
-              })
-            return arrayTitle[0] ? parsedToReturnTitle.join("") : value
-          })
+        highlighter({value, type})
 
       break;
       case (`health`):
@@ -286,95 +308,9 @@ export default function CreateRecipe() {
         else { copyObjSummary[type].character = false; setError({ ...copyObjSummary })}
         setSummaryValue(value);
 
-        let badWordsInDicEsSummary = dicEs.map((e, idx) => {
-          return (
-            value
-              .replaceAll("á", "a").replaceAll("Á", "A")
-              .replaceAll("é", "e").replaceAll("É", "E")
-              .replaceAll("í", "i").replaceAll("Í", "I")
-              .replaceAll("ó", "o").replaceAll("Ó", "O")
-              .replaceAll("ú", "u").replaceAll("Ú", "U")
-              .replaceAll("ü", "u").replaceAll("Ü", "U")
-              .toLowerCase().search(RegExp(
-                `^` + e + `$|` + // MATCH UNIQUE STRING WITH NOTHING AT START OR END
-                `[-,;.:¡!¿?'"()\\][ ]` + e + `$|` + // ALLOWED CHARACTERS AT BEGGINING // TEST
-                `^` + e + `[-,;.:¡!¿?'"()\\][ ]|` + // ALLOWED CHARACTERS AT END // TEST
-                `[-,;.:¡!¿?'"()\\][ ]` + e + `[-,;.:¡!¿?'"()\\][ ]`  //+ `|` + // ALLOWED CHARACTERS AT START & END // TEST
-              , "g" )) !== -1) ? { "target": e, "index": idx } : -1
-        }).filter(e => e !== -1)
+        highlighter({value, type})
 
-        let firstArrayFilterSummary: any = []
-
-        badWordsInDicEsSummary?.filter(e => e !== -1)?.forEach((x, idx) => {
-          if (x !== -1) [...value
-            .replaceAll("á", "a").replaceAll("Á", "A")
-            .replaceAll("é", "e").replaceAll("É", "E")
-            .replaceAll("í", "i").replaceAll("Í", "I")
-            .replaceAll("ó", "o").replaceAll("Ó", "O")
-            .replaceAll("ú", "u").replaceAll("Ú", "U")
-            .replaceAll("ü", "u").replaceAll("Ü", "U")
-            .toLowerCase().matchAll(RegExp(x.target, "g")
-          )].forEach((e, gg) => {
-            if (
-              x.target[0] === e[0][0] &&
-              x.target.length === e[0].length &&
-              ( RegExp(`[-,;.:¡!¿?'"()\\][ ]`, `g`).test(value[e.index! + e[0].length]) || value[e.index! + e[0].length] === undefined ) &&
-              ( RegExp(`[-,;.:¡!¿?'"()\\][ ]`, `g`).test(value[e.index! - 1 ]) || value[e.index! -1] === undefined )
-            ) firstArrayFilterSummary.push({ "target": e[0].trim().replaceAll(/[^A-Za-z0-9 ]/g, ""), "start": e.index, "end": e.index! + e[0].length })
-          })
-        })
-
-        let secondArrayFilterSummary = firstArrayFilterSummary.sort((a: E, b: E) => a.start - b.start)
-
-        let arraySummary = secondArrayFilterSummary.filter((e: any, index: any) => {
-          if (e.start < secondArrayFilterSummary[index - 1]?.end || e.start < secondArrayFilterSummary[index - 2]?.end || e.start < secondArrayFilterSummary[index - 3]?.end || e.start < secondArrayFilterSummary[index - 4]?.end || e.start < secondArrayFilterSummary[index - 5]?.end) return null;
-          return e
-        })
-
-        if (arraySummary[0]) {
-          let copyObjSummary = {...error}
-          copyObjSummary.summary.badWord = true
-          setError({ ...copyObjSummary })
-        } else {
-          let copyObjSummary = {...error}
-          copyObjSummary.summary.badWord = false
-          setError({ ...copyObjSummary })
-        }
-
-        $("#targetSummary")
-          .html(function() {
-            let parsedToReturnSummary:string[] = []
-              if (arraySummary[0]) arraySummary.forEach((e:any, actualIndex:any) => {
-                // if (arraySummary.length === 1) parsedToReturnSummary.push(
-                //   "<div>" + value.substring(0, e.start) + "</div>" + // OPTIONAL STRING
-                //   "<div><mark>" + value.substring(e.start, e.end) + "</mark></div>" + // ONLY ONE e
-                //   "<div>" + value.substring(e.end) + "</div>") // i.e.: "¿dumb" | " dumb"
-                // if (arraySummary.length > 1) parsedToReturnSummary.push(
-                //   "<div>" + (actualIndex === 0 ? value.substring(0, e.start) : value.substring(arraySummary[actualIndex - 1]?.end, e.start)) + "</div>" +
-                //   "<div><mark>" + value.substring(e.start, e.end) + "</mark></div>" + //
-                //   "<div>" + (actualIndex === 0 ? "" : !arraySummary[actualIndex + 1 ]?.end ? value.substring(e.end) :"") + "</div>")
-
-                  if (arraySummary.length === 1) parsedToReturnSummary.push(
-                    value.substring(0, e.start) + // OPTIONAL STRING
-                    "<mark>" + value.substring(e.start, e.end) + "</mark>" + // ONLY ONE e
-                     value.substring(e.end)) // i.e.: "¿dumb" | " dumb"
-                  if (arraySummary.length > 1) parsedToReturnSummary.push(
-                    (actualIndex === 0 ? value.substring(0, e.start) : value.substring(arraySummary[actualIndex - 1]?.end, e.start)) +
-                    "<mark>" + value.substring(e.start, e.end) + "</mark>" + //
-                    (actualIndex === 0 ? "" : !arraySummary[actualIndex + 1 ]?.end ? value.substring(e.end) :""))
-
-              })
-              // parsedToReturnSummary.unshift("<div style='display:flex; flexDirection:row; height:23px'>")
-              // parsedToReturnSummary.push("</div>")
-              parsedToReturnSummary.unshift("<div>")
-              parsedToReturnSummary.push("</div>")
-
-              //console.log("parsedToReturnSummary.join", parsedToReturnSummary.join(""))
-              console.log("parsedToReturnSummary", parsedToReturnSummary)
-              console.log("value", value)
-
-            return arraySummary[0] ? parsedToReturnSummary.join("") : value
-          })
+        
 
 
 
@@ -513,7 +449,6 @@ export default function CreateRecipe() {
     $("#title").on("scroll",function(e) {
       $("#targetTitle").scrollLeft($("#title").scrollLeft()!)
     })
-    console.log("summary height", $("#summary").innerHeight())
   })
 
   //console.log("titleValue", titleValue.length)
@@ -532,7 +467,7 @@ export default function CreateRecipe() {
                 <Box sx={s.eachRow}>
                   <Box sx={s.text}>Title:</Box>
                   <Tooltip
-                    sx={s.genericTooltip}
+                    sx={s.tooltipCenter}
                     arrow
                     variant="outlined"
                     size="lg"
@@ -564,9 +499,9 @@ export default function CreateRecipe() {
                       <InputLabel id={"targetTitle"} shrink={false} sx={s.inputShownTitle}>{ titleValue }</InputLabel>
                       <TextField
                         className={`testTitle`}
-                        sx={s.inputHiddenTitle({ length:titleValue.length })}
-                        autoComplete='off'
                         id="title"
+                        autoComplete='off'
+                        sx={s.inputHiddenTitle({ length:titleValue.length })}
                         value={titleValue}
                         placeholder={titlePlaceholder}
                         onFocus={() => setTitlePlaceholder("")}
@@ -579,7 +514,7 @@ export default function CreateRecipe() {
                 <Box sx={s.eachRow}>
                   <Box sx={s.text}>Health Score:</Box>
                   <Tooltip
-                    sx={s.genericTooltip}
+                    sx={s.tooltipLeft}
                     arrow
                     variant="outlined"
                     size="lg"
@@ -616,7 +551,7 @@ export default function CreateRecipe() {
                 <Box sx={s.eachRow}>
                   <Box sx={s.text}>Summary:</Box>
                   <Tooltip
-                    sx={s.genericTooltip}
+                    sx={s.tooltipCenter}
                     arrow
                     variant="outlined"
                     size="lg"
@@ -696,7 +631,7 @@ export default function CreateRecipe() {
                         <Box sx={s.stepTitle}>Step {index + 1}:</Box>
 
                         <Tooltip
-                          sx={s.genericTooltip}
+                          sx={s.tooltipCenter}
                           key={index}
                           arrow
                           variant="outlined"

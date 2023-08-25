@@ -26,9 +26,20 @@ export const form = () => {
   }
 }
 
-export const genericTooltip = () => {
+export const tooltipCenter = () => {
   return {
     zIndex: 1,
+  }
+}
+
+export const tooltipLeft = () => {
+  return {
+    zIndex: 1,
+    span: {
+      position: relative,
+      width: '90%',
+      //background: 'blue', // dev
+    }
   }
 }
 
@@ -90,7 +101,8 @@ export const inputShownTitle = () => {
     padding: '16.5px 0px 16.5px 0px',
     position: 'absolute',
     //color: 'yellow', // IF SETTING TO !IMPORTANT, JQUERY CANNOT OVERRIDE STYLE ! // dev
-    color: 'rgba(0, 0, 0, 0.87) !important',
+    color: 'rgba(0, 0, 0, 0.87) !important', // IF TextField IS MULTILINE, PLACEHOLDER MUST BE LIKE THIS
+    //color: 'transparent !important',
   }
 }
 
@@ -106,7 +118,8 @@ export const inputHiddenTitle = ({ length }: inputHiddenTitleI) => {
     position: 'relative',
     width: '68vw',
     input: {
-      color: length > 0 ? 'transparent !important' : 'rgba(0, 0, 0, 0.87) !important',
+      color: length > 0 ? 'transparent !important' : 'rgba(0, 0, 0, 0.87) !important', // IF TextField IS MULTILINE, PLACEHOLDER MUST BE LIKE THIS
+      //color: 'transparent !important',
       //color: 'red !important', // dev
       caretColor: 'rgba(0, 0, 0, 0.87) !important',
       '::selection': {  
@@ -117,89 +130,16 @@ export const inputHiddenTitle = ({ length }: inputHiddenTitleI) => {
 
 export const inputShownSummary = () => {
   return {
-    //display: 'flex',
-    //display: 'inline-flex',
-    //position: 'absolute',
-    //flexDirection: 'row',
-    //display: 'none', // dev
-    //background: 'darkgreen',
-    //whiteSpace: 'pre',
     
-    //width: '350px',
-    //height: '250px',
-    //height: '150px',
-    //height: '23px',
-    //maxwidth: 'calc(68vw - 28px)',
-    //minwidth: 'calc(68vw - 28px)',
-    //height: '79px',
-    //textWrap: 'wrap',
-    //whiteSpace: 'pre-wrap',
-    //marginLeft: '14px',
-    //padding: '16.5px 0px 16.5px 0px',
-    //padding: '16.5px 0px 16.5px 0px',
-
-    //position: 'relative', // dev
-    
-    //color: 'rgba(0, 0, 0, 0.87) !important',
-    //flexWrap: 'wrap',
-    //whiteSpace: 'pre',
-    //fontWight: '400',
-    //letterSpacing: '0.15008px',
-    //lineHeight: '23px',
-    //textOverflow: 'clip',
-    //whiteSpace: 'pre-wrap',
-    //overflowWrap: 'anywhere',
-    //whiteSpace: 'nowrap',
-    //whiteSpace: 'wrap',
-
-    //flexWrap: 'nowrap',
-    //overflowWrap: 'normal',
-    //textWrap: 'wrap',
-    //letterSpacing: '0.15008px',
-    //wordSpacing: '0px',
-    //WebkitBorderHorizontalSpacing: '0px',
-    //WebkitBorderVerticalSpacing: '0px',
-    //whiteSpaceCollapse: 'collapse'
-    //whiteSpace: 'break-spaces',
-    //whiteSpace: 'pre',
-
-    //textWrap: 'wrap',
-    //whiteSpace: 'break-spaces',
-    //flexWrap: 'wrap',
-
-    height: '79px',
-    //width: 'calc(68vw - 28px)',
-    width: 'calc(68vw - 14px)',
-    color: 'yellow', // dev // IF SETTING TO !IMPORTANT, JQUERY CANNOT OVERRIDE STYLE !
-    background: 'darkgreen',
-
-    fontFamily: '"Roboto","Helvetica","Arial",sans-serif',
-    fontWeight: '400',
-    fontSize: '1rem',
-    lineHeight: '1.4375em',
-    letterSpacing: '0.00938em',
-    //color: 'rgba(0, 0, 0, 0.87)',
-    boxSizing: 'border-box',
-    cursor: 'text',
-    display: 'inline-flex',
-    WebkitBoxAlign: 'center',
-    msFlexAlign: 'center',
-    alignItems: 'center',
-    position: 'relative',
-    borderRadius: '4px',
-    //padding: '16.5px 14px',
-    padding: '16.5px 0px 0px 14px',
-
-    textOverflow: 'clip',
-    textEmphasisPosition: 'over',
-    //flexWrap: 'nowrap',
-    overflowWrap: 'normal',
-    textWrap: 'nowrap',
-    whiteSpaceCollapse: 'collapse',
     flexWrap: 'wrap',
-    //whiteSpace: 'break-spaces',
     whiteSpace: 'pre-wrap',
-
+    display: 'flex',
+    width: 'calc(68vw - 28px)',
+    marginLeft: '14px',
+    padding: '16.5px 0px 16.5px 0px',
+    position: 'absolute',
+    fontWeight: '400',
+    color: 'transparent !important',
   }
 }
 
@@ -209,15 +149,9 @@ interface inputHiddenSummaryI {
 
 export const inputHiddenSummary = ({ length }: inputHiddenSummaryI) => {
   return {
-    /* ...noSelect, */
     display: 'flex',
-    //display: 'none',
-    //whiteSpace: 'pre',
-    //display: 'none', // dev
     position: 'relative',
-    //whiteSpace: 'pre',
     width: '68vw',
-    //width: 'calc(68vw - 12px)',
     input: {
       //whiteSpace: 'pre',
       //color: length > 0 ? 'transparent !important' : 'rgba(0, 0, 0, 0.87) !important',
