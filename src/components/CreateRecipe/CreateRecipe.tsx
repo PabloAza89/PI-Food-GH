@@ -58,7 +58,7 @@ export default function CreateRecipe() {
     setStepsState([...copyState])
 
     let copyError = {...error}
-    copyError.instructions.splice(index + 1, 0, { error: false })
+    copyError.instructions.splice(index + 1, 0, { character: false, badWord: false })
     setError(copyError)
   }
 
@@ -100,37 +100,53 @@ export default function CreateRecipe() {
   const [healthValue, setHealthValue] = useState<string>('');
   const [summaryValue, setSummaryValue] = useState<string>('');
 
+  interface titleI {
+    character: boolean,
+    badWord: boolean
+  }
+
   interface healthI {
     string?: boolean,
     max?: boolean
   }
 
-  // interface instructionsI {
-  //   index: number,
-  //   error: boolean
-  // }
-
   interface instructionsI {
     //[index: number]: boolean,
-    error: boolean,
+    //error: boolean,
+    character: boolean,
+    badWord: boolean,
+  }
+
+  interface summaryI {
+    character: boolean,
+    badWord: boolean,
   }
 
   interface errorI {
-    title: boolean,
+    title: titleI,
     health: healthI,
-    summary: boolean,
+    summary: summaryI,
     instructions: instructionsI[]
   }
 
   const [error, setError] = useState<errorI>({
-    title: false,
+    title: {
+      character: false,
+      badWord: false
+    },
     health: {
       string: false,
       max: false
     },
-    summary: false,
+    summary: {
+      character: false,
+      badWord: false
+    },
     instructions: [
-      { error: false }
+      {
+        character: false,
+        badWord: false
+      },
     ]
   });
 
@@ -182,50 +198,15 @@ export default function CreateRecipe() {
     index?: number,
   }
 
-  // const validator = ({ type, value, index }: validateStringI) => {
-  //   switch (type) {
-  //     case (`title`):
-  //       if (/(!|¡|@|[?]|¡|<|>|[/]|[\\]|%|[[]|]|[|]|°|#|[$]|&|[()]|[)]|=|_|[*]|¿|[+]|~|{|}|`|\^)/.test(value)) setError({...error, [type]: true})
-  //       else setError({...error, [type]: false});
-  //       setTitleValue(value);
-  //     break;
-  //     case (`health`):
-  //       let copyObj = {...error}
-  //       if (!/^\d+$/.test(value) && value.length !== 0 ) { copyObj.health.string = true; setError({ ...copyObj })}
-  //       else { copyObj.health.string = false; setError({ ...copyObj })}
-  //       if (parseInt(value, 10) > 100 && value.length !== 0) {copyObj.health.max = true; setError({ ...copyObj })}
-  //       else { copyObj.health.max = false; setError({ ...copyObj })}
-  //       setHealthValue(value);
-  //     break;
-  //     case (`summary`):
-  //       if (/(!|¡|@|[?]|¡|<|>|[/]|[\\]|%|[[]|]|[|]|°|#|[$]|&|[()]|[)]|=|_|[*]|¿|[+]|~|{|}|`|\^)/.test(value)) setError({...error, [type]: true})
-  //       else setError({...error, [type]: false});
-  //       setSummaryValue(value);
-  //     break;
-  //     case (`instructions`):
-  //       if (/(!|¡|@|[?]|¡|<|>|[/]|[\\]|%|[[]|]|[|]|°|#|[$]|&|[()]|[)]|=|_|[*]|¿|[+]|~|{|}|`|\^)/.test(value)) {
-  //         let copyObj = {...error}
-  //         copyObj.instructions.splice(index!, 1, { error: true }  )
-  //         setError(copyObj)
-  //       } else {
-  //         let copyObj = {...error}
-  //         copyObj.instructions.splice(index!, 1, { error: false }  )
-  //       }
-  //     break;
-  //   }
-  // }
-
-
-
   const validator = ({ type, value, index }: validateStringI) => {
     switch (type) {
       case (`title`):
-        if (/[^A-Za-z0-9-(áÁéÉíÍóÓúÚüÜñÑ),;.:¡!¿?'"()[\] ]/g.test(value) && value.length !== 0) setError({...error, [type]: true}) // NEW REGEX !
-        // ALLOWED CHARACTERS: , ; . : - ! ¡ ¿ ? ' " () [] (15)
-        else setError({...error, [type]: false});
+        let copyObjTitle = {...error}
+        if (/[^A-Za-z0-9-(áÁéÉíÍóÓúÚüÜñÑ),;.:¡!¿?'"()[\] ]/g.test(value) && value.length !== 0) { copyObjTitle[type].character = true; setError({ ...copyObjTitle }) }
+        else { copyObjTitle[type].character = false; setError({ ...copyObjTitle })}
         setTitleValue(value);
 
-        let badWordsInDicEs = dicEs.map((e, idx) => {
+        let badWordsInDicEsTitle = dicEs.map((e, idx) => {
           return (
             value
               .replaceAll("á", "a").replaceAll("Á", "A")
@@ -242,18 +223,9 @@ export default function CreateRecipe() {
               , "g" )) !== -1) ? { "target": e, "index": idx } : -1
         }).filter(e => e !== -1)
 
-        // console.log(JSON.stringify(badWordsInDicEs, null, 4)) // ok
+        let firstArrayFilterTitle: any = []
 
-
-        let preParsedArray: any = []
-
-
-        //console.log(JSON.stringify(badWordsInDicEs, null, 4)) // ok
-        console.log("badWordsInDicEs", badWordsInDicEs) // ok
-
-
-        badWordsInDicEs?.filter(e => e !== -1)?.forEach((x, idx) => {
-
+        badWordsInDicEsTitle?.filter(e => e !== -1)?.forEach((x, idx) => {
           if (x !== -1) [...value
             .replaceAll("á", "a").replaceAll("Á", "A")
             .replaceAll("é", "e").replaceAll("É", "E")
@@ -261,108 +233,41 @@ export default function CreateRecipe() {
             .replaceAll("ó", "o").replaceAll("Ó", "O")
             .replaceAll("ú", "u").replaceAll("Ú", "U")
             .replaceAll("ü", "u").replaceAll("Ü", "U")
-            .toLowerCase().matchAll(RegExp(
-
-            // `^` + x.target + `$|` + // UNIQUE WORD WITH NOTHING AT START OR END
-            // `^` + x.target + `[-,;.:¡!¿?'"()\\][ ]|` + // START WORD WITH ALLOWED CHARACTER AT END
-            // `[-,;.:¡!¿?'"()\\][ ]` + x.target + `$|` + // ALLOWED CHARACTER AT BEGGINING AND NOTHING AT END
-            // x.target + `$|` + // WORD AT END
-            // //x.target + `[-,;.:¡!¿?'"()\\][]|` + // WORD CONTINUED WITH ALLOWED CHARACTERS
-            // x.target + `$`  // WORD CONTINUED WITH ALLOWED CHARACTERS
-
-            //`^` + x.target + `$|` + // UNIQUE WORD WITH NOTHING AT START OR END
-            //`^` + x.target + `[-,;.:¡!¿?'"()\\][ ]|` + // START WORD WITH ALLOWED CHARACTER AT END
-            //`([-,;.:¡!¿?'"()\\][ ]|^)` + x.target + `([-,;.:¡!¿?'"()\\][ ]|$)`  // ALLOWED CHARACTER AT BEGGINING AND NOTHING AT END
-            //`([-,;.:¡!¿?'"()\\][ ]|^)` + x.target // OK
-
-            //`(^|[-,;.:¡!¿?'"()\\][ ])` + x.target + `([-,;.:¡!¿?'"()\\][ ]|$)` // + // OK
-            x.target
-
-            //`([-,;.:¡!¿?'"()\\][ ]|^)` + x.target + `[-,;.:¡!¿?'"()\\][ ]`// OK
-
-            //x.target + `$|` + // WORD AT END
-            //x.target + `[-,;.:¡!¿?'"()\\][]|` + // WORD CONTINUED WITH ALLOWED CHARACTERS
-            //x.target + `$`  // WORD CONTINUED WITH ALLOWED CHARACTERS
-
-            , "g")
+            .toLowerCase().matchAll(RegExp(x.target, "g")
           )].forEach((e, gg) => {
-
-            console.log("x.target", x.target)
-            console.log("gg", gg)
-            console.log("e", e)
-
-
-            //RegExp("[-,;.:¡!¿?'"()\\][ ]", "g").test(qq[4])
-            //RegExp("[)]", "g").test(qq[4])
-
-            //console.log("target", x.target)
-            console.log("value", value)
-            console.log("RegExp VALUE", value[e.index! + e[0].length ])
-            //console.log("RegExp", value[e.index! + e[0].length ] !== (undefined && `-` && `,` && `;` && `.` && `:` && `¡` && `!` && `¿` && `?` && `'` && `"` && `(`  && `)` && `]` && `[` && " "))
-            //console.log("RegExp", RegExp(`[-,;.:¡!¿?'"()\\][ ]`, `g`).test(value[e.index! + e[0].length]))
-
-            //console.log("RegExp", RegExp(`[a-z]`, `g`).test(value[e.index! + e[0].length ]) )
-            //console.log("RegExp", value[e.index! + e[0].length ] === undefined)
-            console.log("RegExp", value[e.index! - 1 ] )
-
-
             if (
               x.target[0] === e[0][0] &&
               x.target.length === e[0].length &&
               ( RegExp(`[-,;.:¡!¿?'"()\\][ ]`, `g`).test(value[e.index! + e[0].length]) || value[e.index! + e[0].length] === undefined ) &&
               ( RegExp(`[-,;.:¡!¿?'"()\\][ ]`, `g`).test(value[e.index! - 1 ]) || value[e.index! -1] === undefined )
-            ) preParsedArray.push({ "target": e[0].trim().replaceAll(/[^A-Za-z0-9 ]/g, ""), "start": e.index, "end": e.index! + e[0].length }) // EQUAL = START AND END ARE EQUAL
-            //if (x.target[0] !== e[0][0] && x.target.length === e[0].length - 1) preParsedArray.push({ "target": e[0].trim().replace(/[^A-Za-z0-9 ]/g, ""), "start": e.index! + 1, "end": e.index! + e[0].length }) // "SPACE" AT BEGGINING = FIRST LETTER IS DIFFERENT // + 1 LENGTH IN e[0].length
-            //if (x.target[0] !== e[0][0] && x.target.length === e[0].length - 2) preParsedArray.push({ "target": e[0].trim().replace(/[^A-Za-z0-9 ]/g, ""), "start": e.index! + 1, "end": e.index! + e[0].length - 1 }) // "SPACE" AT BEGGINING AND END = FIRST LETTER IS DIFFERENT // + 2 LENGTH IN e[0].length
-           //if (x.target[0] === e[0][0] && x.target.length === e[0].length - 1) preParsedArray.push({ "target": e[0].trim().replace(/[^A-Za-z0-9 ]/g, ""), "start": e.index! , "end": e.index! + e[0].length - 1 }) // "SPACE" AT END = FIRST LETTER ARE EQUAL // + 1 LENGTH IN e[0].length
-
-            console.log("x.target[0]", x.target[0])
-            console.log("e[0][0]", e[0][0])
-            console.log("x.target.length", x.target.length)
-            console.log("e[0].length", e[0].length)
-
+            ) firstArrayFilterTitle.push({ "target": e[0].trim().replaceAll(/[^A-Za-z0-9 ]/g, ""), "start": e.index, "end": e.index! + e[0].length })
           })
-
         })
 
-        //console.log(JSON.stringify(array, null, 4)) // ok
+        let secondArrayFilterTitle = firstArrayFilterTitle.sort((a: E, b: E) => a.start - b.start)
 
-
-        let aaa1 = preParsedArray.sort((a: E, b: E) => a.start - b.start)
-
-        console.log("preParsedArray", preParsedArray)
-
-        let aaa2 = aaa1.filter((e: any, index: any) => {
-          if (e.start < aaa1[index - 1]?.end || e.start < aaa1[index - 2]?.end || e.start < aaa1[index - 3]?.end || e.start < aaa1[index - 4]?.end || e.start < aaa1[index - 5]?.end) return null;
+        let arrayTitle = secondArrayFilterTitle.filter((e: any, index: any) => {
+          if (e.start < secondArrayFilterTitle[index - 1]?.end || e.start < secondArrayFilterTitle[index - 2]?.end || e.start < secondArrayFilterTitle[index - 3]?.end || e.start < secondArrayFilterTitle[index - 4]?.end || e.start < secondArrayFilterTitle[index - 5]?.end) return null;
           return e
         })
 
-        let array: any = aaa2
+        if (arrayTitle[0]) { copyObjTitle[type].badWord = true; setError({ ...copyObjTitle })}
+        else { copyObjTitle[type].badWord = false; setError({ ...copyObjTitle })}
 
-        $("#targetVVV")
+        $("#targetTitle")
           .html(function() {
-            let parsedToReturn:string[] = []
-
-              if (array[0]) array
-                .forEach((e:any, actualIndex:any) => { // SORT TO LEFT TO RIGHT PARSE
-
-                    console.log("e", e)
-
-              if (array.length === 1) parsedToReturn.push(
-                "<div>" + value.substring(0, e.start) + "</div>" + // OPTIONAL STRING
-                "<mark>" + value.substring(e.start, e.end) + "</mark>" + // ONLY ONE e
-                "<div>" + value.substring(e.end) + "</div>") // i.e.: "¿dumb" | " dumb"
-              if (array.length > 1) parsedToReturn.push(
-                "<div>" + (actualIndex === 0 ? value.substring(0, e.start) : value.substring(array[actualIndex - 1]?.end, e.start)) + "</div>" +
-                "<mark>" + value.substring(e.start, e.end) + "</mark>" + //
-                "<div>" + (actualIndex === 0 ? "" : !array[actualIndex + 1 ]?.end ? value.substring(e.end) :"") + "</div>")
-
-            })
-
-            console.table(parsedToReturn)
-
-            return array[0] ? parsedToReturn.join("") : value
-
+            let parsedToReturnTitle:string[] = []
+              if (arrayTitle[0]) arrayTitle.forEach((e:any, actualIndex:any) => {
+                if (arrayTitle.length === 1) parsedToReturnTitle.push(
+                  "<div>" + value.substring(0, e.start) + "</div>" + // OPTIONAL STRING
+                  "<mark>" + value.substring(e.start, e.end) + "</mark>" + // ONLY ONE e
+                  "<div>" + value.substring(e.end) + "</div>") // i.e.: "¿dumb" | " dumb"
+                if (arrayTitle.length > 1) parsedToReturnTitle.push(
+                  "<div>" + (actualIndex === 0 ? value.substring(0, e.start) : value.substring(arrayTitle[actualIndex - 1]?.end, e.start)) + "</div>" +
+                  "<mark>" + value.substring(e.start, e.end) + "</mark>" + //
+                  "<div>" + (actualIndex === 0 ? "" : !arrayTitle[actualIndex + 1 ]?.end ? value.substring(e.end) :"") + "</div>")
+              })
+            return arrayTitle[0] ? parsedToReturnTitle.join("") : value
           })
 
       break;
@@ -375,23 +280,175 @@ export default function CreateRecipe() {
         setHealthValue(value);
       break;
       case (`summary`):
-        if (/(!|¡|@|[?]|¡|<|>|[/]|[\\]|%|[[]|]|[|]|°|#|[$]|&|[()]|[)]|=|_|[*]|¿|[+]|~|{|}|`|\^)/.test(value)) setError({...error, [type]: true})
-        else setError({...error, [type]: false});
+
+        let copyObjSummary = {...error}
+        if (/[^A-Za-z0-9-(áÁéÉíÍóÓúÚüÜñÑ),;.:¡!¿?'"()[\] ]/g.test(value) && value.length !== 0) { copyObjSummary[type].character = true; setError({ ...copyObjSummary }) }
+        else { copyObjSummary[type].character = false; setError({ ...copyObjSummary })}
         setSummaryValue(value);
+
+        let badWordsInDicEsSummary = dicEs.map((e, idx) => {
+          return (
+            value
+              .replaceAll("á", "a").replaceAll("Á", "A")
+              .replaceAll("é", "e").replaceAll("É", "E")
+              .replaceAll("í", "i").replaceAll("Í", "I")
+              .replaceAll("ó", "o").replaceAll("Ó", "O")
+              .replaceAll("ú", "u").replaceAll("Ú", "U")
+              .replaceAll("ü", "u").replaceAll("Ü", "U")
+              .toLowerCase().search(RegExp(
+                `^` + e + `$|` + // MATCH UNIQUE STRING WITH NOTHING AT START OR END
+                `[-,;.:¡!¿?'"()\\][ ]` + e + `$|` + // ALLOWED CHARACTERS AT BEGGINING // TEST
+                `^` + e + `[-,;.:¡!¿?'"()\\][ ]|` + // ALLOWED CHARACTERS AT END // TEST
+                `[-,;.:¡!¿?'"()\\][ ]` + e + `[-,;.:¡!¿?'"()\\][ ]`  //+ `|` + // ALLOWED CHARACTERS AT START & END // TEST
+              , "g" )) !== -1) ? { "target": e, "index": idx } : -1
+        }).filter(e => e !== -1)
+
+        let firstArrayFilterSummary: any = []
+
+        badWordsInDicEsSummary?.filter(e => e !== -1)?.forEach((x, idx) => {
+          if (x !== -1) [...value
+            .replaceAll("á", "a").replaceAll("Á", "A")
+            .replaceAll("é", "e").replaceAll("É", "E")
+            .replaceAll("í", "i").replaceAll("Í", "I")
+            .replaceAll("ó", "o").replaceAll("Ó", "O")
+            .replaceAll("ú", "u").replaceAll("Ú", "U")
+            .replaceAll("ü", "u").replaceAll("Ü", "U")
+            .toLowerCase().matchAll(RegExp(x.target, "g")
+          )].forEach((e, gg) => {
+            if (
+              x.target[0] === e[0][0] &&
+              x.target.length === e[0].length &&
+              ( RegExp(`[-,;.:¡!¿?'"()\\][ ]`, `g`).test(value[e.index! + e[0].length]) || value[e.index! + e[0].length] === undefined ) &&
+              ( RegExp(`[-,;.:¡!¿?'"()\\][ ]`, `g`).test(value[e.index! - 1 ]) || value[e.index! -1] === undefined )
+            ) firstArrayFilterSummary.push({ "target": e[0].trim().replaceAll(/[^A-Za-z0-9 ]/g, ""), "start": e.index, "end": e.index! + e[0].length })
+          })
+        })
+
+        let secondArrayFilterSummary = firstArrayFilterSummary.sort((a: E, b: E) => a.start - b.start)
+
+        let arraySummary = secondArrayFilterSummary.filter((e: any, index: any) => {
+          if (e.start < secondArrayFilterSummary[index - 1]?.end || e.start < secondArrayFilterSummary[index - 2]?.end || e.start < secondArrayFilterSummary[index - 3]?.end || e.start < secondArrayFilterSummary[index - 4]?.end || e.start < secondArrayFilterSummary[index - 5]?.end) return null;
+          return e
+        })
+
+        if (arraySummary[0]) {
+          let copyObjSummary = {...error}
+          copyObjSummary.summary.badWord = true
+          setError({ ...copyObjSummary })
+        } else {
+          let copyObjSummary = {...error}
+          copyObjSummary.summary.badWord = false
+          setError({ ...copyObjSummary })
+        }
+
+        $("#targetSummary")
+          .html(function() {
+            let parsedToReturnSummary:string[] = []
+              if (arraySummary[0]) arraySummary.forEach((e:any, actualIndex:any) => {
+                // if (arraySummary.length === 1) parsedToReturnSummary.push(
+                //   "<div>" + value.substring(0, e.start) + "</div>" + // OPTIONAL STRING
+                //   "<div><mark>" + value.substring(e.start, e.end) + "</mark></div>" + // ONLY ONE e
+                //   "<div>" + value.substring(e.end) + "</div>") // i.e.: "¿dumb" | " dumb"
+                // if (arraySummary.length > 1) parsedToReturnSummary.push(
+                //   "<div>" + (actualIndex === 0 ? value.substring(0, e.start) : value.substring(arraySummary[actualIndex - 1]?.end, e.start)) + "</div>" +
+                //   "<div><mark>" + value.substring(e.start, e.end) + "</mark></div>" + //
+                //   "<div>" + (actualIndex === 0 ? "" : !arraySummary[actualIndex + 1 ]?.end ? value.substring(e.end) :"") + "</div>")
+
+                  if (arraySummary.length === 1) parsedToReturnSummary.push(
+                    value.substring(0, e.start) + // OPTIONAL STRING
+                    "<mark>" + value.substring(e.start, e.end) + "</mark>" + // ONLY ONE e
+                     value.substring(e.end)) // i.e.: "¿dumb" | " dumb"
+                  if (arraySummary.length > 1) parsedToReturnSummary.push(
+                    (actualIndex === 0 ? value.substring(0, e.start) : value.substring(arraySummary[actualIndex - 1]?.end, e.start)) +
+                    "<mark>" + value.substring(e.start, e.end) + "</mark>" + //
+                    (actualIndex === 0 ? "" : !arraySummary[actualIndex + 1 ]?.end ? value.substring(e.end) :""))
+
+              })
+              // parsedToReturnSummary.unshift("<div style='display:flex; flexDirection:row; height:23px'>")
+              // parsedToReturnSummary.push("</div>")
+              parsedToReturnSummary.unshift("<div>")
+              parsedToReturnSummary.push("</div>")
+
+              //console.log("parsedToReturnSummary.join", parsedToReturnSummary.join(""))
+              console.log("parsedToReturnSummary", parsedToReturnSummary)
+              console.log("value", value)
+
+            return arraySummary[0] ? parsedToReturnSummary.join("") : value
+          })
+
+
+
+
       break;
       case (`instructions`):
-        if (/(!|¡|@|[?]|¡|<|>|[/]|[\\]|%|[[]|]|[|]|°|#|[$]|&|[()]|[)]|=|_|[*]|¿|[+]|~|{|}|`|\^)/.test(value)) {
-          let copyObj = {...error}
-          copyObj.instructions.splice(index!, 1, { error: true }  )
-          setError(copyObj)
+        if (/[^A-Za-z0-9-(áÁéÉíÍóÓúÚüÜñÑ),;.:¡!¿?'"()[\] ]/g.test(value) && value.length !== 0) { 
+          let copyObjInstructions = {...error}
+          copyObjInstructions.instructions[index!].character = true
+          setError({ ...copyObjInstructions })
         } else {
-          let copyObj = {...error}
-          copyObj.instructions.splice(index!, 1, { error: false }  )
+          let copyObjInstructions = {...error}
+          copyObjInstructions.instructions[index!].character = false
+          setError({ ...copyObjInstructions })
         }
+
+        let badWordsInDicEsInstructions = dicEs.map((e, idx) => {
+          return (
+            value
+              .replaceAll("á", "a").replaceAll("Á", "A")
+              .replaceAll("é", "e").replaceAll("É", "E")
+              .replaceAll("í", "i").replaceAll("Í", "I")
+              .replaceAll("ó", "o").replaceAll("Ó", "O")
+              .replaceAll("ú", "u").replaceAll("Ú", "U")
+              .replaceAll("ü", "u").replaceAll("Ü", "U")
+              .toLowerCase().search(RegExp(
+                `^` + e + `$|` + // MATCH UNIQUE STRING WITH NOTHING AT START OR END
+                `[-,;.:¡!¿?'"()\\][ ]` + e + `$|` + // ALLOWED CHARACTERS AT BEGGINING // TEST
+                `^` + e + `[-,;.:¡!¿?'"()\\][ ]|` + // ALLOWED CHARACTERS AT END // TEST
+                `[-,;.:¡!¿?'"()\\][ ]` + e + `[-,;.:¡!¿?'"()\\][ ]`  //+ `|` + // ALLOWED CHARACTERS AT START & END // TEST
+              , "g" )) !== -1) ? { "target": e, "index": idx } : -1
+        }).filter(e => e !== -1)
+
+        let firstArrayFilterInstructions: any = []
+
+        badWordsInDicEsInstructions?.filter(e => e !== -1)?.forEach((x, idx) => {
+          if (x !== -1) [...value
+            .replaceAll("á", "a").replaceAll("Á", "A")
+            .replaceAll("é", "e").replaceAll("É", "E")
+            .replaceAll("í", "i").replaceAll("Í", "I")
+            .replaceAll("ó", "o").replaceAll("Ó", "O")
+            .replaceAll("ú", "u").replaceAll("Ú", "U")
+            .replaceAll("ü", "u").replaceAll("Ü", "U")
+            .toLowerCase().matchAll(RegExp(x.target, "g")
+          )].forEach((e, gg) => {
+            if (
+              x.target[0] === e[0][0] &&
+              x.target.length === e[0].length &&
+              ( RegExp(`[-,;.:¡!¿?'"()\\][ ]`, `g`).test(value[e.index! + e[0].length]) || value[e.index! + e[0].length] === undefined ) &&
+              ( RegExp(`[-,;.:¡!¿?'"()\\][ ]`, `g`).test(value[e.index! - 1 ]) || value[e.index! -1] === undefined )
+            ) firstArrayFilterInstructions.push({ "target": e[0].trim().replaceAll(/[^A-Za-z0-9 ]/g, ""), "start": e.index, "end": e.index! + e[0].length })
+          })
+        })
+
+        let secondArrayFilterInstructions = firstArrayFilterInstructions.sort((a: E, b: E) => a.start - b.start)
+
+        let arrayInstructions = secondArrayFilterInstructions.filter((e: any, index: any) => {
+          if (e.start < secondArrayFilterInstructions[index - 1]?.end || e.start < secondArrayFilterInstructions[index - 2]?.end || e.start < secondArrayFilterInstructions[index - 3]?.end || e.start < secondArrayFilterInstructions[index - 4]?.end || e.start < secondArrayFilterInstructions[index - 5]?.end) return null;
+          return e
+        })
+
+        if (arrayInstructions[0]) {
+          let copyObjInstructions = {...error}
+          copyObjInstructions.instructions[index!].badWord = true
+          setError({ ...copyObjInstructions })
+        } else {
+          let copyObjInstructions = {...error}
+          copyObjInstructions.instructions[index!].badWord = false
+          setError({ ...copyObjInstructions })
+        }
+
       break;
     }
   }
-
 
   let [dietChoosen, setDietChoosen] = useState({
     name: "-- select an option --",
@@ -419,10 +476,10 @@ export default function CreateRecipe() {
     setDietsArray([]);
     setStepsState(['']);
     setError({
-      title: false,
+      title: { character: false, badWord: false },
       health: { string: false, max: false },
-      summary: false,
-      instructions: [{ error: false }]
+      summary: { character: false, badWord: false },
+      instructions: [{ character: false, badWord: false },]
     });
   };
 
@@ -450,122 +507,18 @@ export default function CreateRecipe() {
 
       }
     })
-
   }
-
-  // $(function(){
-  //   $(`.dietCard${id}`).prop(`scrollWidth`) > $(`.dietCard${id}`).innerWidth()! ? setFitDiet(false) : setFitDiet(true)
-  //   $(`.titleCard${id}`).prop(`scrollWidth`) > $(`.titleCard${id}`).innerWidth()! ? setFitTitle(false) : setFitTitle(true)
-  //   $(`.dishCard${id}`).prop(`scrollWidth`) > $(`.dishCard${id}`).innerWidth()! ? setFitDish(false) : setFitDish(true)
-  // })
-
-  // $(function(){
-
-  //   $(`.buttonDeleteStep`)
-  //     .on( "mouseenter", function(){
-  //       //if ()setButtonDeleteStepLast()
-  //       //stepsState.length === 1 ? setButtonDeleteStepLast(true) : setButtonDeleteStepLast(false)
-  //       console.log("enter")
-
-  //   })
-  //   .on( "mouseleave", function(){
-  //     //stepsState.length === 1 ? setButtonDeleteStepLast(true) : setButtonDeleteStepLast(false)
-  //     //setButtonDeleteStepLast(false)
-  //     console.log("leave")
-  //   })
-
-  // })
-
-  //   $(function(){
-
-  //   $(`.buttonDeleteStep`)
-  //     .on( "mouseenter", function(){
-  //       //if ()setButtonDeleteStepLast()
-  //       //stepsState.length === 1 ? setButtonDeleteStepLast(true) : setButtonDeleteStepLast(false)
-  //       console.log("enter")
-
-  //   })
-  //   .on( "mouseleave", function(){
-  //     //stepsState.length === 1 ? setButtonDeleteStepLast(true) : setButtonDeleteStepLast(false)
-  //     //setButtonDeleteStepLast(false)
-  //     console.log("leave")
-  //   })
-
-  // })
-
-
-  // $(`.buttonDeleteStep`)
-  //   .on( "mouseenter", function(){
-  //     //if ()setButtonDeleteStepLast()
-  //     //stepsState.length === 1 ? setButtonDeleteStepLast(true) : setButtonDeleteStepLast(false)
-  //     console.log("enter")
-
-  //   })
-  //   .on( "mouseleave", function(){
-  //     //stepsState.length === 1 ? setButtonDeleteStepLast(true) : setButtonDeleteStepLast(false)
-  //     //setButtonDeleteStepLast(false)
-  //     console.log("leave")
-  //   })
-
-
-
-
-  //console.log("stepsState", stepsState)
-  //let qq = "estupido de mierda"
-  //let qq = "11ab2dol"
-  //let qq = "este es un pelotuda, bob"
-  //console.log("dicEs", dicEs)
-
-  //qq.map(e => ww.search(e))
-  //let ww = dicEs.map(e => qq.search(e))
-  //console.log("resultado", ww)
-  //console.log("resultado", ww.filter(e => e !== -1))
-
-  //console.table(error)
-  //console.log("error", error)
-  //console.log(JSON.stringify(error, null, 4));
-  //console.log("healthValue", typeof healthValue)
-  //console.log("healthValue.length", healthValue.length)
-
-  // $(function(){
-  //   $(`.testTitle`)
-  //     .css("color", "red")
-  // })
-
-  // $(function(){
-  //   $(`#title`)
-  //     .css("color", "red")
-  // })
-
-  // $(function(){
-  //   $(`.testTitle`)
-  //     .css("color", "red")
-  // })
 
   $(function(){
     $("#title").on("scroll",function(e) {
-
-      $("#targetVVV").scrollLeft($("#title").scrollLeft()!)
-      // $("#targetVVV")
-      //     //console.log("AA", $("#targetVVV").html())
-      //     //.html(`<plaintext style="color:blue">${titleValue}`).css("color", "blue")
-      //     //.html(`<div style="color:blue">${titleValue}</div>`)
-      //     .html(function() {
-      //       //var emphasis = "<em>" + $( "p" ).length + " paragraphs!</em>";
-      //       // var emphasis = "<em>" + " paragraphs!</em>";
-      //       // return "<p>All new content for " + emphasis + "</p>";
-      //       var emphasis = "<em>" + " paragraphs!</em>";
-      //       return "<p>All new content for " + emphasis + "</p>";
-      //     })
-          //.css("color", "blue")
-      // $("#targetVVV")
-      //     //console.log("AA", $("#targetVVV").html())
-      //     //.html(`<plaintext style="color:blue">${titleValue}`).css("color", "blue")
-      //     .html(`${titleValue}`).css("color", "blue")
+      $("#targetTitle").scrollLeft($("#title").scrollLeft()!)
     })
+    console.log("summary height", $("#summary").innerHeight())
+  })
 
-   })
-
+  //console.log("titleValue", titleValue.length)
+  console.log("stepsState", stepsState)
+  console.log("error.instructions", error.instructions)
 
   return !firstInstance ?
     (
@@ -581,104 +534,46 @@ export default function CreateRecipe() {
                   <Tooltip
                     sx={s.genericTooltip}
                     arrow
+                    variant="outlined"
+                    size="lg"
                     enterDelay={500}
                     leaveDelay={200}
                     enterTouchDelay={0}
-                    open={error.title}
+                    open={error.title.character || error.title.badWord}
                     //open={true}
                     placement="bottom"
-                    //onKeyDown={(e) => e.stopPropagation()}
-                    variant="outlined"
-                    size="lg"
+                    
                     title={
                       <Box sx={{ display: 'flex', flexDirection: 'column', color: '#25252d', background: '#f5f5f9', fontFamily: 'Roboto'}}>
-                        <Box sx={{ fontWeight: '400', fontSize: '17px' }}>Special characters not allowed in "Title" !</Box>
-                        <Box sx={{ color: '#42424f' }}>Allowed characters: <b>, ; . : - ! ¡ ¿ ? ' " ( ) [ ]</b> [15]</Box>
-                        <Box sx={{ fontWeight: '400' }}><em>Please, <u>remove unallowed characters</u>.</em></Box>
+                        { error.title.character ? <Box sx={{ fontWeight: '400', fontSize: '17px' }}>Special characters not allowed in "Title" !</Box> : null }
+                        { error.title.character ? <Box sx={{ color: '#42424f' }}>Allowed characters:</Box> : null }
+                        { error.title.character ? <Box sx={{ color: '#42424f', textAlign: 'center' }}><b>, ; . : - ! ¡ ¿ ? ' " ( ) [ ] á Á é É í Í ó Ó ú Ú ü Ü ñ Ñ</b></Box> : null }
+                        { error.title.badWord ? <Box sx={{ fontWeight: '400' }}><em>Please, remove </em><mark>highlighted</mark> <em>bad words.</em></Box> : null }
+                        { error.title.character ? <Box sx={{ display: 'flex', flexDirection: 'row', fontWeight: '400' }}><em>Please, 
+                          <Tooltip
+                            title={`Ä ä % { } @ / \\ # À à ° ¬ $ & = * etc..`}
+                            sx={{ display: 'flex', flexDirection: 'column', color: '#42424f', background: '#f5f5f9', fontFamily: 'Roboto'}}
+                          >
+                            <u>remove unallowed characters</u>
+                          </Tooltip>.</em>
+                        </Box> : null }
                       </Box>
                     }
                   >
-
                     <Box>
-                      {/* <InputLabel size="small" shrink={false} value={titleValue} sx={{ zIndex: 4000 }}>  AAAAAA  </InputLabel> */}
-                      {/* <InputLabel shrink={false} sx={s.inputLabelContainer} ><TextField sx={s.textFieldInsideLabel}>{titleValue}</TextField></InputLabel> */}
-                      {/* <InputLabel shrink={false} sx={s.inputLabelContainer} ><TextField sx={s.textFieldInsideLabel}>{<strong>${titleValue}</strong>}</TextField></InputLabel> */}
-                      {/* <InputLabel shrink={false} sx={s.inputLabelContainer} ><TextField>{<strong>${titleValue}</strong>}</TextField></InputLabel> */}
-                      {/* <InputLabel shrink={false} sx={s.inputLabelContainer} >{<strong>${titleValue}</strong>}</InputLabel> */}
-                      {/* <InputLabel id={"targetVVV"} shrink={false} sx={s.inputLabelContainer} >{RegExp(titleValue, "g")}</InputLabel> */}
-                      <InputLabel id={"targetVVV"} shrink={false} sx={s.inputLabelContainer}>{titleValue}</InputLabel>
-                      {/* <p contentEditable="true" style={s.inputLabelContainer()}><strong>{titleValue}</strong></p> */}
-                      {/* {titleValue} */}
+                      <InputLabel id={"targetTitle"} shrink={false} sx={s.inputShownTitle}>{ titleValue }</InputLabel>
                       <TextField
-                        //label={titleValue}
-                        //label={<><strong>"AAA"</strong> "AAA"<strong>"AAA"</strong></>}
-                        //label={<strong>"AAA"</strong>}
-                        //label={"AAA"}
-                        //label={"AAAAAAAAAAAAAAAAAAAAAAAADASDASDASDWQqwe21sadfsdfsdfsdfsdf"}
-
-                        //label={'margin="none"'}
-                        //shrink={false}
-                        //hiddenLabel={false}
-                        //label={'margin="none"'}
-                        //InputLabelProps={{ shrink: false, focused: false, style: { color: 'black' } }}
-                        //InputLabelProps={{ shrink: false, focused: false, style: { color: 'red', paddingTop: '0.5px', } }}
-
-                        //InputLabelProps={{ /* sx: { userSelect: "text" }, */ shrink: true, focused: true, style: s.textFieldLabel() }}
-
-                        //InputLabelProps={{ sx: { userSelect: "text" } }}
-                        //LabelProps={{ shrink: false, focused: false, style: s.test1() }}
-                        //onKeyDown={(e) => e.stopPropagation()}
-                        //InputProps={{ color: 'red' }}
-                        //InputProps={{ style: s.textFieldInput()/* , readOnly: true */ } }
-                        //InputProps={{ style: { color: 'blue', WebkitTouchCallout: 'none', WebkitUserSelect: 'none', khtmlUserSelect: 'none', MozUserSelect: 'none', MsUserSelect: 'none', UserSelect: 'none' } }}
-
-                        //InputProps={{ style: { color: 'black', userSelect: 'none' } }}
-                        //InputProps={{ style: s.test() }}
-                        //input={"ASDASD"}
-                        //input={titleValue}
-                        //placeholder={`ASDASD`}
-                        //input={<OutlinedInput />}
-
-
                         className={`testTitle`}
-                        //id={`testTitle`}
-                        sx={s.input}
-                        //sx={{label: s.test3}}
-                        //inputRef={textInput}
-                        //type="text"
+                        sx={s.inputHiddenTitle({ length:titleValue.length })}
                         autoComplete='off'
                         id="title"
                         value={titleValue}
-                        //value={parse('<strong>' + 'AAA' + '</strong>')}
-                        //value={parse('<strong>' + 'AAA' + '</strong>')}
-                        //value={parse(`<strong>${titleValue}</strong>`)}
-
-                        //value="&lt;b&gt;Some text&lt;b/&gt;"
-                        //value={"AAA".replace(new RegExp('(^|)(' + "AAA" + ')(|$)','ig'), '$1<b>$2</b>$3')}
-                        //value="&quot;<b>http://sansoftmax.blogspot.com/</b>&quot;"
-                        // InputProps={{
-                        //   readOnly: true,
-                        // }}
-                        //value={<strong>"AAA"</strong>}
-                        //value={<strong>"AAA"</strong>}
-                        //value={JSON.parse(<strong>"AAA"</strong>)}
-
-                        //placeholder={<strong>"AAA"</strong>}
-                        //placeholder={<strong>`BBBBBB`</strong>}
-                        //placeholder={titlePlaceholder}
-                        //placeholder={titleValue}
-                        //onScroll={(e) => {$("#targetVVV").scrollLeft($("#title").scrollLeft()!)}}
+                        placeholder={titlePlaceholder}
                         onFocus={() => setTitlePlaceholder("")}
                         onBlur={() => setTitlePlaceholder(`e.g. Pasta with tomatoes..`)}
                         onChange={(e) => { validator({ value: e.target.value, type: e.target.id }) }}
-
                       />
-
-
-
-
                     </Box>
-
                   </Tooltip>
                 </Box>
                 <Box sx={s.eachRow}>
@@ -686,15 +581,23 @@ export default function CreateRecipe() {
                   <Tooltip
                     sx={s.genericTooltip}
                     arrow
+                    variant="outlined"
+                    size="lg"
                     enterDelay={500}
                     leaveDelay={200}
                     enterTouchDelay={0}
                     open={error.health.string || error.health.max}
-                    placement="bottom"
+                    placement="bottom-start"
                     title={
-                      error.health.string ?
-                      `Only numbers allowed in "Health Score" !` :
-                      `Allowed numbers are between 0 and 100 !`
+                      <Box sx={{ display: 'flex', flexDirection: 'column', color: '#25252d', background: '#f5f5f9', fontFamily: 'Roboto'}}>
+                        <Box
+                          sx={{ color: '#25252d', fontWeight: '400' }}
+                        >{error.health.string ?
+                          `Only numbers allowed in "Health Score" !` :
+                          `Allowed numbers are between 0 and 100 !`}
+                        </Box>
+                      </Box>
+                      
                     }
                   >
                     <TextField
@@ -715,24 +618,47 @@ export default function CreateRecipe() {
                   <Tooltip
                     sx={s.genericTooltip}
                     arrow
+                    variant="outlined"
+                    size="lg"
                     enterDelay={500}
                     leaveDelay={200}
                     enterTouchDelay={0}
-                    open={error.summary}
+                    open={error.summary.character || error.summary.badWord}
                     placement="bottom"
-                    title={`Special characters not allowed in "Summary" !`}
+                    //title={`Special characters not allowed in "Summary" !`}
+                    title={
+                      <Box sx={{ display: 'flex', flexDirection: 'column', color: '#25252d', background: '#f5f5f9', fontFamily: 'Roboto'}}>
+                        { error.summary.character ? <Box sx={{ fontWeight: '400', fontSize: '17px' }}>Special characters not allowed in "Summary" !</Box> : null }
+                        { error.summary.character ? <Box sx={{ color: '#42424f' }}>Allowed characters:</Box> : null }
+                        { error.summary.character ? <Box sx={{ color: '#42424f', textAlign: 'center' }}><b>, ; . : - ! ¡ ¿ ? ' " ( ) [ ] á Á é É í Í ó Ó ú Ú ü Ü ñ Ñ</b></Box> : null }
+                        { error.summary.badWord ? <Box sx={{ fontWeight: '400' }}><em>Please, remove </em><mark>highlighted</mark> <em>bad words.</em></Box> : null }
+                        { error.summary.character ? <Box sx={{ display: 'flex', flexDirection: 'row', fontWeight: '400' }}><em>Please, 
+                          <Tooltip
+                            title={`Ä ä % { } @ / \\ # À à ° ¬ $ & = * etc..`}
+                            sx={{ display: 'flex', flexDirection: 'column', color: '#42424f', background: '#f5f5f9', fontFamily: 'Roboto'}}
+                          >
+                            <u>remove unallowed characters</u>
+                          </Tooltip>.</em>
+                        </Box> : null }
+                      </Box>
+                    }
                   >
-                    <TextField
-                      id="summary"
-                      autoComplete='off'
-                      sx={s.input}
-                      value={summaryValue}
-                      multiline
-                      placeholder={summaryPlaceholder}
-                      onFocus={() => setSummaryPlaceholder("")}
-                      onBlur={() => setSummaryPlaceholder(`e.g. Healthy pasta recipe`)}
-                      onChange={(e) => { validator({ value: e.target.value, type: e.target.id }) }}
-                    />
+                    <Box>
+                      <InputLabel id={"targetSummary"} shrink={false} sx={s.inputShownSummary}>{ summaryValue }</InputLabel>
+                      
+                      <TextField
+                        id="summary"
+                        autoComplete='off'
+                        //sx={s.input}
+                        sx={s.inputHiddenSummary({ length:summaryValue.length })}
+                        value={summaryValue}
+                        multiline
+                        placeholder={summaryPlaceholder}
+                        onFocus={() => setSummaryPlaceholder("")}
+                        onBlur={() => setSummaryPlaceholder(`e.g. Healthy pasta recipe`)}
+                        onChange={(e) => { validator({ value: e.target.value, type: e.target.id }) }}
+                      />
+                    </Box>
                   </Tooltip>
                 </Box>
                 <Box sx={s.eachRow}>
@@ -773,12 +699,24 @@ export default function CreateRecipe() {
                           sx={s.genericTooltip}
                           key={index}
                           arrow
+                          variant="outlined"
+                          size="lg"
                           enterDelay={500}
                           leaveDelay={200}
                           enterTouchDelay={0}
-                          open={error.instructions[`${index}`].error}
+                          //open={error.instructions[`${index}`].character || error.instructions[`${index}`].badWord}
+                          open={error.instructions[`${index}`].character}
                           placement="bottom"
-                          title={`Special characters not allowed on step ${index + 1} of "Instructions" !`}
+                          title={
+                            <Box 
+                              sx={{ display: 'flex', flexDirection: 'column', color: '#25252d', background: '#f5f5f9', fontFamily: 'Roboto'}}
+                            >
+                              <Box>
+                                {`Special characters not allowed on step ${index + 1} of "Instructions" !`}
+                              </Box>
+                                
+                            </Box>
+                          }
                         >
                           <TextField
                             id={`${index}instructions`}
