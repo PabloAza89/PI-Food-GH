@@ -12,21 +12,9 @@ import dietss from '../../db/diets.json';
 import Tooltip from '@mui/joy/Tooltip';
 import Swal from 'sweetalert2';
 import dicEs from '../../dictionary/es.json';
-import $, { isWindow } from 'jquery';
-import parse from 'html-react-parser';
-//import Highlighter from "react-highlight-words";
+import $ from 'jquery';
 
-export default function CreateRecipe() {
-
-  // onBlur={() => setInstructionsPlaceholder(`e.g. Cut pasta, fry tomatoes..`)}
-
-  interface E {
-    target: string,
-    start: number,
-    end: number
-  }
-
-  let textInput = useRef(null)
+const CreateRecipe = () => {
 
   const dispatch = useDispatch()
 
@@ -46,6 +34,10 @@ export default function CreateRecipe() {
     let copyError = {...error}
     copyError.instructions.splice(index, 1)
     setError(copyError)
+
+    $(`#targetInstructions${index}`)
+      .html("<div></div>")
+
   }
 
   interface handlerAddI {
@@ -60,6 +52,44 @@ export default function CreateRecipe() {
     let copyError = {...error}
     copyError.instructions.splice(index + 1, 0, { character: false, badWord: false })
     setError(copyError)
+
+    // $(`#targetInstructions${index + 1}`)
+    //   .html("<div></div>")
+
+    let arrayWithContent: any = []
+
+      copyState.map((e, idxx) => {
+        //highlighter({value: e, type: 'instructions', index: index})
+        //return validator({ type: 'instructions', value: e, index: index })
+        // $(`#targetInstructions${index + 1}`)
+        //     .html($(`#targetInstructions${index + 1}`).html())
+        //arrayWithContent.push($(`#targetInstructions${index}`).text())
+        //return arrayWithContent.push(stepsState[idxx])
+        return $(`#targetInstructions${idxx}`)
+             .html(e)
+            
+
+            //   .html($(`#targetInstructions1`).html())
+            // $(`#targetInstructions1`)
+            //   .html("<div></div>")
+        
+      //console.log("copyState", copyState)
+    })
+
+    copyState.map((e, idxx) => {
+      return highlighter({value: e, type: 'instructions', index: idxx})
+
+    })
+
+    
+
+    //console.log("stepsStatestepsState", stepsState)
+    console.log("copyState", copyState)
+
+    //console.log("arrayWithContent", arrayWithContent)
+
+    
+
   }
 
   interface handlerUpdateI {
@@ -191,85 +221,120 @@ export default function CreateRecipe() {
 
   interface highlighterI {
     value: string,
-    type: string,
+    type: any,
+    index?: number
   }
 
-  function highlighter({value, type}: highlighterI) {
+  const highlighter = ({value, type, index}: highlighterI) => {
 
-    let badWordsInDicEsSummary = dicEs.map((e, idx) => {
-      return (
-        value
-          .replaceAll("á", "a").replaceAll("Á", "A")
-          .replaceAll("é", "e").replaceAll("É", "E")
-          .replaceAll("í", "i").replaceAll("Í", "I")
-          .replaceAll("ó", "o").replaceAll("Ó", "O")
-          .replaceAll("ú", "u").replaceAll("Ú", "U")
-          .replaceAll("ü", "u").replaceAll("Ü", "U")
-          .toLowerCase().search(RegExp(
-            `^` + e + `$|` + // MATCH UNIQUE STRING WITH NOTHING AT START OR END
-            `[-,;.:¡!¿?'"()\\][ ]` + e + `$|` + // ALLOWED CHARACTERS AT BEGGINING // TEST
-            `^` + e + `[-,;.:¡!¿?'"()\\][ ]|` + // ALLOWED CHARACTERS AT END // TEST
-            `[-,;.:¡!¿?'"()\\][ ]` + e + `[-,;.:¡!¿?'"()\\][ ]`  //+ `|` + // ALLOWED CHARACTERS AT START & END // TEST
-          , "g" )) !== -1) ? { "target": e, "index": idx } : -1
-    }).filter(e => e !== -1)
-
-
-    let firstArrayFilterSummary: any = []
-
-    badWordsInDicEsSummary?.filter(e => e !== -1)?.forEach((x, idx) => {
-      if (x !== -1) [...value
-        .replaceAll("á", "a").replaceAll("Á", "A")
+    const characterReplacer = (string: string) => {
+      return  string.replaceAll("á", "a").replaceAll("Á", "A")
         .replaceAll("é", "e").replaceAll("É", "E")
         .replaceAll("í", "i").replaceAll("Í", "I")
         .replaceAll("ó", "o").replaceAll("Ó", "O")
         .replaceAll("ú", "u").replaceAll("Ú", "U")
         .replaceAll("ü", "u").replaceAll("Ü", "U")
-        .toLowerCase().matchAll(RegExp(x.target, "g")
-      )].forEach((e, gg) => {
+        .toLowerCase()
+    }
+
+    let badWordsInDicEs = dicEs.map((e, idx) => {
+      return (
+        characterReplacer(value)
+          .search(RegExp(
+            `^` + e + `$|` + // MATCH UNIQUE STRING WITH NOTHING AT START OR END
+            `[-,\n;.:¡!¿?'"()\\][ ]` + e + `$|` + // ALLOWED CHARACTERS AT BEGGINING // TEST
+            `^` + e + `[-,\n;.:¡!¿?'"()\\][ ]|` + // ALLOWED CHARACTERS AT END // TEST
+            `[-,\n;.:¡!¿?'"()\\][ ]` + e + `[-,\n;.:¡!¿?'"()\\][ ]`  //+ `|` + // ALLOWED CHARACTERS AT START & END // TEST
+          , "g" )) !== -1) ? { "target": e, "index": idx } : -1
+    }).filter(e => e !== -1)
+
+    let firstArrayFilter: any = []
+
+    badWordsInDicEs?.filter(e => e !== -1)?.forEach((x, idx) => {
+      if (x !== -1) [...characterReplacer(value).matchAll(RegExp(x.target, "g"))].forEach((e, gg) => {
         if (
           x.target[0] === e[0][0] &&
           x.target.length === e[0].length &&
-          ( RegExp(`[-,;.:¡!¿?'"()\\][ ]`, `g`).test(value[e.index! + e[0].length]) || value[e.index! + e[0].length] === undefined ) &&
-          ( RegExp(`[-,;.:¡!¿?'"()\\][ ]`, `g`).test(value[e.index! - 1 ]) || value[e.index! -1] === undefined )
-        ) firstArrayFilterSummary.push({ "target": e[0].trim().replaceAll(/[^A-Za-z0-9 ]/g, ""), "start": e.index, "end": e.index! + e[0].length })
+          ( RegExp(`[-,\n;.:¡!¿?'"()\\][ ]`, `g`).test(value[e.index! + e[0].length]) || value[e.index! + e[0].length] === undefined ) &&
+          ( RegExp(`[-,\n;.:¡!¿?'"()\\][ ]`, `g`).test(value[e.index! - 1 ]) || value[e.index! -1] === undefined )
+        ) firstArrayFilter.push({ "target": e[0].trim().replaceAll(/[^A-Za-z0-9 ]/g, ""), "start": e.index, "end": e.index! + e[0].length })
       })
     })
 
-    let secondArrayFilterSummary = firstArrayFilterSummary.sort((a: E, b: E) => a.start - b.start)
+    let secondArrayFilter = firstArrayFilter.sort((a: any, b: any) => a.start - b.start)
 
-    let arraySummary = secondArrayFilterSummary.filter((e: any, index: any) => {
-      if (e.start < secondArrayFilterSummary[index - 1]?.end || e.start < secondArrayFilterSummary[index - 2]?.end || e.start < secondArrayFilterSummary[index - 3]?.end || e.start < secondArrayFilterSummary[index - 4]?.end || e.start < secondArrayFilterSummary[index - 5]?.end) return null;
+    let array = secondArrayFilter.filter((e: any, index: any) => {
+      if (e.start < secondArrayFilter[index - 1]?.end || e.start < secondArrayFilter[index - 2]?.end || e.start < secondArrayFilter[index - 3]?.end || e.start < secondArrayFilter[index - 4]?.end || e.start < secondArrayFilter[index - 5]?.end) return null;
       return e
     })
 
-    if (arraySummary[0]) {
-      let copyObjSummary = {...error}
-      copyObjSummary.summary.badWord = true
-      setError({ ...copyObjSummary })
-    } else {
-      let copyObjSummary = {...error}
-      copyObjSummary.summary.badWord = false
-      setError({ ...copyObjSummary })
+    // if (arrayInstructions[0]) {
+    //   let copyObjInstructions = {...error}
+    //   copyObjInstructions.instructions[index!].badWord = true
+    //   setError({ ...copyObjInstructions })
+    // } else {
+    //   let copyObjInstructions = {...error}
+    //   copyObjInstructions.instructions[index!].badWord = false
+    //   setError({ ...copyObjInstructions })
+    // }
+
+
+
+    if (array[0] && type === 'instructions') {
+      let copyObj = {...error}
+      copyObj.instructions[index!].badWord = true
+      setError({ ...copyObj })
     }
 
-    //$("#targetSummary")
-    $(`#target${type.slice(0,1).toUpperCase() + type.slice(1)}`)
+    if (array[0] === undefined && type === 'instructions') {
+      let copyObj = {...error}
+      copyObj.instructions[index!].badWord = false
+      setError({ ...copyObj })
+    }
+
+    if (array[0] !== undefined && type !== 'instructions') {
+
+      let copyObj: any = {...error}
+      copyObj[type].badWord = true
+      setError({ ...copyObj })
+    }
+
+    if (array[0] === undefined && type !== 'instructions') {
+      let copyObj: any = {...error}
+      copyObj[type].badWord = false
+      setError({ ...copyObj })
+
+    }
+
+
+    //console.log("instructions", type)
+    //console.log("index", index)
+    //console.log("type.slice(0,1).", `#target${type.slice(0,1).toUpperCase() + type.slice(1) + index}` )
+
+
+    //$("#target")
+    //$(`#target${type.slice(0,1).toUpperCase() + type.slice(1)}`)
+    //$(index !== undefined ? `#target${type.slice(0,1).toUpperCase() + type.slice(1) + index}` : `#target${type.slice(0,1).toUpperCase() + type.slice(1)}`)
+    console.log("array[0]", array)
+    console.log("value", value)
+    //$(`#target${type.slice(0,1).toUpperCase() + type.slice(1) + index}`)
+    $(index !== undefined ? `#target${type.slice(0,1).toUpperCase() + type.slice(1) + index}` : `#target${type.slice(0,1).toUpperCase() + type.slice(1)}`)
       .html(function() {
-        let parsedToReturnSummary:string[] = []
-          if (arraySummary[0]) arraySummary.forEach((e:any, actualIndex:any) => {
-              if (arraySummary.length === 1) parsedToReturnSummary.push(
+        let parsedToReturn:string[] = []
+          if (array[0]) array.forEach((e:any, actualIndex:any) => {
+              if (array.length === 1) parsedToReturn.push(
                 value.substring(0, e.start) + // OPTIONAL STRING
                 "<mark>" + value.substring(e.start, e.end) + "</mark>" + // ONLY ONE e
                  value.substring(e.end)) // i.e.: "¿dumb" | " dumb"
-              if (arraySummary.length > 1) parsedToReturnSummary.push(
-                (actualIndex === 0 ? value.substring(0, e.start) : value.substring(arraySummary[actualIndex - 1]?.end, e.start)) +
+              if (array.length > 1) parsedToReturn.push(
+                (actualIndex === 0 ? value.substring(0, e.start) : value.substring(array[actualIndex - 1]?.end, e.start)) +
                 "<mark>" + value.substring(e.start, e.end) + "</mark>" + //
-                (actualIndex === 0 ? "" : !arraySummary[actualIndex + 1 ]?.end ? value.substring(e.end) :""))
+                (actualIndex === 0 ? "" : !array[actualIndex + 1 ]?.end ? value.substring(e.end) :""))
           })
-          parsedToReturnSummary.unshift("<div>")
-          parsedToReturnSummary.push("</div>")
+          parsedToReturn.unshift("<div>")
+          parsedToReturn.push("</div>")
 
-        return arraySummary[0] ? parsedToReturnSummary.join("") : value
+        return array[0] ? parsedToReturn.join("") : value
       })
   }
 
@@ -283,15 +348,14 @@ export default function CreateRecipe() {
   }
 
   const validator = ({ type, value, index }: validateStringI) => {
+    //console.log("index", index)
     switch (type) {
       case (`title`):
         let copyObjTitle = {...error}
-        if (/[^A-Za-z0-9-(áÁéÉíÍóÓúÚüÜñÑ),;.:¡!¿?'"()[\] ]/g.test(value) && value.length !== 0) { copyObjTitle[type].character = true; setError({ ...copyObjTitle }) }
+        if (/[^A-Za-z0-9-(áÁéÉíÍóÓúÚüÜñÑ),\n;.:¡!¿?'"()[\] ]/g.test(value) && value.length !== 0) { copyObjTitle[type].character = true; setError({ ...copyObjTitle }) }
         else { copyObjTitle[type].character = false; setError({ ...copyObjTitle })}
         setTitleValue(value);
-
         highlighter({value, type})
-
       break;
       case (`health`):
         let copyObj = {...error}
@@ -302,22 +366,17 @@ export default function CreateRecipe() {
         setHealthValue(value);
       break;
       case (`summary`):
-
         let copyObjSummary = {...error}
-        if (/[^A-Za-z0-9-(áÁéÉíÍóÓúÚüÜñÑ),;.:¡!¿?'"()[\] ]/g.test(value) && value.length !== 0) { copyObjSummary[type].character = true; setError({ ...copyObjSummary }) }
+        if (/[^A-Za-z0-9-(áÁéÉíÍóÓúÚüÜñÑ),\n;.:¡!¿?'"()[\] ]/g.test(value) && value.length !== 0) { copyObjSummary[type].character = true; setError({ ...copyObjSummary }) }
         else { copyObjSummary[type].character = false; setError({ ...copyObjSummary })}
         setSummaryValue(value);
-
         highlighter({value, type})
-
-        
-
-
-
-
       break;
       case (`instructions`):
-        if (/[^A-Za-z0-9-(áÁéÉíÍóÓúÚüÜñÑ),;.:¡!¿?'"()[\] ]/g.test(value) && value.length !== 0) { 
+
+    //     console.log("instructions", type)
+    // console.log("index", index)
+        if (/[^A-Za-z0-9-(áÁéÉíÍóÓúÚüÜñÑ),;.:¡!¿?'"()[\] ]/g.test(value) && value.length !== 0) {
           let copyObjInstructions = {...error}
           copyObjInstructions.instructions[index!].character = true
           setError({ ...copyObjInstructions })
@@ -326,61 +385,7 @@ export default function CreateRecipe() {
           copyObjInstructions.instructions[index!].character = false
           setError({ ...copyObjInstructions })
         }
-
-        let badWordsInDicEsInstructions = dicEs.map((e, idx) => {
-          return (
-            value
-              .replaceAll("á", "a").replaceAll("Á", "A")
-              .replaceAll("é", "e").replaceAll("É", "E")
-              .replaceAll("í", "i").replaceAll("Í", "I")
-              .replaceAll("ó", "o").replaceAll("Ó", "O")
-              .replaceAll("ú", "u").replaceAll("Ú", "U")
-              .replaceAll("ü", "u").replaceAll("Ü", "U")
-              .toLowerCase().search(RegExp(
-                `^` + e + `$|` + // MATCH UNIQUE STRING WITH NOTHING AT START OR END
-                `[-,;.:¡!¿?'"()\\][ ]` + e + `$|` + // ALLOWED CHARACTERS AT BEGGINING // TEST
-                `^` + e + `[-,;.:¡!¿?'"()\\][ ]|` + // ALLOWED CHARACTERS AT END // TEST
-                `[-,;.:¡!¿?'"()\\][ ]` + e + `[-,;.:¡!¿?'"()\\][ ]`  //+ `|` + // ALLOWED CHARACTERS AT START & END // TEST
-              , "g" )) !== -1) ? { "target": e, "index": idx } : -1
-        }).filter(e => e !== -1)
-
-        let firstArrayFilterInstructions: any = []
-
-        badWordsInDicEsInstructions?.filter(e => e !== -1)?.forEach((x, idx) => {
-          if (x !== -1) [...value
-            .replaceAll("á", "a").replaceAll("Á", "A")
-            .replaceAll("é", "e").replaceAll("É", "E")
-            .replaceAll("í", "i").replaceAll("Í", "I")
-            .replaceAll("ó", "o").replaceAll("Ó", "O")
-            .replaceAll("ú", "u").replaceAll("Ú", "U")
-            .replaceAll("ü", "u").replaceAll("Ü", "U")
-            .toLowerCase().matchAll(RegExp(x.target, "g")
-          )].forEach((e, gg) => {
-            if (
-              x.target[0] === e[0][0] &&
-              x.target.length === e[0].length &&
-              ( RegExp(`[-,;.:¡!¿?'"()\\][ ]`, `g`).test(value[e.index! + e[0].length]) || value[e.index! + e[0].length] === undefined ) &&
-              ( RegExp(`[-,;.:¡!¿?'"()\\][ ]`, `g`).test(value[e.index! - 1 ]) || value[e.index! -1] === undefined )
-            ) firstArrayFilterInstructions.push({ "target": e[0].trim().replaceAll(/[^A-Za-z0-9 ]/g, ""), "start": e.index, "end": e.index! + e[0].length })
-          })
-        })
-
-        let secondArrayFilterInstructions = firstArrayFilterInstructions.sort((a: E, b: E) => a.start - b.start)
-
-        let arrayInstructions = secondArrayFilterInstructions.filter((e: any, index: any) => {
-          if (e.start < secondArrayFilterInstructions[index - 1]?.end || e.start < secondArrayFilterInstructions[index - 2]?.end || e.start < secondArrayFilterInstructions[index - 3]?.end || e.start < secondArrayFilterInstructions[index - 4]?.end || e.start < secondArrayFilterInstructions[index - 5]?.end) return null;
-          return e
-        })
-
-        if (arrayInstructions[0]) {
-          let copyObjInstructions = {...error}
-          copyObjInstructions.instructions[index!].badWord = true
-          setError({ ...copyObjInstructions })
-        } else {
-          let copyObjInstructions = {...error}
-          copyObjInstructions.instructions[index!].badWord = false
-          setError({ ...copyObjInstructions })
-        }
+        highlighter({value, type, index})
 
       break;
     }
@@ -417,6 +422,8 @@ export default function CreateRecipe() {
       summary: { character: false, badWord: false },
       instructions: [{ character: false, badWord: false },]
     });
+    $(`#targetInstructions0`)
+      .html("<div></div>")
   };
 
 
@@ -433,14 +440,12 @@ export default function CreateRecipe() {
     }).then((result) => {
       if (result.isConfirmed) {
         clearHandler()
-          Swal.fire({
-            title: 'All cleared !',
-            showConfirmButton: false,
-            icon: 'success',
-            timer: 1000,
-          })
-
-
+        Swal.fire({
+          title: 'All cleared !',
+          showConfirmButton: false,
+          icon: 'success',
+          timer: 1000,
+        })
       }
     })
   }
@@ -477,7 +482,7 @@ export default function CreateRecipe() {
                     open={error.title.character || error.title.badWord}
                     //open={true}
                     placement="bottom"
-                    
+
                     title={
                       <Box sx={{ display: 'flex', flexDirection: 'column', color: '#25252d', background: '#f5f5f9', fontFamily: 'Roboto'}}>
                         { error.title.character ? <Box sx={{ fontWeight: '400', fontSize: '17px' }}>Special characters not allowed in "Title" !</Box> : null }
@@ -532,7 +537,7 @@ export default function CreateRecipe() {
                           `Allowed numbers are between 0 and 100 !`}
                         </Box>
                       </Box>
-                      
+
                     }
                   >
                     <TextField
@@ -580,12 +585,11 @@ export default function CreateRecipe() {
                   >
                     <Box>
                       <InputLabel id={"targetSummary"} shrink={false} sx={s.inputShownSummary}>{ summaryValue }</InputLabel>
-                      
                       <TextField
                         id="summary"
                         autoComplete='off'
                         //sx={s.input}
-                        sx={s.inputHiddenSummary({ length:summaryValue.length })}
+                        sx={s.inputHiddenSummary}
                         value={summaryValue}
                         multiline
                         placeholder={summaryPlaceholder}
@@ -640,31 +644,35 @@ export default function CreateRecipe() {
                           leaveDelay={200}
                           enterTouchDelay={0}
                           //open={error.instructions[`${index}`].character || error.instructions[`${index}`].badWord}
-                          open={error.instructions[`${index}`].character}
+                          open={error.instructions[`${index}`].character || error.instructions[`${index}`].badWord}
                           placement="bottom"
                           title={
-                            <Box 
+                            <Box
                               sx={{ display: 'flex', flexDirection: 'column', color: '#25252d', background: '#f5f5f9', fontFamily: 'Roboto'}}
                             >
                               <Box>
                                 {`Special characters not allowed on step ${index + 1} of "Instructions" !`}
                               </Box>
-                                
                             </Box>
                           }
                         >
-                          <TextField
-                            id={`${index}instructions`}
-                            autoComplete='off'
-                            multiline
-                            value={stepsState[index]}
-                            placeholder={`e.g. Cut pasta, fry tomatoes..`}
-                            sx={s.inputStep}
-                            onChange={(e) => {
-                              handlerUpdate({ index: parseInt((e.target as HTMLInputElement).id, 10), value: e.target.value });
-                              validator({ value: e.target.value, type: e.target.id.replace(/[0-9]/g, ''), index: parseInt((e.target as HTMLInputElement).id, 10) })
-                            }}
-                          />
+                          <Box>
+                            <InputLabel id={`targetInstructions${index}`} shrink={false} sx={s.inputShownInstructions}>{ stepsState[index] }</InputLabel>
+                            <TextField
+                              //id={`instructions${index}`}
+                              id={`${index}instructions`}
+                              autoComplete='off'
+                              multiline
+                              value={stepsState[index]}
+                              placeholder={`e.g. Cut pasta, fry tomatoes..`}
+                              //sx={s.inputStep}
+                              sx={s.inputHiddenInstructions}
+                              onChange={(e) => {
+                                handlerUpdate({ index: parseInt((e.target as HTMLInputElement).id, 10), value: e.target.value });
+                                validator({ value: e.target.value, type: e.target.id.replace(/[0-9]/g, ''), index: parseInt((e.target as HTMLInputElement).id, 10) })
+                              }}
+                            />
+                          </Box>
                         </Tooltip>
 
                         <Tooltip
@@ -770,3 +778,5 @@ export default function CreateRecipe() {
       </div>
     )
 }
+
+export default CreateRecipe;

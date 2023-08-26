@@ -143,11 +143,7 @@ export const inputShownSummary = () => {
   }
 }
 
-interface inputHiddenSummaryI {
-  length: number
-}
-
-export const inputHiddenSummary = ({ length }: inputHiddenSummaryI) => {
+export const inputHiddenSummary = () => {
   return {
     display: 'flex',
     position: 'relative',
@@ -163,6 +159,50 @@ export const inputHiddenSummary = ({ length }: inputHiddenSummaryI) => {
       '::selection': { 
       }
     }
+  }
+}
+
+export const inputShownInstructions = () => {
+  return {
+    
+    flexWrap: 'wrap',
+    whiteSpace: 'pre-wrap',
+    display: 'flex',
+    //width: 'calc(68vw - 28px)',
+    width: 'calc(48vw - 28px)',
+    marginLeft: '14px',
+    padding: '16.5px 0px 16.5px 0px',
+    position: 'absolute',
+    fontWeight: '400',
+    color: 'transparent !important',
+  }
+}
+
+export const inputHiddenInstructions = () => {
+  return {
+    display: 'flex',
+    position: 'relative',
+    //width: '68vw',
+    width: '48vw',
+    //background: 'lightblue', // dev
+    input: {
+      //whiteSpace: 'pre',
+      //color: length > 0 ? 'transparent !important' : 'rgba(0, 0, 0, 0.87) !important',
+      color: 'transparent !important',
+      //color: 'red !important', // dev
+      //fontWeight: '900',
+      caretColor: 'rgba(0, 0, 0, 0.87) !important',
+      //caretColor: 'transparent !important',
+      '::selection': {
+      }
+    }
+  }
+}
+
+export const inputStep = () => {
+  return { 
+    width: '48vw',
+    background: 'lightblue'
   }
 }
 
@@ -185,7 +225,8 @@ export const input = () => {
 
 export const stepsContainer = () => {
   return {
-    background: 'gold',
+    //background: 'gold', // dev
+    background: 'gray',
     display: 'flex',
     flexDirection: 'column'
   }
@@ -218,12 +259,7 @@ export const stepTitle = () => {
   }
 }
 
-export const inputStep = () => {
-  return { 
-    width: '48vw',
-    background: 'lightblue'
-  }
-}
+
 
 export const newStepTooltip = () => {
   return {

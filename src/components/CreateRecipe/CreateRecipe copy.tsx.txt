@@ -13,7 +13,7 @@ import Tooltip from '@mui/joy/Tooltip';
 import Swal from 'sweetalert2';
 import dicEs from '../../dictionary/es.json';
 import $, { isWindow } from 'jquery';
-import parse from 'html-react-parser';
+//import parse from 'html-react-parser';
 //import Highlighter from "react-highlight-words";
 
 export default function CreateRecipe() {
