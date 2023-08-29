@@ -47,7 +47,31 @@ const CreateRecipe = () => {
     index: number,
   }
 
-  const handlerAdd = ({ index }: handlerAddI) => {
+  // const handlerAdd = ({ index }: handlerAddI) => {
+  //   const firstStep = async () => {
+    
+  //     let copyState = [...stepsState]
+  //     copyState.splice(index + 1, 0, "")
+  //     setStepsState([...copyState])
+
+  //     let copyError = {...error}
+  //     copyError.instructions.splice(index + 1, 0, { character: false, badWord: false })
+  //     setError(copyError)
+
+  //     copyState.forEach((e,indexx) => {
+  //       highlighter({value: e, type: 'instructions', index: indexx})
+  //     })
+  //   }
+
+  //   const secondStep = async () => { // only highlight for last index
+  //     let copyState2 = [...stepsState]
+  //     if (copyState2.length > 1 && index !== copyState2.length - 1 ) highlighter({value: copyState2.slice(copyState2.length-1)[0], type: 'instructions', index: copyState2.length})
+  //   }
+    
+  //   firstStep().then(() => secondStep())
+  // }
+
+   const handlerAdd = async ({ index }: handlerAddI) => {
     const firstStep = async () => {
     
       let copyState = [...stepsState]
@@ -57,48 +81,24 @@ const CreateRecipe = () => {
       let copyError = {...error}
       copyError.instructions.splice(index + 1, 0, { character: false, badWord: false })
       setError(copyError)
+
+       copyState.forEach((e,indexx) => {
+        highlighter({value: e, type: 'instructions', index: indexx})
+      })
+
+      
+
+      
     }
 
-    const secondStep = async () => {
+    const secondStep = async () => { // only highlight for last index
       let copyState2 = [...stepsState]
-
-      // for (let i = index; i < copyState2.length ; i++) {
-      //   if (i !== 0 && i !== index) {
-      //     if (copyState2[i] !== '')
-      //       $(`#targetInstructions${i}`).html("<div></div>")
-      //       highlighter({value: copyState2[i], type: 'instructions', index: i + 1})
-      //   }
-      // }
-
-      for (let i = index; i < copyState2.length ; i++) {
-        if (i !== 0 && i !== index) {
-          // if (copyState2[i] !== '') {
-          //   $(`#targetInstructions${i}`).html("<div></div>")
-          //   highlighter({value: copyState2[i], type: 'instructions', index: i + 1})
-          // }
-
-          $(`#targetInstructions${i}`).html(copyState2[i + 1])
-          highlighter({value: copyState2[i], type: 'instructions', index: i + 1})
-          // if (copyState2[i] !== '' && copyState2[i - 1] === '') {
-          //   //$(`#targetInstructions${i}`).html("<div></div>")
-          //   highlighter({value: copyState2[i], type: 'instructions', index: i + 1})
-          // }
-          // if (copyState2[i] !== '' && copyState2[i - 1] !== '') {
-          //   //$(`#targetInstructions${i}`).html("<div></div>")
-          //   highlighter({value: copyState2[i], type: 'instructions', index: i + 1})
-          // }
-          // if (copyState2[i] === '') {
-          //   //$(`#targetInstructions${i}`).html("<div></div>")
-          //   highlighter({value: copyState2[i], type: 'instructions', index: i})
-          // }
-        }
-      }
-
-
-
+      if (copyState2.length > 1 && index !== copyState2.length - 1 ) highlighter({value: copyState2.slice(copyState2.length-1)[0], type: 'instructions', index: copyState2.length})
     }
     
     firstStep().then(() => secondStep())
+    //firstStep()
+    //secondStep()
   }
 
   interface handlerUpdateI {
@@ -246,7 +246,11 @@ const CreateRecipe = () => {
           , "g" )) !== -1) ? { "target": e, "index": idx } : -1
     }).filter(e => e !== -1)
 
+    //console.log("badWordsInDicEs badWordsInDicEs", badWordsInDicEs)
+
     let firstArrayFilter: any = []
+
+    
 
     badWordsInDicEs?.filter(e => e !== -1)?.forEach((x, idx) => {
       if (x !== -1) [...characterReplacer(value).matchAll(RegExp(x.target, "g"))].forEach((e, gg) => {
@@ -259,12 +263,26 @@ const CreateRecipe = () => {
       })
     })
 
+    //console.log("badWordsInDicEs badWordsInDicEs", badWordsInDicEs)
+
     let secondArrayFilter = firstArrayFilter.sort((a: any, b: any) => a.start - b.start)
+
+    // qq.sort((a, b) => a.start - b.start).filter((e,i) => {
+    //   if (i !== qq.length - 1) {
+    //       if (e.end < qq[i+1].start) return e
+    //       //if (e.start === qq[i+1].start) return e
+    //       //else if (e.length > qq[i+1].length) return e
+    //   }
+    // }) editing gighligh algorithm..
+
+    //console.log("secondArrayFilter secondArrayFilter", secondArrayFilter) // here problem
 
     let array = secondArrayFilter.filter((e: any, index: any) => {
       if (e.start < secondArrayFilter[index - 1]?.end || e.start < secondArrayFilter[index - 2]?.end || e.start < secondArrayFilter[index - 3]?.end || e.start < secondArrayFilter[index - 4]?.end || e.start < secondArrayFilter[index - 5]?.end) return null;
       return e
     })
+
+   //console.log("array array", array)
 
     let copyObj: any = {...error}
 
@@ -291,12 +309,12 @@ const CreateRecipe = () => {
     //console.log("array[0]", array)
     //console.log("value", value)
     //$(`#target${type.slice(0,1).toUpperCase() + type.slice(1) + index}`)
-    console.log("a ver este index", index)
-    console.log("a ver este type", type)
+    //console.log("a ver este index", index)
+    //console.log("a ver este type", type)
     $(index !== undefined ? `#target${type.slice(0,1).toUpperCase() + type.slice(1) + index}` : `#target${type.slice(0,1).toUpperCase() + type.slice(1)}`)
       .html(function() {
         let parsedToReturn:string[] = []
-        console.log("array ???", array)
+        //console.log("array ???", array)
         if (array[0]) array.forEach((e:any, actualIndex:any) => {
           if (array.length === 1) parsedToReturn.push(
             value.substring(0, e.start) + // OPTIONAL STRING
@@ -309,7 +327,7 @@ const CreateRecipe = () => {
         })
         parsedToReturn.unshift("<div>")
         parsedToReturn.push("</div>")
-        console.log("parsedtoreturn", parsedToReturn)
+        //console.log("parsedtoreturn", parsedToReturn)
         return array[0] ? parsedToReturn.join("") : value
       })
   }
@@ -367,23 +385,9 @@ const CreateRecipe = () => {
     }
   }
 
-  let [dietChoosen, setDietChoosen] = useState({
-    name: "-- select an option --",
-    hidden: false
-  })
-
-  function formHandler(event:any) {
-    setDietChoosen({
-      name: event,
-      hidden: true
-    })
-  }
-
-
   const handleChange = (event: SelectChangeEvent<typeof dietsArray>) => {
     const { target: { value } } = event
     setDietsArray( typeof value === 'string' ? value.split(',') : value );
-
   };
 
   const clearHandler = () => {
@@ -432,8 +436,8 @@ const CreateRecipe = () => {
   })
 
   //console.log("titleValue", titleValue.length)
-  console.log("stepsState", stepsState)
-  console.log("error.instructions", error.instructions)
+  //console.log("stepsState", stepsState)
+  //console.log("error.instructions", error.instructions)
 
   return !firstInstance ?
     (
@@ -631,7 +635,8 @@ const CreateRecipe = () => {
                   }
                 >
                   <Box>
-                    <InputLabel id={`targetInstructions${index}`} shrink={false} sx={s.inputShownInstructions}>{ stepsState[index] +  console.log("stepsState[index]", stepsState[index]) }</InputLabel>
+                    {/* <InputLabel id={`targetInstructions${index}`} shrink={false} sx={s.inputShownInstructions}>{ stepsState[index] +  console.log("stepsState[index]", stepsState[index]) }</InputLabel> */}
+                    <InputLabel id={`targetInstructions${index}`} shrink={false} sx={s.inputShownInstructions}>{ stepsState[index] }</InputLabel>
                     <TextField
                       //id={`instructions${index}`}
                       //b={`instructions${index}`}
@@ -676,10 +681,11 @@ const CreateRecipe = () => {
                       disabled={stepsState.length >= 10 ? true : false}
                       id={`${index}`}
                       sx={s.buttonNew}
-                      onClick={(e) => { 
-                        // Promise.all([ handlerAdd({ index: parseInt((e.target as HTMLInputElement).id, 10) }) ])
-                        // .then(() => handlerAddNext())
-                        handlerAdd({ index: parseInt((e.target as HTMLInputElement).id, 10) })
+                      onClick={(e) => {
+                         //Promise.all([ handlerAdd({ index: parseInt((e.target as HTMLInputElement).id, 10) }) ])
+                         //.then((res) => handlerAddNext())
+                         handlerAdd({ index: parseInt((e.target as HTMLInputElement).id, 10) })
+                        //handlerAdd({ index: parseInt((e.target as HTMLInputElement).id, 10) })
                         
                         
                       }}
