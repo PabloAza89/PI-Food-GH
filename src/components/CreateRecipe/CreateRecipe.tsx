@@ -47,30 +47,6 @@ const CreateRecipe = () => {
     index: number,
   }
 
-  // const handlerAdd = ({ index }: handlerAddI) => {
-  //   const firstStep = async () => {
-    
-  //     let copyState = [...stepsState]
-  //     copyState.splice(index + 1, 0, "")
-  //     setStepsState([...copyState])
-
-  //     let copyError = {...error}
-  //     copyError.instructions.splice(index + 1, 0, { character: false, badWord: false })
-  //     setError(copyError)
-
-  //     copyState.forEach((e,indexx) => {
-  //       highlighter({value: e, type: 'instructions', index: indexx})
-  //     })
-  //   }
-
-  //   const secondStep = async () => { // only highlight for last index
-  //     let copyState2 = [...stepsState]
-  //     if (copyState2.length > 1 && index !== copyState2.length - 1 ) highlighter({value: copyState2.slice(copyState2.length-1)[0], type: 'instructions', index: copyState2.length})
-  //   }
-    
-  //   firstStep().then(() => secondStep())
-  // }
-
    const handlerAdd = async ({ index }: handlerAddI) => {
     const firstStep = async () => {
     
@@ -270,7 +246,7 @@ const CreateRecipe = () => {
       else if (b.end - a.end) return b.end - a.end
       return null
     })
-    
+
     let array:any = []
 
     secondArrayFilter.forEach((el:any,idx:any) => {
@@ -305,11 +281,6 @@ const CreateRecipe = () => {
       setError({ ...copyObj })
     }
 
-    //console.log("array[0]", array)
-    //console.log("value", value)
-    //$(`#target${type.slice(0,1).toUpperCase() + type.slice(1) + index}`)
-    //console.log("a ver este index", index)
-    //console.log("a ver este type", type)
     $(index !== undefined ? `#target${type.slice(0,1).toUpperCase() + type.slice(1) + index}` : `#target${type.slice(0,1).toUpperCase() + type.slice(1)}`)
       .html(function() {
         let parsedToReturn:string[] = []
@@ -341,7 +312,6 @@ const CreateRecipe = () => {
   }
 
   const validator = ({ type, value, index }: validateStringI) => {
-    //console.log("index", index)
     switch (type) {
       case (`title`):
         let copyObjTitle = {...error}
@@ -366,9 +336,6 @@ const CreateRecipe = () => {
         highlighter({value, type})
       break;
       case (`instructions`):
-
-    //     console.log("instructions", type)
-    // console.log("index", index)
         if (/[^A-Za-z0-9-(áÁéÉíÍóÓúÚüÜñÑ),;.:¡!¿?'"()[\] ]/g.test(value) && value.length !== 0) {
           let copyObjInstructions = {...error}
           copyObjInstructions.instructions[index!].character = true
@@ -379,7 +346,6 @@ const CreateRecipe = () => {
           setError({ ...copyObjInstructions })
         }
         highlighter({value, type, index})
-
       break;
     }
   }
@@ -444,7 +410,7 @@ const CreateRecipe = () => {
         component="form"
         sx={s.form}
       >
-        {/* <Box component="img" src={noImage1} /> */}
+        <Box component="img" src={noImage1} />
         <Typography >Create your own recipe ! Please fill in all fields:</Typography>
         <Box sx={s.eachRow}>
           <Box sx={s.text}>Title:</Box>
@@ -457,7 +423,6 @@ const CreateRecipe = () => {
             leaveDelay={200}
             enterTouchDelay={0}
             open={error.title.character || error.title.badWord}
-            //open={true}
             placement="bottom"
 
             title={
@@ -542,7 +507,6 @@ const CreateRecipe = () => {
             enterTouchDelay={0}
             open={error.summary.character || error.summary.badWord}
             placement="bottom"
-            //title={`Special characters not allowed in "Summary" !`}
             title={
               <Box sx={{ display: 'flex', flexDirection: 'column', color: '#25252d', background: '#f5f5f9', fontFamily: 'Roboto'}}>
                 { error.summary.character ? <Box sx={{ fontWeight: '400', fontSize: '17px' }}>Special characters not allowed in "Summary" !</Box> : null }
@@ -565,7 +529,6 @@ const CreateRecipe = () => {
               <TextField
                 id="summary"
                 autoComplete='off'
-                //sx={s.input}
                 sx={s.inputHiddenSummary}
                 value={summaryValue}
                 multiline
@@ -612,7 +575,7 @@ const CreateRecipe = () => {
                 <Box sx={s.stepTitle}>Step {index + 1}:</Box>
 
                 <Tooltip
-                  sx={s.tooltipCenter}
+                  sx={ index % 2 === 0 ? s.tooltipRight : s.tooltipLeft }
                   key={index}
                   arrow
                   variant="outlined"
@@ -620,32 +583,34 @@ const CreateRecipe = () => {
                   enterDelay={500}
                   leaveDelay={200}
                   enterTouchDelay={0}
-                  //open={error.instructions[`${index}`].character || error.instructions[`${index}`].badWord}
                   open={error.instructions[`${index}`].character || error.instructions[`${index}`].badWord}
-                  placement="bottom"
+                  placement={ index % 2 === 0 ? `bottom-end` : `bottom-start` }
                   title={
-                    <Box
-                      sx={{ display: 'flex', flexDirection: 'column', color: '#25252d', background: '#f5f5f9', fontFamily: 'Roboto'}}
-                    >
-                      <Box>
-                        {`Special characters not allowed on step ${index + 1} of "Instructions" !`}
-                      </Box>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', color: '#25252d', background: '#f5f5f9', fontFamily: 'Roboto'}}>
+                      { error.instructions[index].character ? <Box sx={{ fontWeight: '400', fontSize: '17px' }}>Special characters not allowed in "Summary" !</Box> : null }
+                      { error.instructions[index].character ? <Box sx={{ color: '#42424f' }}>Allowed characters:</Box> : null }
+                      { error.instructions[index].character ? <Box sx={{ color: '#42424f', textAlign: 'center' }}><b>, ; . : - ! ¡ ¿ ? ' " ( ) [ ] á Á é É í Í ó Ó ú Ú ü Ü ñ Ñ</b></Box> : null }
+                      { error.instructions[index].badWord ? <Box sx={{ fontWeight: '400' }}><em>Please, remove </em><mark>highlighted</mark> <em>bad words on step {index + 1}.</em></Box> : null }
+                      { error.instructions[index].character ?
+                        <Box sx={{ display: 'flex', flexDirection: 'row', fontWeight: '400' }}><em>Please, 
+                          <Tooltip
+                            title={`Ä ä % { } @ / \\ # À à ° ¬ $ & = * etc..`}
+                            sx={{ display: 'flex', flexDirection: 'column', color: '#42424f', background: '#f5f5f9', fontFamily: 'Roboto'}}
+                          >
+                            <u>remove unallowed characters</u>
+                          </Tooltip> on step {index + 1}.</em>
+                        </Box> : null }
                     </Box>
                   }
                 >
                   <Box>
-                    {/* <InputLabel id={`targetInstructions${index}`} shrink={false} sx={s.inputShownInstructions}>{ stepsState[index] +  console.log("stepsState[index]", stepsState[index]) }</InputLabel> */}
                     <InputLabel id={`targetInstructions${index}`} shrink={false} sx={s.inputShownInstructions}>{ stepsState[index] }</InputLabel>
                     <TextField
-                      //id={`instructions${index}`}
-                      //b={`instructions${index}`}
-                      //className={`${index}instructions`}
                       id={`${index}instructions`}
                       autoComplete='off'
                       multiline
                       value={stepsState[index]}
                       placeholder={`e.g. Cut pasta, fry tomatoes..`}
-                      //sx={s.inputStep}
                       sx={s.inputHiddenInstructions}
                       onChange={(e) => {
                         handlerUpdate({ index: parseInt((e.target as HTMLInputElement).id, 10), value: e.target.value });
@@ -671,23 +636,13 @@ const CreateRecipe = () => {
                     </Box>
                   }
                 >
-                  <Box
-                    //disableRipple={stepsState.length >= 10 ? true : false}
-                    sx={s.buttonNewHelper}
-                  >
+                  <Box sx={s.buttonNewHelper}>
                     <Button
                       variant="contained"
                       disabled={stepsState.length >= 10 ? true : false}
                       id={`${index}`}
                       sx={s.buttonNew}
-                      onClick={(e) => {
-                         //Promise.all([ handlerAdd({ index: parseInt((e.target as HTMLInputElement).id, 10) }) ])
-                         //.then((res) => handlerAddNext())
-                         handlerAdd({ index: parseInt((e.target as HTMLInputElement).id, 10) })
-                        //handlerAdd({ index: parseInt((e.target as HTMLInputElement).id, 10) })
-                        
-                        
-                      }}
+                      onClick={(e) => {handlerAdd({ index: parseInt((e.target as HTMLInputElement).id, 10 )})}}
                     >New Step
                     </Button>
                   </Box>
@@ -704,10 +659,7 @@ const CreateRecipe = () => {
                   placement="bottom-end"
                   title={"You can't delete first step !"}
                 >
-                  <Box
-                    //disableRipple={stepsState.length === 1 ? true : false}
-                    sx={s.buttonDeleteHelper}
-                  >
+                  <Box sx={s.buttonDeleteHelper}>
                     <Button
                       className={`buttonDeleteStep`}
                       variant="contained"
@@ -728,7 +680,6 @@ const CreateRecipe = () => {
           <Button
             sx={s.buttonClearSave}
             variant="contained"
-            //onClick={() => clearHandler()}
             onClick={() => clearFieldsNotif()}
           >
             CLEAR
@@ -736,6 +687,17 @@ const CreateRecipe = () => {
           <Button
             sx={s.buttonClearSave}
             variant="contained"
+            disabled={
+              error.title.character ||
+              error.title.badWord ||
+              error.health.string ||
+              error.health.max ||
+              error.summary.character ||
+              error.summary.badWord ||
+              error.instructions.filter(e => e.character === true)[0] ||
+              error.instructions.filter(e => e.badWord === true)[0] ?
+              true : false
+            }
           >
             SAVE RECIPE
           </Button>
@@ -748,11 +710,6 @@ const CreateRecipe = () => {
         <span>RECIPE CREATED SUCCESSFULLY !</span>
         <button className='alertButtonSuccess' id="success" onClick={() => {setShowAlert(false) ; setFirstInstance(false)}}></button>
         <div className="hiddenSuccess">
-          {/* {
-            setTimeout(() => {
-              document.getElementById("success")&&document.getElementById("success").click()
-            }, 1500)
-          } */}
         </div>
       </div>
     )

@@ -43,6 +43,18 @@ export const tooltipLeft = () => {
   }
 }
 
+export const tooltipRight = () => {
+  return {
+    zIndex: 1,
+    span: {
+      position: relative,
+      display: 'flex',
+      flexDirection: 'row-reverse',
+      width: '90%',
+    }
+  }
+}
+
 // eachRow 80vw
 // (text) 12vw + 68vw (input)
 
