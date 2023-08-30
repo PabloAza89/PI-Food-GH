@@ -1,0 +1,47 @@
+let qq = [
+  {
+    "target": "tarado",
+    "start": 0,
+    "end": 6
+},
+{
+    "target": "bobo",
+    "start": 7,
+    "end": 11
+},
+ { target: 'hijo de p', start: 12, end: 21 },
+ { target: 'hijo de', start: 12, end: 19 },
+ { target: 'hijo de puta pario', start: 22, end: 40 },
+{ target: 'hijo de puta', start: 22, end: 34 },
+{ target: 'hijo de', start: 22, end: 29 },
+{ target: 'puta', start: 30, end: 34 },
+{ target: 'pario', start: 35, end: 40 }
+]
+
+
+qq.sort((a, b) => {
+  if (a.start - b.start) return 1
+  else if (a.end - b.end) return 1
+  return 1
+})
+
+let ww = []
+
+qq.forEach((el,idx) => {
+  if (idx === 0) ww.push(el) // for first index
+  if (idx !== 0 && idx !== qq.length - 1) { // for the rest
+     if (el.start > ww[ww.length-1].end) ww.push(el)
+  }
+   if (idx === qq.length - 1 && el.start > ww[ww.length-1].end) ww.push(el) // for last index
+})
+
+qq.forEach((el,idx) => {
+  ww.push(el)
+})
+
+// qq.forEach((el,idx) => {
+//   ww.push(el)
+// })
+
+//console.log(ww)
+console.log(ww)

@@ -265,21 +265,20 @@ const CreateRecipe = () => {
 
     //console.log("badWordsInDicEs badWordsInDicEs", badWordsInDicEs)
 
-    let secondArrayFilter = firstArrayFilter.sort((a: any, b: any) => a.start - b.start)
+    let secondArrayFilter = firstArrayFilter.sort((a:any, b:any) => {
+      if (a.start - b.start) return a.start - b.start
+      else if (b.end - a.end) return b.end - a.end
+      return null
+    })
+    
+    let array:any = []
 
-    // qq.sort((a, b) => a.start - b.start).filter((e,i) => {
-    //   if (i !== qq.length - 1) {
-    //       if (e.end < qq[i+1].start) return e
-    //       //if (e.start === qq[i+1].start) return e
-    //       //else if (e.length > qq[i+1].length) return e
-    //   }
-    // }) editing gighligh algorithm..
-
-    //console.log("secondArrayFilter secondArrayFilter", secondArrayFilter) // here problem
-
-    let array = secondArrayFilter.filter((e: any, index: any) => {
-      if (e.start < secondArrayFilter[index - 1]?.end || e.start < secondArrayFilter[index - 2]?.end || e.start < secondArrayFilter[index - 3]?.end || e.start < secondArrayFilter[index - 4]?.end || e.start < secondArrayFilter[index - 5]?.end) return null;
-      return e
+    secondArrayFilter.forEach((el:any,idx:any) => {
+      if (idx === 0) array.push(el) // for first index
+      if (idx !== 0 && idx !== secondArrayFilter.length - 1) { // for the rest
+         if (el.start > array[array.length-1].end) array.push(el)
+      }
+       if (idx === secondArrayFilter.length - 1 && el.start > array[array.length-1].end) array.push(el) // for last index
     })
 
    //console.log("array array", array)
