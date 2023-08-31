@@ -17,7 +17,23 @@ const CreateRecipe = () => {
 
   const dispatch = useDispatch()
 
+  const [titlePlaceholder, setTitlePlaceholder] = useState<string>('e.g. Pasta with tomatoes..');
+  const [healthScorePlaceholder, setHealthScorePlaceholder] = useState<string>('e.g. 73');
+  const [summaryPlaceholder, setSummaryPlaceholder] = useState<string>('e.g. Healthy pasta recipe');
+
+  const [titleValue, setTitleValue] = useState<string>('');
+  const [healthValue, setHealthValue] = useState<string>('');
+  const [summaryValue, setSummaryValue] = useState<string>('');
+  const [dietsArray, setDietsArray] = useState<string[]>([]);
   const [stepsState, setStepsState] = useState(['']);
+
+  // const [emptyChecker, setEmptyChecker] = useState({
+  //   title: titleValue.replaceAll(" ","").replaceAll("\n", "") === "",
+  //   health: false,
+  //   summary: false,
+  //   diets: false,
+  //   steps: [{step: 0, empty: false}],
+  // });
 
   interface handlerI {
     index: number
@@ -33,14 +49,9 @@ const CreateRecipe = () => {
     setError(copyError)
 
     copyState.forEach((e, idx) => {
-        //return $(`#targetInstructions${idx}`).html(e)
         $(`#targetInstructions${idx}`).html(e)
         highlighter({value: e, type: 'instructions', index: idx})
     })
-
-    // copyState.map((e, idx) => {
-    //   return highlighter({value: e, type: 'instructions', index: idx})
-    // })
   }
 
   interface handlerAddI {
@@ -49,32 +60,26 @@ const CreateRecipe = () => {
 
    const handlerAdd = async ({ index }: handlerAddI) => {
     const firstStep = async () => {
-    
+
       let copyState = [...stepsState]
       copyState.splice(index + 1, 0, "")
       setStepsState([...copyState])
 
       let copyError = {...error}
-      copyError.instructions.splice(index + 1, 0, { character: false, badWord: false })
+      copyError.instructions.splice(index + 1, 0, { character: false, badWord: false, empty: false })
       setError(copyError)
 
        copyState.forEach((e,indexx) => {
         highlighter({value: e, type: 'instructions', index: indexx})
       })
-
-      
-
-      
     }
 
     const secondStep = async () => { // only highlight for last index
       let copyState2 = [...stepsState]
       if (copyState2.length > 1 && index !== copyState2.length - 1 ) highlighter({value: copyState2.slice(copyState2.length-1)[0], type: 'instructions', index: copyState2.length})
     }
-    
+
     firstStep().then(() => secondStep())
-    //firstStep()
-    //secondStep()
   }
 
   interface handlerUpdateI {
@@ -88,53 +93,32 @@ const CreateRecipe = () => {
     setStepsState([...copy])
   }
 
-  const [dietsArray, setDietsArray] = useState<string[]>([]);
-
   const [showAlert, setShowAlert] = useState(false)
   const [firstInstance, setFirstInstance] = useState(false)
-
   const [created, setCreated] = useState(0)
-  const [dietSelected, setDietSelected] = useState([])
-  let uniqueNamesDiets = Array.from(new Set(dietSelected));
-
-  let handleDietSelected = (event:any[]) => {
-    //setDietSelected([...dietSelected, event])
-  }
-
-  const [title, setTitle] = useState("");
-  const [healthScore, setHealthScore] = useState("");
-  const [summary, setSummary] = useState("");
-  const [analyzedInstructions, setAnalyzedInstructions] = useState("");
-
-  const [titlePlaceholder, setTitlePlaceholder] = useState<string>('e.g. Pasta with tomatoes..');
-  const [healthScorePlaceholder, setHealthScorePlaceholder] = useState<string>('e.g. 73');
-  const [summaryPlaceholder, setSummaryPlaceholder] = useState<string>('e.g. Healthy pasta recipe');
-
-  const [titleValue, setTitleValue] = useState<string>('');
-  //const [titleValue, setTitleValue] = useState<string>('<strong>ASDASDASD</strong>');
-  const [healthValue, setHealthValue] = useState<string>('');
-  const [summaryValue, setSummaryValue] = useState<string>('');
 
   interface titleI {
     character: boolean,
-    badWord: boolean
+    badWord: boolean,
+    empty: boolean
   }
 
   interface healthI {
     string?: boolean,
-    max?: boolean
+    max?: boolean,
+    empty: boolean
   }
 
   interface instructionsI {
-    //[index: number]: boolean,
-    //error: boolean,
     character: boolean,
     badWord: boolean,
+    empty: boolean
   }
 
   interface summaryI {
     character: boolean,
     badWord: boolean,
+    empty: boolean
   }
 
   interface errorI {
@@ -147,20 +131,24 @@ const CreateRecipe = () => {
   const [error, setError] = useState<errorI>({
     title: {
       character: false,
-      badWord: false
+      badWord: false,
+      empty: false
     },
     health: {
       string: false,
-      max: false
+      max: false,
+      empty: false
     },
     summary: {
       character: false,
-      badWord: false
+      badWord: false,
+      empty: false
     },
     instructions: [
       {
         character: false,
-        badWord: false
+        badWord: false,
+        empty: false
       },
     ]
   });
@@ -175,23 +163,25 @@ const CreateRecipe = () => {
     // else return false
   }
 
-  const handleSubmit = async (e:any) => {
-    e.preventDefault();
-      if (created === 0) {
-        dispatch(addNew({
-            "id": Math.floor(100000 + Math.random() * 900000),
-            "title": title,
-            "diets": uniqueNamesDiets,
-            "healthScore": healthScore,
-            "summary": summary,
-            "analyzedInstructions": analyzedInstructions,
-            "image": Math.floor(Math.random() * 3)
-      }))
-        setCreated(1)
-      } else {
-        setShowAlert(true)
-      }
-  };
+  // const handleSubmit = async (e:any) => {
+  //   e.preventDefault();
+  //     if (created === 0) {
+  //     //   dispatch(addNew({
+  //     //       "id": Math.floor(100000 + Math.random() * 900000),
+  //     //       "title": title,
+  //     //       "diets": uniqueNamesDiets,
+  //     //       "healthScore": healthScore,
+  //     //       "summary": summary,
+  //     //       "analyzedInstructions": analyzedInstructions,
+  //     //       "image": Math.floor(Math.random() * 3)
+  //     // }))
+  //       setCreated(1)
+  //     } else {
+  //       setShowAlert(true)
+  //     }
+  // };
+
+  
 
   interface highlighterI {
     value: string,
@@ -222,11 +212,7 @@ const CreateRecipe = () => {
           , "g" )) !== -1) ? { "target": e, "index": idx } : -1
     }).filter(e => e !== -1)
 
-    //console.log("badWordsInDicEs badWordsInDicEs", badWordsInDicEs)
-
     let firstArrayFilter: any = []
-
-    
 
     badWordsInDicEs?.filter(e => e !== -1)?.forEach((x, idx) => {
       if (x !== -1) [...characterReplacer(value).matchAll(RegExp(x.target, "g"))].forEach((e, gg) => {
@@ -238,8 +224,6 @@ const CreateRecipe = () => {
         ) firstArrayFilter.push({ "target": e[0].trim().replaceAll(/[^A-Za-z0-9 ]/g, ""), "start": e.index, "end": e.index! + e[0].length })
       })
     })
-
-    //console.log("badWordsInDicEs badWordsInDicEs", badWordsInDicEs)
 
     let secondArrayFilter = firstArrayFilter.sort((a:any, b:any) => {
       if (a.start - b.start) return a.start - b.start
@@ -256,8 +240,6 @@ const CreateRecipe = () => {
       }
        if (idx === secondArrayFilter.length - 1 && el.start > array[array.length-1].end) array.push(el) // for last index
     })
-
-   //console.log("array array", array)
 
     let copyObj: any = {...error}
 
@@ -284,7 +266,6 @@ const CreateRecipe = () => {
     $(index !== undefined ? `#target${type.slice(0,1).toUpperCase() + type.slice(1) + index}` : `#target${type.slice(0,1).toUpperCase() + type.slice(1)}`)
       .html(function() {
         let parsedToReturn:string[] = []
-        //console.log("array ???", array)
         if (array[0]) array.forEach((e:any, actualIndex:any) => {
           if (array.length === 1) parsedToReturn.push(
             value.substring(0, e.start) + // OPTIONAL STRING
@@ -297,13 +278,9 @@ const CreateRecipe = () => {
         })
         parsedToReturn.unshift("<div>")
         parsedToReturn.push("</div>")
-        //console.log("parsedtoreturn", parsedToReturn)
         return array[0] ? parsedToReturn.join("") : value
       })
   }
-
-
-
 
   interface validateStringI {
     type: string,
@@ -315,10 +292,13 @@ const CreateRecipe = () => {
     switch (type) {
       case (`title`):
         let copyObjTitle = {...error}
-        if (/[^A-Za-z0-9-(áÁéÉíÍóÓúÚüÜñÑ),\n;.:¡!¿?'"()[\] ]/g.test(value) && value.length !== 0) { copyObjTitle[type].character = true; setError({ ...copyObjTitle }) }
+        if (/[^A-Za-z0-9-(áÁéÉíÍóÓúÚüÜñÑ),;.:¡!¿?'"()[\] ]/g.test(value) && value.length !== 0) { copyObjTitle[type].character = true; setError({ ...copyObjTitle }) }
         else { copyObjTitle[type].character = false; setError({ ...copyObjTitle })}
+        if (value.replaceAll(" ","").replaceAll("\n", "") === "") { copyObjTitle[type].empty = true; setError({ ...copyObjTitle }) }
+        else { copyObjTitle[type].empty = false; setError({ ...copyObjTitle }) }
         setTitleValue(value);
         highlighter({value, type})
+        
       break;
       case (`health`):
         let copyObj = {...error}
@@ -336,7 +316,7 @@ const CreateRecipe = () => {
         highlighter({value, type})
       break;
       case (`instructions`):
-        if (/[^A-Za-z0-9-(áÁéÉíÍóÓúÚüÜñÑ),;.:¡!¿?'"()[\] ]/g.test(value) && value.length !== 0) {
+        if (/[^A-Za-z0-9-(áÁéÉíÍóÓúÚüÜñÑ),\n;.:¡!¿?'"()[\] ]/g.test(value) && value.length !== 0) {
           let copyObjInstructions = {...error}
           copyObjInstructions.instructions[index!].character = true
           setError({ ...copyObjInstructions })
@@ -362,10 +342,10 @@ const CreateRecipe = () => {
     setDietsArray([]);
     setStepsState(['']);
     setError({
-      title: { character: false, badWord: false },
-      health: { string: false, max: false },
-      summary: { character: false, badWord: false },
-      instructions: [{ character: false, badWord: false },]
+      title: { character: false, badWord: false, empty: false },
+      health: { string: false, max: false, empty: false },
+      summary: { character: false, badWord: false, empty: false },
+      instructions: [{ character: false, badWord: false, empty: false },]
     });
     $(`#targetInstructions0`)
       .html("<div></div>")
@@ -400,9 +380,41 @@ const CreateRecipe = () => {
     })
   })
 
-  //console.log("titleValue", titleValue.length)
-  //console.log("stepsState", stepsState)
-  //console.log("error.instructions", error.instructions)
+  function handleSubmit(e:any) {
+    if (titleValue === "") {
+      Swal.fire({
+        title: 'All cleared !',
+        text: 'No undo.',
+        icon: 'info',
+        showConfirmButton: false,
+        showDenyButton: false,
+        showCancelButton: false,
+        timer: 1000,
+      })
+    }
+    else {
+      fetch(`http://localhost:3001/recipes`, {
+        method: 'POST',
+        body: JSON.stringify({
+          title: titleValue,
+          healthScore: healthValue,
+          summary: summaryValue,
+          diets: dietsArray,
+          analyzedInstructions: stepsState
+      }),
+      headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+      }
+      })
+      .then((res) => res.json())
+      .then((res) => console.log(res))
+    }
+  }
+
+  //console.log("", summaryValue)
+  //console.log("emptyChecker", emptyChecker.title)
+  console.log("error.title", error.title)
+  
 
   return !firstInstance ?
     (
@@ -587,7 +599,7 @@ const CreateRecipe = () => {
                   placement={ index % 2 === 0 ? `bottom-end` : `bottom-start` }
                   title={
                     <Box sx={{ display: 'flex', flexDirection: 'column', color: '#25252d', background: '#f5f5f9', fontFamily: 'Roboto'}}>
-                      { error.instructions[index].character ? <Box sx={{ fontWeight: '400', fontSize: '17px' }}>Special characters not allowed in "Summary" !</Box> : null }
+                      { error.instructions[index].character ? <Box sx={{ fontWeight: '400', fontSize: '17px' }}>Special characters not allowed in "Instructions" !</Box> : null }
                       { error.instructions[index].character ? <Box sx={{ color: '#42424f' }}>Allowed characters:</Box> : null }
                       { error.instructions[index].character ? <Box sx={{ color: '#42424f', textAlign: 'center' }}><b>, ; . : - ! ¡ ¿ ? ' " ( ) [ ] á Á é É í Í ó Ó ú Ú ü Ü ñ Ñ</b></Box> : null }
                       { error.instructions[index].badWord ? <Box sx={{ fontWeight: '400' }}><em>Please, remove </em><mark>highlighted</mark> <em>bad words on step {index + 1}.</em></Box> : null }
@@ -681,12 +693,12 @@ const CreateRecipe = () => {
             sx={s.buttonClearSave}
             variant="contained"
             onClick={() => clearFieldsNotif()}
-          >
-            CLEAR
+          >CLEAR
           </Button>
           <Button
             sx={s.buttonClearSave}
             variant="contained"
+            onClick={(e) => handleSubmit(e)}
             disabled={
               error.title.character ||
               error.title.badWord ||
@@ -698,8 +710,7 @@ const CreateRecipe = () => {
               error.instructions.filter(e => e.badWord === true)[0] ?
               true : false
             }
-          >
-            SAVE RECIPE
+          >SAVE RECIPE
           </Button>
         </Box>
       </Box>
