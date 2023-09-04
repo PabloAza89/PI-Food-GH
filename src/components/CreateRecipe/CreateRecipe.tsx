@@ -27,13 +27,7 @@ const CreateRecipe = () => {
   const [dietsArray, setDietsArray] = useState<string[]>([]);
   const [stepsState, setStepsState] = useState(['']);
 
-  // const [emptyChecker, setEmptyChecker] = useState({
-  //   title: titleValue.replaceAll(" ","").replaceAll("\n", "") === "",
-  //   health: false,
-  //   summary: false,
-  //   diets: false,
-  //   steps: [{step: 0, empty: false}],
-  // });
+  const [saveButtonDisabled, setSaveButtonDisabled] = useState<boolean>(false);
 
   interface handlerI {
     index: number
@@ -152,36 +146,6 @@ const CreateRecipe = () => {
       },
     ]
   });
-
-  function handleSubmitButton() {
-    // if (error.title || error.health.one || error.health.two || error.summary || error.instructions ||
-    //   // (document.getElementById("checkerTitle")&&document.getElementById("checkerTitle").value.length === 0) ||
-    //   // (document.getElementById("checkerHealth")&&document.getElementById("checkerHealth").value.length === 0) ||
-    //   // (document.getElementById("checkerSummary")&&document.getElementById("checkerSummary").value.length === 0) ||
-    //   // (document.getElementById("checkerInstructions")&&document.getElementById("checkerInstructions").value.length === 0) ||
-    //   uniqueNamesDiets.length === 0) return true
-    // else return false
-  }
-
-  // const handleSubmit = async (e:any) => {
-  //   e.preventDefault();
-  //     if (created === 0) {
-  //     //   dispatch(addNew({
-  //     //       "id": Math.floor(100000 + Math.random() * 900000),
-  //     //       "title": title,
-  //     //       "diets": uniqueNamesDiets,
-  //     //       "healthScore": healthScore,
-  //     //       "summary": summary,
-  //     //       "analyzedInstructions": analyzedInstructions,
-  //     //       "image": Math.floor(Math.random() * 3)
-  //     // }))
-  //       setCreated(1)
-  //     } else {
-  //       setShowAlert(true)
-  //     }
-  // };
-
-  
 
   interface highlighterI {
     value: string,
@@ -341,6 +305,7 @@ const CreateRecipe = () => {
     setSummaryValue('');
     setDietsArray([]);
     setStepsState(['']);
+    setSaveButtonDisabled(false);
     setError({
       title: { character: false, badWord: false, empty: false },
       health: { string: false, max: false, empty: false },
@@ -348,6 +313,8 @@ const CreateRecipe = () => {
       instructions: [{ character: false, badWord: false, empty: false },]
     });
     $(`#targetInstructions0`)
+      .html("<div></div>")
+    $(`#targetTitle`)
       .html("<div></div>")
   };
 
@@ -381,10 +348,30 @@ const CreateRecipe = () => {
   })
 
   function handleSubmit(e:any) {
-    if (titleValue === "") {
+    let emptyInputs = []
+
+    if (titleValue.replaceAll(" ","").replaceAll("\n", "") === "") emptyInputs.push("Title")
+    if (healthValue.replaceAll(" ","").replaceAll("\n", "") === "") emptyInputs.push("Health Score")
+    if (summaryValue.replaceAll(" ","").replaceAll("\n", "") === "") emptyInputs.push("Summary")
+    if (dietsArray.length === 0) emptyInputs.push("Diets")
+    if (stepsState.map((e) => {if (e.replaceAll(" ","").replaceAll("\n", "") === "") return 1; else return -1}).some(e => e !== -1)) {
+      let indexNumbers: any = []
+      stepsState.forEach((e,i) => {if (e.replaceAll(" ","").replaceAll("\n", "") === "") indexNumbers.push(i+1) })
+      emptyInputs.push(
+        indexNumbers.length > 1 ?
+        `Step ${indexNumbers.slice(0,-1).map((e:any) => e).join(", ") + " and " + indexNumbers.slice(-1)} on Instructions` :
+        `Step ${indexNumbers[0]} on Instructions`,
+      )
+    }
+
+    if (emptyInputs.length > 0) {
       Swal.fire({
-        title: 'All cleared !',
-        text: 'No undo.',
+        title:
+          emptyInputs.length > 1 ?
+          `${emptyInputs.slice(0,-1).map(e => e).join(", ") + " & " + emptyInputs.slice(-1)}
+          cannot be empty !` :
+          `${emptyInputs[0]} cannot be empty !`,
+        text: 'Please, fill all fields.',
         icon: 'info',
         showConfirmButton: false,
         showDenyButton: false,
@@ -407,13 +394,29 @@ const CreateRecipe = () => {
       }
       })
       .then((res) => res.json())
-      .then((res) => console.log(res))
+      .then((res) => {
+        if (res.status === 200) {
+          Swal.fire({
+            title: 'Recipe saved successfully !',
+            icon: 'info',
+            showConfirmButton: false,
+            showDenyButton: false,
+            showCancelButton: false,
+            timer: 1000,
+          })
+        }
+      })
+      .then(() => setSaveButtonDisabled(true))
+      .catch((rej) => {
+        console.log("sv error", rej)
+      })
+      ////.then((rej) => console.log(rej))
     }
   }
 
   //console.log("", summaryValue)
   //console.log("emptyChecker", emptyChecker.title)
-  console.log("error.title", error.title)
+  //console.log("error.title", error.title)
   
 
   return !firstInstance ?
@@ -700,6 +703,7 @@ const CreateRecipe = () => {
             variant="contained"
             onClick={(e) => handleSubmit(e)}
             disabled={
+              saveButtonDisabled ||
               error.title.character ||
               error.title.badWord ||
               error.health.string ||
