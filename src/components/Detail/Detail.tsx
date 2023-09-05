@@ -8,23 +8,13 @@ import noImage3 from "../../images/noImage3.jpg";
 import { Link } from "react-router-dom";
 import logo from "../../images/logo.png";
 import { Box, Button, TextField, Dialog, Divider, Typography, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material/';
+import { recipesI } from '../../interfaces/interfaces';
 
 export default function Detail() {
 
   let arrImages = [noImage1, noImage2, noImage3]
 
   const params = useParams()
-
-  interface recipesI {
-    id: any,
-    title: any,
-    diets: any,
-    healthScore: any,
-    summary: any,
-    analyzedInstructions: any,
-    image: any,
-    dishTypes: any,
-  }
 
   const allRecipes = useSelector((state: { allRecipes: recipesI[] }) => state.allRecipes)
   const recipe = allRecipes.filter((c:any) => parseInt(params.recipeId!) === c.id && parseInt(params.recipeId!).toString().length === params.recipeId!.length)[0]

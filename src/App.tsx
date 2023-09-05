@@ -67,7 +67,7 @@ function App() {
     })
 
   },[dispatch])
-  
+
 
   const currentWidth = useSelector((state: {currentWidth:number}) => state.currentWidth)
 
@@ -84,12 +84,25 @@ function App() {
     }
   }
 
-const aa = async () => {
-  dispatch(fetchRecipesFromAPI())
-  dispatch(getDietsFromDB())
+const FirstFunc = async () => {
+  useEffect(() => {
+    console.log("done")
+    dispatch(getDietsFromDB())
+    dispatch(fetchRecipesFromAPI())
+    //dispatch(allRecipesLoaded(true))
+  },[])
 }
-  
-aa().then(() => dispatch(allRecipesLoaded(true)))
+
+// const firstFunc = async () => {
+//     console.log("done")
+//     dispatch(getDietsFromDB())
+//     dispatch(fetchRecipesFromAPI())
+// }
+
+//irstFunc()
+
+
+FirstFunc().then(() => dispatch(allRecipesLoaded(true)))
 
   return (
     <Box sx={s.background}>

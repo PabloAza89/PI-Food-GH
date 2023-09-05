@@ -11,6 +11,7 @@ import {
 } from '../../actions';
 import Tooltip from '@mui/joy/Tooltip';
 //import dietss from '../../db/diets.json';
+import serverSDDietsArray from '../../db/diets.json'; // SD = Shut Down
 import $ from 'jquery';
 
 const NavBar = () =>  {
@@ -34,6 +35,7 @@ const NavBar = () =>  {
 
   const currentWidth = useSelector((state: {currentWidth:number}) => state.currentWidth)
   const menuShown = useSelector((state: {menuShown:boolean}) => state.menuShown)
+  const allDietsOnline = useSelector((state: {allDietsOnline:boolean}) => state.allDietsOnline)
 
   interface allDietsI {
     id: any,
@@ -54,9 +56,9 @@ const NavBar = () =>  {
     {
       diet: 'All Diets',
       text: '',
-      alphaOrHealthy: '',
-      }
-    )
+      alphaOrHealthy: ''
+    }
+  )
 
   const healthLevelHandler = (e: SelectChangeEvent) => {
     setSortAlpha('' as string);
@@ -106,7 +108,6 @@ const NavBar = () =>  {
             onClick={() => dispatch(setMenuShown(!menuShown))}
             sx={s.menuButton({ currentWidth })}
           >
-        
             <MenuIcon sx={{ fontSize: 40 }} />
           </Button>
         </Tooltip>
@@ -117,7 +118,7 @@ const NavBar = () =>  {
             component="form"
             onSubmit={(e: any) => { e.preventDefault(); dispatch(filter(entireFilter)) }}
           >
-          
+
             <TextField
             //variant="contained"
               className={`inputPos`}
@@ -130,7 +131,7 @@ const NavBar = () =>  {
               sx={s.input()}
               onChange={(e) => {setEntireFilter({...entireFilter, text: e.target.value}); dispatch(setIndexChoosen(0))}}
             />
-            
+
           </Box>
           <Link to="/create">
             <Button
@@ -156,14 +157,22 @@ const NavBar = () =>  {
               value={entireFilter.diet}
               onChange={(e) => setEntireFilter({...entireFilter, diet:e.target.value})}
             >
-              {allDietsArray.map(e => {
+              { allDietsOnline ?
+                allDietsArray.map(e => {
                 return (
                   <MenuItem
                     key={e.title}
                     value={`${e.title}`}
                   >{e.title}</MenuItem>
-                )
-              })}
+                )}) :
+                serverSDDietsArray.map(e => {
+                  return (
+                    <MenuItem
+                      key={e.title}
+                      value={`${e.title}`}
+                    >{e.title}</MenuItem>
+                  )})
+              }
             </Select>
           </FormControl>
           <FormControl>

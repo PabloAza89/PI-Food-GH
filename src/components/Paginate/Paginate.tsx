@@ -4,6 +4,7 @@ import { setIndexChoosen } from '../../actions';
 import * as s from '../../styles/PaginateSX';
 import { Box, Button, TextField, Dialog, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material/';
 import $ from 'jquery';
+import { recipesI } from '../../interfaces/interfaces';
 
 const Paginate = () => {
 
@@ -13,17 +14,6 @@ const Paginate = () => {
   const menuShown = useSelector((state: {menuShown: boolean}) => state.menuShown)
 
   const dispatch = useDispatch()
-
-  interface recipesI {
-    id: any,
-    title: any,
-    diets: any,
-    healthScore: any,
-    summary: any,
-    analyzedInstructions: any,
-    image: any,
-    dishTypes: any,
-  }
 
   const toShow = useSelector((state: { toShow: recipesI[] }) => state.toShow)
 

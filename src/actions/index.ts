@@ -1,6 +1,17 @@
+// export function fetchRecipesFromAPI() {
+//   return {
+//     type: 'FETCH_RECIPES_FROM_API',
+//   }
+// };
+
 export function fetchRecipesFromAPI() {
-  return {
-    type: 'FETCH_RECIPES_FROM_API',
+  return async function(dispatch: any) {
+    return (
+      fetch("http://localhost:3001/recipes")
+      .then(resp => resp.json())
+      .then(data => dispatch({type: 'FETCH_RECIPES', payload: data}))
+      .catch(error => dispatch({type: 'FETCH_RECIPES', payload: "error"}))
+    )
   }
 };
 
@@ -9,7 +20,8 @@ export function getDietsFromDB() {
     return (
       fetch("http://localhost:3001/diets")
       .then(resp => resp.json())
-      .then(data => dispatch({type: 'GET_DIETS_FROM_DB', payload: data}))
+      .then(data => dispatch({type: 'GET_DIETS', payload: data}))
+      .catch(error => dispatch({type: 'GET_DIETS', payload: "error"}))
     )
   }
 };

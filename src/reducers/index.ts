@@ -1,20 +1,11 @@
 import toAvoidKey from '../db/toAvoidKey.json';
-
-interface recipesI {
-  id: any,
-  title: any,
-  diets: any,
-  healthScore: any,
-  summary: any,
-  analyzedInstructions: any,
-  image: any,
-  dishTypes: any,
-}
+import { recipesI } from '../interfaces/interfaces';
 
 interface initialStateI {
   allRecipes: recipesI[],
   toShow: recipesI[],
   allDiets: any[],
+  allDietsOnline: boolean,
   allRecipesLoaded: boolean,
   showMain: boolean,
   indexChoosen: number,
@@ -40,6 +31,7 @@ const initialState: initialStateI = {
   allRecipes: [],
   toShow: [],
   allDiets: [],
+  allDietsOnline: true,
   allRecipesLoaded: false,
   showMain: false,
   indexChoosen: 0,
@@ -63,28 +55,61 @@ const initialState: initialStateI = {
 
 const reducer = (state = initialState, action: {type: string; payload: any}) => {
   switch (action.type) {
-    case 'FETCH_RECIPES_FROM_API':
-      let parsedArr: recipesI[] = []
-      toAvoidKey.results.map(e => parsedArr.push(
+    // case 'FETCH_RECIPES_FROM_API':
+    //   let parsedArr: recipesI[] = []
+    //   toAvoidKey.results.map(e => parsedArr.push(
+    //     {
+    //       id: e.id,
+    //       title: e.title,
+    //       summary: e.summary,
+    //       healthScore: e.healthScore,
+    //       analyzedInstructions:
+    //           e.analyzedInstructions[0] ? e.analyzedInstructions[0].steps.map(e=> e.step) : [],
+    //       image: e.image,
+    //       diets: e.diets.map(function(e) {
+    //         if ((e.indexOf(e) !== e.length - 1)) return e.split(" ").map(e => e[0].toUpperCase() + e.slice(1)).join(" ")
+    //         else return e.split(" ").map(e => e[0].toUpperCase() + e.slice(1)).join(" ")
+    //       }),
+    //       dishTypes: e.dishTypes
+    //     }
+    //   ))
+    //   return {
+    //     ...state,
+    //     allRecipes: parsedArr,
+    //     toShow: parsedArr
+    //   };
+
+    case 'FETCH_RECIPES':
+      //toAvoidKey.results.map
+      console.log("action.payload", action.payload)
+      let targetArray:any = []
+
+      if (action.payload !== 'error') targetArray = action.payload
+      else targetArray = toAvoidKey
+
+      let parsedArrOffline: recipesI[] = []
+      targetArray && targetArray.map((e:any) => parsedArrOffline.push(
         {
           id: e.id,
           title: e.title,
           summary: e.summary,
           healthScore: e.healthScore,
           analyzedInstructions:
-              e.analyzedInstructions[0] ? e.analyzedInstructions[0].steps.map(e=> e.step) : [],
+               e.analyzedInstructions[0] ?
+               e.analyzedInstructions.map((e:any)=> e) :
+               [],
           image: e.image,
-          diets: e.diets.map(function(e) {
-            if ((e.indexOf(e) !== e.length - 1)) return e.split(" ").map(e => e[0].toUpperCase() + e.slice(1)).join(" ")
-            else return e.split(" ").map(e => e[0].toUpperCase() + e.slice(1)).join(" ")
+          diets: e.diets.map(function(e:any) {
+            if ((e.indexOf(e) !== e.length - 1)) return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ")
+            else return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ")
           }),
           dishTypes: e.dishTypes
         }
       ))
       return {
         ...state,
-        allRecipes: parsedArr,
-        toShow: parsedArr
+        allRecipes: parsedArrOffline,
+        toShow: parsedArrOffline
       };
 
     case 'ALL_RECIPES_LOADED':
@@ -93,17 +118,16 @@ const reducer = (state = initialState, action: {type: string; payload: any}) => 
         allRecipesLoaded: action.payload
       };
 
-    case 'GET_DIETS_FROM_DB':
-      // fetch(`http://localhost:3001/diets`, {
-      //   .then((res) => res.json() )
-      //   .then( data => {
-      //     console.log(data);     
-
-      return {
+    case 'GET_DIETS':
+      //console.log("action.payload", action.payload)
+      if (action.payload === "error") {
+        return {
+          ...state,
+          //allDiets: [{title:"All Diets"}, {title:"Vegan"}]
+          allDietsOnline: false
+        };
+      } else return {
         ...state,
-        //allDiets: ["a","b","c"]
-        //allDiets: [state.allDiets, [...resArray]]
-        //allDiets: resArray
         allDiets: action.payload
       };
 

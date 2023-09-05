@@ -5,6 +5,7 @@ import store from '../../store/store';
 import { Box } from '@mui/material';
 import $ from 'jquery';
 import { useEffect } from 'react';
+import { recipesI } from '../../interfaces/interfaces';
 
 const CardsMapper = ()  => {
 
@@ -14,17 +15,6 @@ const CardsMapper = ()  => {
   const menuShown = useSelector((state: {menuShown: boolean}) => state.menuShown)
 
   const dispatch = useDispatch()
-
-  interface recipesI {
-    id: any,
-    title: any,
-    diets: any,
-    healthScore: any,
-    summary: any,
-    analyzedInstructions: any,
-    image: any,
-    dishTypes: any,
-  }
 
   const toShow = useSelector((state: { toShow: recipesI[] }) => state.toShow)
 
