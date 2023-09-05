@@ -1,5 +1,6 @@
-import { legacy_createStore as createStore, compose } from 'redux';
+import { legacy_createStore as createStore, applyMiddleware, compose } from 'redux';
 import rootReducer from '../reducers';
+import thunk from 'redux-thunk';
 
 declare global {
   interface Window {
@@ -7,9 +8,15 @@ declare global {
   }
 }
 
+const composeEnhancers =
+   (typeof window !== 'undefined' &&
+   window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ||
+   compose;
+
 const store = createStore(
   rootReducer,
-  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__()
+  composeEnhancers(applyMiddleware(thunk)),
+  //window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__()
 );
 
 export type RootState = ReturnType<typeof store.getState>

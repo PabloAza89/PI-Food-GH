@@ -19,7 +19,8 @@ import {
   setCurrentWidth, setHeight, setLarLand,
   setLarPort, setMedLand, setMedPort, setMinLand,
   setMinPort, setPercentageResizedHeight, setWidth,
-  setScrollWidth, setHasScroll, setScrollPosition
+  setScrollWidth, setHasScroll, setScrollPosition,
+  getDietsFromDB
 } from './actions';
 import store from './store/store';
 import $ from 'jquery';
@@ -83,16 +84,9 @@ function App() {
     }
   }
 
-  // try {
-  //   dispatch(fetchRecipesFromAPI());
-  //   dispatch(allRecipesLoaded(true))
-
-  // } catch(e) {
-  //   console.log(e)
-  // }
 const aa = async () => {
   dispatch(fetchRecipesFromAPI())
-  
+  dispatch(getDietsFromDB())
 }
   
 aa().then(() => dispatch(allRecipesLoaded(true)))

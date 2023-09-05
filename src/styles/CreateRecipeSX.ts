@@ -26,6 +26,19 @@ export const form = () => {
   }
 }
 
+export const imageSearcher = () => {
+  return {
+    //...noSelect,
+    display: 'flex',
+    flexDirection: 'column',
+    background: 'darkred', // dev
+    width: '400px',
+    height: '300px',
+    alignItems: 'center',
+    marginTop: '16px',
+  }
+}
+
 export const tooltipCenter = () => {
   return {
     zIndex: 1,
@@ -104,7 +117,11 @@ export const textFieldInput = () => {
   }
 }
 
-export const inputShownTitle = () => {
+interface inputShownTitleI {
+  disabled: boolean
+}
+
+export const inputShownTitle = ({ disabled }: inputShownTitleI) => {
   return {
     display: 'flex',
     whiteSpace: 'pre',
@@ -113,8 +130,7 @@ export const inputShownTitle = () => {
     padding: '16.5px 0px 16.5px 0px',
     position: 'absolute',
     //color: 'yellow', // IF SETTING TO !IMPORTANT, JQUERY CANNOT OVERRIDE STYLE ! // dev
-    color: 'rgba(0, 0, 0, 0.87) !important', // IF TextField IS MULTILINE, PLACEHOLDER MUST BE LIKE THIS
-    //color: 'transparent !important',
+    color: disabled ? 'transparent !important' : 'rgba(0, 0, 0, 0.87) !important', // IF TextField IS MULTILINE, PLACEHOLDER MUST BE LIKE THIS
   }
 }
 

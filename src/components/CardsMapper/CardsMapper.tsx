@@ -25,7 +25,7 @@ const CardsMapper = ()  => {
     image: any,
     dishTypes: any,
   }
-  
+
   const toShow = useSelector((state: { toShow: recipesI[] }) => state.toShow)
 
   let arraySplitedBy9: any[] = toShow.slice( indexChoosen * 9, (indexChoosen * 9) + 9 )

@@ -10,7 +10,7 @@ import {
   setIndexChoosen, filter, setMenuShown
 } from '../../actions';
 import Tooltip from '@mui/joy/Tooltip';
-import dietss from '../../db/diets.json';
+//import dietss from '../../db/diets.json';
 import $ from 'jquery';
 
 const NavBar = () =>  {
@@ -34,6 +34,13 @@ const NavBar = () =>  {
 
   const currentWidth = useSelector((state: {currentWidth:number}) => state.currentWidth)
   const menuShown = useSelector((state: {menuShown:boolean}) => state.menuShown)
+
+  interface allDietsI {
+    id: any,
+    title: string
+  }
+
+  const allDietsArray = useSelector((state: {allDiets: allDietsI[]}) => state.allDiets)
 
   //const [menuShown, setMenuShown] = useState<boolean>(false);
 
@@ -149,7 +156,7 @@ const NavBar = () =>  {
               value={entireFilter.diet}
               onChange={(e) => setEntireFilter({...entireFilter, diet:e.target.value})}
             >
-              {dietss.map(e => {
+              {allDietsArray.map(e => {
                 return (
                   <MenuItem
                     key={e.title}

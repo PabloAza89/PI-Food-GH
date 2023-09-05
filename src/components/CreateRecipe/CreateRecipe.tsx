@@ -22,11 +22,13 @@ const CreateRecipe = () => {
   const [summaryPlaceholder, setSummaryPlaceholder] = useState<string>('e.g. Healthy pasta recipe');
 
   const [titleValue, setTitleValue] = useState<string>('');
+  const [imageValue, setImageValue] = useState<string>('');
   const [healthValue, setHealthValue] = useState<string>('');
   const [summaryValue, setSummaryValue] = useState<string>('');
   const [dietsArray, setDietsArray] = useState<string[]>([]);
   const [stepsState, setStepsState] = useState(['']);
 
+  const [allDisabled, setAllDisabled] = useState<boolean>(false);
   const [saveButtonDisabled, setSaveButtonDisabled] = useState<boolean>(false);
 
   interface handlerI {
@@ -97,6 +99,10 @@ const CreateRecipe = () => {
     empty: boolean
   }
 
+  interface imageI {
+    start: boolean
+  }
+
   interface healthI {
     string?: boolean,
     max?: boolean,
@@ -117,6 +123,7 @@ const CreateRecipe = () => {
 
   interface errorI {
     title: titleI,
+    image: imageI,
     health: healthI,
     summary: summaryI,
     instructions: instructionsI[]
@@ -126,23 +133,26 @@ const CreateRecipe = () => {
     title: {
       character: false,
       badWord: false,
-      empty: false
+      empty: true
+    },
+    image: {
+      start: false
     },
     health: {
       string: false,
       max: false,
-      empty: false
+      empty: true
     },
     summary: {
       character: false,
       badWord: false,
-      empty: false
+      empty: true
     },
     instructions: [
       {
         character: false,
         badWord: false,
-        empty: false
+        empty: true
       },
     ]
   });
@@ -262,7 +272,12 @@ const CreateRecipe = () => {
         else { copyObjTitle[type].empty = false; setError({ ...copyObjTitle }) }
         setTitleValue(value);
         highlighter({value, type})
-        
+      break;
+      case (`image`):
+        let copyObjImage = {...error}
+        if (value.trim().slice(0,8) !== "https://" && value.trim().length !== 0) { copyObjImage[type].start = true; setError({ ...copyObjImage }) }
+        else { copyObjImage[type].start = false; setError({ ...copyObjImage })}
+        setImageValue(value.trim());
       break;
       case (`health`):
         let copyObj = {...error}
@@ -301,13 +316,16 @@ const CreateRecipe = () => {
 
   const clearHandler = () => {
     setTitleValue('');
+    setImageValue('');
     setHealthValue('');
     setSummaryValue('');
     setDietsArray([]);
     setStepsState(['']);
     setSaveButtonDisabled(false);
+    setAllDisabled(false)
     setError({
       title: { character: false, badWord: false, empty: false },
+      image: { start: true },
       health: { string: false, max: false, empty: false },
       summary: { character: false, badWord: false, empty: false },
       instructions: [{ character: false, badWord: false, empty: false },]
@@ -384,6 +402,7 @@ const CreateRecipe = () => {
         method: 'POST',
         body: JSON.stringify({
           title: titleValue,
+          image: imageValue,
           healthScore: healthValue,
           summary: summaryValue,
           diets: dietsArray,
@@ -406,7 +425,10 @@ const CreateRecipe = () => {
           })
         }
       })
-      .then(() => setSaveButtonDisabled(true))
+      .then(() => {
+        setSaveButtonDisabled(true)
+        setAllDisabled(true)
+      })
       .catch((rej) => {
         console.log("sv error", rej)
       })
@@ -417,7 +439,7 @@ const CreateRecipe = () => {
   //console.log("", summaryValue)
   //console.log("emptyChecker", emptyChecker.title)
   //console.log("error.title", error.title)
-  
+  console.log("image error", error.image)
 
   return !firstInstance ?
     (
@@ -425,7 +447,8 @@ const CreateRecipe = () => {
         component="form"
         sx={s.form}
       >
-        <Box component="img" src={noImage1} />
+        {/* <Box component="img" src={noImage1} /> */}
+        <Box component="img" sx={s.imageSearcher} src={imageValue} />
         <Typography >Create your own recipe ! Please fill in all fields:</Typography>
         <Box sx={s.eachRow}>
           <Box sx={s.text}>Title:</Box>
@@ -458,9 +481,10 @@ const CreateRecipe = () => {
             }
           >
             <Box>
-              <InputLabel id={"targetTitle"} shrink={false} sx={s.inputShownTitle}>{ titleValue }</InputLabel>
+              <InputLabel disabled={allDisabled} id={"targetTitle"} shrink={false} sx={s.inputShownTitle({ disabled: allDisabled})}>{ titleValue }</InputLabel>
               <TextField
                 className={`testTitle`}
+                disabled={allDisabled}
                 id="title"
                 autoComplete='off'
                 sx={s.inputHiddenTitle({ length:titleValue.length })}
@@ -471,6 +495,45 @@ const CreateRecipe = () => {
                 onChange={(e) => { validator({ value: e.target.value, type: e.target.id }) }}
               />
             </Box>
+          </Tooltip>
+        </Box>
+        <Box sx={s.eachRow}>
+          <Box sx={s.text}>Image:</Box>
+          <Tooltip
+            sx={s.tooltipLeft}
+            arrow
+            variant="outlined"
+            size="lg"
+            enterDelay={500}
+            leaveDelay={200}
+            enterTouchDelay={0}
+            open={error.image.start}
+            placement="bottom"
+            title={
+              <Box sx={{ display: 'flex', flexDirection: 'column', color: '#25252d', background: '#f5f5f9', fontFamily: 'Roboto'}}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', color: '#25252d', fontWeight: '400' }}>
+                  <Box><mark><em>It's seems you are typing a non secure link..</em></mark></Box>
+                  <Box>{ error.image.start ? <mark><em>Please, be shure your link starts with <b>https://</b></em></mark> : null }</Box>
+                </Box>
+                <Box sx={{ display: 'flex', flexDirection: 'column', color: '#25252d', fontWeight: '400' }}>
+                  <Box>Please, copy and paste your food recipe link image url here !</Box>
+                  <Box>If you dont give a link, a random image gonna be used in your recipe.</Box>
+                </Box>
+              </Box>
+            }
+          >
+            <TextField
+              className={`inputPos`}
+              id="image"
+              disabled={allDisabled}
+              sx={s.input}
+              value={imageValue}
+              autoComplete='off'
+              placeholder={`e.g. https://commons.wikimedia.org/wiki/File:Elaboraci%C3%B3n_del_tomate_frito_(4).jpg`}
+              //onFocus={() => setHealthScorePlaceholder("")}
+              //onBlur={() => setHealthScorePlaceholder(`e.g. https://commons.wikimedia.org/wiki/File:Elaboraci%C3%B3n_del_tomate_frito_(4).jpg`)}
+              onChange={(e) => { validator({ value: e.target.value, type: e.target.id }) }}
+            />
           </Tooltip>
         </Box>
         <Box sx={s.eachRow}>
@@ -501,6 +564,7 @@ const CreateRecipe = () => {
               className={`inputPos`}
               id="health"
               sx={s.input}
+              disabled={allDisabled}
               value={healthValue}
               autoComplete='off'
               placeholder={healthScorePlaceholder}
@@ -540,12 +604,13 @@ const CreateRecipe = () => {
             }
           >
             <Box>
-              <InputLabel id={"targetSummary"} shrink={false} sx={s.inputShownSummary}>{ summaryValue }</InputLabel>
+              <InputLabel disabled={allDisabled} id={"targetSummary"} shrink={false} sx={s.inputShownSummary}>{ summaryValue }</InputLabel>
               <TextField
                 id="summary"
                 autoComplete='off'
                 sx={s.inputHiddenSummary}
                 value={summaryValue}
+                disabled={allDisabled}
                 multiline
                 placeholder={summaryPlaceholder}
                 onFocus={() => setSummaryPlaceholder("")}
@@ -564,6 +629,7 @@ const CreateRecipe = () => {
               placeholder={`Select Diets`}
               multiple
               value={dietsArray}
+              disabled={allDisabled}
               label="Select Diets"
               onChange={handleChange}
               renderValue={(selected) => selected.join(', ')}
@@ -619,11 +685,12 @@ const CreateRecipe = () => {
                   }
                 >
                   <Box>
-                    <InputLabel id={`targetInstructions${index}`} shrink={false} sx={s.inputShownInstructions}>{ stepsState[index] }</InputLabel>
+                    <InputLabel disabled={allDisabled} id={`targetInstructions${index}`} shrink={false} sx={s.inputShownInstructions}>{ stepsState[index] }</InputLabel>
                     <TextField
                       id={`${index}instructions`}
                       autoComplete='off'
                       multiline
+                      disabled={allDisabled}
                       value={stepsState[index]}
                       placeholder={`e.g. Cut pasta, fry tomatoes..`}
                       sx={s.inputHiddenInstructions}
@@ -654,7 +721,7 @@ const CreateRecipe = () => {
                   <Box sx={s.buttonNewHelper}>
                     <Button
                       variant="contained"
-                      disabled={stepsState.length >= 10 ? true : false}
+                      disabled={allDisabled ? true : stepsState.length >= 10 ? true : false}
                       id={`${index}`}
                       sx={s.buttonNew}
                       onClick={(e) => {handlerAdd({ index: parseInt((e.target as HTMLInputElement).id, 10 )})}}
@@ -678,7 +745,7 @@ const CreateRecipe = () => {
                     <Button
                       className={`buttonDeleteStep`}
                       variant="contained"
-                      disabled={stepsState.length === 1 ? true : false}
+                      disabled={allDisabled ? true : stepsState.length === 1 ? true : false}
                       id={`${index}`}
                       sx={s.buttonDelete}
                       onClick={(e) => { handlerDelete({ index: parseInt((e.target as HTMLInputElement).id, 10) }) }}

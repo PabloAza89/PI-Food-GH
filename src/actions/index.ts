@@ -4,6 +4,16 @@ export function fetchRecipesFromAPI() {
   }
 };
 
+export function getDietsFromDB() {
+  return async function(dispatch: any) {
+    return (
+      fetch("http://localhost:3001/diets")
+      .then(resp => resp.json())
+      .then(data => dispatch({type: 'GET_DIETS_FROM_DB', payload: data}))
+    )
+  }
+};
+
 export function allRecipesLoaded(payload: any) {
   return {
     type: 'ALL_RECIPES_LOADED',

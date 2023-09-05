@@ -14,6 +14,7 @@ interface recipesI {
 interface initialStateI {
   allRecipes: recipesI[],
   toShow: recipesI[],
+  allDiets: any[],
   allRecipesLoaded: boolean,
   showMain: boolean,
   indexChoosen: number,
@@ -38,6 +39,7 @@ interface initialStateI {
 const initialState: initialStateI = {
   allRecipes: [],
   toShow: [],
+  allDiets: [],
   allRecipesLoaded: false,
   showMain: false,
   indexChoosen: 0,
@@ -84,11 +86,28 @@ const reducer = (state = initialState, action: {type: string; payload: any}) => 
         allRecipes: parsedArr,
         toShow: parsedArr
       };
+
     case 'ALL_RECIPES_LOADED':
       return {
         ...state,
         allRecipesLoaded: action.payload
       };
+
+    case 'GET_DIETS_FROM_DB':
+      // fetch(`http://localhost:3001/diets`, {
+      //   .then((res) => res.json() )
+      //   .then( data => {
+      //     console.log(data);     
+
+      return {
+        ...state,
+        //allDiets: ["a","b","c"]
+        //allDiets: [state.allDiets, [...resArray]]
+        //allDiets: resArray
+        allDiets: action.payload
+      };
+
+
     case 'FILTER':
       const copyArrayDiet = [...state.allRecipes]
       let arrayToShow: recipesI[] = []
