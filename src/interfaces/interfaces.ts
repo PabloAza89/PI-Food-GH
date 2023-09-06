@@ -7,4 +7,5 @@ export interface recipesI {
   analyzedInstructions: any,
   image: any,
   dishTypes: any,
+  userRecipe: boolean,
 }

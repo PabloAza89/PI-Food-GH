@@ -103,7 +103,8 @@ const reducer = (state = initialState, action: {type: string; payload: any}) => 
             if ((e.indexOf(e) !== e.length - 1)) return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ")
             else return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ")
           }),
-          dishTypes: e.dishTypes
+          dishTypes: e.dishTypes,
+          userRecipe: e.userRecipe
         }
       ))
       return {

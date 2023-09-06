@@ -1,24 +1,33 @@
+import { useState, useEffect } from "react";
 import * as s from  '../../styles/CardsMapperSX';
 import Card from '../Card/Card';
 import { useSelector , useDispatch } from 'react-redux';
-import store from '../../store/store';
 import { Box } from '@mui/material';
-import $ from 'jquery';
-import { useEffect } from 'react';
 import { recipesI } from '../../interfaces/interfaces';
+import {
+  fetchRecipesFromAPI, allRecipesLoaded, getDietsFromDB
+} from '../../actions';
 
 const CardsMapper = ()  => {
+
+  const dispatch = useDispatch()
 
   const indexChoosen = useSelector((state: {indexChoosen: number}) => state.indexChoosen)
   const scrollWidth = useSelector((state: {scrollWidth: number}) => state.scrollWidth)
   const scrollPosition = useSelector((state: {scrollPosition: number}) => state.scrollPosition)
   const menuShown = useSelector((state: {menuShown: boolean}) => state.menuShown)
-
-  const dispatch = useDispatch()
-
   const toShow = useSelector((state: { toShow: recipesI[] }) => state.toShow)
 
   let arraySplitedBy9: any[] = toShow.slice( indexChoosen * 9, (indexChoosen * 9) + 9 )
+
+  const FirstFunc = async () => {
+  useEffect(() => {
+    dispatch(getDietsFromDB())
+    dispatch(fetchRecipesFromAPI())
+  },[])
+}
+
+FirstFunc().then(() => dispatch(allRecipesLoaded(true)))
 
   return toShow[0] !== undefined ?
   (
@@ -32,6 +41,7 @@ const CardsMapper = ()  => {
           diets={e.diets}
           image={e.image}
           dishTypes={e.dishTypes}
+          userRecipe={e.userRecipe}
         />
       )}
     </Box>

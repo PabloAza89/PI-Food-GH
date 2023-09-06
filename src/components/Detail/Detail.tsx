@@ -17,19 +17,15 @@ export default function Detail() {
   const params = useParams()
 
   const allRecipes = useSelector((state: { allRecipes: recipesI[] }) => state.allRecipes)
-  const recipe = allRecipes.filter((c:any) => parseInt(params.recipeId!) === c.id && parseInt(params.recipeId!).toString().length === params.recipeId!.length)[0]
+  const recipe = allRecipes.filter((c:any) => params.recipeId! === c.id.toString() && params.recipeId!.toString().length === params.recipeId!.length)[0]
 
-  function regexInSummary(text: any) {
-      return text.replaceAll(/(<[/]b>|<b>|<[/]a>|<a\b[^>]*>|[/]a>)/g, '');
-  }
-
-  //console.log("recipe.analyzedInstructions[0]", !!recipe.analyzedInstructions[0])
+  function regexInSummary(text: any) { return text.replaceAll(/(<[/]b>|<b>|<[/]a>|<a\b[^>]*>|[/]a>)/g, '') }
 
   if (recipe) {
     return (
       <Box sx={s.background}>
         <Box sx={s.card}>
-          <Box component="img" sx={s.image} src={recipe.image.length > 1 ? recipe.image : arrImages[recipe.image] } alt="" />
+          <Box component="img" sx={s.image} src={ recipe.userRecipe && recipe.image.length === 1 ? arrImages[parseInt(recipe.image, 10) - 1] : recipe.userRecipe && recipe.image.length > 1 ? `https://res.cloudinary.com/dtembdocm/image/upload/` + recipe.image : recipe.image } alt="" />
           <Typography sx={s.text}><b>Title: </b>{recipe.title}</Typography>
           <Typography sx={s.text}>
             <b>Diets: </b>

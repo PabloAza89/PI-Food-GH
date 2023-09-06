@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useDispatch } from 'react-redux';
 import * as s from "../../styles/CreateRecipeSX";
 import "../../styles/CreateRecipeSX.css";
-import noImage1 from "../../images/noImage1.jpg";
+import noLoaded from "../../images/noLoaded.jpg";
 import logo from "../../images/logo.png";
 import { Link } from "react-router-dom";
 import { addNew } from '../../actions';
@@ -30,6 +30,7 @@ const CreateRecipe = () => {
 
   const [allDisabled, setAllDisabled] = useState<boolean>(false);
   const [saveButtonDisabled, setSaveButtonDisabled] = useState<boolean>(false);
+  const [imageLoaded, setImageLoaded] = useState<boolean>(false);
 
   interface handlerI {
     index: number
@@ -439,7 +440,9 @@ const CreateRecipe = () => {
   //console.log("", summaryValue)
   //console.log("emptyChecker", emptyChecker.title)
   //console.log("error.title", error.title)
-  console.log("image error", error.image)
+  //console.log("image error", error.image)
+  console.log("imageLoaded", imageLoaded)
+  
 
   return !firstInstance ?
     (
@@ -448,7 +451,8 @@ const CreateRecipe = () => {
         sx={s.form}
       >
         {/* <Box component="img" src={noImage1} /> */}
-        <Box component="img" sx={s.imageSearcher} src={imageValue} />
+        <Box component="img" sx={{ width: '0px', height: '0px' }} src={ imageValue } onLoad={() => setImageLoaded(true)} onError={() => setImageLoaded(false)} />
+        <Box component="img" sx={s.imageSearcher} src={ imageLoaded ? imageValue : noLoaded } /* onLoad={() => setImageLoaded(true)} */ /* onError={() => setImageLoaded(false)} */ />
         <Typography >Create your own recipe ! Please fill in all fields:</Typography>
         <Box sx={s.eachRow}>
           <Box sx={s.text}>Title:</Box>

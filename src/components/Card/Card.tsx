@@ -15,9 +15,10 @@ interface CardI {
   healthScore: number,
   diets: any,
   dishTypes: any
+  userRecipe: boolean,
 }
 
-const Card = ({ id, image, title, healthScore , diets, dishTypes }: CardI) => {
+const Card = ({ id, image, title, healthScore , diets, dishTypes, userRecipe }: CardI) => {
 
   let arrImages = [noImage1, noImage2, noImage3]
 
@@ -34,8 +35,7 @@ const Card = ({ id, image, title, healthScore , diets, dishTypes }: CardI) => {
   return (
     <Box sx={s.background}>
       <Link to={`/${id}`}>
-        {/* <Box component="img" sx={s.image} src={image.length > 1 ? image : arrImages[image] } alt="" /> */}
-        <Box component="img" sx={s.image} src={image} alt="" />
+        <Box component="img" sx={s.image} src={ userRecipe && image.length === 1 ? arrImages[parseInt(image, 10) - 1] : userRecipe && image.length > 1 ? `https://res.cloudinary.com/dtembdocm/image/upload/` + image : image } alt="" />
       </Link>
       <Link style={{ textDecoration: 'none' }} to={`/${id}`}>
         <Tooltip

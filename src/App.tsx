@@ -84,25 +84,14 @@ function App() {
     }
   }
 
-const FirstFunc = async () => {
-  useEffect(() => {
-    console.log("done")
-    dispatch(getDietsFromDB())
-    dispatch(fetchRecipesFromAPI())
-    //dispatch(allRecipesLoaded(true))
-  },[])
-}
-
-// const firstFunc = async () => {
-//     console.log("done")
+// const FirstFunc = async () => {
+//   useEffect(() => {
 //     dispatch(getDietsFromDB())
 //     dispatch(fetchRecipesFromAPI())
+//   },[])
 // }
 
-//irstFunc()
-
-
-FirstFunc().then(() => dispatch(allRecipesLoaded(true)))
+// FirstFunc().then(() => dispatch(allRecipesLoaded(true)))
 
   return (
     <Box sx={s.background}>
