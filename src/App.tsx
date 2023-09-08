@@ -10,9 +10,11 @@ import GoBack from "./components/GoBack/GoBack";
 import Paginate from "./components/Paginate/Paginate";
 import NavBar from "./components/NavBar/NavBar";
 import GoUp from "./components/GoUp/GoUp";
+import GoogleAuth from "./components/GoogleAuth/GoogleAuth";
 import Error from './components/Error/Error';
 import CreateRecipe from "./components/CreateRecipe/CreateRecipe";
 import About from "./components/About/About";
+
 import { useDispatch } from 'react-redux';
 import {
   fetchRecipesFromAPI, allRecipesLoaded,
@@ -93,8 +95,20 @@ function App() {
 
 // FirstFunc().then(() => dispatch(allRecipesLoaded(true)))
 
+  const [ responseTkn, setResponseTkn ] = useState({
+    userEmail: '',
+    token: ''
+  })
+
+  function callBack(data: any) {
+    console.log("parent Data", data)
+    console.log("parent Data email ", data.userEmail)
+    console.log("parent Data tkn", data.userTkn)
+  }
+
   return (
     <Box sx={s.background}>
+      <GoogleAuth hCB={callBack}/>
       <Box sx={s.wallpaperBody} />
       <Routes>
         <Route path="/" element={<>

@@ -4,7 +4,7 @@ import * as s from "../../styles/CreateRecipeSX";
 import "../../styles/CreateRecipeSX.css";
 import noLoaded from "../../images/noLoaded.jpg";
 import logo from "../../images/logo.png";
-import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { addNew } from '../../actions';
 import { Box, Button, OutlinedInput, Input, InputBase, TextField, ListItemText, Checkbox, Dialog, Typography,FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material/';
 import dietss from '../../db/diets.json';
@@ -12,10 +12,28 @@ import Tooltip from '@mui/joy/Tooltip';
 import Swal from 'sweetalert2';
 import dicEs from '../../dictionary/es.json';
 import $ from 'jquery';
+//import GoogleAuth from '../GoogleAuth/GoogleAuth';
 
 const CreateRecipe = () => {
 
   const dispatch = useDispatch()
+  const location = useLocation()
+
+  //let target = "#access_token=ya29.a0AfB_byDIz7hhoF8LD-CKwEThmne7OFCMeVSE0Fe9S63pZMYyMyETZn-DZJAMtRHeJ81F5xlzKWsXhO7nwRJyPH1HU16WUicndnUofWtLtm9OJxLlFViidifL5j9sdfDUcUIzBiEvQ1af3myuTkbPsUGOBocrt2H-lL7vIQaCgYKAegSARESFQHsvYlsmHQGVEJKfKUuGb2CdOmrWw0173&token_type=Bearer&expires_in=3599&scope=email%20profile%20https://www.googleapis.com/auth/userinfo.email%20openid%20https://www.googleapis.com/auth/userinfo.profile&authuser=2&prompt=consent"
+  let target = location.hash
+
+  let start = target.indexOf(`#access_token=`)
+  let end = target.indexOf(`&token_type=`)
+
+  let authTk = target.slice(start+14,end)
+
+  // console.log(start)
+  // console.log(end)
+  // console.log(authTk)
+
+  // console.log("location", location)
+  // console.log("location.hash === ", location.hash === "")
+  // console.log("location.hash", location.hash)
 
   const [titlePlaceholder, setTitlePlaceholder] = useState<string>('e.g. Pasta with tomatoes..');
   const [healthScorePlaceholder, setHealthScorePlaceholder] = useState<string>('e.g. 73');
@@ -436,24 +454,19 @@ const CreateRecipe = () => {
       ////.then((rej) => console.log(rej))
     }
   }
-
-  //console.log("", summaryValue)
-  //console.log("emptyChecker", emptyChecker.title)
-  //console.log("error.title", error.title)
-  //console.log("image error", error.image)
-  console.log("imageLoaded", imageLoaded)
-  
-
+ 
   return !firstInstance ?
     (
       <Box
         component="form"
         sx={s.form}
       >
-        {/* <Box component="img" src={noImage1} /> */}
-        <Box component="img" sx={{ width: '0px', height: '0px' }} src={ imageValue } onLoad={() => setImageLoaded(true)} onError={() => setImageLoaded(false)} />
-        <Box component="img" sx={s.imageSearcher} src={ imageLoaded ? imageValue : noLoaded } /* onLoad={() => setImageLoaded(true)} */ /* onError={() => setImageLoaded(false)} */ />
+        <Box component="img" sx={{ width: '0px', height: '0px' }} src={ imageValue } onLoad={() => setImageLoaded(true)} onError={() => setImageLoaded(false)} />  {/* HIDDEN, ONLY FOR IMAGE VERIFICATION PURPOSES. */}
+        <Box component="img" sx={s.imageSearcher} src={ imageLoaded ? imageValue : noLoaded } />
         <Typography >Create your own recipe ! Please fill in all fields:</Typography>
+
+        {/* <GoogleAuth /> */}
+        
         <Box sx={s.eachRow}>
           <Box sx={s.text}>Title:</Box>
           <Tooltip
