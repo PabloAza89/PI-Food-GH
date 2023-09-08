@@ -4,10 +4,11 @@ import { Box, Button } from '@mui/material/';
 import { ReactComponent as MySvg } from '../../images/googleLogo.svg';
 import * as s from "../../styles/GoogleAuthSX";
 
-const GoogleAuth = (props: any) => {
+const GoogleAuth = ({ retrieveLogin, userData }: any) => {
   const [ responseTkn, setResponseTkn ] = useState("")
   const [ user, setUser ] = useState("")
 
+  console.log("userData", userData)
   
   const login = useGoogleLogin({
       onSuccess: (codeResponse) => {
@@ -19,10 +20,9 @@ const GoogleAuth = (props: any) => {
           })
           .then((res) => res.json())
           .then((response) => {
-            
             console.log("response", response.email)
             setUser(response.email)
-            props.hCB({userEmail: response.email, userTkn: codeResponse.access_token})
+            retrieveLogin({email: response.email, token: codeResponse.access_token})
           })
           .catch(rej => console.log(rej))
 
@@ -52,7 +52,7 @@ const GoogleAuth = (props: any) => {
 
   return (
     <Box sx={s.background}>
-      <Button variant="contained" sx={s.bgIn} onClick={() => login()} ><MySvg/>{ user ? `  Signed in as ${user}` : `  Sign in with Google` }</Button>
+      <Button variant="contained" sx={s.bgIn} onClick={() => login()} ><MySvg/>{ userData.email ? `  Signed in as ${userData.email}` : `  Sign in with Google` }</Button>
       { user ?
       <Button variant="contained" sx={s.bgOut} onClick={() => logout()} >
         <Box className="fa fa-sign-out fa-lg" aria-hidden="true"></Box>

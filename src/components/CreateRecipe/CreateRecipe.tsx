@@ -12,9 +12,9 @@ import Tooltip from '@mui/joy/Tooltip';
 import Swal from 'sweetalert2';
 import dicEs from '../../dictionary/es.json';
 import $ from 'jquery';
-//import GoogleAuth from '../GoogleAuth/GoogleAuth';
+import GoogleAuth from '../GoogleAuth/GoogleAuth';
 
-const CreateRecipe = () => {
+const CreateRecipe = ({ retrieveLogin, userData }: any) => {
 
   const dispatch = useDispatch()
   const location = useLocation()
@@ -465,7 +465,7 @@ const CreateRecipe = () => {
         <Box component="img" sx={s.imageSearcher} src={ imageLoaded ? imageValue : noLoaded } />
         <Typography >Create your own recipe ! Please fill in all fields:</Typography>
 
-        {/* <GoogleAuth /> */}
+        <GoogleAuth retrieveLogin={retrieveLogin} userData={userData} />
         
         <Box sx={s.eachRow}>
           <Box sx={s.text}>Title:</Box>

@@ -70,7 +70,6 @@ function App() {
 
   },[dispatch])
 
-
   const currentWidth = useSelector((state: {currentWidth:number}) => state.currentWidth)
 
   const [isLoading, setIsLoading] = useState({
@@ -86,29 +85,22 @@ function App() {
     }
   }
 
-// const FirstFunc = async () => {
-//   useEffect(() => {
-//     dispatch(getDietsFromDB())
-//     dispatch(fetchRecipesFromAPI())
-//   },[])
-// }
-
-// FirstFunc().then(() => dispatch(allRecipesLoaded(true)))
-
-  const [ responseTkn, setResponseTkn ] = useState({
-    userEmail: '',
+  const [ userData, setUserData ] = useState({
+    email: '',
     token: ''
   })
 
-  function callBack(data: any) {
-    console.log("parent Data", data)
-    console.log("parent Data email ", data.userEmail)
-    console.log("parent Data tkn", data.userTkn)
+  console.log("in APP", userData)
+
+  function retrieveLogin(data: any) {
+    //console.log("parent Data", data)
+    //console.log("parent Data email ", data.userEmail)
+    //console.log("parent Data tkn", data.userTkn)
+    setUserData({ email:data.email, token: data.token })
   }
 
   return (
     <Box sx={s.background}>
-      <GoogleAuth hCB={callBack}/>
       <Box sx={s.wallpaperBody} />
       <Routes>
         <Route path="/" element={<>
@@ -123,7 +115,7 @@ function App() {
         </>}/>
         <Route path="/create" element={<>
           <GoBack />
-          <CreateRecipe />
+          <CreateRecipe retrieveLogin={retrieveLogin} userData={userData}/>
         </>}/>
         <Route path="/about" element={<>
           <About />
