@@ -454,7 +454,18 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
       ////.then((rej) => console.log(rej))
     }
   }
- 
+
+  //document.cookie = 'myCookie=myValue;expires=Sun, 31 Dec 2017 23:00:00 GMT;domain=www.mydomain.com;path=/;secure;';
+
+  document.cookie = 'myCookie=myValue;expires=Sun, 31 Dec 2023 23:00:00 GMT;path=/;';
+  console.log("document.cookie", document.cookie)
+  console.log("Date()", Date())
+  
+  const date = new Date();
+  date.setTime(date.getTime() + (120 * 1000))
+  console.log("aaa", date.toUTCString())
+  
+
   return !firstInstance ?
     (
       <Box

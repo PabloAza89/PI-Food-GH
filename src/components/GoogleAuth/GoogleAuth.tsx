@@ -8,7 +8,9 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
   const [ responseTkn, setResponseTkn ] = useState("")
   const [ user, setUser ] = useState("")
 
+  
   console.log("userData", userData)
+  
   
   const login = useGoogleLogin({
       onSuccess: (codeResponse) => {
@@ -53,7 +55,7 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
   return (
     <Box sx={s.background}>
       <Button variant="contained" sx={s.bgIn} onClick={() => login()} ><MySvg/>{ userData.email ? `  Signed in as ${userData.email}` : `  Sign in with Google` }</Button>
-      { user ?
+      { userData.email ?
       <Button variant="contained" sx={s.bgOut} onClick={() => logout()} >
         <Box className="fa fa-sign-out fa-lg" aria-hidden="true"></Box>
       </Button>
