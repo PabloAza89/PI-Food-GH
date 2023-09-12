@@ -344,7 +344,7 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
     setAllDisabled(false)
     setError({
       title: { character: false, badWord: false, empty: false },
-      image: { start: true },
+      image: { start: false },
       health: { string: false, max: false, empty: false },
       summary: { character: false, badWord: false, empty: false },
       instructions: [{ character: false, badWord: false, empty: false },]
@@ -401,21 +401,40 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
       )
     }
 
-    if (emptyInputs.length > 0) {
+
+   
+  
+
+    // if (emptyInputs.length > 0) {
+    //   Swal.fire({
+    //     title:
+    //       emptyInputs.length > 1 ?
+    //       `${emptyInputs.slice(0,-1).map(e => e).join(", ") + " & " + emptyInputs.slice(-1)}
+    //       cannot be empty !` :
+    //       `${emptyInputs[0]} cannot be empty !`,
+    //     text: 'Please, fill all fields.',
+    //     icon: 'info',
+    //     showConfirmButton: false,
+    //     showDenyButton: false,
+    //     showCancelButton: false,
+    //     timer: 1000,
+    //   })
+    // }
+    console.log("emptyInputs.length", emptyInputs.length)
+    //else if (emptyInputs.length === 0 && userData.email === '') {
+    if (userData.email === '') {
       Swal.fire({
-        title:
-          emptyInputs.length > 1 ?
-          `${emptyInputs.slice(0,-1).map(e => e).join(", ") + " & " + emptyInputs.slice(-1)}
-          cannot be empty !` :
-          `${emptyInputs[0]} cannot be empty !`,
-        text: 'Please, fill all fields.',
+        title: `You must be logged to do that ! `,
+        //html: `Please, log-in with Google with the right-upper side button.<br><br>Don't have a Google account ?<br>Please, follow this <a target="_blank" rel="noopener noreferrer" href="https://accounts.google.com/SignUp">link</a> and create a new one !`,
+        html: `Please, log-in with Google with the right-upper side button.<br><br>Don't have a Google account ?<br>Please, follow this <a style="color:#0000EE"target="_blank" rel="noopener noreferrer" href="https://accounts.google.com/SignUp">link</a> and create a new one !`,
         icon: 'info',
         showConfirmButton: false,
         showDenyButton: false,
         showCancelButton: false,
-        timer: 1000,
+        timer: 3000,
       })
     }
+
     else {
       fetch(`http://localhost:3001/recipes`, {
         method: 'POST',
@@ -425,7 +444,8 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
           healthScore: healthValue,
           summary: summaryValue,
           diets: dietsArray,
-          analyzedInstructions: stepsState
+          analyzedInstructions: stepsState,
+          email: userData.email
       }),
       headers: {
           'Content-type': 'application/json; charset=UTF-8',
@@ -457,13 +477,21 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
 
   //document.cookie = 'myCookie=myValue;expires=Sun, 31 Dec 2017 23:00:00 GMT;domain=www.mydomain.com;path=/;secure;';
 
-  document.cookie = 'myCookie=myValue;expires=Sun, 31 Dec 2023 23:00:00 GMT;path=/;';
-  console.log("document.cookie", document.cookie)
-  console.log("Date()", Date())
-  
   const date = new Date();
-  date.setTime(date.getTime() + (120 * 1000))
+  const minutes = 1
+  date.setTime(date.getTime() + (60 * 1000 * minutes))
   console.log("aaa", date.toUTCString())
+
+  //document.cookie = `myCookie=myValue;expires=Sun, 31 Dec 2023 23:00:00 GMT;path=/;`;
+  //document.cookie = `myCookie=myValue;expires=${date.toUTCString()};path=/;`;
+  //document.cookie = `myCookie=myValue; expires=${date.toUTCString()}; path=/; HttpOnly;`;
+  //document.cookie = `myCookie=myValue;expires=${date.toUTCString()};path=/;`;
+  console.log("document.cookie", document.cookie)
+  //console.log("Date()", Date())
+  
+  console.log("userData", userData)
+
+  
   
 
   return !firstInstance ?

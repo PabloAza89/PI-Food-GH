@@ -93,11 +93,25 @@ function App() {
   console.log("in APP", userData)
 
   function retrieveLogin(data: any) {
-    //console.log("parent Data", data)
-    //console.log("parent Data email ", data.userEmail)
-    //console.log("parent Data tkn", data.userTkn)
     setUserData({ email:data.email, token: data.token })
   }
+
+  useEffect(() => {
+    fetch(`http://localhost:3001/user`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      }
+    })
+    .then((res) => res.json())
+    .then((res) => { 
+      console.log("RES", res)
+      setUserData({ email: res.email, token: res.token })
+    })
+    .catch(rej => console.log(rej))
+
+  },[])
 
   return (
     <Box sx={s.background}>

@@ -1,52 +1,58 @@
 import { useGoogleLogin } from '@react-oauth/google';
-import { useState, useEffect, useRef } from "react";
 import { Box, Button } from '@mui/material/';
 import { ReactComponent as MySvg } from '../../images/googleLogo.svg';
 import * as s from "../../styles/GoogleAuthSX";
 
 const GoogleAuth = ({ retrieveLogin, userData }: any) => {
-  const [ responseTkn, setResponseTkn ] = useState("")
-  const [ user, setUser ] = useState("")
 
-  
   console.log("userData", userData)
-  
-  
+
   const login = useGoogleLogin({
-      onSuccess: (codeResponse) => {
-        console.log("RESPOSE", codeResponse);
-        setResponseTkn(codeResponse.access_token)
+    onSuccess: (codeResponse) => {
+      //console.log("RESPOSE", codeResponse);
 
-        fetch(`https://www.googleapis.com/oauth2/v3/userinfo?access_token=${codeResponse.access_token}`, {
-          method: 'GET',
-          })
-          .then((res) => res.json())
-          .then((response) => {
-            console.log("response", response.email)
-            setUser(response.email)
-            retrieveLogin({email: response.email, token: codeResponse.access_token})
-          })
-          .catch(rej => console.log(rej))
+      fetch(`https://www.googleapis.com/oauth2/v3/userinfo?access_token=${codeResponse.access_token}`, {
+        method: 'GET',
+      })
+      .then((res) => res.json())
+      .then((res) => {
+        //console.log("response", res.email)
+        retrieveLogin({email: res.email, token: codeResponse.access_token})
+        return { email: res.email, token: codeResponse.access_token }
+      })
+      .then((res) => {
+        console.log("A VER ESTE", res)
+        fetch(`http://localhost:3001/user`, {
+          method: 'POST',
+          credentials: 'include',
+          body: JSON.stringify({
+            email: res.email,
+            token: res.token
+          }),
+          headers: {
+              'Content-type': 'application/json; charset=UTF-8',
+          }
+        })
+      })
+      .catch(rej => console.log(rej))
 
-      },
-      onError: (error) => console.log('Login Failed:', error)
-    })
+    },
+    onError: (error) => console.log('Login Failed:', error)
+  })
 
   const logout = () => {
-    fetch(`https://oauth2.googleapis.com/revoke?token=${responseTkn}`, {
+    fetch(`https://oauth2.googleapis.com/revoke?token=${userData.token}`, {
       method: 'POST',
       })
       .then((res) => res.json())
       .then((response) => {
         if (response.error !== undefined) {
           console.log("User is already log out..");
-          setUser(response.email)
-          setResponseTkn("")
+          retrieveLogin({email: "", token: ""})
         }
         if (response.error === undefined) {
           console.log("User logout successfully")
-          setUser(response.email)
-          setResponseTkn("")
+          retrieveLogin({email: "", token: ""})
         }
       })
       .catch(rej => console.log(rej))
