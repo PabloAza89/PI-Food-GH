@@ -3,6 +3,8 @@ import { useState } from 'react';
 import noImage1 from "../../images/noImage1.jpg";
 import noImage2 from "../../images/noImage2.jpg";
 import noImage3 from "../../images/noImage3.jpg";
+import axios from 'axios';
+import notAvailable from "../../images/notAvailable.jpg";
 import { Box, Typography, Divider } from '@mui/material';
 import Tooltip from '@mui/joy/Tooltip';
 import * as s from "../../styles/CardSX";
@@ -25,6 +27,7 @@ const Card = ({ id, image, title, healthScore , diets, dishTypes, userRecipe }: 
   const [ fitTitle, setFitTitle ] = useState<boolean>(true)
   const [ fitDiet, setFitDiet ] = useState<boolean>(true)
   const [ fitDish, setFitDish ] = useState<boolean>(true)
+  const [ brokenImage, setBrokenImage ] = useState<boolean>(false)
 
   $(function(){
     $(`.dietCard${id}`).prop(`scrollWidth`) > $(`.dietCard${id}`).innerWidth()! ? setFitDiet(false) : setFitDiet(true)
@@ -32,10 +35,35 @@ const Card = ({ id, image, title, healthScore , diets, dishTypes, userRecipe }: 
     $(`.dishCard${id}`).prop(`scrollWidth`) > $(`.dishCard${id}`).innerWidth()! ? setFitDish(false) : setFitDish(true)
   })
 
+  if (userRecipe && image.length > 1) {
+    fetch( `https://res.cloudinary.com/dtembdocm/image/upload/` + image, {
+      headers: { 'Cache-Control': 'no-cache' }
+    })
+      .then((res) => {
+        if (res.ok) setBrokenImage(false)
+        else setBrokenImage(true)
+      })
+      .catch((err) => console.error(err))
+  }
+
   return (
     <Box sx={s.background}>
       <Link to={`/${id}`}>
-        <Box component="img" sx={s.image} src={ userRecipe && image.length === 1 ? arrImages[parseInt(image, 10) - 1] : userRecipe && image.length > 1 ? `https://res.cloudinary.com/dtembdocm/image/upload/` + image : image } alt="" />
+        <Box
+          component="img"
+          sx={s.image}
+          src={
+            brokenImage ?
+            notAvailable :
+            userRecipe && image.length === 1 ?
+            arrImages[parseInt(image, 10) - 1] :
+            userRecipe && image.length > 1 ?
+            `https://res.cloudinary.com/dtembdocm/image/upload/` + image :
+            image
+          }
+          alt=""
+          //onError={() => setBrokenImage(true)}
+        />
       </Link>
       <Link style={{ textDecoration: 'none' }} to={`/${id}`}>
         <Tooltip

@@ -105,7 +105,7 @@ function App() {
       }
     })
     .then((res) => res.json())
-    .then((res) => { 
+    .then((res) => {
       console.log("RES", res)
       setUserData({ email: res.email, token: res.token })
     })

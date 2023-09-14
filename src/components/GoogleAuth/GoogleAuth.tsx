@@ -45,14 +45,28 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
       method: 'POST',
       })
       .then((res) => res.json())
-      .then((response) => {
-        if (response.error !== undefined) {
+      .then((res) => {
+        if (res.error !== undefined) {
           console.log("User is already log out..");
           retrieveLogin({email: "", token: ""})
+          fetch(`http://localhost:3001/user`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+              'Content-type': 'application/json; charset=UTF-8',
+            }
+          })
         }
-        if (response.error === undefined) {
+        if (res.error === undefined) {
           console.log("User logout successfully")
           retrieveLogin({email: "", token: ""})
+          fetch(`http://localhost:3001/user`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+              'Content-type': 'application/json; charset=UTF-8',
+            }
+          })
         }
       })
       .catch(rej => console.log(rej))

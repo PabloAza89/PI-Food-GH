@@ -405,24 +405,27 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
    
   
 
-    // if (emptyInputs.length > 0) {
-    //   Swal.fire({
-    //     title:
-    //       emptyInputs.length > 1 ?
-    //       `${emptyInputs.slice(0,-1).map(e => e).join(", ") + " & " + emptyInputs.slice(-1)}
-    //       cannot be empty !` :
-    //       `${emptyInputs[0]} cannot be empty !`,
-    //     text: 'Please, fill all fields.',
-    //     icon: 'info',
-    //     showConfirmButton: false,
-    //     showDenyButton: false,
-    //     showCancelButton: false,
-    //     timer: 1000,
-    //   })
-    // }
     console.log("emptyInputs.length", emptyInputs.length)
-    //else if (emptyInputs.length === 0 && userData.email === '') {
-    if (userData.email === '') {
+    
+    if (emptyInputs.length > 0) {
+      Swal.fire({
+        title:
+          emptyInputs.length > 1 ?
+          `${emptyInputs.slice(0,-1).map(e => e).join(", ") + " & " + emptyInputs.slice(-1)}
+          cannot be empty !` :
+          `${emptyInputs[0]} cannot be empty !`,
+        text: 'Please, fill all fields.',
+        icon: 'info',
+        showConfirmButton: false,
+        showDenyButton: false,
+        showCancelButton: false,
+        timer: 1000,
+      })
+    }
+
+    
+    else if (emptyInputs.length === 0 && userData.email === '') {
+    //if (userData.email === '') {
       Swal.fire({
         title: `You must be logged to do that ! `,
         //html: `Please, log-in with Google with the right-upper side button.<br><br>Don't have a Google account ?<br>Please, follow this <a target="_blank" rel="noopener noreferrer" href="https://accounts.google.com/SignUp">link</a> and create a new one !`,
@@ -436,41 +439,67 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
     }
 
     else {
-      fetch(`http://localhost:3001/recipes`, {
+    
+      fetch(`http://localhost:3001/user`, {
         method: 'POST',
-        body: JSON.stringify({
-          title: titleValue,
-          image: imageValue,
-          healthScore: healthValue,
-          summary: summaryValue,
-          diets: dietsArray,
-          analyzedInstructions: stepsState,
-          email: userData.email
-      }),
-      headers: {
+        credentials: 'include',
+        headers: {
           'Content-type': 'application/json; charset=UTF-8',
-      }
+        }
       })
       .then((res) => res.json())
-      .then((res) => {
-        if (res.status === 200) {
+      .then((res) => { 
+        console.log("RES RES", res)
+        if (res.status === 400 && res.message === 'Invalid Credentials') {
+          console.log("PASS BY THIS WAY")
+          retrieveLogin({ email: '', token: '' })
           Swal.fire({
-            title: 'Recipe saved successfully !',
+            title: `There was an error when cheking your loggin.. `,
+            text: `Please, log in again.`,
             icon: 'info',
             showConfirmButton: false,
             showDenyButton: false,
             showCancelButton: false,
-            timer: 1000,
+            timer: 3000,
           })
         }
-      })
-      .then(() => {
-        setSaveButtonDisabled(true)
-        setAllDisabled(true)
-      })
-      .catch((rej) => {
-        console.log("sv error", rej)
-      })
+        if (res.status === 200) {
+          fetch(`http://localhost:3001/recipes`, {
+            method: 'POST',
+            body: JSON.stringify({
+              title: titleValue,
+              image: imageValue,
+              healthScore: healthValue,
+              summary: summaryValue,
+              diets: dietsArray,
+              analyzedInstructions: stepsState,
+              email: userData.email
+          }),
+          headers: {
+              'Content-type': 'application/json; charset=UTF-8',
+          }
+          })
+          .then((res) => res.json())
+          .then((res) => {
+            if (res.status === 200) {
+              Swal.fire({
+                title: 'Recipe saved successfully !',
+                icon: 'info',
+                showConfirmButton: false,
+                showDenyButton: false,
+                showCancelButton: false,
+                timer: 1000,
+              })
+            }
+            
+          })
+          .then((res) => {
+            setSaveButtonDisabled(true)
+            setAllDisabled(true)
+          })
+        }
+       })
+      .catch((rej) => console.log("rej", rej))
       ////.then((rej) => console.log(rej))
     }
   }

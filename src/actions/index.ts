@@ -10,7 +10,13 @@ export function fetchRecipesFromAPI() {
       fetch("http://localhost:3001/recipes")
       .then(resp => resp.json())
       .then(data => dispatch({type: 'FETCH_RECIPES', payload: data}))
-      .catch(error => dispatch({type: 'FETCH_RECIPES', payload: "error"}))
+      .catch(error => {
+        console.log("FRONT", error);
+        //if (error.message === 'Expired key') dispatch({type: 'FETCH_RECIPES', payload: error})
+        //if (error.message === 'Expired key') dispatch({type: 'FETCH_RECIPES', payload: error})
+        dispatch({type: 'FETCH_RECIPES', payload: error})
+        //else dispatch({type: 'FETCH_RECIPES', payload: error})
+      })
     )
   }
 };
