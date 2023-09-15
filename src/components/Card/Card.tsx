@@ -3,7 +3,6 @@ import { useState } from 'react';
 import noImage1 from "../../images/noImage1.jpg";
 import noImage2 from "../../images/noImage2.jpg";
 import noImage3 from "../../images/noImage3.jpg";
-import axios from 'axios';
 import notAvailable from "../../images/notAvailable.jpg";
 import { Box, Typography, Divider } from '@mui/material';
 import Tooltip from '@mui/joy/Tooltip';
@@ -62,7 +61,6 @@ const Card = ({ id, image, title, healthScore , diets, dishTypes, userRecipe }: 
             image
           }
           alt=""
-          //onError={() => setBrokenImage(true)}
         />
       </Link>
       <Link style={{ textDecoration: 'none' }} to={`/${id}`}>

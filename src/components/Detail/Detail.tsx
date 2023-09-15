@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useParams } from "react-router-dom";
 import { useSelector , useDispatch } from 'react-redux';
 import "../../styles/Detail.css";
@@ -5,6 +6,7 @@ import * as s from "../../styles/DetailSX";
 import noImage1 from "../../images/noImage1.jpg";
 import noImage2 from "../../images/noImage2.jpg";
 import noImage3 from "../../images/noImage3.jpg";
+import notAvailable from "../../images/notAvailable.jpg";
 import { Link } from "react-router-dom";
 import logo from "../../images/logo.png";
 import { Box, Button, TextField, Dialog, Divider, Typography, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material/';
@@ -13,6 +15,7 @@ import { recipesI } from '../../interfaces/interfaces';
 export default function Detail() {
 
   let arrImages = [noImage1, noImage2, noImage3]
+  const [ brokenImage, setBrokenImage ] = useState<boolean>(false)
 
   const params = useParams()
 
@@ -21,11 +24,34 @@ export default function Detail() {
 
   function regexInSummary(text: any) { return text.replaceAll(/(<[/]b>|<b>|<[/]a>|<a\b[^>]*>|[/]a>)/g, '') }
 
+  if (recipe.userRecipe && recipe.image.length > 1) {
+    fetch( `https://res.cloudinary.com/dtembdocm/image/upload/` + recipe.image, {
+      headers: { 'Cache-Control': 'no-cache' }
+    })
+      .then((res) => {
+        if (res.ok) setBrokenImage(false)
+        else setBrokenImage(true)
+      })
+      .catch((err) => console.error(err))
+  }
+
   if (recipe) {
     return (
       <Box sx={s.background}>
         <Box sx={s.card}>
-          <Box component="img" sx={s.image} src={ recipe.userRecipe && recipe.image.length === 1 ? arrImages[parseInt(recipe.image, 10) - 1] : recipe.userRecipe && recipe.image.length > 1 ? `https://res.cloudinary.com/dtembdocm/image/upload/` + recipe.image : recipe.image } alt="" />
+          <Box
+            component="img"
+            sx={s.image}
+            src={
+              brokenImage ?
+              notAvailable :
+              recipe.userRecipe && recipe.image.length === 1 ?
+              arrImages[parseInt(recipe.image, 10) - 1] :
+              recipe.userRecipe && recipe.image.length > 1 ?
+              `https://res.cloudinary.com/dtembdocm/image/upload/` + recipe.image :
+              recipe.image
+            }
+            alt="" />
           <Typography sx={s.text}><b>Title: </b>{recipe.title}</Typography>
           <Typography sx={s.text}>
             <b>Diets: </b>

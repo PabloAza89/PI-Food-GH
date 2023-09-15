@@ -84,7 +84,7 @@ const reducer = (state = initialState, action: {type: string; payload: any}) => 
       console.log("action.payload", action.payload)
       let targetArray:any = []
 
-      if (action.payload.ok) targetArray = action.payload.message
+      if (action.payload.ok) targetArray = action.payload.message//.slice(0,5)
       else targetArray = toAvoidKey
 
       let parsedArrOffline: recipesI[] = []
