@@ -42,7 +42,7 @@ const Card = ({ id, image, title, healthScore , diets, dishTypes, userRecipe }: 
         if (res.ok) setBrokenImage(false)
         else setBrokenImage(true)
       })
-      .catch((err) => console.error(err))
+      .catch((err) => { console.error(err) })
   }
 
   return (
