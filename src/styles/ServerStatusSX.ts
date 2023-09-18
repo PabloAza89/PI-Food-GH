@@ -6,21 +6,9 @@ import {
 
 export const background = () => {
   return {
-    // display: 'flex',
-    // zIndex: 2,
-    // position: 'absolute',
-    // flexDirection: 'column',
-    // background: 'lightgray', // dev
-    // width: '280px',
-    // //height: '250px',
-    // right: '0px',
-
     ...fixed, ...flex,
-    //background: 'yellow', // dev
-    //background: 'lightgray', // dev
-    //width: '0px',
-    //height: '120px',
-    right: '0px',
+    //right: '0px',
+    right: '-250px',
     top: '200px',
     zIndex: 3000,
   }
@@ -30,7 +18,21 @@ export const eachRow = () => {
   return {
     display: 'flex',
     flexDirection: 'row',
-    
+    width: '273px',
+    //background: 'yellow', // dev
+    alignItems: 'center',
+    marginLeft: '7px',
+  }
+}
+
+export const eachRowSmall = () => {
+  return {
+    display: 'flex',
+    flexDirection: 'row',
+    width: '260px', // 280 total
+    //background: 'yellow', // dev
+    alignItems: 'center',
+    marginLeft: '20px',
   }
 }
 
@@ -44,9 +46,9 @@ export const circleBig = ({ online }: circleBigI) => {
     //position: 'absolute',
     flexDirection: 'row',
     background: online ? 'green' : 'red', // dev
-    width: '15px',
-    height: '15px',
-    border: '2px solid gray',
+    width: '13px',
+    height: '13px',
+    border: '2px solid darkslategray',
     right: '0px',
     borderRadius: '50%',
   }
@@ -67,7 +69,7 @@ export const circleSmall = ({ red, blue }: circleSmallI) => {
     background: red ? 'red' : blue ? 'blue' : 'green',
     width: '10px',
     height: '10px',
-    border: '2px solid gray',
+    border: '2px solid darkslategray',
     right: '0px',
     borderRadius: '50%',
   }
@@ -76,6 +78,7 @@ export const circleSmall = ({ red, blue }: circleSmallI) => {
 export const button = () => {
   return {
     ...flex, ...fixed, ...noSelect,
+    zIndex: 3001,
     minWidth: '30px !important',
     width: '30px !important',
     minHeight: '120px !important',
@@ -107,11 +110,13 @@ export const sliderBox = () => {
   return {
     ...flex, ...relative, ...column, ...jcc,
     //background: 'orange', // dev
-    background: 'lightgray', // dev
-    width: '300px',
-    height: '300px',
+    //background: 'lightgray', // dev
+    background: 'cadetblue',
+    //width: '280px',
+    width: '310px',
+    //height: '300px',
     //left: '0px',
     //right: '10px',
-    right: '-100px',
+    right: '-200px',
   }
 }
