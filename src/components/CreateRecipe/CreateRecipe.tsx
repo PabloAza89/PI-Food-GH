@@ -16,6 +16,13 @@ import GoogleAuth from '../GoogleAuth/GoogleAuth';
 
 const CreateRecipe = ({ retrieveLogin, userData }: any) => {
 
+  let titleValueLS: string | null = localStorage.getItem('titleValue');
+  let imageValueLS: string | null = localStorage.getItem('imageValue');
+  let healthValueLS: string | null = localStorage.getItem('healthValue');
+  let summaryValueLS: string | null = localStorage.getItem('summaryValue');
+  let dietsArrayLS: string | null = localStorage.getItem('dietsArray');
+  let stepsStateLS: string | null = localStorage.getItem('stepsState');
+
   const dispatch = useDispatch()
   const location = useLocation()
 
@@ -54,10 +61,12 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
     index: number
   }
 
-  const handlerDelete = ({ index }: handlerI) => {
+  const handlerDeleteInstructions = ({ index }: handlerI) => {
     let copyState = [...stepsState]
     copyState.splice(index, 1)
     setStepsState([...copyState])
+
+    localStorage.setItem('stepsState', JSON.stringify([...copyState]))
 
     let copyError = {...error}
     copyError.instructions.splice(index, 1)
@@ -69,11 +78,11 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
     })
   }
 
-  interface handlerAddI {
+  interface handlerAddInstructionsI {
     index: number,
   }
 
-   const handlerAdd = async ({ index }: handlerAddI) => {
+   const handlerAddInstructions = async ({ index }: handlerAddInstructionsI) => {
     const firstStep = async () => {
 
       let copyState = [...stepsState]
@@ -81,12 +90,15 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
       setStepsState([...copyState])
 
       let copyError = {...error}
-      copyError.instructions.splice(index + 1, 0, { character: false, badWord: false, empty: false })
+      copyError.instructions.splice(index + 1, 0, { character: false, badWord: false, empty: true })
       setError(copyError)
 
        copyState.forEach((e,indexx) => {
         highlighter({value: e, type: 'instructions', index: indexx})
       })
+
+      localStorage.setItem('stepsState', JSON.stringify([...copyState]))
+
     }
 
     const secondStep = async () => { // only highlight for last index
@@ -97,15 +109,17 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
     firstStep().then(() => secondStep())
   }
 
-  interface handlerUpdateI {
+  interface handlerUpdateInstructionsI {
     index: number,
     value: string
   }
 
-  const handlerUpdate = ({ index, value }: handlerUpdateI) => {
+  const handlerUpdateInstructions = ({ index, value }: handlerUpdateInstructionsI) => {
     let copy = [...stepsState]
     copy.splice(index, 1, value)
     setStepsState([...copy])
+    //localStorage.setItem('stepsState', [...copy])
+    localStorage.setItem('stepsState', JSON.stringify([...copy]))
   }
 
   const [showAlert, setShowAlert] = useState(false)
@@ -167,7 +181,11 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
       badWord: false,
       empty: true
     },
-    instructions: [
+    instructions:
+    stepsStateLS !== null ?
+    Array.from({length: JSON.parse(stepsStateLS).length}, (e,i) => ({character: false, badWord: false, empty: true}))
+    :
+    [
       {
         character: false,
         badWord: false,
@@ -194,6 +212,8 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
         .toLowerCase()
     }
 
+    console.log("QUE VALUE", value)
+
     let badWordsInDicEs = dicEs.map((e, idx) => {
       return (
         characterReplacer(value)
@@ -204,6 +224,8 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
             `[-,\n;.:¡!¿?'"()\\][ ]` + e + `[-,\n;.:¡!¿?'"()\\][ ]`  //+ `|` + // ALLOWED CHARACTERS AT START & END // TEST
           , "g" )) !== -1) ? { "target": e, "index": idx } : -1
     }).filter(e => e !== -1)
+
+    console.log("badWordsInDicEs", badWordsInDicEs)
 
     let firstArrayFilter: any = []
 
@@ -234,7 +256,12 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
        if (idx === secondArrayFilter.length - 1 && el.start > array[array.length-1].end) array.push(el) // for last index
     })
 
+    //let copyObj: any = {...error}
     let copyObj: any = {...error}
+    //console.log("copyObj", copyObj)
+    //console.log("copyObj", copyObj)
+    //console.log("array", array)
+
 
     if (array[0] && type === 'instructions') {
       copyObj.instructions[index!].badWord = true
@@ -256,8 +283,17 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
       setError({ ...copyObj })
     }
 
+    console.log("value inside", value)
+    console.log("array inside", array)
+
+    // if ($(`#target${type.slice(0,1).toUpperCase() + type.slice(1) + index}`).length) {
+    //   alert(`Div ${index} exists`);
+    // } else{
+    //   alert(`Div ${index} does not exists`);
+    // }
+
     $(index !== undefined ? `#target${type.slice(0,1).toUpperCase() + type.slice(1) + index}` : `#target${type.slice(0,1).toUpperCase() + type.slice(1)}`)
-      .html(function() {
+      .html( function() {
         let parsedToReturn:string[] = []
         if (array[0]) array.forEach((e:any, actualIndex:any) => {
           if (array.length === 1) parsedToReturn.push(
@@ -271,8 +307,12 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
         })
         parsedToReturn.unshift("<div>")
         parsedToReturn.push("</div>")
+        //console.log("parsedToReturn", parsedToReturn)
+        //console.log("parsedToReturn", parsedToReturn)
+
         return array[0] ? parsedToReturn.join("") : value
       })
+
   }
 
   interface validateStringI {
@@ -281,7 +321,7 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
     index?: number,
   }
 
-  const validator = ({ type, value, index }: validateStringI) => {
+  const validator = async ({ type, value, index }: validateStringI) => {
     switch (type) {
       case (`title`):
         let copyObjTitle = {...error}
@@ -290,6 +330,7 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
         if (value.replaceAll(" ","").replaceAll("\n", "") === "") { copyObjTitle[type].empty = true; setError({ ...copyObjTitle }) }
         else { copyObjTitle[type].empty = false; setError({ ...copyObjTitle }) }
         setTitleValue(value);
+        localStorage.setItem('titleValue', value)
         highlighter({value, type})
       break;
       case (`image`):
@@ -297,6 +338,7 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
         if (value.trim().slice(0,8) !== "https://" && value.trim().length !== 0) { copyObjImage[type].start = true; setError({ ...copyObjImage }) }
         else { copyObjImage[type].start = false; setError({ ...copyObjImage })}
         setImageValue(value.trim());
+        localStorage.setItem('imageValue', value)
       break;
       case (`health`):
         let copyObj = {...error}
@@ -305,22 +347,30 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
         if (parseInt(value, 10) > 100 && value.length !== 0) {copyObj.health.max = true; setError({ ...copyObj })}
         else { copyObj.health.max = false; setError({ ...copyObj })}
         setHealthValue(value);
+        localStorage.setItem('healthValue', value)
       break;
       case (`summary`):
         let copyObjSummary = {...error}
         if (/[^A-Za-z0-9-(áÁéÉíÍóÓúÚüÜñÑ),\n;.:¡!¿?'"()[\] ]/g.test(value) && value.length !== 0) { copyObjSummary[type].character = true; setError({ ...copyObjSummary }) }
         else { copyObjSummary[type].character = false; setError({ ...copyObjSummary })}
         setSummaryValue(value);
+        localStorage.setItem('summaryValue', value)
         highlighter({value, type})
       break;
       case (`instructions`):
         if (/[^A-Za-z0-9-(áÁéÉíÍóÓúÚüÜñÑ),\n;.:¡!¿?'"()[\] ]/g.test(value) && value.length !== 0) {
           let copyObjInstructions = {...error}
           copyObjInstructions.instructions[index!].character = true
+          copyObjInstructions.instructions[index!].empty = value.replaceAll(" ","").replaceAll("\n", "") === "" ? true : false
+          console.log("copyObjInstructions.instructions 1", copyObjInstructions.instructions)
+          //title.replaceAll(" ","").replaceAll("\n", "") === ""
           setError({ ...copyObjInstructions })
         } else {
+          //let copyObjInstructions = stepsStateLS !== null ? {...error} : {...error}
           let copyObjInstructions = {...error}
           copyObjInstructions.instructions[index!].character = false
+          copyObjInstructions.instructions[index!].empty = value.replaceAll(" ","").replaceAll("\n", "") === "" ? true : false
+          console.log("copyObjInstructions.instructions 2", copyObjInstructions.instructions)
           setError({ ...copyObjInstructions })
         }
         highlighter({value, type, index})
@@ -328,9 +378,11 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
     }
   }
 
-  const handleChange = (event: SelectChangeEvent<typeof dietsArray>) => {
+  const handleChangeDiets = (event: SelectChangeEvent<typeof dietsArray>) => {
     const { target: { value } } = event
     setDietsArray( typeof value === 'string' ? value.split(',') : value );
+    //typeof value === 'string' ? localStorage.setItem('dietsArray', JSON.stringify(value.split(','))) : localStorage.setItem('dietsArray', JSON.stringify(value))
+    localStorage.setItem('dietsArray', JSON.stringify(value))
   };
 
   const clearHandler = () => {
@@ -349,6 +401,7 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
       summary: { character: false, badWord: false, empty: false },
       instructions: [{ character: false, badWord: false, empty: false },]
     });
+    localStorage.clear()
     $(`#targetInstructions0`)
       .html("<div></div>")
     $(`#targetTitle`)
@@ -401,12 +454,8 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
       )
     }
 
-
-   
-  
-
     console.log("emptyInputs.length", emptyInputs.length)
-    
+
     if (emptyInputs.length > 0) {
       Swal.fire({
         title:
@@ -423,7 +472,7 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
       })
     }
 
-    
+
     else if (emptyInputs.length === 0 && userData.email === '') {
     //if (userData.email === '') {
       Swal.fire({
@@ -439,7 +488,7 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
     }
 
     else {
-    
+
       fetch(`http://localhost:3001/user`, {
         method: 'POST',
         credentials: 'include',
@@ -448,7 +497,7 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
         }
       })
       .then((res) => res.json())
-      .then((res) => { 
+      .then((res) => {
         console.log("RES RES", res)
         if (res.status === 400 && res.message === 'Invalid Credentials') {
           console.log("PASS BY THIS WAY")
@@ -491,7 +540,7 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
                 timer: 1000,
               })
             }
-            
+
           })
           .then((res) => {
             setSaveButtonDisabled(true)
@@ -499,395 +548,399 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
           })
         }
        })
-      .catch((rej) => console.log("rej", rej))
+      .catch((rej) => {
+        console.log("rej", rej)
+        Swal.fire({
+          title: `It's seems like server its sleeping..`,
+          html: `So you cannot save your recipe.<br>We are sorry. Please try againg later..<br><br>Don't worry about everything you wrote, it will be saved in browser memory :) `,
+          icon: 'error',
+          showConfirmButton: false,
+          showDenyButton: false,
+          showCancelButton: false,
+          timer: 3000,
+        })
+      })
       ////.then((rej) => console.log(rej))
     }
   }
 
-  //document.cookie = 'myCookie=myValue;expires=Sun, 31 Dec 2017 23:00:00 GMT;domain=www.mydomain.com;path=/;secure;';
+  console.log("stepsState", stepsState)
+  //console.log(JSON.stringify(error, null, 4))
+  //localStorage.clear()
 
-  const date = new Date();
-  const minutes = 1
-  date.setTime(date.getTime() + (60 * 1000 * minutes))
-  console.log("aaa", date.toUTCString())
+  useEffect(() => { // RETRIEVES INFO FROM LS
+    if (titleValueLS !== null) { setTitleValue(titleValueLS); validator({ type: `title`, value: titleValueLS }) }
+    if (imageValueLS !== null) setImageValue(imageValueLS)
+    if (healthValueLS !== null) { setHealthValue(healthValueLS); validator({ type: `health`, value: healthValueLS }) }
+    if (summaryValueLS !== null) { setSummaryValue(summaryValueLS); validator({ type: `summary`, value: summaryValueLS }) }
+    if (dietsArrayLS !== null) setDietsArray(JSON.parse(dietsArrayLS))
+    if (stepsStateLS !== null) {
+      setStepsState(JSON.parse(stepsStateLS))
+      setTimeout(() => {
+        stepsStateLS !== null && JSON.parse(stepsStateLS).forEach((el:any, idx:any) => {
+          validator({ value: el, type: `instructions`, index: idx })
+        })
+       }, 0)
+    }
+  },[])
 
-  //document.cookie = `myCookie=myValue;expires=Sun, 31 Dec 2023 23:00:00 GMT;path=/;`;
-  //document.cookie = `myCookie=myValue;expires=${date.toUTCString()};path=/;`;
-  //document.cookie = `myCookie=myValue; expires=${date.toUTCString()}; path=/; HttpOnly;`;
-  //document.cookie = `myCookie=myValue;expires=${date.toUTCString()};path=/;`;
-  console.log("document.cookie", document.cookie)
-  //console.log("Date()", Date())
-  
-  console.log("userData", userData)
-
-  
-  
-
-  return !firstInstance ?
-    (
-      <Box
-        component="form"
-        sx={s.form}
-      >
-        <Box component="img" sx={{ width: '0px', height: '0px' }} src={ imageValue } onLoad={() => setImageLoaded(true)} onError={() => setImageLoaded(false)} />  {/* HIDDEN, ONLY FOR IMAGE VERIFICATION PURPOSES. */}
+  return (
+    <Box
+      component="form"
+      sx={s.form}
+    >
+      <Box component="img" sx={{ width: '0px', height: '0px' }} src={ imageValue } onLoad={() => setImageLoaded(true)} onError={() => setImageLoaded(false)} />  {/* HIDDEN, ONLY FOR IMAGE VERIFICATION PURPOSES. */}
+      <Box>
         <Box component="img" sx={s.imageSearcher} src={ imageLoaded ? imageValue : noLoaded } />
-        <Typography >Create your own recipe ! Please fill in all fields:</Typography>
+      </Box>
 
-        <GoogleAuth retrieveLogin={retrieveLogin} userData={userData} />
-        
-        <Box sx={s.eachRow}>
-          <Box sx={s.text}>Title:</Box>
-          <Tooltip
-            sx={s.tooltipCenter}
-            arrow
-            variant="outlined"
-            size="lg"
-            enterDelay={500}
-            leaveDelay={200}
-            enterTouchDelay={0}
-            open={error.title.character || error.title.badWord}
-            placement="bottom"
+      <Typography>Create your own recipe ! Please fill in all fields:</Typography>
 
-            title={
-              <Box sx={{ display: 'flex', flexDirection: 'column', color: '#25252d', background: '#f5f5f9', fontFamily: 'Roboto'}}>
-                { error.title.character ? <Box sx={{ fontWeight: '400', fontSize: '17px' }}>Special characters not allowed in "Title" !</Box> : null }
-                { error.title.character ? <Box sx={{ color: '#42424f' }}>Allowed characters:</Box> : null }
-                { error.title.character ? <Box sx={{ color: '#42424f', textAlign: 'center' }}><b>, ; . : - ! ¡ ¿ ? ' " ( ) [ ] á Á é É í Í ó Ó ú Ú ü Ü ñ Ñ</b></Box> : null }
-                { error.title.badWord ? <Box sx={{ fontWeight: '400' }}><em>Please, remove </em><mark>highlighted</mark> <em>bad words.</em></Box> : null }
-                { error.title.character ? <Box sx={{ display: 'flex', flexDirection: 'row', fontWeight: '400' }}><em>Please, 
-                  <Tooltip
-                    title={`Ä ä % { } @ / \\ # À à ° ¬ $ & = * etc..`}
-                    sx={{ display: 'flex', flexDirection: 'column', color: '#42424f', background: '#f5f5f9', fontFamily: 'Roboto'}}
-                  >
-                    <u>remove unallowed characters</u>
-                  </Tooltip>.</em>
-                </Box> : null }
-              </Box>
-            }
-          >
-            <Box>
-              <InputLabel disabled={allDisabled} id={"targetTitle"} shrink={false} sx={s.inputShownTitle({ disabled: allDisabled})}>{ titleValue }</InputLabel>
-              <TextField
-                className={`testTitle`}
-                disabled={allDisabled}
-                id="title"
-                autoComplete='off'
-                sx={s.inputHiddenTitle({ length:titleValue.length })}
-                value={titleValue}
-                placeholder={titlePlaceholder}
-                onFocus={() => setTitlePlaceholder("")}
-                onBlur={() => setTitlePlaceholder(`e.g. Pasta with tomatoes..`)}
-                onChange={(e) => { validator({ value: e.target.value, type: e.target.id }) }}
-              />
+
+
+      <GoogleAuth retrieveLogin={retrieveLogin} userData={userData} />
+
+      <Box sx={s.eachRow}>
+        <Box sx={s.text}>Title:</Box>
+        <Tooltip
+          sx={s.tooltipCenter}
+          arrow
+          variant="outlined"
+          size="lg"
+          enterDelay={5000}
+          enterNextDelay={5000}
+          leaveDelay={200}
+          enterTouchDelay={0}
+          open={error.title.character || error.title.badWord}
+          placement="bottom"
+
+          title={
+            <Box sx={{ display: 'flex', flexDirection: 'column', color: '#25252d', background: '#f5f5f9', fontFamily: 'Roboto'}}>
+              { error.title.character ? <Box sx={{ fontWeight: '400', fontSize: '17px' }}>Special characters not allowed in "Title" !</Box> : null }
+              { error.title.character ? <Box sx={{ color: '#42424f' }}>Allowed characters:</Box> : null }
+              { error.title.character ? <Box sx={{ color: '#42424f', textAlign: 'center' }}><b>, ; . : - ! ¡ ¿ ? ' " ( ) [ ] á Á é É í Í ó Ó ú Ú ü Ü ñ Ñ</b></Box> : null }
+              { error.title.badWord ? <Box sx={{ fontWeight: '400' }}><em>Please, remove </em><mark>highlighted</mark> <em>bad words.</em></Box> : null }
+              { error.title.character ? <Box sx={{ display: 'flex', flexDirection: 'row', fontWeight: '400' }}><em>Please, 
+                <Tooltip
+                  title={`Ä ä % { } @ / \\ # À à ° ¬ $ & = * etc..`}
+                  sx={{ display: 'flex', flexDirection: 'column', color: '#42424f', background: '#f5f5f9', fontFamily: 'Roboto'}}
+                >
+                  <u>remove unallowed characters</u>
+                </Tooltip>.</em>
+              </Box> : null }
             </Box>
-          </Tooltip>
-        </Box>
-        <Box sx={s.eachRow}>
-          <Box sx={s.text}>Image:</Box>
-          <Tooltip
-            sx={s.tooltipLeft}
-            arrow
-            variant="outlined"
-            size="lg"
-            enterDelay={500}
-            leaveDelay={200}
-            enterTouchDelay={0}
-            open={error.image.start}
-            placement="bottom"
-            title={
-              <Box sx={{ display: 'flex', flexDirection: 'column', color: '#25252d', background: '#f5f5f9', fontFamily: 'Roboto'}}>
-                <Box sx={{ display: 'flex', flexDirection: 'column', color: '#25252d', fontWeight: '400' }}>
-                  <Box><mark><em>It's seems you are typing a non secure link..</em></mark></Box>
-                  <Box>{ error.image.start ? <mark><em>Please, be shure your link starts with <b>https://</b></em></mark> : null }</Box>
-                </Box>
-                <Box sx={{ display: 'flex', flexDirection: 'column', color: '#25252d', fontWeight: '400' }}>
-                  <Box>Please, copy and paste your food recipe link image url here !</Box>
-                  <Box>If you dont give a link, a random image gonna be used in your recipe.</Box>
-                </Box>
-              </Box>
-            }
-          >
+          }
+        >
+          <Box>
+            <InputLabel disabled={allDisabled} id={"targetTitle"} shrink={false} sx={s.inputShownTitle({ disabled: allDisabled})}>{ titleValue }</InputLabel>
             <TextField
-              className={`inputPos`}
-              id="image"
+              //autoFocus
+              className={`testTitle`}
               disabled={allDisabled}
-              sx={s.input}
-              value={imageValue}
+              id="title"
               autoComplete='off'
-              placeholder={`e.g. https://commons.wikimedia.org/wiki/File:Elaboraci%C3%B3n_del_tomate_frito_(4).jpg`}
-              //onFocus={() => setHealthScorePlaceholder("")}
-              //onBlur={() => setHealthScorePlaceholder(`e.g. https://commons.wikimedia.org/wiki/File:Elaboraci%C3%B3n_del_tomate_frito_(4).jpg`)}
+              sx={s.inputHiddenTitle({ length:titleValue.length })}
+              value={titleValue}
+              placeholder={titlePlaceholder}
+              onFocus={() => setTitlePlaceholder("")}
+              onBlur={() => setTitlePlaceholder(`e.g. Pasta with tomatoes..`)}
               onChange={(e) => { validator({ value: e.target.value, type: e.target.id }) }}
             />
-          </Tooltip>
-        </Box>
-        <Box sx={s.eachRow}>
-          <Box sx={s.text}>Health Score:</Box>
-          <Tooltip
-            sx={s.tooltipLeft}
-            arrow
-            variant="outlined"
-            size="lg"
-            enterDelay={500}
-            leaveDelay={200}
-            enterTouchDelay={0}
-            open={error.health.string || error.health.max}
-            placement="bottom-start"
-            title={
-              <Box sx={{ display: 'flex', flexDirection: 'column', color: '#25252d', background: '#f5f5f9', fontFamily: 'Roboto'}}>
-                <Box
-                  sx={{ color: '#25252d', fontWeight: '400' }}
-                >{error.health.string ?
-                  `Only numbers allowed in "Health Score" !` :
-                  `Allowed numbers are between 0 and 100 !`}
-                </Box>
-              </Box>
-
-            }
-          >
-            <TextField
-              className={`inputPos`}
-              id="health"
-              sx={s.input}
-              disabled={allDisabled}
-              value={healthValue}
-              autoComplete='off'
-              placeholder={healthScorePlaceholder}
-              onFocus={() => setHealthScorePlaceholder("")}
-              onBlur={() => setHealthScorePlaceholder(`e.g. 73`)}
-              onChange={(e) => { validator({ value: e.target.value, type: e.target.id }) }}
-            />
-          </Tooltip>
-        </Box>
-        <Box sx={s.eachRow}>
-          <Box sx={s.text}>Summary:</Box>
-          <Tooltip
-            sx={s.tooltipCenter}
-            arrow
-            variant="outlined"
-            size="lg"
-            enterDelay={500}
-            leaveDelay={200}
-            enterTouchDelay={0}
-            open={error.summary.character || error.summary.badWord}
-            placement="bottom"
-            title={
-              <Box sx={{ display: 'flex', flexDirection: 'column', color: '#25252d', background: '#f5f5f9', fontFamily: 'Roboto'}}>
-                { error.summary.character ? <Box sx={{ fontWeight: '400', fontSize: '17px' }}>Special characters not allowed in "Summary" !</Box> : null }
-                { error.summary.character ? <Box sx={{ color: '#42424f' }}>Allowed characters:</Box> : null }
-                { error.summary.character ? <Box sx={{ color: '#42424f', textAlign: 'center' }}><b>, ; . : - ! ¡ ¿ ? ' " ( ) [ ] á Á é É í Í ó Ó ú Ú ü Ü ñ Ñ</b></Box> : null }
-                { error.summary.badWord ? <Box sx={{ fontWeight: '400' }}><em>Please, remove </em><mark>highlighted</mark> <em>bad words.</em></Box> : null }
-                { error.summary.character ? <Box sx={{ display: 'flex', flexDirection: 'row', fontWeight: '400' }}><em>Please, 
-                  <Tooltip
-                    title={`Ä ä % { } @ / \\ # À à ° ¬ $ & = * etc..`}
-                    sx={{ display: 'flex', flexDirection: 'column', color: '#42424f', background: '#f5f5f9', fontFamily: 'Roboto'}}
-                  >
-                    <u>remove unallowed characters</u>
-                  </Tooltip>.</em>
-                </Box> : null }
-              </Box>
-            }
-          >
-            <Box>
-              <InputLabel disabled={allDisabled} id={"targetSummary"} shrink={false} sx={s.inputShownSummary}>{ summaryValue }</InputLabel>
-              <TextField
-                id="summary"
-                autoComplete='off'
-                sx={s.inputHiddenSummary}
-                value={summaryValue}
-                disabled={allDisabled}
-                multiline
-                placeholder={summaryPlaceholder}
-                onFocus={() => setSummaryPlaceholder("")}
-                onBlur={() => setSummaryPlaceholder(`e.g. Healthy pasta recipe`)}
-                onChange={(e) => { validator({ value: e.target.value, type: e.target.id }) }}
-              />
-            </Box>
-          </Tooltip>
-        </Box>
-        <Box sx={s.eachRow}>
-          <Box sx={s.text}>Diets:</Box>
-          <FormControl>
-            <InputLabel>Select Diets</InputLabel>
-            <Select
-              sx={s.input}
-              placeholder={`Select Diets`}
-              multiple
-              value={dietsArray}
-              disabled={allDisabled}
-              label="Select Diets"
-              onChange={handleChange}
-              renderValue={(selected) => selected.join(', ')}
-              MenuProps={ {PaperProps: { style: { maxHeight: `${48 * 4.5}px`, width: 300 }}}}
-            >
-              {dietss.slice(1).map(e => (
-                <MenuItem
-                  key={e.title}
-                  value={`${e.title}`}
-                >
-                  <Checkbox checked={dietsArray.indexOf(e.title) > -1} />
-                  <ListItemText primary={e.title} />
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Box>
-        <Box sx={s.eachRow}>
-          <Box sx={s.text}>Instructions:</Box>
-          <Box sx={s.stepsContainer}>
-
-            {stepsState.map((e, index) => (
-              <Box key={index} sx={s.eachStep}>
-                <Box sx={s.stepTitle}>Step {index + 1}:</Box>
-
-                <Tooltip
-                  sx={ index % 2 === 0 ? s.tooltipRight : s.tooltipLeft }
-                  key={index}
-                  arrow
-                  variant="outlined"
-                  size="lg"
-                  enterDelay={500}
-                  leaveDelay={200}
-                  enterTouchDelay={0}
-                  open={error.instructions[`${index}`].character || error.instructions[`${index}`].badWord}
-                  placement={ index % 2 === 0 ? `bottom-end` : `bottom-start` }
-                  title={
-                    <Box sx={{ display: 'flex', flexDirection: 'column', color: '#25252d', background: '#f5f5f9', fontFamily: 'Roboto'}}>
-                      { error.instructions[index].character ? <Box sx={{ fontWeight: '400', fontSize: '17px' }}>Special characters not allowed in "Instructions" !</Box> : null }
-                      { error.instructions[index].character ? <Box sx={{ color: '#42424f' }}>Allowed characters:</Box> : null }
-                      { error.instructions[index].character ? <Box sx={{ color: '#42424f', textAlign: 'center' }}><b>, ; . : - ! ¡ ¿ ? ' " ( ) [ ] á Á é É í Í ó Ó ú Ú ü Ü ñ Ñ</b></Box> : null }
-                      { error.instructions[index].badWord ? <Box sx={{ fontWeight: '400' }}><em>Please, remove </em><mark>highlighted</mark> <em>bad words on step {index + 1}.</em></Box> : null }
-                      { error.instructions[index].character ?
-                        <Box sx={{ display: 'flex', flexDirection: 'row', fontWeight: '400' }}><em>Please, 
-                          <Tooltip
-                            title={`Ä ä % { } @ / \\ # À à ° ¬ $ & = * etc..`}
-                            sx={{ display: 'flex', flexDirection: 'column', color: '#42424f', background: '#f5f5f9', fontFamily: 'Roboto'}}
-                          >
-                            <u>remove unallowed characters</u>
-                          </Tooltip> on step {index + 1}.</em>
-                        </Box> : null }
-                    </Box>
-                  }
-                >
-                  <Box>
-                    <InputLabel disabled={allDisabled} id={`targetInstructions${index}`} shrink={false} sx={s.inputShownInstructions}>{ stepsState[index] }</InputLabel>
-                    <TextField
-                      id={`${index}instructions`}
-                      autoComplete='off'
-                      multiline
-                      disabled={allDisabled}
-                      value={stepsState[index]}
-                      placeholder={`e.g. Cut pasta, fry tomatoes..`}
-                      sx={s.inputHiddenInstructions}
-                      onChange={(e) => {
-                        handlerUpdate({ index: parseInt((e.target as HTMLInputElement).id, 10), value: e.target.value });
-                        validator({ value: e.target.value, type: e.target.id.replace(/[0-9]/g, ''), index: parseInt((e.target as HTMLInputElement).id, 10) })
-                      }}
-                    />
-                  </Box>
-                </Tooltip>
-
-                <Tooltip
-                  arrow
-                  enterDelay={700}
-                  enterNextDelay={700}
-                  leaveDelay={200}
-                  enterTouchDelay={0}
-                  disableFocusListener={stepsState.length >= 10 ? false : true}
-                  disableHoverListener={stepsState.length >= 10 ? false : true}
-                  placement="bottom-end"
-                  title={
-                    <Box sx={s.newStepTooltip}>
-                      <Box>Max steps {`<`}10{`>`} reached !</Box>
-                      <Box>Please, delete some old step to add new one.</Box>
-                    </Box>
-                  }
-                >
-                  <Box sx={s.buttonNewHelper}>
-                    <Button
-                      variant="contained"
-                      disabled={allDisabled ? true : stepsState.length >= 10 ? true : false}
-                      id={`${index}`}
-                      sx={s.buttonNew}
-                      onClick={(e) => {handlerAdd({ index: parseInt((e.target as HTMLInputElement).id, 10 )})}}
-                    >New Step
-                    </Button>
-                  </Box>
-                </Tooltip>
-
-                <Tooltip
-                  arrow
-                  enterDelay={700}
-                  enterNextDelay={700}
-                  leaveDelay={200}
-                  enterTouchDelay={0}
-                  disableFocusListener={stepsState.length === 1 ? false : true}
-                  disableHoverListener={stepsState.length === 1 ? false : true}
-                  placement="bottom-end"
-                  title={"You can't delete first step !"}
-                >
-                  <Box sx={s.buttonDeleteHelper}>
-                    <Button
-                      className={`buttonDeleteStep`}
-                      variant="contained"
-                      disabled={allDisabled ? true : stepsState.length === 1 ? true : false}
-                      id={`${index}`}
-                      sx={s.buttonDelete}
-                      onClick={(e) => { handlerDelete({ index: parseInt((e.target as HTMLInputElement).id, 10) }) }}
-                    >Detele Step
-                    </Button>
-                  </Box>
-                </Tooltip>
-              </Box>
-            ))}
-
           </Box>
-        </Box>
-        <Box sx={s.eachRow}>
-          <Button
-            sx={s.buttonClearSave}
-            variant="contained"
-            onClick={() => clearFieldsNotif()}
-          >CLEAR
-          </Button>
-          <Button
-            sx={s.buttonClearSave}
-            variant="contained"
-            onClick={(e) => handleSubmit(e)}
-            disabled={
-              saveButtonDisabled ||
-              error.title.character ||
-              error.title.badWord ||
-              error.health.string ||
-              error.health.max ||
-              error.summary.character ||
-              error.summary.badWord ||
-              error.instructions.filter(e => e.character === true)[0] ||
-              error.instructions.filter(e => e.badWord === true)[0] ?
-              true : false
-            }
-          >SAVE RECIPE
-          </Button>
+        </Tooltip>
+      </Box>
+      <Box sx={s.eachRow}>
+        <Box sx={s.text}>Image:</Box>
+        <Tooltip
+          sx={s.tooltipLeft}
+          arrow
+          variant="outlined"
+          size="lg"
+          enterDelay={500}
+          leaveDelay={200}
+          enterTouchDelay={0}
+          open={error.image.start}
+          placement="bottom"
+          title={
+            <Box sx={{ display: 'flex', flexDirection: 'column', color: '#25252d', background: '#f5f5f9', fontFamily: 'Roboto'}}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', color: '#25252d', fontWeight: '400' }}>
+                <Box><mark><em>It's seems you are typing a non secure link..</em></mark></Box>
+                <Box>{ error.image.start ? <mark><em>Please, be shure your link starts with <b>https://</b></em></mark> : null }</Box>
+              </Box>
+              <Box sx={{ display: 'flex', flexDirection: 'column', color: '#25252d', fontWeight: '400' }}>
+                <Box>Please, copy and paste your food recipe link image url here !</Box>
+                <Box>If you dont give a link, a random image gonna be used in your recipe.</Box>
+              </Box>
+            </Box>
+          }
+        >
+          <TextField
+            className={`inputPos`}
+            id="image"
+            disabled={allDisabled}
+            sx={s.input}
+            value={imageValue}
+            autoComplete='off'
+            placeholder={`e.g. https://commons.wikimedia.org/wiki/File:Elaboraci%C3%B3n_del_tomate_frito_(4).jpg`}
+            //onFocus={() => setHealthScorePlaceholder("")}
+            //onBlur={() => setHealthScorePlaceholder(`e.g. https://commons.wikimedia.org/wiki/File:Elaboraci%C3%B3n_del_tomate_frito_(4).jpg`)}
+            onChange={(e) => { validator({ value: e.target.value, type: e.target.id }) }}
+          />
+        </Tooltip>
+      </Box>
+      <Box sx={s.eachRow}>
+        <Box sx={s.text}>Health Score:</Box>
+        <Tooltip
+          sx={s.tooltipLeft}
+          arrow
+          variant="outlined"
+          size="lg"
+          enterDelay={500}
+          leaveDelay={200}
+          enterTouchDelay={0}
+          open={error.health.string || error.health.max}
+          placement="bottom-start"
+          title={
+            <Box sx={{ display: 'flex', flexDirection: 'column', color: '#25252d', background: '#f5f5f9', fontFamily: 'Roboto'}}>
+              <Box
+                sx={{ color: '#25252d', fontWeight: '400' }}
+              >{error.health.string ?
+                `Only numbers allowed in "Health Score" !` :
+                `Allowed numbers are between 0 and 100 !`}
+              </Box>
+            </Box>
+
+          }
+        >
+          <TextField
+            className={`inputPos`}
+            id="health"
+            sx={s.input}
+            disabled={allDisabled}
+            value={healthValue}
+            autoComplete='off'
+            placeholder={healthScorePlaceholder}
+            onFocus={() => setHealthScorePlaceholder("")}
+            onBlur={() => setHealthScorePlaceholder(`e.g. 73`)}
+            onChange={(e) => { validator({ value: e.target.value, type: e.target.id }) }}
+          />
+        </Tooltip>
+      </Box>
+      <Box sx={s.eachRow}>
+        <Box sx={s.text}>Summary:</Box>
+        <Tooltip
+          sx={s.tooltipCenter}
+          arrow
+          variant="outlined"
+          size="lg"
+          enterDelay={500}
+          leaveDelay={200}
+          enterTouchDelay={0}
+          open={error.summary.character || error.summary.badWord}
+          placement="bottom"
+          title={
+            <Box sx={{ display: 'flex', flexDirection: 'column', color: '#25252d', background: '#f5f5f9', fontFamily: 'Roboto'}}>
+              { error.summary.character ? <Box sx={{ fontWeight: '400', fontSize: '17px' }}>Special characters not allowed in "Summary" !</Box> : null }
+              { error.summary.character ? <Box sx={{ color: '#42424f' }}>Allowed characters:</Box> : null }
+              { error.summary.character ? <Box sx={{ color: '#42424f', textAlign: 'center' }}><b>, ; . : - ! ¡ ¿ ? ' " ( ) [ ] á Á é É í Í ó Ó ú Ú ü Ü ñ Ñ</b></Box> : null }
+              { error.summary.badWord ? <Box sx={{ fontWeight: '400' }}><em>Please, remove </em><mark>highlighted</mark> <em>bad words.</em></Box> : null }
+              { error.summary.character ? <Box sx={{ display: 'flex', flexDirection: 'row', fontWeight: '400' }}><em>Please, 
+                <Tooltip
+                  title={`Ä ä % { } @ / \\ # À à ° ¬ $ & = * etc..`}
+                  sx={{ display: 'flex', flexDirection: 'column', color: '#42424f', background: '#f5f5f9', fontFamily: 'Roboto'}}
+                >
+                  <u>remove unallowed characters</u>
+                </Tooltip>.</em>
+              </Box> : null }
+            </Box>
+          }
+        >
+          <Box>
+            <InputLabel disabled={allDisabled} id={"targetSummary"} shrink={false} sx={s.inputShownSummary}>{ summaryValue }</InputLabel>
+            <TextField
+              id="summary"
+              autoComplete='off'
+              sx={s.inputHiddenSummary}
+              value={summaryValue}
+              disabled={allDisabled}
+              multiline
+              placeholder={summaryPlaceholder}
+              onFocus={() => setSummaryPlaceholder("")}
+              onBlur={() => setSummaryPlaceholder(`e.g. Healthy pasta recipe`)}
+              onChange={(e) => { validator({ value: e.target.value, type: e.target.id }) }}
+            />
+          </Box>
+        </Tooltip>
+      </Box>
+      <Box sx={s.eachRow}>
+        <Box sx={s.text}>Diets:</Box>
+        <FormControl>
+          <InputLabel>Select Diets</InputLabel>
+          <Select
+            sx={s.input}
+            placeholder={`Select Diets`}
+            multiple
+            value={dietsArray}
+            disabled={allDisabled}
+            label="Select Diets"
+            onChange={handleChangeDiets}
+            renderValue={(selected) => selected.join(', ')}
+            MenuProps={ {PaperProps: { style: { maxHeight: `${48 * 4.5}px`, width: 300 }}}}
+          >
+            {dietss.slice(1).map(e => (
+              <MenuItem
+                key={e.title}
+                value={`${e.title}`}
+              >
+                <Checkbox checked={dietsArray.indexOf(e.title) > -1} />
+                <ListItemText primary={e.title} />
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Box>
+      <Box sx={s.eachRow}>
+        <Box sx={s.text}>Instructions:</Box>
+        <Box sx={s.stepsContainer}>
+
+          {/* stepsState[2] !== undefined &&  */stepsState.map((e, index) => (
+            <Box key={index} sx={s.eachStep}>
+              <Box sx={s.stepTitle}>Step {index + 1}:</Box>
+
+              <Tooltip
+                sx={ index % 2 === 0 ? s.tooltipRight : s.tooltipLeft }
+                key={index}
+                arrow
+                variant="outlined"
+                size="lg"
+                enterDelay={500}
+                leaveDelay={200}
+                enterTouchDelay={0}
+                open={error.instructions[index].character || error.instructions[index].badWord}
+                placement={ index % 2 === 0 ? `bottom-end` : `bottom-start` }
+                title={
+                  <Box sx={{ display: 'flex', flexDirection: 'column', color: '#25252d', background: '#f5f5f9', fontFamily: 'Roboto'}}>
+                    { error.instructions[index].character ? <Box sx={{ fontWeight: '400', fontSize: '17px' }}>Special characters not allowed in "Instructions" !</Box> : null }
+                    { error.instructions[index].character ? <Box sx={{ color: '#42424f' }}>Allowed characters:</Box> : null }
+                    { error.instructions[index].character ? <Box sx={{ color: '#42424f', textAlign: 'center' }}><b>, ; . : - ! ¡ ¿ ? ' " ( ) [ ] á Á é É í Í ó Ó ú Ú ü Ü ñ Ñ</b></Box> : null }
+                    { error.instructions[index].badWord ? <Box sx={{ fontWeight: '400' }}><em>Please, remove </em><mark>highlighted</mark> <em>bad words on step {index + 1}.</em></Box> : null }
+                    { error.instructions[index].character ?
+                      <Box sx={{ display: 'flex', flexDirection: 'row', fontWeight: '400' }}><em>Please, 
+                        <Tooltip
+                          title={`Ä ä % { } @ / \\ # À à ° ¬ $ & = * etc..`}
+                          sx={{ display: 'flex', flexDirection: 'column', color: '#42424f', background: '#f5f5f9', fontFamily: 'Roboto'}}
+                        >
+                          <u>remove unallowed characters</u>
+                        </Tooltip> on step {index + 1}.</em>
+                      </Box> : null }
+                  </Box>
+                }
+              >
+                
+                <Box id={`testtest${index}`}>
+                  {/* {console.log("a ver esto", index)} */}
+                  {/* <InputLabel disabled={allDisabled} id={`targetInstructions${index}`} shrink={false} sx={s.inputShownInstructions}>{ stepsState[index] }</InputLabel> */}
+                  <InputLabel disabled={allDisabled} id={`targetInstructions${index}`} shrink={false} sx={s.inputShownInstructions}>{ stepsState[index] }</InputLabel>
+                  <TextField
+                    id={`${index}instructions`}
+                    autoComplete='off'
+                    multiline
+                    disabled={allDisabled}
+                    value={stepsState[index]}
+                    placeholder={`e.g. Cut pasta, fry tomatoes..`}
+                    sx={s.inputHiddenInstructions}
+                    onChange={(e) => {
+                      handlerUpdateInstructions({ index: parseInt((e.target as HTMLInputElement).id, 10), value: e.target.value });
+                      validator({ value: e.target.value, type: e.target.id.replace(/[0-9]/g, ''), index: parseInt((e.target as HTMLInputElement).id, 10) })
+                    }}
+                  />
+                </Box>
+              </Tooltip>
+
+              <Tooltip
+                arrow
+                enterDelay={700}
+                enterNextDelay={700}
+                leaveDelay={200}
+                enterTouchDelay={0}
+                disableFocusListener={stepsState.length >= 10 ? false : true}
+                disableHoverListener={stepsState.length >= 10 ? false : true}
+                placement="bottom-end"
+                title={
+                  <Box sx={s.newStepTooltip}>
+                    <Box>Max steps {`<`}10{`>`} reached !</Box>
+                    <Box>Please, delete some old step to add new one.</Box>
+                  </Box>
+                }
+              >
+                <Box sx={s.buttonNewHelper}>
+                  <Button
+                    variant="contained"
+                    disabled={allDisabled ? true : stepsState.length >= 10 ? true : false}
+                    id={`${index}`}
+                    sx={s.buttonNew}
+                    onClick={(e) => { handlerAddInstructions({ index: parseInt((e.target as HTMLInputElement).id, 10 )}) }}
+                  >New Step
+                  </Button>
+                </Box>
+              </Tooltip>
+
+              <Tooltip
+                arrow
+                enterDelay={700}
+                enterNextDelay={700}
+                leaveDelay={200}
+                enterTouchDelay={0}
+                disableFocusListener={stepsState.length === 1 ? false : true}
+                disableHoverListener={stepsState.length === 1 ? false : true}
+                placement="bottom-end"
+                title={"You can't delete first step !"}
+              >
+                <Box sx={s.buttonDeleteHelper}>
+                  <Button
+                    className={`buttonDeleteStep`}
+                    variant="contained"
+                    disabled={allDisabled ? true : stepsState.length === 1 ? true : false}
+                    id={`${index}`}
+                    sx={s.buttonDelete}
+                    onClick={(e) => { handlerDeleteInstructions({ index: parseInt((e.target as HTMLInputElement).id, 10) }) }}
+                  >Detele Step
+                  </Button>
+                </Box>
+              </Tooltip>
+            </Box>
+          ))}
+
         </Box>
       </Box>
-    )
-    : !showAlert ?
-    (
-      <div className="alertButtonBGSuccess">
-        <span>RECIPE CREATED SUCCESSFULLY !</span>
-        <button className='alertButtonSuccess' id="success" onClick={() => {setShowAlert(false) ; setFirstInstance(false)}}></button>
-        <div className="hiddenSuccess">
-        </div>
-      </div>
-    )
-    :
-    (
-      <div className="alertButtonBG">
-        <span>Recipe was already created ! </span>
-        <span>Please select 'CREATE NEW RECIPE!' to create a new one !</span>
-        <button className='alertButton' onClick={() => {setShowAlert(false) ; setFirstInstance(false)}}><b>GO BACK !</b></button>
-      </div>
-    )
+      <Box sx={s.eachRow}>
+        <Button
+          sx={s.buttonClearSave}
+          variant="contained"
+          onClick={() => clearFieldsNotif()}
+        >CLEAR
+        </Button>
+        <Button
+          sx={s.buttonClearSave}
+          variant="contained"
+          onClick={(e) => handleSubmit(e)}
+          disabled={
+            saveButtonDisabled ||
+            error.title.character ||
+            error.title.badWord ||
+            error.health.string ||
+            error.health.max ||
+            error.summary.character ||
+            error.summary.badWord ||
+            error.instructions.filter(e => e.character === true)[0] ||
+            error.instructions.filter(e => e.badWord === true)[0] ?
+            true : false
+          }
+        >SAVE RECIPE
+        </Button>
+      </Box>
+    </Box>
+  )
 }
 
 export default CreateRecipe;

@@ -30,10 +30,11 @@ export const imageSearcher = () => {
   return {
     //...noSelect,
     display: 'flex',
-    flexDirection: 'column',
-    background: 'darkred', // dev
-    width: '400px',
-    height: '300px',
+    position : 'relative',
+    //flexDirection: 'column',
+    background: 'yellow', // dev
+    width: '400px !important',
+    height: '300px !important',
     alignItems: 'center',
     marginTop: '16px',
   }
@@ -41,7 +42,10 @@ export const imageSearcher = () => {
 
 export const tooltipCenter = () => {
   return {
+    //display: 'flex',
+    //position: 'relative',
     zIndex: 1,
+    //transitionDelay: '1s'
   }
 }
 
@@ -79,6 +83,7 @@ export const eachRow = () => {
     display: 'flex',
     flexDirection: 'row',
     width: '80vw',
+    //height: '56px',
     justifyContent: 'center',
   }
 }

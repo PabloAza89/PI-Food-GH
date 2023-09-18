@@ -20,25 +20,48 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
         retrieveLogin({email: res.email, token: codeResponse.access_token})
         return { email: res.email, token: codeResponse.access_token }
       })
-      .then((res) => {
-        console.log("A VER ESTE", res)
-        fetch(`http://localhost:3001/user`, {
-          method: 'POST',
-          credentials: 'include',
-          body: JSON.stringify({
-            email: res.email,
-            token: res.token
-          }),
-          headers: {
-              'Content-type': 'application/json; charset=UTF-8',
-          }
-        })
-      })
       .catch(rej => console.log(rej))
 
     },
-    onError: (error) => console.log('Login Failed:', error)
+    onError: (error) => {console.log(error)}
   })
+
+  //console.log("logingg", login)
+
+  if (userData.email !== '') {
+    fetch(`http://localhost:3001/user`, {
+      method: 'POST',
+      credentials: 'include',
+      body: JSON.stringify({
+        email: userData.email,
+        token: userData.token
+      }),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      }
+    })
+    .then((res) => res.json())
+    .then((res) => {
+      console.log("RES", res)
+      //setUserData({ email: res.email, token: res.token })
+    })
+    .catch(rej => console.log(rej))
+  }
+
+  // .then((res) => {
+  //   console.log("A VER ESTE", res)
+  //   fetch(`http://localhost:3001/user`, {
+  //     method: 'POST',
+  //     credentials: 'include',
+  //     body: JSON.stringify({
+  //       email: res.email,
+  //       token: res.token
+  //     }),
+  //     headers: {
+  //         'Content-type': 'application/json; charset=UTF-8',
+  //     }
+  //   })        
+  // })
 
   const logout = () => {
     fetch(`https://oauth2.googleapis.com/revoke?token=${userData.token}`, {

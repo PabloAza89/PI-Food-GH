@@ -1,7 +1,8 @@
 import toAvoidKey from '../db/toAvoidKey.json';
-import { recipesI } from '../interfaces/interfaces';
+import { recipesI, serverStatusI } from '../interfaces/interfaces';
 
 interface initialStateI {
+  serverStatus: serverStatusI,
   allRecipes: recipesI[],
   toShow: recipesI[],
   allDiets: any[],
@@ -28,6 +29,7 @@ interface initialStateI {
 }
 
 const initialState: initialStateI = {
+  serverStatus: { online: true, validKey: true, try: 1 },
   allRecipes: [],
   toShow: [],
   allDiets: [],
@@ -55,40 +57,22 @@ const initialState: initialStateI = {
 
 const reducer = (state = initialState, action: {type: string; payload: any}) => {
   switch (action.type) {
-    // case 'FETCH_RECIPES_FROM_API':
-    //   let parsedArr: recipesI[] = []
-    //   toAvoidKey.results.map(e => parsedArr.push(
-    //     {
-    //       id: e.id,
-    //       title: e.title,
-    //       summary: e.summary,
-    //       healthScore: e.healthScore,
-    //       analyzedInstructions:
-    //           e.analyzedInstructions[0] ? e.analyzedInstructions[0].steps.map(e=> e.step) : [],
-    //       image: e.image,
-    //       diets: e.diets.map(function(e) {
-    //         if ((e.indexOf(e) !== e.length - 1)) return e.split(" ").map(e => e[0].toUpperCase() + e.slice(1)).join(" ")
-    //         else return e.split(" ").map(e => e[0].toUpperCase() + e.slice(1)).join(" ")
-    //       }),
-    //       dishTypes: e.dishTypes
-    //     }
-    //   ))
-    //   return {
-    //     ...state,
-    //     allRecipes: parsedArr,
-    //     toShow: parsedArr
-    //   };
-
     case 'FETCH_RECIPES':
       //toAvoidKey.results.map
+      //console.log("action.payload", Object.keys(action.payload))
       console.log("action.payload", action.payload)
+      const copyServerStatus = {...state.serverStatus}
+      copyServerStatus.online = action.payload.ok || action.payload.ok === false ? true : false
+      copyServerStatus.validKey = action.payload.ok ? true : false
+      copyServerStatus.try = action.payload.ok || action.payload.ok === false ? action.payload.try : 1
       let targetArray:any = []
 
-      if (action.payload.ok) targetArray = action.payload.message//.slice(0,5)
+      if (action.payload.ok === true) targetArray = action.payload.message//.slice(0,5)
+      else if (action.payload.ok === false) targetArray = action.payload.message.concat(toAvoidKey)
       else targetArray = toAvoidKey
 
-      let parsedArrOffline: recipesI[] = []
-      targetArray && targetArray.map((e:any) => parsedArrOffline.push(
+      let parsedArr: recipesI[] = []
+      targetArray && targetArray.map((e:any) => parsedArr.push(
         {
           id: e.id,
           title: e.title,
@@ -109,8 +93,9 @@ const reducer = (state = initialState, action: {type: string; payload: any}) => 
       ))
       return {
         ...state,
-        allRecipes: parsedArrOffline,
-        toShow: parsedArrOffline
+        allRecipes: parsedArr,
+        toShow: parsedArr,
+        serverStatus: copyServerStatus
       };
 
     case 'ALL_RECIPES_LOADED':

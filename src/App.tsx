@@ -10,7 +10,7 @@ import GoBack from "./components/GoBack/GoBack";
 import Paginate from "./components/Paginate/Paginate";
 import NavBar from "./components/NavBar/NavBar";
 import GoUp from "./components/GoUp/GoUp";
-import GoogleAuth from "./components/GoogleAuth/GoogleAuth";
+import ServerStatus from "./components/ServerStatus/ServerStatus";
 import Error from './components/Error/Error';
 import CreateRecipe from "./components/CreateRecipe/CreateRecipe";
 import About from "./components/About/About";
@@ -118,20 +118,24 @@ function App() {
       <Box sx={s.wallpaperBody} />
       <Routes>
         <Route path="/" element={<>
+          <ServerStatus />
           <NavBar />
           <Paginate />
           <CardsMapper />
           <GoUp />
         </>}/>
         <Route path="/:recipeId" element={<>
+          <ServerStatus />
           <GoBack />
           <Detail />
         </>}/>
         <Route path="/create" element={<>
+          <ServerStatus />
           <GoBack />
           <CreateRecipe retrieveLogin={retrieveLogin} userData={userData}/>
         </>}/>
         <Route path="/about" element={<>
+          <ServerStatus />
           <About />
         </>}/>
         <Route path="*" element={<>

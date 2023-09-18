@@ -9,3 +9,9 @@ export interface recipesI {
   dishTypes: any,
   userRecipe: boolean,
 }
+
+export interface serverStatusI {
+  online: boolean,
+  validKey: boolean,
+  try: number,
+}
