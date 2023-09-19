@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useGoogleLogin } from '@react-oauth/google';
 import { Box, Button } from '@mui/material/';
 import { ReactComponent as MySvg } from '../../images/googleLogo.svg';
@@ -5,18 +6,15 @@ import * as s from "../../styles/GoogleAuthSX";
 
 const GoogleAuth = ({ retrieveLogin, userData }: any) => {
 
-  console.log("userData", userData)
+  //console.log("userData", userData)
 
   const login = useGoogleLogin({
     onSuccess: (codeResponse) => {
-      //console.log("RESPOSE", codeResponse);
-
       fetch(`https://www.googleapis.com/oauth2/v3/userinfo?access_token=${codeResponse.access_token}`, {
         method: 'GET',
       })
       .then((res) => res.json())
       .then((res) => {
-        //console.log("response", res.email)
         retrieveLogin({email: res.email, token: codeResponse.access_token})
         return { email: res.email, token: codeResponse.access_token }
       })
@@ -26,43 +24,24 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
     onError: (error) => {console.log(error)}
   })
 
-  //console.log("logingg", login)
-
-  if (userData.email !== '') {
-    fetch(`http://localhost:3001/user`, {
-      method: 'POST',
-      credentials: 'include',
-      body: JSON.stringify({
-        email: userData.email,
-        token: userData.token
-      }),
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-      }
-    })
-    .then((res) => res.json())
-    .then((res) => {
-      console.log("RES", res)
-      //setUserData({ email: res.email, token: res.token })
-    })
-    .catch(rej => console.log(rej))
-  }
-
-  // .then((res) => {
-  //   console.log("A VER ESTE", res)
-  //   fetch(`http://localhost:3001/user`, {
-  //     method: 'POST',
-  //     credentials: 'include',
-  //     body: JSON.stringify({
-  //       email: res.email,
-  //       token: res.token
-  //     }),
-  //     headers: {
-  //         'Content-type': 'application/json; charset=UTF-8',
-  //     }
-  //   })        
-  // })
-
+  useEffect(() => {
+    if (userData.email !== '') {
+      fetch(`http://localhost:3001/user`, {
+        method: 'POST',
+        credentials: 'include',
+        body: JSON.stringify({
+          email: userData.email,
+          token: userData.token
+        }),
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+        }
+      })
+      .then((res) => res.json())
+      .catch(rej => console.log(rej))
+    }
+  },[userData.email, userData.token])
+ 
   const logout = () => {
     fetch(`https://oauth2.googleapis.com/revoke?token=${userData.token}`, {
       method: 'POST',

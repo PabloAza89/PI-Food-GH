@@ -11,6 +11,7 @@ import dietss from '../../db/diets.json';
 import Tooltip from '@mui/joy/Tooltip';
 import Swal from 'sweetalert2';
 import dicEs from '../../dictionary/es.json';
+import dicEn from '../../dictionary/en.json';
 import $ from 'jquery';
 import GoogleAuth from '../GoogleAuth/GoogleAuth';
 
@@ -26,7 +27,6 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
   const dispatch = useDispatch()
   const location = useLocation()
 
-  //let target = "#access_token=ya29.a0AfB_byDIz7hhoF8LD-CKwEThmne7OFCMeVSE0Fe9S63pZMYyMyETZn-DZJAMtRHeJ81F5xlzKWsXhO7nwRJyPH1HU16WUicndnUofWtLtm9OJxLlFViidifL5j9sdfDUcUIzBiEvQ1af3myuTkbPsUGOBocrt2H-lL7vIQaCgYKAegSARESFQHsvYlsmHQGVEJKfKUuGb2CdOmrWw0173&token_type=Bearer&expires_in=3599&scope=email%20profile%20https://www.googleapis.com/auth/userinfo.email%20openid%20https://www.googleapis.com/auth/userinfo.profile&authuser=2&prompt=consent"
   let target = location.hash
 
   let start = target.indexOf(`#access_token=`)
@@ -34,17 +34,10 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
 
   let authTk = target.slice(start+14,end)
 
-  // console.log(start)
-  // console.log(end)
-  // console.log(authTk)
-
-  // console.log("location", location)
-  // console.log("location.hash === ", location.hash === "")
-  // console.log("location.hash", location.hash)
-
   const [titlePlaceholder, setTitlePlaceholder] = useState<string>('e.g. Pasta with tomatoes..');
   const [healthScorePlaceholder, setHealthScorePlaceholder] = useState<string>('e.g. 73');
   const [summaryPlaceholder, setSummaryPlaceholder] = useState<string>('e.g. Healthy pasta recipe');
+  //const [doNothing, setDoNothing] = useState<boolean>(false);
 
   const [titleValue, setTitleValue] = useState<string>('');
   const [imageValue, setImageValue] = useState<string>('');
@@ -132,10 +125,6 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
     empty: boolean
   }
 
-  interface imageI {
-    start: boolean
-  }
-
   interface healthI {
     string?: boolean,
     max?: boolean,
@@ -156,7 +145,6 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
 
   interface errorI {
     title: titleI,
-    image: imageI,
     health: healthI,
     summary: summaryI,
     instructions: instructionsI[]
@@ -167,9 +155,6 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
       character: false,
       badWord: false,
       empty: true
-    },
-    image: {
-      start: false
     },
     health: {
       string: false,
@@ -225,11 +210,33 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
           , "g" )) !== -1) ? { "target": e, "index": idx } : -1
     }).filter(e => e !== -1)
 
-    console.log("badWordsInDicEs", badWordsInDicEs)
+    let badWordsInDicEn = dicEn.map((e, idx) => {
+      return (
+        characterReplacer(value)
+          .search(RegExp(
+            `^` + e + `$|` + // MATCH UNIQUE STRING WITH NOTHING AT START OR END
+            `[-,\n;.:¡!¿?'"()\\][ ]` + e + `$|` + // ALLOWED CHARACTERS AT BEGGINING // TEST
+            `^` + e + `[-,\n;.:¡!¿?'"()\\][ ]|` + // ALLOWED CHARACTERS AT END // TEST
+            `[-,\n;.:¡!¿?'"()\\][ ]` + e + `[-,\n;.:¡!¿?'"()\\][ ]`  //+ `|` + // ALLOWED CHARACTERS AT START & END // TEST
+          , "g" )) !== -1) ? { "target": e, "index": idx } : -1
+    }).filter(e => e !== -1)
+
+    //console.log("badWordsInDicEs", badWordsInDicEs)
 
     let firstArrayFilter: any = []
 
     badWordsInDicEs?.filter(e => e !== -1)?.forEach((x, idx) => {
+      if (x !== -1) [...characterReplacer(value).matchAll(RegExp(x.target, "g"))].forEach((e, gg) => {
+        if (
+          x.target[0] === e[0][0] &&
+          x.target.length === e[0].length &&
+          ( RegExp(`[-,\n;.:¡!¿?'"()\\][ ]`, `g`).test(value[e.index! + e[0].length]) || value[e.index! + e[0].length] === undefined ) &&
+          ( RegExp(`[-,\n;.:¡!¿?'"()\\][ ]`, `g`).test(value[e.index! - 1 ]) || value[e.index! -1] === undefined )
+        ) firstArrayFilter.push({ "target": e[0].trim().replaceAll(/[^A-Za-z0-9 ]/g, ""), "start": e.index, "end": e.index! + e[0].length })
+      })
+    })
+
+    badWordsInDicEn?.filter(e => e !== -1)?.forEach((x, idx) => {
       if (x !== -1) [...characterReplacer(value).matchAll(RegExp(x.target, "g"))].forEach((e, gg) => {
         if (
           x.target[0] === e[0][0] &&
@@ -333,13 +340,6 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
         localStorage.setItem('titleValue', value)
         highlighter({value, type})
       break;
-      case (`image`):
-        let copyObjImage = {...error}
-        if (value.trim().slice(0,8) !== "https://" && value.trim().length !== 0) { copyObjImage[type].start = true; setError({ ...copyObjImage }) }
-        else { copyObjImage[type].start = false; setError({ ...copyObjImage })}
-        setImageValue(value.trim());
-        localStorage.setItem('imageValue', value)
-      break;
       case (`health`):
         let copyObj = {...error}
         if (!/^\d+$/.test(value) && value.length !== 0 ) { copyObj.health.string = true; setError({ ...copyObj })}
@@ -396,7 +396,6 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
     setAllDisabled(false)
     setError({
       title: { character: false, badWord: false, empty: false },
-      image: { start: false },
       health: { string: false, max: false, empty: false },
       summary: { character: false, badWord: false, empty: false },
       instructions: [{ character: false, badWord: false, empty: false },]
@@ -659,17 +658,14 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
           enterDelay={500}
           leaveDelay={200}
           enterTouchDelay={0}
-          open={error.image.start}
+          /* open={error.image.start} */
           placement="bottom"
           title={
             <Box sx={{ display: 'flex', flexDirection: 'column', color: '#25252d', background: '#f5f5f9', fontFamily: 'Roboto'}}>
               <Box sx={{ display: 'flex', flexDirection: 'column', color: '#25252d', fontWeight: '400' }}>
-                <Box><mark><em>It's seems you are typing a non secure link..</em></mark></Box>
-                <Box>{ error.image.start ? <mark><em>Please, be shure your link starts with <b>https://</b></em></mark> : null }</Box>
-              </Box>
-              <Box sx={{ display: 'flex', flexDirection: 'column', color: '#25252d', fontWeight: '400' }}>
                 <Box>Please, copy and paste your food recipe link image url here !</Box>
-                <Box>If you dont give a link, a random image gonna be used in your recipe.</Box>
+                <Box>If it's everything OK, you can preview your image in center upper box</Box>
+                <Box>If you dont give a link, or link its not valid, a random image gonna be used in your recipe.</Box>
               </Box>
             </Box>
           }
@@ -684,7 +680,20 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
             placeholder={`e.g. https://commons.wikimedia.org/wiki/File:Elaboraci%C3%B3n_del_tomate_frito_(4).jpg`}
             //onFocus={() => setHealthScorePlaceholder("")}
             //onBlur={() => setHealthScorePlaceholder(`e.g. https://commons.wikimedia.org/wiki/File:Elaboraci%C3%B3n_del_tomate_frito_(4).jpg`)}
-            onChange={(e) => { validator({ value: e.target.value, type: e.target.id }) }}
+            //onKeyDown={(e) => { console.log("e.key", e.key) }}
+          
+            // 32 y 160
+            onChange={(e) => {
+              //console.log("e.key", e)
+              /* validator({ value: e.target.value, type: e.target.id }); */
+              //setImageValue(e.target.value/* .trim() *//* .replaceAll(" ","") */);
+              
+                setImageValue(e.target.value.trim())
+                localStorage.setItem('imageValue', e.target.value)
+              
+              
+              
+            }}
           />
         </Tooltip>
       </Box>

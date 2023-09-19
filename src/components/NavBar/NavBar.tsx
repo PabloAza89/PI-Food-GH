@@ -152,7 +152,7 @@ const NavBar = () =>  {
             <Select
               sx={s.selectDietsHealthAlpha}
               value={entireFilter.diet}
-              onChange={(e) => setEntireFilter({...entireFilter, diet:e.target.value})}
+              onChange={(e) => { setEntireFilter({...entireFilter, diet:e.target.value}); dispatch(setIndexChoosen(0)) }}
             >
               { allDietsOnline ?
                 allDietsArray.map(e => {
@@ -176,7 +176,7 @@ const NavBar = () =>  {
             <Select
               sx={s.selectDietsHealthAlpha}
               value={entireFilter.dish}
-              onChange={(e) => setEntireFilter({...entireFilter, dish:e.target.value})}
+              onChange={(e) => { setEntireFilter({...entireFilter, dish:e.target.value}); dispatch(setIndexChoosen(0)) }}
             >
               { allDishesOnline ?
                 allDishesArray.map(e => {
