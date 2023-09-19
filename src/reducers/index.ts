@@ -6,7 +6,9 @@ interface initialStateI {
   allRecipes: recipesI[],
   toShow: recipesI[],
   allDiets: any[],
+  allDishes: any[],
   allDietsOnline: boolean,
+  allDishesOnline: boolean,
   allRecipesLoaded: boolean,
   showMain: boolean,
   indexChoosen: number,
@@ -33,7 +35,9 @@ const initialState: initialStateI = {
   allRecipes: [],
   toShow: [],
   allDiets: [],
+  allDishes: [],
   allDietsOnline: true,
+  allDishesOnline: true,
   allRecipesLoaded: false,
   showMain: false,
   indexChoosen: 0,
@@ -58,8 +62,6 @@ const initialState: initialStateI = {
 const reducer = (state = initialState, action: {type: string; payload: any}) => {
   switch (action.type) {
     case 'FETCH_RECIPES':
-      //toAvoidKey.results.map
-      //console.log("action.payload", Object.keys(action.payload))
       console.log("action.payload", action.payload)
       const copyServerStatus = {...state.serverStatus}
       copyServerStatus.online = action.payload.ok || action.payload.ok === false ? true : false
@@ -97,35 +99,39 @@ const reducer = (state = initialState, action: {type: string; payload: any}) => 
         toShow: parsedArr,
         serverStatus: copyServerStatus
       };
-
     case 'ALL_RECIPES_LOADED':
       return {
         ...state,
         allRecipesLoaded: action.payload
       };
-
     case 'GET_DIETS':
-      //console.log("action.payload", action.payload)
       if (action.payload === "error") {
         return {
           ...state,
-          //allDiets: [{title:"All Diets"}, {title:"Vegan"}]
           allDietsOnline: false
         };
       } else return {
         ...state,
         allDiets: action.payload
       };
-
-
+    case 'GET_DISHES':
+      if (action.payload === "error") {
+        return {
+          ...state,
+          allDishesOnline: false
+        };
+      } else return {
+        ...state,
+        allDishes: action.payload
+      };
     case 'FILTER':
       const copyArrayDiet = [...state.allRecipes]
       let arrayToShow: recipesI[] = []
-      if (action.payload.diet === "All Diets") {
-        arrayToShow = copyArrayDiet // DIETS FILTER
-        arrayToShow = arrayToShow.filter((e:any) => e.title.toLowerCase().includes(action.payload.text.toLowerCase())) // THEN TEXT FILTER
-      } else {
-        arrayToShow = copyArrayDiet.filter((e:any) => e.diets.includes(action.payload.diet)) // DIETS FILTER
+      if (action.payload.diet === "All Diets") arrayToShow = copyArrayDiet // ALL DIETS INCLUDED
+      if (action.payload.diet !== "All Diets") arrayToShow = copyArrayDiet.filter((e:any) => e.diets.includes(action.payload.diet)) // FILTER TARGET DIET
+      if (action.payload.dish === "All Dishes") arrayToShow = arrayToShow.filter((e:any) => e.title.toLowerCase().includes(action.payload.text.toLowerCase())) // ALL DIETS INCLUDED THEN TEXT FILTER
+      if (action.payload.dish !== "All Dishes") {
+        arrayToShow = arrayToShow.filter((e:any) => e.dishTypes.includes(action.payload.dish.toLowerCase())) // FILTER TARGET DISH
         arrayToShow = arrayToShow.filter((e:any) => e.title.toLowerCase().includes(action.payload.text.toLowerCase())) // THEN TEXT FILTER
       }
       switch (action.payload.alphaOrHealthy) {

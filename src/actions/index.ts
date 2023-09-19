@@ -32,6 +32,17 @@ export function getDietsFromDB() {
   }
 };
 
+export function getDishesFromDB() {
+  return async function(dispatch: any) {
+    return (
+      fetch("http://localhost:3001/dishes")
+      .then(resp => resp.json())
+      .then(data => dispatch({type: 'GET_DISHES', payload: data}))
+      .catch(error => dispatch({type: 'GET_DISHES', payload: "error"}))
+    )
+  }
+};
+
 export function allRecipesLoaded(payload: any) {
   return {
     type: 'ALL_RECIPES_LOADED',
@@ -41,6 +52,7 @@ export function allRecipesLoaded(payload: any) {
 
 interface filterI {
   diet: string,
+  dish: string,
   text: string,
   alphaOrHealthy: string,
 }

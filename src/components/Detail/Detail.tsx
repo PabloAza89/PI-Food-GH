@@ -24,7 +24,7 @@ export default function Detail() {
 
   function regexInSummary(text: any) { return text.replaceAll(/(<[/]b>|<b>|<[/]a>|<a\b[^>]*>|[/]a>)/g, '') }
 
-  if (recipe.userRecipe && recipe.image.length > 1) {
+  if (recipe !== undefined && recipe.userRecipe && recipe.image.length > 1) {
     fetch( `https://res.cloudinary.com/dtembdocm/image/upload/` + recipe.image, {
       headers: { 'Cache-Control': 'no-cache' }
     })
@@ -35,7 +35,9 @@ export default function Detail() {
       .catch((err) => console.error(err))
   }
 
-  if (recipe) {
+  console.log("RECIPE", recipe)
+
+  if (recipe !== undefined) {
     return (
       <Box sx={s.background}>
         <Box sx={s.card}>
@@ -51,7 +53,8 @@ export default function Detail() {
               `https://res.cloudinary.com/dtembdocm/image/upload/` + recipe.image :
               recipe.image
             }
-            alt="" />
+            alt=""
+          />
           <Typography sx={s.text}><b>Title: </b>{recipe.title}</Typography>
           <Typography sx={s.text}>
             <b>Diets: </b>
@@ -65,10 +68,14 @@ export default function Detail() {
           </Typography>
           <Typography sx={s.text}>
             <b>Dish Types: </b>
-            {recipe.dishTypes && recipe.dishTypes.map((e:any) => {
-              if ((recipe.dishTypes.indexOf(e) !== recipe.dishTypes.length - 1)) return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join("  ") + " + "
-              else return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ")
-            })}
+            {
+              recipe.dishTypes[0] !== undefined ?
+              recipe.dishTypes.map((e:any) => {
+                if ((recipe.dishTypes.indexOf(e) !== recipe.dishTypes.length - 1)) return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join("  ") + " + "
+                else return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ")
+              }) :
+              `All Dishes`
+            }
           </Typography>
           <Divider sx={s.dividerTop}/>
           <Typography sx={s.text}>
@@ -78,7 +85,7 @@ export default function Detail() {
           <Divider sx={s.dividerBottom({ show: recipe.analyzedInstructions[0] })}/>
           <Box sx={s.instructions}>
             <Typography sx={s.text}><b>{recipe.analyzedInstructions[0] ? `Instructions: ` : null}</b></Typography>
-              {recipe.analyzedInstructions && recipe.analyzedInstructions.map((e: any, index: any) => {
+              {/* {recipe.analyzedInstructions && recipe.analyzedInstructions.map((e: any, index: any) => {
                 return (
                   <Box key={index} sx={s.eachStep}>
                     <Typography sx={s.eachStepTitle}>
@@ -86,6 +93,18 @@ export default function Detail() {
                     </Typography>
                     <Typography sx={s.eachStepContent}>
                       {e}
+                    </Typography>
+                  </Box>
+                )
+              })} */}
+              {recipe.analyzedInstructions[0] && recipe.analyzedInstructions[0].steps.map((e: any, index: any) => {
+                return (
+                  <Box key={index} sx={s.eachStep}>
+                    <Typography sx={s.eachStepTitle}>
+                      <b>Step {++index}: </b>
+                    </Typography>
+                    <Typography sx={s.eachStepContent}>
+                      {e.step}
                     </Typography>
                   </Box>
                 )

@@ -10,8 +10,8 @@ import {
   setIndexChoosen, filter, setMenuShown
 } from '../../actions';
 import Tooltip from '@mui/joy/Tooltip';
-//import dietss from '../../db/diets.json';
 import serverSDDietsArray from '../../db/diets.json'; // SD = Shut Down
+import serverSDDishesArray from '../../db/dishes.json'; // SD = Shut Down
 import $ from 'jquery';
 
 const NavBar = () =>  {
@@ -25,29 +25,31 @@ const NavBar = () =>  {
   const [healthLabelShown, setHealthLabelShown] = useState<boolean>(false);
   const [sortAlpha, setSortAlpha] = useState<string>('');
   const [alphaLabelShown, setAlphaLabelShown] = useState<boolean>(false);
-  const [labelShown, setLabelShown] = useState<boolean>(false);
-  const [typeOfDiet, setTypeOfDiet] = useState<string>('All Diets');
-  const [textToFilter, setTextToFilter] = useState<string>('');
   const [placeholder, setPlaceholder] = useState<string>('Find recipe..');
-
-  const [test, setTest] = useState<boolean>(false);
-
 
   const currentWidth = useSelector((state: {currentWidth:number}) => state.currentWidth)
   const menuShown = useSelector((state: {menuShown:boolean}) => state.menuShown)
   const allDietsOnline = useSelector((state: {allDietsOnline:boolean}) => state.allDietsOnline)
+  const allDishesOnline = useSelector((state: {allDishesOnline:boolean}) => state.allDishesOnline)
 
   interface allDietsI {
-    id: any,
+    id?: string,
+    title: string
+  }
+
+  interface allDishesI {
+    id?: string,
     title: string
   }
 
   const allDietsArray = useSelector((state: {allDiets: allDietsI[]}) => state.allDiets)
+  const allDishesArray = useSelector((state: {allDishes: allDishesI[]}) => state.allDishes)
 
   //const [menuShown, setMenuShown] = useState<boolean>(false);
 
   interface entireFilterI {
     diet: string,
+    dish: string,
     text: string,
     alphaOrHealthy: string,
   }
@@ -55,6 +57,7 @@ const NavBar = () =>  {
   const [entireFilter, setEntireFilter] = useState<entireFilterI>(
     {
       diet: 'All Diets',
+      dish: 'All Dishes',
       text: '',
       alphaOrHealthy: ''
     }
@@ -72,17 +75,12 @@ const NavBar = () =>  {
     setHealthLabelShown(false)
   };
 
-  interface dietAndTextHandlerI {
-    diet: string,
-    text: string,
-  }
-
   useEffect(() => {
     dispatch(filter(entireFilter))
     if (currentWidth > 800) dispatch(setMenuShown(false))
   },[ dispatch, entireFilter, currentWidth ])
 
-  //console.log(JSON.stringify(entireFilter, null, 4))
+  console.log("entireFilter", entireFilter)
 
   return (
     <Box sx={s.background({ menuShown })}>
@@ -120,7 +118,6 @@ const NavBar = () =>  {
           >
 
             <TextField
-            //variant="contained"
               className={`inputPos`}
               type="text"
               autoComplete='off'
@@ -166,6 +163,30 @@ const NavBar = () =>  {
                   >{e.title}</MenuItem>
                 )}) :
                 serverSDDietsArray.map(e => {
+                  return (
+                    <MenuItem
+                      key={e.title}
+                      value={`${e.title}`}
+                    >{e.title}</MenuItem>
+                  )})
+              }
+            </Select>
+          </FormControl>
+          <FormControl>
+            <Select
+              sx={s.selectDietsHealthAlpha}
+              value={entireFilter.dish}
+              onChange={(e) => setEntireFilter({...entireFilter, dish:e.target.value})}
+            >
+              { allDishesOnline ?
+                allDishesArray.map(e => {
+                return (
+                  <MenuItem
+                    key={e.title}
+                    value={`${e.title}`}
+                  >{e.title}</MenuItem>
+                )}) :
+                serverSDDishesArray.map(e => {
                   return (
                     <MenuItem
                       key={e.title}

@@ -135,10 +135,18 @@ const Card = ({ id, image, title, healthScore , diets, dishTypes, userRecipe }: 
           sx={s.text}
         >
           <b>Dish Types: </b>
-          {dishTypes && dishTypes.map((e:any) => {
+          {/* {dishTypes && dishTypes.map((e:any) => {
             if ((dishTypes.indexOf(e) !== dishTypes.length - 1)) return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join("  ") + " + "
             else return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ")
-          })}
+          })} */}
+          {
+            dishTypes[0] !== undefined ?
+            dishTypes.map((e:any) => {
+              if ((dishTypes.indexOf(e) !== dishTypes.length - 1)) return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join("  ") + " + "
+              else return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ")
+            }) :
+            `All Dishes`
+          }
         </Typography>
       </Tooltip>
     </Box>

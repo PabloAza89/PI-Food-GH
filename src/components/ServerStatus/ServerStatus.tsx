@@ -82,11 +82,11 @@ const ServerStatus = () =>  {
         {/* <Typography>CONNECTION STATUS</Typography> */}
         <Box sx={s.eachRow}>
           <Box sx={s.circleBig({ online: serverStatus.online })}></Box>
-          <Typography> Server { serverStatus.online ? `Online` : `Offline`}</Typography>
+          <Typography> Server Status: { serverStatus.online ? `Online` : `Offline`}</Typography>
         </Box>
         <Box sx={s.eachRow}>
           <Box sx={s.circleBig({ online: serverStatus.online })}></Box>
-          <Typography> User Repices</Typography>
+          <Typography> User Repices: { serverStatus.online ? `Available` : `Not Available`}</Typography>
         </Box>
         <Box sx={s.eachRow}>
           <Box sx={s.circleBig({ online: serverStatus.validKey })}></Box>
@@ -114,7 +114,7 @@ const ServerStatus = () =>  {
             `Server is online and currently its using the Key Nº ${serverStatus.try} for access third-part API Database (Base Recipes). User Recipes are also available.` :
             serverStatus.online && !serverStatus.validKey ?
             `Server is online and User Recipes are also available. But all Keys for access third-part API request are rate-limited so then you are seeing an offline copy of Base Recipes Database.` :
-            `You currently are viewing an offline version of the site, because the server is actually offline. User Recipes are not available and you are viewing an offline copy of Base Recipes Database. You cannot save your recipes until the server its online again.`
+            `You currently are viewing an offline version of the site, because the server is actually offline. User Recipes are not available and you are viewing an offline copy of Base Recipes Database. You cannot save your recipes until the server is back online.`
           }</Typography>
         </Box>
       </Box>

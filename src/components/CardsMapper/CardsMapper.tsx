@@ -5,7 +5,7 @@ import { useSelector , useDispatch } from 'react-redux';
 import { Box } from '@mui/material';
 import { recipesI } from '../../interfaces/interfaces';
 import {
-  fetchRecipesFromAPI, allRecipesLoaded, getDietsFromDB
+  fetchRecipesFromAPI, allRecipesLoaded, getDietsFromDB, getDishesFromDB
 } from '../../actions';
 
 const CardsMapper = ()  => {
@@ -23,6 +23,7 @@ const CardsMapper = ()  => {
   const FirstFunc = async () => {
   useEffect(() => {
     dispatch(getDietsFromDB())
+    dispatch(getDishesFromDB())
     dispatch(fetchRecipesFromAPI())
   },[])
 }

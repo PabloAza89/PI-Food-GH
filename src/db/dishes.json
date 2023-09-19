@@ -1,0 +1,62 @@
+[
+  {
+      "id": "0eddb00e-326e-4229-aef5-d0532f5a8a29",
+      "title": "All Dishes"
+  },
+  {
+      "id": "4a5782cd-60d0-4c33-b9cf-2e37dce19ffa",
+      "title": "Side Dish"
+  },
+  {
+      "id": "ac51ab08-3fdc-4d62-9ec6-751bba643bb4",
+      "title": "Lunch"
+  },
+  {
+      "id": "8aebb065-4d78-4b8a-815f-d0a8283c4878",
+      "title": "Main course"
+  },
+  {
+      "id": "e4060b8e-fb34-4415-92c4-8e7b002f4179",
+      "title": "Main dish"
+  },
+  {
+      "id": "c7b93927-64c0-4503-b9e4-cd1035aaa062",
+      "title": "Dinner"
+  },
+  {
+      "id": "1e6d1ac9-3540-4832-917e-494266b67837",
+      "title": "Morning Meal"
+  },
+  {
+      "id": "1a09f1a9-49c3-496c-8342-93553e1f84df",
+      "title": "Brunch"
+  },
+  {
+      "id": "ddf742aa-7dcb-424f-ae79-9e06fbc4ccdb",
+      "title": "Breakfast"
+  },
+  {
+      "id": "e74818d1-c782-4dba-9e56-b4e0e0b1dc75",
+      "title": "Soup"
+  },
+  {
+      "id": "6d42f446-c12c-4235-b3ed-0db5050c0023",
+      "title": "Salad"
+  },
+  {
+      "id": "275b3d05-7647-40ed-af26-e7ce28d7d0af",
+      "title": "Condiment"
+  },
+  {
+      "id": "5c42b777-6ffa-42d0-93e7-837340faf63a",
+      "title": "Dip"
+  },
+  {
+      "id": "b102330a-3330-4d01-861c-9deeea67b6ed",
+      "title": "Sauce"
+  },
+  {
+      "id": "0b56faea-d10d-481d-81f0-883e0c17530d",
+      "title": "Spread"
+  }
+]
