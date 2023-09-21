@@ -102,10 +102,18 @@ const Card = ({ id, image, title, healthScore , diets, dishTypes, userRecipe }: 
           sx={s.text}
         >
           <b>Diets: </b>
-          {diets[0] && diets.map((e:any) => {
+          {/* {diets[0] && diets.map((e:any) => {
             if ((diets.indexOf(e) !== diets.length - 1)) return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ") + " + "
             else return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ")
-          })}
+          })} */}
+          {
+            diets[0] !== undefined ?
+            diets.map((e:any) => {
+              if ((diets.indexOf(e) !== diets.length - 1)) return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ") + " + "
+              else return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ")
+            }) :
+            `Not specified`
+          }
         </Typography>
       </Tooltip>
       <Typography sx={s.text}>
@@ -145,7 +153,7 @@ const Card = ({ id, image, title, healthScore , diets, dishTypes, userRecipe }: 
               if ((dishTypes.indexOf(e) !== dishTypes.length - 1)) return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join("  ") + " + "
               else return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ")
             }) :
-            `All Dishes`
+            `Not specified`
           }
         </Typography>
       </Tooltip>

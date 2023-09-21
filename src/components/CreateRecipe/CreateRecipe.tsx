@@ -7,7 +7,8 @@ import logo from "../../images/logo.png";
 import { useLocation } from "react-router-dom";
 import { addNew } from '../../actions';
 import { Box, Button, OutlinedInput, Input, InputBase, TextField, ListItemText, Checkbox, Dialog, Typography,FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material/';
-import dietss from '../../db/diets.json';
+import dietsEntireArray from '../../db/diets.json';
+import dishesEntireArray from '../../db/dishes.json';
 import Tooltip from '@mui/joy/Tooltip';
 import Swal from 'sweetalert2';
 import dicEs from '../../dictionary/es.json';
@@ -21,6 +22,7 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
   let imageValueLS: string | null = localStorage.getItem('imageValue');
   let healthValueLS: string | null = localStorage.getItem('healthValue');
   let summaryValueLS: string | null = localStorage.getItem('summaryValue');
+  let dishesArrayLS: string | null = localStorage.getItem('dishesArray');
   let dietsArrayLS: string | null = localStorage.getItem('dietsArray');
   let stepsStateLS: string | null = localStorage.getItem('stepsState');
 
@@ -43,6 +45,7 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
   const [imageValue, setImageValue] = useState<string>('');
   const [healthValue, setHealthValue] = useState<string>('');
   const [summaryValue, setSummaryValue] = useState<string>('');
+  const [dishesArray, setDishesArray] = useState<string[]>([]);
   const [dietsArray, setDietsArray] = useState<string[]>([]);
   const [stepsState, setStepsState] = useState(['']);
 
@@ -378,10 +381,16 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
     }
   }
 
+  const handleChangeDishes = (event: SelectChangeEvent<typeof dishesArray>) => {
+    const { target: { value } } = event
+    setDishesArray( typeof value === 'string' ? value.split(',') : value );
+    localStorage.setItem('dishesArray', JSON.stringify(value))
+  };
+
+
   const handleChangeDiets = (event: SelectChangeEvent<typeof dietsArray>) => {
     const { target: { value } } = event
     setDietsArray( typeof value === 'string' ? value.split(',') : value );
-    //typeof value === 'string' ? localStorage.setItem('dietsArray', JSON.stringify(value.split(','))) : localStorage.setItem('dietsArray', JSON.stringify(value))
     localStorage.setItem('dietsArray', JSON.stringify(value))
   };
 
@@ -390,6 +399,7 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
     setImageValue('');
     setHealthValue('');
     setSummaryValue('');
+    setDishesArray([]);
     setDietsArray([]);
     setStepsState(['']);
     setSaveButtonDisabled(false);
@@ -442,6 +452,7 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
     if (titleValue.replaceAll(" ","").replaceAll("\n", "") === "") emptyInputs.push("Title")
     if (healthValue.replaceAll(" ","").replaceAll("\n", "") === "") emptyInputs.push("Health Score")
     if (summaryValue.replaceAll(" ","").replaceAll("\n", "") === "") emptyInputs.push("Summary")
+    if (dishesArray.length === 0) emptyInputs.push("Dishes")
     if (dietsArray.length === 0) emptyInputs.push("Diets")
     if (stepsState.map((e) => {if (e.replaceAll(" ","").replaceAll("\n", "") === "") return 1; else return -1}).some(e => e !== -1)) {
       let indexNumbers: any = []
@@ -453,7 +464,8 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
       )
     }
 
-    console.log("emptyInputs.length", emptyInputs.length)
+    //console.log("emptyInputs.length", emptyInputs.length)
+    console.log("emptyInputs", emptyInputs)
 
     if (emptyInputs.length > 0) {
       Swal.fire({
@@ -462,14 +474,14 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
           `${emptyInputs.slice(0,-1).map(e => e).join(", ") + " & " + emptyInputs.slice(-1)}
           cannot be empty !` :
           `${emptyInputs[0]} cannot be empty !`,
-        text: 'Please, fill all fields.',
+        text: `Please, fill all fields`.concat(emptyInputs.some(e => e.includes('Instructions')) ? ` or either remove empty steps on Instructions` : `.`),
         icon: 'info',
         showConfirmButton: false,
         showDenyButton: false,
         showCancelButton: false,
         timer: 1000,
       })
-    }
+    } // qq.some(e => e.includes('Instructions'))
 
 
     else if (emptyInputs.length === 0 && userData.email === '') {
@@ -488,47 +500,27 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
 
     else {
 
-      fetch(`http://localhost:3001/user`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-type': 'application/json; charset=UTF-8',
-        }
-      })
-      .then((res) => res.json())
-      .then((res) => {
-        console.log("RES RES", res)
-        if (res.status === 400 && res.message === 'Invalid Credentials') {
-          console.log("PASS BY THIS WAY")
-          retrieveLogin({ email: '', token: '' })
-          Swal.fire({
-            title: `There was an error when cheking your loggin.. `,
-            text: `Please, log in again.`,
-            icon: 'info',
-            showConfirmButton: false,
-            showDenyButton: false,
-            showCancelButton: false,
-            timer: 3000,
-          })
-        }
-        if (res.status === 200) {
           fetch(`http://localhost:3001/recipes`, {
             method: 'POST',
+            credentials: 'include',
+            headers: {
+              'Content-type': 'application/json; charset=UTF-8',
+            },
             body: JSON.stringify({
               title: titleValue,
               image: imageValue,
               healthScore: healthValue,
               summary: summaryValue,
+              dishes: dishesArray,
               diets: dietsArray,
               analyzedInstructions: stepsState,
-              email: userData.email
-          }),
-          headers: {
-              'Content-type': 'application/json; charset=UTF-8',
-          }
+              email: userData.email,
+              fd_tkn: userData.fd_tkn
+            })
           })
           .then((res) => res.json())
           .then((res) => {
+            console.log("RES RES", res)
             if (res.status === 200) {
               Swal.fire({
                 title: 'Recipe saved successfully !',
@@ -538,15 +530,106 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
                 showCancelButton: false,
                 timer: 1000,
               })
+              setSaveButtonDisabled(true)
+              setAllDisabled(true)
             }
+            if (res.status === 400 && res.message === 'Invalid Credentials') {
+              console.log("PASS BY THIS WAY")
+              retrieveLogin({ email: '', fd_tkn: '' })
+              Swal.fire({
+                title: `There was an error when cheking your loggin.. `,
+                text: `Please, log in again.`,
+                icon: 'info',
+                showConfirmButton: false,
+                showDenyButton: false,
+                showCancelButton: false,
+                timer: 3000,
+              })
+              setSaveButtonDisabled(false)
+              setAllDisabled(false)
+            }
+          })
+          // .then((res) => {
+          //   setSaveButtonDisabled(true)
+          //   setAllDisabled(true)
+          // })
 
-          })
-          .then((res) => {
-            setSaveButtonDisabled(true)
-            setAllDisabled(true)
-          })
-        }
-       })
+      // fetch(`http://localhost:3001/user`, {
+      //   method: 'POST',
+      //   credentials: 'include',
+      //   headers: {
+      //     'Content-type': 'application/json; charset=UTF-8',
+      //   }
+      // })
+      // .then((res) => res.json())
+      //.then((res) => {
+       // console.log("RES RES", res)
+
+        // if (res.status === 400 && res.message === 'Invalid Credentials') {
+        //   console.log("PASS BY THIS WAY")
+        //   retrieveLogin({ email: '', fd_tkn: '' })
+        //   Swal.fire({
+        //     title: `There was an error when cheking your loggin.. `,
+        //     text: `Please, log in again.`,
+        //     icon: 'info',
+        //     showConfirmButton: false,
+        //     showDenyButton: false,
+        //     showCancelButton: false,
+        //     timer: 3000,
+        //   })
+        // }
+
+        // if (res.status === 200) {
+        //   fetch(`http://localhost:3001/recipes`, {
+        //     method: 'POST',
+        //     body: JSON.stringify({
+        //       title: titleValue,
+        //       image: imageValue,
+        //       healthScore: healthValue,
+        //       summary: summaryValue,
+        //       dishes: dishesArray,
+        //       diets: dietsArray,
+        //       analyzedInstructions: stepsState,
+        //       email: userData.email
+        //   }),
+        //   headers: {
+        //       'Content-type': 'application/json; charset=UTF-8',
+        //   }
+        //   })
+        //   .then((res) => res.json())
+        //   .then((res) => {
+        //     if (res.status === 200) {
+        //       Swal.fire({
+        //         title: 'Recipe saved successfully !',
+        //         icon: 'info',
+        //         showConfirmButton: false,
+        //         showDenyButton: false,
+        //         showCancelButton: false,
+        //         timer: 1000,
+        //       })
+        //     }
+
+        //   })
+        //   .then((res) => {
+        //     setSaveButtonDisabled(true)
+        //     setAllDisabled(true)
+        //   })
+        // }
+
+        // if (res.status !== 200) { // TESTING
+        //   Swal.fire({
+        //     title: 'There was an error saving your Recipe..',
+        //     text: 'Please try again.',
+        //     icon: 'error',
+        //     showConfirmButton: false,
+        //     showDenyButton: false,
+        //     showCancelButton: false,
+        //     timer: 1000,
+        //   })
+        // }
+
+
+       //})
       .catch((rej) => {
         console.log("rej", rej)
         Swal.fire({
@@ -563,15 +646,21 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
     }
   }
 
-  console.log("stepsState", stepsState)
+  
+  
+
+  //console.log("stepsState", stepsState)
   //console.log(JSON.stringify(error, null, 4))
   //localStorage.clear()
+  console.log("dishesEntireArray", dishesEntireArray)
+  
 
   useEffect(() => { // RETRIEVES INFO FROM LS
     if (titleValueLS !== null) { setTitleValue(titleValueLS); validator({ type: `title`, value: titleValueLS }) }
     if (imageValueLS !== null) setImageValue(imageValueLS)
     if (healthValueLS !== null) { setHealthValue(healthValueLS); validator({ type: `health`, value: healthValueLS }) }
     if (summaryValueLS !== null) { setSummaryValue(summaryValueLS); validator({ type: `summary`, value: summaryValueLS }) }
+    if (dishesArrayLS !== null) setDishesArray(JSON.parse(dishesArrayLS))
     if (dietsArrayLS !== null) setDietsArray(JSON.parse(dietsArrayLS))
     if (stepsStateLS !== null) {
       setStepsState(JSON.parse(stepsStateLS))
@@ -680,19 +769,9 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
             placeholder={`e.g. https://commons.wikimedia.org/wiki/File:Elaboraci%C3%B3n_del_tomate_frito_(4).jpg`}
             //onFocus={() => setHealthScorePlaceholder("")}
             //onBlur={() => setHealthScorePlaceholder(`e.g. https://commons.wikimedia.org/wiki/File:Elaboraci%C3%B3n_del_tomate_frito_(4).jpg`)}
-            //onKeyDown={(e) => { console.log("e.key", e.key) }}
-          
-            // 32 y 160
             onChange={(e) => {
-              //console.log("e.key", e)
-              /* validator({ value: e.target.value, type: e.target.id }); */
-              //setImageValue(e.target.value/* .trim() *//* .replaceAll(" ","") */);
-              
-                setImageValue(e.target.value.trim())
-                localStorage.setItem('imageValue', e.target.value)
-              
-              
-              
+              setImageValue(e.target.value.trim())
+              localStorage.setItem('imageValue', e.target.value)
             }}
           />
         </Tooltip>
@@ -734,6 +813,33 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
             onChange={(e) => { validator({ value: e.target.value, type: e.target.id }) }}
           />
         </Tooltip>
+      </Box>
+      <Box sx={s.eachRow}>
+        <Box sx={s.text}>Dishes:</Box>
+        <FormControl>
+          <InputLabel>Select Dishes</InputLabel>
+          <Select
+            sx={s.input}
+            placeholder={`Select Dishes`}
+            multiple
+            value={dishesArray}
+            disabled={allDisabled}
+            label="Select Dishes"
+            onChange={handleChangeDishes}
+            renderValue={(selected) => selected.join(', ')}
+            MenuProps={ {PaperProps: { style: { maxHeight: `${48 * 4.5}px`, width: 300 }}}}
+          >
+            {dishesEntireArray.filter(e => e.title !== `All Dishes`).map(e => (
+              <MenuItem
+                key={e.title}
+                value={`${e.title}`}
+              >
+                <Checkbox checked={dishesArray.indexOf(e.title) > -1} />
+                <ListItemText primary={e.title} />
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
       </Box>
       <Box sx={s.eachRow}>
         <Box sx={s.text}>Summary:</Box>
@@ -796,7 +902,7 @@ const CreateRecipe = ({ retrieveLogin, userData }: any) => {
             renderValue={(selected) => selected.join(', ')}
             MenuProps={ {PaperProps: { style: { maxHeight: `${48 * 4.5}px`, width: 300 }}}}
           >
-            {dietss.slice(1).map(e => (
+            {dietsEntireArray.filter(e => e.title !== `All Diets`).map(e => (
               <MenuItem
                 key={e.title}
                 value={`${e.title}`}

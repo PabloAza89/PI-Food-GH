@@ -77,23 +77,23 @@ function App() {
     refresh: false
   });
 
-  function GetAfterCreated () {
-    setIsLoading({ ...isLoading , refresh : true})
+  // function GetAfterCreated () {
+  //   setIsLoading({ ...isLoading , refresh : true})
 
-    if (isLoading) {
-      setIsLoading({...isLoading , main: false})
-    }
-  }
+  //   if (isLoading) {
+  //     setIsLoading({...isLoading , main: false})
+  //   }
+  // }
 
   const [ userData, setUserData ] = useState({
     email: '',
-    token: ''
+    fd_tkn: ''
   })
 
   console.log("in APP", userData)
 
   function retrieveLogin(data: any) {
-    setUserData({ email:data.email, token: data.token })
+    setUserData({ email:data.email, fd_tkn: data.fd_tkn })
   }
 
   useEffect(() => {
@@ -102,12 +102,16 @@ function App() {
       credentials: 'include',
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
-      }
+      },
+      body: JSON.stringify({
+        email: userData.email,
+        fd_tkn: userData.fd_tkn
+      })
     })
     .then((res) => res.json())
     .then((res) => {
       console.log("RES", res)
-      setUserData({ email: res.email, token: res.token })
+      setUserData({ email: res.email, fd_tkn: res.fd_tkn })
     })
     .catch(rej => console.log(rej))
 

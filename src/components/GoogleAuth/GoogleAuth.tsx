@@ -15,8 +15,8 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
       })
       .then((res) => res.json())
       .then((res) => {
-        retrieveLogin({email: res.email, token: codeResponse.access_token})
-        return { email: res.email, token: codeResponse.access_token }
+        retrieveLogin({ email: res.email, fd_tkn: codeResponse.access_token })
+        return { email: res.email, fd_tkn: codeResponse.access_token }
       })
       .catch(rej => console.log(rej))
 
@@ -29,28 +29,28 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
       fetch(`http://localhost:3001/user`, {
         method: 'POST',
         credentials: 'include',
-        body: JSON.stringify({
-          email: userData.email,
-          token: userData.token
-        }),
         headers: {
           'Content-type': 'application/json; charset=UTF-8',
-        }
+        },
+        body: JSON.stringify({
+          email: userData.email,
+          fd_tkn: userData.fd_tkn
+        })
       })
       .then((res) => res.json())
       .catch(rej => console.log(rej))
     }
-  },[userData.email, userData.token])
+  },[userData.email, userData.fd_tkn])
  
   const logout = () => {
-    fetch(`https://oauth2.googleapis.com/revoke?token=${userData.token}`, {
+    fetch(`https://oauth2.googleapis.com/revoke?token=${userData.fd_tkn}`, {
       method: 'POST',
       })
       .then((res) => res.json())
       .then((res) => {
         if (res.error !== undefined) {
           console.log("User is already log out..");
-          retrieveLogin({email: "", token: ""})
+          retrieveLogin({email: "", fd_tkn: ""})
           fetch(`http://localhost:3001/user`, {
             method: 'POST',
             credentials: 'include',
@@ -61,7 +61,7 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
         }
         if (res.error === undefined) {
           console.log("User logout successfully")
-          retrieveLogin({email: "", token: ""})
+          retrieveLogin({email: "", fd_tkn: ""})
           fetch(`http://localhost:3001/user`, {
             method: 'POST',
             credentials: 'include',

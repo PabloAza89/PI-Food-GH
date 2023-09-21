@@ -58,10 +58,14 @@ export default function Detail() {
           <Typography sx={s.text}><b>Title: </b>{recipe.title}</Typography>
           <Typography sx={s.text}>
             <b>Diets: </b>
-            {recipe.diets[0] && recipe.diets.map((e:any) => {
-              if ((recipe.diets.indexOf(e) !== recipe.diets.length - 1)) return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ") + " + "
-              else return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ")
-            })}
+            {
+              recipe.diets[0] !== undefined ?
+              recipe.diets[0] && recipe.diets.map((e:any) => {
+                if ((recipe.diets.indexOf(e) !== recipe.diets.length - 1)) return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ") + " + "
+                else return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ")
+              }) :
+              `Not specified`
+            }
           </Typography>
           <Typography sx={s.text}>
             <b>Healt Score: </b>{recipe.healthScore}
@@ -74,7 +78,7 @@ export default function Detail() {
                 if ((recipe.dishTypes.indexOf(e) !== recipe.dishTypes.length - 1)) return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join("  ") + " + "
                 else return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ")
               }) :
-              `All Dishes`
+              `Not specified`
             }
           </Typography>
           <Divider sx={s.dividerTop}/>
@@ -84,31 +88,42 @@ export default function Detail() {
           </Typography>
           <Divider sx={s.dividerBottom({ show: recipe.analyzedInstructions[0] })}/>
           <Box sx={s.instructions}>
-            <Typography sx={s.text}><b>{recipe.analyzedInstructions[0] ? `Instructions: ` : null}</b></Typography>
-              {/* {recipe.analyzedInstructions && recipe.analyzedInstructions.map((e: any, index: any) => {
-                return (
-                  <Box key={index} sx={s.eachStep}>
-                    <Typography sx={s.eachStepTitle}>
-                      <b>Step {++index}: </b>
-                    </Typography>
-                    <Typography sx={s.eachStepContent}>
-                      {e}
-                    </Typography>
-                  </Box>
-                )
-              })} */}
-              {recipe.analyzedInstructions[0] && recipe.analyzedInstructions[0].steps.map((e: any, index: any) => {
-                return (
-                  <Box key={index} sx={s.eachStep}>
-                    <Typography sx={s.eachStepTitle}>
-                      <b>Step {++index}: </b>
-                    </Typography>
-                    <Typography sx={s.eachStepContent}>
-                      {e.step}
-                    </Typography>
-                  </Box>
-                )
-              })}
+            <Typography sx={s.text}>
+              {
+                recipe.analyzedInstructions[0] !== undefined ?
+                <b>Instructions: </b> :
+                 null
+              }
+            </Typography>
+              {
+                recipe.analyzedInstructions[0] !== undefined && Object.prototype.toString.call( recipe.analyzedInstructions[0] ) === '[object Object]' ?
+                recipe.analyzedInstructions[0].steps.map((e: any, index: any) => {
+                  return (
+                    <Box key={index} sx={s.eachStep}>
+                      <Typography sx={s.eachStepTitle}>
+                        <b>Step {++index}: </b>
+                      </Typography>
+                      <Typography sx={s.eachStepContent}>
+                        {e.step}
+                      </Typography>
+                    </Box>
+                  )
+                }) :
+                recipe.analyzedInstructions[0] !== undefined && Object.prototype.toString.call( recipe.analyzedInstructions[0] ) !== '[object Object]' ?
+                recipe.analyzedInstructions.map((e: any, index: any) => {
+                  return (
+                    <Box key={index} sx={s.eachStep}>
+                      <Typography sx={s.eachStepTitle}>
+                        <b>Step {++index}: </b>
+                      </Typography>
+                      <Typography sx={s.eachStepContent}>
+                        {e}
+                      </Typography>
+                    </Box>
+                  )
+                }) :
+                null
+              }
           </Box>
         </Box>
         <Box sx={s.helperBottom}></Box>
