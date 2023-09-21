@@ -12,8 +12,8 @@ const ServerStatus = () =>  {
 
   const serverStatus = useSelector((state: { serverStatus: serverStatusI }) => state.serverStatus)
 
-  //const [ show, setShow ] = useState<boolean>(false)
-  const [ show, setShow ] = useState<boolean>(true)
+  const [ show, setShow ] = useState<boolean>(false)
+  //const [ show, setShow ] = useState<boolean>(true)
 
   useEffect(() => {
     $(function() {
@@ -60,7 +60,7 @@ const ServerStatus = () =>  {
     })
   },[show])
 
-  console.log("SHOW", show)
+  //console.log("SHOW", show)
 
   return (
     <Box sx={s.background}>

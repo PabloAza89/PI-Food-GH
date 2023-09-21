@@ -8,7 +8,7 @@ import {
   fetchRecipesFromAPI, allRecipesLoaded, getDietsFromDB, getDishesFromDB
 } from '../../actions';
 
-const CardsMapper = ()  => {
+const CardsMapper = ({ retrieveLogin, userData }: any)  => {
 
   const dispatch = useDispatch()
 
@@ -21,14 +21,14 @@ const CardsMapper = ()  => {
   let arraySplitedBy9: any[] = toShow.slice( indexChoosen * 9, (indexChoosen * 9) + 9 )
 
   const FirstFunc = async () => {
-  useEffect(() => {
-    dispatch(getDietsFromDB())
-    dispatch(getDishesFromDB())
-    dispatch(fetchRecipesFromAPI())
-  },[])
-}
+    useEffect(() => {
+      dispatch(getDietsFromDB())
+      dispatch(getDishesFromDB())
+      dispatch(fetchRecipesFromAPI())
+    },[])
+  }
 
-FirstFunc().then(() => dispatch(allRecipesLoaded(true)))
+  FirstFunc().then(() => dispatch(allRecipesLoaded(true)))
 
   return toShow[0] !== undefined ?
   (
@@ -43,6 +43,11 @@ FirstFunc().then(() => dispatch(allRecipesLoaded(true)))
           image={e.image}
           dishTypes={e.dishTypes}
           userRecipe={e.userRecipe}
+          email={e.email}
+          userData={userData}
+          retrieveLogin={retrieveLogin}
+          summary={e.summary}
+          analyzedInstructions={e.analyzedInstructions}
         />
       )}
     </Box>

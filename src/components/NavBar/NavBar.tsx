@@ -130,7 +130,7 @@ const NavBar = () =>  {
             />
 
           </Box>
-          <Link to="/create">
+          <Link to="/MyRecipe">
             <Button
               variant="contained"
               disableElevation

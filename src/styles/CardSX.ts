@@ -24,6 +24,49 @@ export const background = () => {
   }
 }
 
+interface editDeleteContainerI {
+  show: boolean
+}
+
+export const editDeleteContainer = ({ show }: editDeleteContainerI) => {
+  return {
+    display: show ? 'flex' : 'none',
+    position: 'absolute',
+    flexDirection: 'row',
+    right: '5px',
+    top: '5px',
+  }
+}
+
+export const buttonEditDelete = () => {
+  return {
+    display: 'flex',
+    position: 'relative',
+    padding: '0vw !important',
+    minWidth: '30px !important',
+    width: '30px !important',
+    minHeight: '30px !important',
+    height: '30px !important',
+    marginLeft: '5px'
+  }
+}
+
+export const iconEdit = () => {
+  return {
+    padding: '0vw !important',
+    width: '21px !important',
+    height: '21px !important',
+  }
+}
+
+export const iconDelete = () => {
+  return {
+    padding: '0vw !important',
+    width: '23px !important',
+    height: '23px !important',
+  }
+}
+
 export const image = () => {
   return {
     ...noSelect,
@@ -32,7 +75,6 @@ export const image = () => {
     height: '115px',
   }
 }
-
 
 export const title = () => {
   return {

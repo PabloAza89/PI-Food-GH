@@ -12,7 +12,7 @@ import NavBar from "./components/NavBar/NavBar";
 import GoUp from "./components/GoUp/GoUp";
 import ServerStatus from "./components/ServerStatus/ServerStatus";
 import Error from './components/Error/Error';
-import CreateRecipe from "./components/CreateRecipe/CreateRecipe";
+import MyRecipe from "./components/MyRecipe/MyRecipe";
 import About from "./components/About/About";
 
 import { useDispatch } from 'react-redux';
@@ -125,18 +125,18 @@ function App() {
           <ServerStatus />
           <NavBar />
           <Paginate />
-          <CardsMapper />
+          <CardsMapper retrieveLogin={retrieveLogin} userData={userData}/>
           <GoUp />
         </>}/>
         <Route path="/:recipeId" element={<>
           <ServerStatus />
           <GoBack />
-          <Detail />
+          <Detail retrieveLogin={retrieveLogin} userData={userData}/>
         </>}/>
-        <Route path="/create" element={<>
+        <Route path="/MyRecipe" element={<>
           <ServerStatus />
           <GoBack />
-          <CreateRecipe retrieveLogin={retrieveLogin} userData={userData}/>
+          <MyRecipe retrieveLogin={retrieveLogin} userData={userData}/>
         </>}/>
         <Route path="/about" element={<>
           <ServerStatus />
