@@ -2,6 +2,9 @@ import { useState, useEffect, useRef } from "react";
 import { useDispatch } from 'react-redux';
 import * as s from "../../styles/MyRecipeSX";
 import "../../styles/MyRecipeSX.css";
+import noImage1 from "../../images/noImage1.jpg";
+import noImage2 from "../../images/noImage2.jpg";
+import noImage3 from "../../images/noImage3.jpg";
 import noLoaded from "../../images/noLoaded.jpg";
 import logo from "../../images/logo.png";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -17,6 +20,8 @@ import $ from 'jquery';
 import GoogleAuth from '../GoogleAuth/GoogleAuth';
 
 const MyRecipe = ({ retrieveLogin, userData, editing }: any) => {
+
+  let arrImages = [noImage1, noImage2, noImage3]
 
   const dispatch = useDispatch()
   const location = useLocation()
@@ -104,7 +109,7 @@ const MyRecipe = ({ retrieveLogin, userData, editing }: any) => {
       copyError.instructions.splice(index + 1, 0, { character: false, badWord: false, empty: true })
       setError(copyError)
 
-       copyState.forEach((e,indexx) => {
+      copyState.forEach((e,indexx) => {
         highlighter({value: e, type: 'instructions', index: indexx})
       })
 
@@ -186,8 +191,9 @@ const MyRecipe = ({ retrieveLogin, userData, editing }: any) => {
     },
     instructions:
     stepsStateLS !== null ?
-    Array.from({length: JSON.parse(stepsStateLS).length}, (e,i) => ({character: false, badWord: false, empty: true}))
-    :
+    Array.from({length: JSON.parse(stepsStateLS).length}, (e,i) => ({character: false, badWord: false, empty: true})) :
+    isEditing ?
+    Array.from({length: location.state.analyzedInstructions.length}, (e,i) => ({character: false, badWord: false, empty: true})) :
     [
       {
         character: false,
@@ -639,35 +645,16 @@ const MyRecipe = ({ retrieveLogin, userData, editing }: any) => {
     console.log("IS EDITING", isEditing)
 
     if (isEditing) {
-        setTitleValue(location.state.title); validator({ type: `title`, value: location.state.title })
-        setImageValue(location.state.image)
-        setHealthValue(location.state.healthScore); validator({ type: `health`, value: location.state.healthScore })
+        setTitleValue(location.state.title)//; validator({ type: `title`, value: location.state.title })
+        //setImageValue(location.state.image)
+        setHealthValue(location.state.healthScore)//; validator({ type: `health`, value: location.state.healthScore })
         let dishesParsed = location.state.dishTypes.map((e:any, idx: any) => {
           return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ")
         })
         setDishesArray(dishesParsed)
-        setSummaryValue(location.state.summary); validator({ type: `summary`, value: location.state.summary })
+        setSummaryValue(location.state.summary)//; validator({ type: `summary`, value: location.state.summary })
         setDietsArray(location.state.diets)
-
-        //setStepsState(location.state.analyzedInstructions)
-        //setStepsState(["asd", "bbb"])
-        setStepsState([...location.state.analyzedInstructions])
-
-        // setTimeout(() => {
-        //   location.state.analyzedInstructions.forEach((el:any, idx:any) => {
-        //     validator({ value: el, type: `instructions`, index: idx })
-        //   })
-        // }, 0)
-        //setStepsState(JSON.parse(location.state.analyzedInstructions))
-        
-
-        
-
-        // setTimeout(() => {
-        //   location.state.analyzedInstructions.forEach((el:any, idx:any) => {
-        //     validator({ value: el, type: `instructions`, index: idx })
-        //   })
-        // }, 0)
+        setStepsState(location.state.analyzedInstructions)
       } else {
         if (titleValueLS !== null) { setTitleValue(titleValueLS); validator({ type: `title`, value: titleValueLS }) }
         if (imageValueLS !== null) setImageValue(imageValueLS)
@@ -686,20 +673,76 @@ const MyRecipe = ({ retrieveLogin, userData, editing }: any) => {
       }
   },[])
 
+  //console.log("StepsState StepsState", stepsState)
+  console.log("imageLoaded imageLoaded", imageLoaded)
+  //console.log("imageValue imageValue", imageValue)
+  
+  
+
   return (
     <Box
       component="form"
       sx={s.form}
     >
-      <Box component="img" sx={{ width: '0px', height: '0px' }} src={ imageValue } onLoad={() => setImageLoaded(true)} onError={() => setImageLoaded(false)} />  {/* HIDDEN, ONLY FOR IMAGE VERIFICATION PURPOSES. */}
+      <Box // HIDDEN. ONLY FOR IMAGE VERIFICATION PURPOSES.
+        component="img"
+        sx={{ width: '0px', height: '0px' }}
+        src={
+          //isEditing && location.state.image === imageValue && location.state.image.length === 1 ?
+          //isEditing && location.state.image !== imageValue && location.state.image.length > 1 ?
+          //imageValue
+          //imageValue :
+          // isEditing && location.state.image.length === 1 && location.state.image === imageValue ?
+          // arrImages[parseInt(location.state.image, 10) - 1] : // IMAGE IS RANDOM
+          // isEditing && location.state.image.length > 1 && location.state.image === imageValue ?
+          // `https://res.cloudinary.com/dtembdocm/image/upload/` + imageValue : // IMAGE IS UUID
+          // imageValue // IMAGE IT'S NEW URL
+          //arrImages[2]
+
+          //isEditing && imageValue.length > 0 ?
+          //arrImages[parseInt(location.state.image, 10) - 1] : // IMAGE IS RANDOM
+          //isEditing && location.state.image.length > 1 && location.state.image === imageValue ?
+          //`https://res.cloudinary.com/dtembdocm/image/upload/` + imageValue : // IMAGE IS UUID
+          imageValue // IMAGE IT'S NEW URL
+          //arrImages[2]
+
+
+        }
+        onLoad={() => setImageLoaded(true)}
+        onError={() => setImageLoaded(false)}
+      />
       <Box>
-        <Box component="img" sx={s.imageSearcher} src={ imageLoaded ? imageValue : noLoaded } />
+        <Box
+          component="img"
+          sx={s.imageSearcher}
+          src={
+            //isEditing && location.state.image.length === 1 && location.state.image === imageValue ?
+            
+            
+            // imageLoaded && isEditing && location.state.image.length === 1 && location.state.image === imageValue ?
+            // arrImages[parseInt(location.state.image, 10) - 1] : // IMAGE IS RANDOM
+            // imageLoaded && isEditing && location.state.image.length > 1 && location.state.image === imageValue ?
+            // `https://res.cloudinary.com/dtembdocm/image/upload/` + imageValue : // IMAGE IS UUID
+            // imageLoaded ?
+            // imageValue : // IMAGE IT'S NEW URL
+            // noLoaded // IMAGE NOT FOUND
+
+            /* imageLoaded && */ isEditing && location.state.image.length === 1 && imageValue.length === 0 ?
+            arrImages[parseInt(location.state.image, 10) - 1] : // IMAGE IS RANDOM
+            /* imageLoaded && */ isEditing && location.state.image.length > 1 && imageValue.length === 0 ?
+            `https://res.cloudinary.com/dtembdocm/image/upload/` + location.state.image : // IMAGE IS UUID
+            imageLoaded ?
+            imageValue : // IMAGE IT'S NEW URL
+            noLoaded // IMAGE NOT FOUND
+
+          }
+        />
       </Box>
 
       <Typography>
         {
           isEditing ?
-          `Edit your recipe and then save it !` :
+          `Edit your recipe. Don't forget to save it !` :
           `Create your own recipe ! Please fill in all fields:`
         }
       </Typography>
@@ -749,9 +792,10 @@ const MyRecipe = ({ retrieveLogin, userData, editing }: any) => {
               autoComplete='off'
               sx={s.inputHiddenTitle({ length:titleValue.length })}
               value={titleValue}
-              placeholder={titlePlaceholder}
-              onFocus={() => setTitlePlaceholder("")}
-              onBlur={() => setTitlePlaceholder(`e.g. Pasta with tomatoes..`)}
+              //placeholder={titlePlaceholder}
+              placeholder={`e.g. Pasta with tomatoes..`}
+              //onFocus={() => setTitlePlaceholder("")}
+              //onBlur={() => setTitlePlaceholder(`e.g. Pasta with tomatoes..`)}
               onChange={(e) => { validator({ value: e.target.value, type: e.target.id }) }}
             />
           </Box>
@@ -772,9 +816,9 @@ const MyRecipe = ({ retrieveLogin, userData, editing }: any) => {
           title={
             <Box sx={{ display: 'flex', flexDirection: 'column', color: '#25252d', background: '#f5f5f9', fontFamily: 'Roboto'}}>
               <Box sx={{ display: 'flex', flexDirection: 'column', color: '#25252d', fontWeight: '400' }}>
-                <Box>Please, copy and paste your food recipe link image url here !</Box>
-                <Box>If it's everything OK, you can preview your image in center upper box</Box>
-                <Box>If you dont give a link, or link its not valid, a random image gonna be used in your recipe.</Box>
+                <Box>{ isEditing ? `Leave it empty for use the same image !` : `Please, copy and paste your food recipe image url here !` }</Box>
+                <Box>{ isEditing ? `Either if you want to use a new image, please, paste your new food recipe image url here !` : `If it's everything OK, you can preview your image in center upper box` }</Box>
+                <Box>{ isEditing ? `If your link its not valid, a random image gonna be used in your recipe.` : `If you dont give a link, or link its not valid, a random image gonna be used in your recipe.` }</Box>
               </Box>
             </Box>
           }
@@ -784,15 +828,31 @@ const MyRecipe = ({ retrieveLogin, userData, editing }: any) => {
             id="image"
             disabled={allDisabled}
             sx={s.input}
+            //value={imageValue}
+            //value={ isEditing && imageValue === location.state.image ? "" : imageValue }
             value={imageValue}
             autoComplete='off'
             placeholder={`e.g. https://commons.wikimedia.org/wiki/File:Elaboraci%C3%B3n_del_tomate_frito_(4).jpg`}
             //onFocus={() => setHealthScorePlaceholder("")}
             //onBlur={() => setHealthScorePlaceholder(`e.g. https://commons.wikimedia.org/wiki/File:Elaboraci%C3%B3n_del_tomate_frito_(4).jpg`)}
-            onChange={(e) => {
-              setImageValue(e.target.value.trim())
+            // onChange={(e) => {
+            //   setImageValue(e.target.value.trim())
+            //   localStorage.setItem('imageValue', e.target.value)
+            // }}
+
+            onChange={(e) => { // DOUBLE CHECK/LOADING FOR EDITED ENCODED IMAGE
+              let copyImageValue = e.target.value.trim()
               localStorage.setItem('imageValue', e.target.value)
+              setImageValue(e.target.value.trim())
+              setTimeout(() => {
+                setImageValue("")
+              }, 100)
+              setTimeout(() => {
+                setImageValue(copyImageValue)
+              }, 200)
             }}
+
+         
           />
         </Tooltip>
       </Box>
@@ -938,7 +998,7 @@ const MyRecipe = ({ retrieveLogin, userData, editing }: any) => {
         <Box sx={s.text}>Instructions:</Box>
         <Box sx={s.stepsContainer}>
 
-          {/* stepsState[2] !== undefined &&  */stepsState.map((e, index) => (
+          {stepsState.map((e, index) => (
             <Box key={index} sx={s.eachStep}>
               <Box sx={s.stepTitle}>Step {index + 1}:</Box>
 

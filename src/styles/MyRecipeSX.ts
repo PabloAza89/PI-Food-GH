@@ -32,7 +32,7 @@ export const imageSearcher = () => {
     display: 'flex',
     position : 'relative',
     //flexDirection: 'column',
-    background: 'yellow', // dev
+    //background: 'yellow', // dev
     width: '400px !important',
     height: '300px !important',
     alignItems: 'center',
