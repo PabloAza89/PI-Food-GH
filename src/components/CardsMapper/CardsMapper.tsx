@@ -30,6 +30,8 @@ const CardsMapper = ({ retrieveLogin, userData }: any)  => {
 
   FirstFunc().then(() => dispatch(allRecipesLoaded(true)))
 
+  console.log("in CARDS MAPPER", userData)
+
   return toShow[0] !== undefined ?
   (
     <Box sx={s.background({ scrollWidth, scrollPosition, menuShown })}>

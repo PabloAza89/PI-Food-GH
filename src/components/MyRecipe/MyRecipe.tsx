@@ -19,7 +19,7 @@ import dicEn from '../../dictionary/en.json';
 import $ from 'jquery';
 import GoogleAuth from '../GoogleAuth/GoogleAuth';
 
-const MyRecipe = ({ retrieveLogin, userData, editing }: any) => {
+const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreated }: any) => {
 
   let arrImages = [noImage1, noImage2, noImage3]
 
@@ -63,6 +63,7 @@ const MyRecipe = ({ retrieveLogin, userData, editing }: any) => {
 
   const [titleValue, setTitleValue] = useState<string>('');
   const [imageValue, setImageValue] = useState<string>('');
+  const [imageValueDoubleCheck, setImageValueDoubleCheck] = useState<string>('');
   const [healthValue, setHealthValue] = useState<string>('');
   const [summaryValue, setSummaryValue] = useState<string>('');
   const [dishesArray, setDishesArray] = useState<string[]>([]);
@@ -465,6 +466,7 @@ const MyRecipe = ({ retrieveLogin, userData, editing }: any) => {
 
     Swal.fire({
       title: 'Do you want to cancel editing ?',
+      text: 'Every changes you have made gonna be lost.',
       icon: 'info',
       showDenyButton: true,
       showCancelButton: false,
@@ -472,13 +474,6 @@ const MyRecipe = ({ retrieveLogin, userData, editing }: any) => {
       denyButtonText: `CONTINUE EDITING`,
     }).then((result) => {
       if (result.isConfirmed) {
-        //clearHandler()
-        // Swal.fire({
-        //   title: 'All cleared !',
-        //   showConfirmButton: false,
-        //   icon: 'success',
-        //   timer: 1000,
-        // })
         navigate("/")
       }
     })
@@ -490,7 +485,7 @@ const MyRecipe = ({ retrieveLogin, userData, editing }: any) => {
     })
   })
 
-  function handleSubmit(e:any) {
+  const handleSubmit = (e:any) => {
     let emptyInputs = []
 
     if (titleValue.replaceAll(" ","").replaceAll("\n", "") === "") emptyInputs.push("Title")
@@ -543,7 +538,7 @@ const MyRecipe = ({ retrieveLogin, userData, editing }: any) => {
     }
 
     else {
-      fetch(`http://localhost:3001/recipes`, {
+      fetch(`http://localhost:3001/recipe`, {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -565,6 +560,8 @@ const MyRecipe = ({ retrieveLogin, userData, editing }: any) => {
       .then((res) => {
         console.log("RES RES", res)
         if (res.status === 200) {
+          //retrieveRecipeCreated({ saveButtonDisabled: true, allDisabled: true })
+          
           Swal.fire({
             title: 'Recipe saved successfully !',
             icon: 'info',
@@ -606,6 +603,158 @@ const MyRecipe = ({ retrieveLogin, userData, editing }: any) => {
           setSaveButtonDisabled(false)
           setAllDisabled(false)
         }
+      })
+      .catch((rej) => {
+        console.log("rej", rej)
+        Swal.fire({
+          title: `It's seems like server its sleeping..`,
+          html: `So you cannot save your recipe.<br>We are sorry. Please try againg later..<br><br>Don't worry about everything you wrote, it will be saved in browser memory :) `,
+          icon: 'error',
+          showConfirmButton: false,
+          showDenyButton: false,
+          showCancelButton: false,
+          timer: 3000,
+        })
+      })
+    }
+  }
+
+  const handleSaveEdit = (e:any) => {
+    let emptyInputs = []
+
+    if (titleValue.replaceAll(" ","").replaceAll("\n", "") === "") emptyInputs.push("Title")
+    //if (healthValue.replaceAll(" ","").replaceAll("\n", "") === "") emptyInputs.push("Health Score")
+    if (summaryValue.replaceAll(" ","").replaceAll("\n", "") === "") emptyInputs.push("Summary")
+    if (dishesArray.length === 0) emptyInputs.push("Dishes")
+    if (dietsArray.length === 0) emptyInputs.push("Diets")
+    if (stepsState.map((e) => {if (e.replaceAll(" ","").replaceAll("\n", "") === "") return 1; else return -1}).some(e => e !== -1)) {
+      let indexNumbers: any = []
+      stepsState.forEach((e,i) => {if (e.replaceAll(" ","").replaceAll("\n", "") === "") indexNumbers.push(i+1) })
+      emptyInputs.push(
+        indexNumbers.length > 1 ?
+        `Step ${indexNumbers.slice(0,-1).map((e:any) => e).join(", ") + " and " + indexNumbers.slice(-1)} on Instructions` :
+        `Step ${indexNumbers[0]} on Instructions`,
+      )
+    }
+
+    //console.log("emptyInputs.length", emptyInputs.length)
+    //console.log("emptyInputs", emptyInputs)
+
+    if (emptyInputs.length > 0) {
+      Swal.fire({
+        title:
+          emptyInputs.length > 1 ?
+          `${emptyInputs.slice(0,-1).map(e => e).join(", ") + " & " + emptyInputs.slice(-1)}
+          cannot be empty !` :
+          `${emptyInputs[0]} cannot be empty !`,
+        text: `Please, fill all fields`.concat(emptyInputs.some(e => e.includes('Instructions')) ? ` or either remove empty steps on Instructions` : `.`),
+        icon: 'info',
+        showConfirmButton: false,
+        showDenyButton: false,
+        showCancelButton: false,
+        timer: 1000,
+      })
+    } // qq.some(e => e.includes('Instructions'))
+
+
+    else if (emptyInputs.length === 0 && userData.email === '') {
+    //if (userData.email === '') {
+      Swal.fire({
+        title: `You must be logged to do that ! `,
+        //html: `Please, log-in with Google with the right-upper side button.<br><br>Don't have a Google account ?<br>Please, follow this <a target="_blank" rel="noopener noreferrer" href="https://accounts.google.com/SignUp">link</a> and create a new one !`,
+        html: `Please, log-in with Google with the right-upper side button.<br><br>Don't have a Google account ?<br>Please, follow this <a style="color:#0000EE"target="_blank" rel="noopener noreferrer" href="https://accounts.google.com/SignUp">link</a> and create a new one !`,
+        icon: 'info',
+        showConfirmButton: false,
+        showDenyButton: false,
+        showCancelButton: false,
+        timer: 3000,
+      })
+    }
+
+    else {
+      fetch(`http://localhost:3001/recipe`, {
+        method: 'PUT',
+        credentials: 'include',
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+        },
+        body: JSON.stringify({
+          id: location.state.id,
+          title: titleValue,
+          image: imageValue,
+          healthScore: healthValue,
+          summary: summaryValue,
+          dishes: dishesArray,
+          diets: dietsArray,
+          analyzedInstructions: stepsState,
+          email: userData.email,
+          fd_tkn: userData.fd_tkn
+        })
+      })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log("RES RES", res)
+        if (res.status === 400 && res.message.name === 'SequelizeDatabaseError') {
+          //console.log("PASS BY THIS WAY")
+          //retrieveLogin({ email: '', fd_tkn: '' })
+          Swal.fire({
+            title: `There was an error when updating your recipe.. `,
+            text: `Please, try save again.`,
+            icon: 'info',
+            showConfirmButton: false,
+            showDenyButton: false,
+            showCancelButton: false,
+            timer: 3000,
+          })
+          setSaveButtonDisabled(false)
+          setAllDisabled(false)
+        }
+
+        if (res.status === 200 && res.message === `1 item updated`) {
+          Swal.fire({
+            title: 'Recipe updated successfully !',
+            icon: 'success',
+            showConfirmButton: false,
+            showDenyButton: false,
+            showCancelButton: false,
+            timer: 1500,
+          })
+          setSaveButtonDisabled(true)
+          setAllDisabled(true)
+          retrieveRecipeCreated({ saveButtonDisabled: true, allDisabled: true })
+        }
+
+        if (res.status === 400 && res.message === 'Invalid Credentials') {
+          console.log("PASS BY THIS WAY")
+          retrieveLogin({ email: '', fd_tkn: '' })
+          Swal.fire({
+            title: `There was an error when cheking your loggin.. `,
+            text: `Please, log in again.`,
+            icon: 'info',
+            showConfirmButton: false,
+            showDenyButton: false,
+            showCancelButton: false,
+            timer: 3000,
+          })
+          setSaveButtonDisabled(false)
+          setAllDisabled(false)
+        }
+
+        // if (res.status === 400 && res.message !== 'Invalid Credentials') {
+        //   console.log("PASS BY THIS WAY")
+        //   //retrieveLogin({ email: '', fd_tkn: '' })
+        //   Swal.fire({
+        //     title: `There was an error when saving your recipe.. `,
+        //     text: `Please try again.`,
+        //     icon: 'info',
+        //     showConfirmButton: false,
+        //     showDenyButton: false,
+        //     showCancelButton: false,
+        //     timer: 3000,
+        //   })
+        //   setSaveButtonDisabled(false)
+        //   setAllDisabled(false)
+        // }
       })
       .catch((rej) => {
         console.log("rej", rej)
@@ -674,10 +823,25 @@ const MyRecipe = ({ retrieveLogin, userData, editing }: any) => {
   },[])
 
   //console.log("StepsState StepsState", stepsState)
-  console.log("imageLoaded imageLoaded", imageLoaded)
+  //console.log("imageLoaded imageLoaded", imageLoaded)
   //console.log("imageValue imageValue", imageValue)
   
-  
+  // const ww = () => {
+  //   let copyImageValue = imageValue
+  //  return imageValue + 
+  //    setTimeout(() => {
+  //     setImageValue("")
+  //   }, 100) + 
+  //   setTimeout(() => {
+  //     setImageValue(copyImageValue)
+  //   }, 100)
+  // }
+
+  //console.log("titleValue", titleValue)
+  //console.log("healthValue", healthValue)
+  //console.log("summaryValue", summaryValue)
+  //console.log("dishesArray", dishesArray)
+  //console.log("imageValue", imageValue)
 
   return (
     <Box
@@ -687,27 +851,7 @@ const MyRecipe = ({ retrieveLogin, userData, editing }: any) => {
       <Box // HIDDEN. ONLY FOR IMAGE VERIFICATION PURPOSES.
         component="img"
         sx={{ width: '0px', height: '0px' }}
-        src={
-          //isEditing && location.state.image === imageValue && location.state.image.length === 1 ?
-          //isEditing && location.state.image !== imageValue && location.state.image.length > 1 ?
-          //imageValue
-          //imageValue :
-          // isEditing && location.state.image.length === 1 && location.state.image === imageValue ?
-          // arrImages[parseInt(location.state.image, 10) - 1] : // IMAGE IS RANDOM
-          // isEditing && location.state.image.length > 1 && location.state.image === imageValue ?
-          // `https://res.cloudinary.com/dtembdocm/image/upload/` + imageValue : // IMAGE IS UUID
-          // imageValue // IMAGE IT'S NEW URL
-          //arrImages[2]
-
-          //isEditing && imageValue.length > 0 ?
-          //arrImages[parseInt(location.state.image, 10) - 1] : // IMAGE IS RANDOM
-          //isEditing && location.state.image.length > 1 && location.state.image === imageValue ?
-          //`https://res.cloudinary.com/dtembdocm/image/upload/` + imageValue : // IMAGE IS UUID
-          imageValue // IMAGE IT'S NEW URL
-          //arrImages[2]
-
-
-        }
+        src={imageValue}
         onLoad={() => setImageLoaded(true)}
         onError={() => setImageLoaded(false)}
       />
@@ -716,25 +860,13 @@ const MyRecipe = ({ retrieveLogin, userData, editing }: any) => {
           component="img"
           sx={s.imageSearcher}
           src={
-            //isEditing && location.state.image.length === 1 && location.state.image === imageValue ?
-            
-            
-            // imageLoaded && isEditing && location.state.image.length === 1 && location.state.image === imageValue ?
-            // arrImages[parseInt(location.state.image, 10) - 1] : // IMAGE IS RANDOM
-            // imageLoaded && isEditing && location.state.image.length > 1 && location.state.image === imageValue ?
-            // `https://res.cloudinary.com/dtembdocm/image/upload/` + imageValue : // IMAGE IS UUID
-            // imageLoaded ?
-            // imageValue : // IMAGE IT'S NEW URL
-            // noLoaded // IMAGE NOT FOUND
-
-            /* imageLoaded && */ isEditing && location.state.image.length === 1 && imageValue.length === 0 ?
-            arrImages[parseInt(location.state.image, 10) - 1] : // IMAGE IS RANDOM
-            /* imageLoaded && */ isEditing && location.state.image.length > 1 && imageValue.length === 0 ?
-            `https://res.cloudinary.com/dtembdocm/image/upload/` + location.state.image : // IMAGE IS UUID
+            isEditing && location.state.image.length === 1 && imageValue.length === 0 ?
+            arrImages[parseInt(location.state.image, 10) - 1] : // DEFAULT IMAGE IS RANDOM
+            isEditing && location.state.image.length > 1 && imageValue.length === 0 ?
+            `https://res.cloudinary.com/dtembdocm/image/upload/` + location.state.image : // DEFAULT IMAGE IS UUID
             imageLoaded ?
-            imageValue : // IMAGE IT'S NEW URL
+            imageValueDoubleCheck : // IMAGE IT'S NEW URL // DOUBLE CHECK/LOADING FOR EDITED ENCODED URL IMAGE
             noLoaded // IMAGE NOT FOUND
-
           }
         />
       </Box>
@@ -840,19 +972,20 @@ const MyRecipe = ({ retrieveLogin, userData, editing }: any) => {
             //   localStorage.setItem('imageValue', e.target.value)
             // }}
 
-            onChange={(e) => { // DOUBLE CHECK/LOADING FOR EDITED ENCODED IMAGE
+            onChange={(e) => { // DOUBLE CHECK/LOADING FOR EDITED ENCODED URL IMAGE
               let copyImageValue = e.target.value.trim()
               localStorage.setItem('imageValue', e.target.value)
               setImageValue(e.target.value.trim())
+              setImageValueDoubleCheck(e.target.value.trim())
               setTimeout(() => {
-                setImageValue("")
+                setImageValueDoubleCheck("")
               }, 100)
               setTimeout(() => {
-                setImageValue(copyImageValue)
+                setImageValueDoubleCheck(copyImageValue)
               }, 200)
             }}
 
-         
+
           />
         </Tooltip>
       </Box>
@@ -1112,13 +1245,27 @@ const MyRecipe = ({ retrieveLogin, userData, editing }: any) => {
         <Button
           sx={s.buttonClearSave}
           variant="contained"
-          onClick={() => isEditing ? handleCancelEdit() : clearFieldsNotif()}
-        >{ isEditing ? `CANCEL` : `CLEAR` }
-       </Button>
+          onClick={() =>
+            saveButtonDisabled && allDisabled ?
+            navigate("/") :
+            isEditing ?
+            handleCancelEdit() :
+            clearFieldsNotif()
+          }
+        >
+          {
+            saveButtonDisabled && allDisabled ?
+            `GO BACK` :
+            isEditing ?
+            `CANCEL` :
+            `CLEAR`
+          }
+        </Button>
         <Button
           sx={s.buttonClearSave}
           variant="contained"
-          onClick={(e) => handleSubmit(e)}
+          //onClick={(e) => handleSubmit(e)}
+          onClick={(e) => isEditing ? handleSaveEdit(e) : handleSubmit(e) }
           disabled={
             saveButtonDisabled ||
             error.title.character ||

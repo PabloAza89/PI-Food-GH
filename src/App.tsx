@@ -92,11 +92,28 @@ function App() {
 
   console.log("in APP", userData)
 
-  function retrieveLogin(data: any) {
-    setUserData({ email:data.email, fd_tkn: data.fd_tkn })
+  const retrieveLogin = (props: any) => {
+    setUserData({ email:props.email, fd_tkn: props.fd_tkn })
+  }
+
+  const [ recipeCreated, setRecipeCreated ] = useState({
+    saveButtonDisabled: false,
+    allDisabled: false
+  })
+
+  console.log("recipeCreated recipeCreated", recipeCreated)
+
+  const retrieveRecipeCreated = (props: any) => {
+    console.log("SE EJECUTO")
+    setRecipeCreated({ saveButtonDisabled: props.saveButtonDisabled, allDisabled: props.allDisabled })
   }
 
   useEffect(() => {
+    console.log("recipeCreated 2", recipeCreated)
+  },[retrieveRecipeCreated])
+
+  useEffect(() => {
+
     fetch(`http://localhost:3001/user`, {
       method: 'POST',
       credentials: 'include',
@@ -130,20 +147,24 @@ function App() {
         </>}/>
         <Route path="/:recipeId" element={<>
           <ServerStatus />
-          <GoBack />
+          <GoBack recipeCreated={recipeCreated} />
           <Detail retrieveLogin={retrieveLogin} userData={userData}/>
         </>}/>
         <Route path="/MyRecipe" element={<>
           <ServerStatus />
-          <GoBack />
-          <MyRecipe retrieveLogin={retrieveLogin} userData={userData}/>
+          <GoBack recipeCreated={recipeCreated} />
+          <MyRecipe
+            retrieveLogin={retrieveLogin}
+            userData={userData}
+            retrieveRecipeCreated={retrieveRecipeCreated}
+          />
         </>}/>
         <Route path="/about" element={<>
           <ServerStatus />
           <About />
         </>}/>
         <Route path="*" element={<>
-          <GoBack />
+          <GoBack recipeCreated={recipeCreated} />
           <Error />
         </>}/>
       </Routes>

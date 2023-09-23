@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector , useDispatch } from 'react-redux';
+import '../../styles/DisableAutoFocusSweetAlert2.css';
 import noImage1 from "../../images/noImage1.jpg";
 import noImage2 from "../../images/noImage2.jpg";
 import noImage3 from "../../images/noImage3.jpg";
@@ -79,9 +80,10 @@ const Card = ({
       title: 'Do you want to edit this recipe ?',
       icon: 'question',
       showDenyButton: true,
-      showCancelButton: false,
       confirmButtonText: 'EDIT',
       denyButtonText: `CANCEL`,
+      confirmButtonColor: '#d14141', // NEW ACTION COLOR
+      denyButtonColor: '#3085d6', // NO ACTION COLOR
     })
     .then((result) => {
       if (result.isConfirmed) {
@@ -125,10 +127,12 @@ const Card = ({
       text: 'No undo.',
       icon: 'info',
       showDenyButton: true,
-      showCancelButton: false,
       confirmButtonText: 'DELETE',
       denyButtonText: `CANCEL`,
-    }).then((result) => {
+      confirmButtonColor: '#d14141', // NEW ACTION COLOR
+      denyButtonColor: '#3085d6', // NO ACTION COLOR
+    })
+    .then((result) => {
       if (result.isConfirmed) {
         fetch(`http://localhost:3001/delete`, {
           method: 'DELETE',

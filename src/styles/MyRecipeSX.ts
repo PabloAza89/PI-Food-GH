@@ -33,6 +33,7 @@ export const imageSearcher = () => {
     position : 'relative',
     //flexDirection: 'column',
     //background: 'yellow', // dev
+    background: 'antiquewhite', // dev
     width: '400px !important',
     height: '300px !important',
     alignItems: 'center',

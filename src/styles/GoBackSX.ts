@@ -20,6 +20,7 @@ export const background = () => {
 export const logoTextContainer = () => {
   return {
     //background: 'red', // dev
+    cursor: 'pointer', // dev
     display: 'flex',
     flexDirection: 'row',
     minWidth: '200px',
