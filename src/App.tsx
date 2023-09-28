@@ -5,6 +5,7 @@ import { Route, Routes } from "react-router-dom";
 import * as s from './styles/AppSX'
 import { Box } from '@mui/material';
 import CardsMapper from "./components/CardsMapper/CardsMapper";
+import GoogleAuth from './components/GoogleAuth/GoogleAuth';
 import Detail from "./components/Detail/Detail";
 import GoBack from "./components/GoBack/GoBack";
 import Paginate from "./components/Paginate/Paginate";
@@ -19,8 +20,8 @@ import { useDispatch } from 'react-redux';
 import {
   fetchRecipesFromAPI, allRecipesLoaded,
   setCurrentWidth, setHeight, setLarLand,
-  setLarPort, setMedLand, setMedPort, setMinLand,
-  setMinPort, setPercentageResizedHeight, setWidth,
+  setLarPort, setMedLand, setMedPort, setSmaLand,
+  setSmaPort, setPercentageResizedHeight, setWidth,
   setScrollWidth, setHasScroll, setScrollPosition,
   getDietsFromDB
 } from './actions';
@@ -31,18 +32,52 @@ function App() {
 
   const dispatch = useDispatch()
 
+  // useEffect(() => {
+  //   function handleResize() {
+  //     dispatch(setWidth(window.screen.width))
+  //     dispatch(setHeight(window.screen.height))
+  //     dispatch(setSmaPort(window.screen.width < 425 && window.matchMedia("(orientation: portrait)").matches ? true : false))
+  //     dispatch(setSmaLand(window.screen.height < 425 && !window.matchMedia("(orientation: portrait)").matches ? true : false))
+  //     dispatch(setMedPort(window.screen.width >= 425 && window.screen.width <= 825 && window.matchMedia("(orientation: portrait)").matches ? true : false))
+  //     dispatch(setMedLand(window.screen.height >= 425 && window.screen.height <= 825 && !window.matchMedia("(orientation: portrait)").matches ? true : false))
+  //     dispatch(setLarPort(window.screen.width > 825 && window.matchMedia("(orientation: portrait)").matches ? true : false))
+  //     dispatch(setLarLand(window.screen.height > 825 && !window.matchMedia("(orientation: portrait)").matches ? true : false))
+  //     dispatch(setCurrentWidth(window.innerWidth))
+  //     dispatch(setPercentageResizedHeight(window.innerHeight / window.screen.height))
+  //     dispatch(setHasScroll(window.innerWidth !== $('body').width() ? true : false))
+  //   }
+  //   function scrollHandler() {
+  //     //console.log($(window).scrollTop())
+  //     dispatch(setScrollPosition($(window).scrollTop()!))
+  //   }
+  //   window.addEventListener("scroll", scrollHandler);
+  //   window.addEventListener("resize", handleResize);
+  //   return () => {
+  //     window.removeEventListener("resize", handleResize);
+  //     window.removeEventListener("scroll", scrollHandler);
+  //   }
+  // });
+
   useEffect(() => {
     function handleResize() {
-      dispatch(setWidth(window.screen.width))
-      dispatch(setHeight(window.screen.height))
-      dispatch(setMinPort(window.screen.width < 425 && window.matchMedia("(orientation: portrait)").matches ? true : false))
-      dispatch(setMinLand(window.screen.height < 425 && !window.matchMedia("(orientation: portrait)").matches ? true : false))
-      dispatch(setMedPort(window.screen.width >= 425 && window.screen.width <= 825 && window.matchMedia("(orientation: portrait)").matches ? true : false))
-      dispatch(setMedLand(window.screen.height >= 425 && window.screen.height <= 825 && !window.matchMedia("(orientation: portrait)").matches ? true : false))
-      dispatch(setLarPort(window.screen.width > 825 && window.matchMedia("(orientation: portrait)").matches ? true : false))
-      dispatch(setLarLand(window.screen.height > 825 && !window.matchMedia("(orientation: portrait)").matches ? true : false))
-      dispatch(setCurrentWidth(window.innerWidth))
-      dispatch(setPercentageResizedHeight(window.innerHeight / window.screen.height))
+      let windowScreenWidth = window.screen.width
+      let windowScreenHeight = window.screen.height
+      let windowMatchMediaPortrait = window.matchMedia("(orientation: portrait)").matches
+      let windowInnerWidth = window.innerWidth
+      let windowInnerHeight = window.innerHeight
+      let smallViewport = windowScreenWidth < 425
+      //console.log("TEST QQ", qq)
+      dispatch(setWidth(windowScreenWidth))
+      dispatch(setHeight(windowScreenHeight))
+      dispatch(setSmaPort(windowScreenWidth < 425 && windowMatchMediaPortrait ? true : false)) // Port = Portrait
+      dispatch(setSmaLand(windowScreenHeight < 425 && !windowMatchMediaPortrait ? true : false)) // Land = Landscape
+      dispatch(setMedPort(windowScreenWidth >= 425 && windowScreenWidth <= 825 && windowMatchMediaPortrait ? true : false))
+      dispatch(setMedLand(windowScreenHeight >= 425 && windowScreenHeight <= 825 && !windowMatchMediaPortrait ? true : false))
+      dispatch(setLarPort(windowScreenWidth > 825 && windowMatchMediaPortrait ? true : false))
+      dispatch(setLarLand(windowScreenHeight > 825 && !windowMatchMediaPortrait ? true : false))
+      dispatch(setCurrentWidth(windowInnerWidth))
+      dispatch(setPercentageResizedHeight(windowInnerHeight / windowScreenHeight))
+      dispatch(setHasScroll(windowInnerWidth !== $('body').width() ? true : false))
     }
     function scrollHandler() {
       //console.log($(window).scrollTop())
@@ -96,49 +131,51 @@ function App() {
     setUserData({ email:props.email, fd_tkn: props.fd_tkn })
   }
 
-  const [ recipeCreated, setRecipeCreated ] = useState({
-    saveButtonDisabled: false,
-    allDisabled: false
-  })
+  const [ recipeCreatedOrEdited, setRecipeCreatedOrEdited ] = useState<boolean>(false)
 
-  console.log("recipeCreated recipeCreated", recipeCreated)
+  console.log("recipeCreated recipeCreated", recipeCreatedOrEdited)
 
-  const retrieveRecipeCreated = (props: any) => {
+  const retrieveRecipeCreatedOrEdited = (response: boolean) => {
     console.log("SE EJECUTO")
-    setRecipeCreated({ saveButtonDisabled: props.saveButtonDisabled, allDisabled: props.allDisabled })
+    setRecipeCreatedOrEdited(response)
   }
 
-  useEffect(() => {
-    console.log("recipeCreated 2", recipeCreated)
-  },[retrieveRecipeCreated])
+  // useEffect(() => {
+  //   console.log("recipeCreated 2", recipeCreated)
+  // },[retrieveRecipeCreated])
 
   useEffect(() => {
-
-    fetch(`http://localhost:3001/user`, {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-      },
-      body: JSON.stringify({
-        email: userData.email,
-        fd_tkn: userData.fd_tkn
+    //if (userData.fd_tkn !== '') {
+      fetch(`http://localhost:3001/user`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+        },
+        body: JSON.stringify({
+          email: userData.email,
+          fd_tkn: userData.fd_tkn
+        })
       })
-    })
-    .then((res) => res.json())
-    .then((res) => {
-      console.log("RES", res)
-      setUserData({ email: res.email, fd_tkn: res.fd_tkn })
-    })
-    .catch(rej => console.log(rej))
-
+      .then((res) => res.json())
+      .then((res) => {
+        console.log("RES APP", res)
+        setUserData({ email: res.email, fd_tkn: res.fd_tkn })
+      })
+      .catch(rej => console.log(rej))
+   // }
+      
+   
   },[])
+
+  
 
   return (
     <Box sx={s.background}>
       <Box sx={s.wallpaperBody} />
       <Routes>
         <Route path="/" element={<>
+          <GoogleAuth retrieveLogin={retrieveLogin} userData={userData} />
           <ServerStatus />
           <NavBar />
           <Paginate />
@@ -147,16 +184,17 @@ function App() {
         </>}/>
         <Route path="/:recipeId" element={<>
           <ServerStatus />
-          <GoBack recipeCreated={recipeCreated} />
+          <GoBack />
           <Detail retrieveLogin={retrieveLogin} userData={userData}/>
         </>}/>
         <Route path="/MyRecipe" element={<>
+          <GoogleAuth retrieveLogin={retrieveLogin} userData={userData} />
           <ServerStatus />
-          <GoBack recipeCreated={recipeCreated} />
+          <GoBack recipeCreatedOrEdited={recipeCreatedOrEdited} />
           <MyRecipe
             retrieveLogin={retrieveLogin}
             userData={userData}
-            retrieveRecipeCreated={retrieveRecipeCreated}
+            retrieveRecipeCreatedOrEdited={retrieveRecipeCreatedOrEdited}
           />
         </>}/>
         <Route path="/about" element={<>
@@ -164,7 +202,7 @@ function App() {
           <About />
         </>}/>
         <Route path="*" element={<>
-          <GoBack recipeCreated={recipeCreated} />
+          <GoBack />
           <Error />
         </>}/>
       </Routes>

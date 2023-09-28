@@ -3,6 +3,7 @@ import { useGoogleLogin } from '@react-oauth/google';
 import { Box, Button } from '@mui/material/';
 import { ReactComponent as MySvg } from '../../images/googleLogo.svg';
 import * as s from "../../styles/GoogleAuthSX";
+import Swal from 'sweetalert2';
 
 const GoogleAuth = ({ retrieveLogin, userData }: any) => {
 
@@ -38,6 +39,21 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
         })
       })
       .then((res) => res.json())
+      .then((res) => {
+        console.log("RES APP", res)
+        if (res.status === 400 && res.message === `Invalid Credentials`) {
+          retrieveLogin({ email: "", fd_tkn: "" })
+          Swal.fire({
+            title: `There was an error when cheking your loggin.. `,
+            text: `Please, log in again.`,
+            icon: 'info',
+            showConfirmButton: false,
+            showDenyButton: false,
+            showCancelButton: false,
+            timer: 3000,
+          })
+        }
+      })
       .catch(rej => console.log(rej))
     }
   },[userData.email, userData.fd_tkn])

@@ -8,35 +8,35 @@ import loadingImage from '../../images/loadingImage.png';
 function Error() {
 
   const english = useSelector((state: {english:boolean}) => state.english)
-  const minPort = useSelector((state: {minPort:boolean}) => state.minPort)
-  const minLand = useSelector((state: {minLand:boolean}) => state.minLand)
+  const smaPort = useSelector((state: {smaPort:boolean}) => state.smaPort)
+  const smaLand = useSelector((state: {smaLand:boolean}) => state.smaLand)
   const medPort = useSelector((state: {medPort:boolean}) => state.medPort)
   const medLand = useSelector((state: {medLand:boolean}) => state.medLand)
 
   const [loaded, setLoaded] = useState<boolean>(false)
 
   return (
-    <Box sx={s.background({ minPort, minLand })}>
-      <Box sx={s.leftRightHelper({ minPort, minLand })} />
-      <Box sx={s.mainContainer({ minPort, minLand, medPort, medLand })}>
+    <Box sx={s.background({ smaPort, smaLand })}>
+      <Box sx={s.leftRightHelper({ smaPort, smaLand })} />
+      <Box sx={s.mainContainer({ smaPort, smaLand, medPort, medLand })}>
         <Box>
           <Box
             component="img"
             src={error}
             onLoad={() => setLoaded(true)}
-            sx={s.errorGif({ loaded, minPort, minLand, medPort, medLand })}
+            sx={s.errorGif({ loaded, smaPort, smaLand, medPort, medLand })}
           />
           <Box
             component="img"
             src={loadingImage}
-            sx={s.placeholderAnimation({ loaded, minPort, minLand, medPort, medLand })}
+            sx={s.placeholderAnimation({ loaded, smaPort, smaLand, medPort, medLand })}
           />
         </Box>
-        <Typography sx={s.message({ minPort, minLand, medPort, medLand })}>
+        <Typography sx={s.message({ smaPort, smaLand, medPort, medLand })}>
           { english ? `This page does not exist.` : `Esta página no existe.` }
         </Typography>
       </Box>
-      <Box sx={s.leftRightHelper({ minPort, minLand })} />
+      <Box sx={s.leftRightHelper({ smaPort, smaLand })} />
     </Box>
   )
 }

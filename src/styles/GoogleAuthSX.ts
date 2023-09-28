@@ -10,7 +10,7 @@ export const background = () => {
   return {
     display: 'flex',
     position: 'absolute',
-    right: '0px',
+    right: '17px',
     marginRight: '10px',
     marginTop: '10px',
     flexDirection: 'row',

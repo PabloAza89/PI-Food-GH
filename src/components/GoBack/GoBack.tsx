@@ -11,9 +11,9 @@ import {
 } from '../../actions';
 import dietss from '../../db/diets.json';
 
-const GoBack = ({ recipeCreated }: any) =>  {
+const GoBack = ({ recipeCreatedOrEdited }: any) =>  {
 
-  //console.log("recipeCreated", recipeCreated)
+  
 
   const location = useLocation()
   const navigate = useNavigate()
@@ -40,7 +40,7 @@ const GoBack = ({ recipeCreated }: any) =>  {
   // },[])
 
   const handleReturn = () => {
-    if (location.pathname.toLowerCase() === `/myrecipe` && isEditing ) {
+    if (location.pathname.toLowerCase() === `/myrecipe` && isEditing && !recipeCreatedOrEdited) {
       Swal.fire({
         title: 'Do you want to cancel editing and go back ?',
         text: 'Any changes you have made gonna be lost.',
@@ -57,14 +57,34 @@ const GoBack = ({ recipeCreated }: any) =>  {
           navigate("/")
         }
       })
-    } else navigate("/")
+    } 
+    else if (location.pathname.toLowerCase() === `/myrecipe` && !isEditing && !recipeCreatedOrEdited) {
+      Swal.fire({
+        title: 'Do you want to cancel create a new recipe and go back ?',
+        text: `Don't worry about everything you wrote, it will be saved in browser memory :)`,
+        icon: 'info',
+        showDenyButton: true,
+        showCancelButton: false,
+        confirmButtonText: 'CANCEL CREATING',
+        denyButtonText: `CONTINUE CREATING`,
+        confirmButtonColor: '#d14141', // NEW ACTION COLOR
+        denyButtonColor: '#3085d6' // NO ACTION COLOR
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          navigate("/")
+        }
+      })
+    } 
+    else navigate("/")
   }  
 
   // useEffect(() => {
 
   // },[])
 
-  console.log("recipeCreated", recipeCreated)
+  //console.log("recipeCreated", recipeCreated)
+  console.log("recipeCreated goBACK", recipeCreatedOrEdited, "isEditing", isEditing)
 
   return (
     <Box sx={s.background}>

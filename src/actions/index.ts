@@ -99,17 +99,17 @@ export function setHeight(setHeight:number) {
   }
 };
 
-export function setMinPort(setMinPort:boolean) {
+export function setSmaPort(setSmaPort:boolean) {
   return {
     type: 'MIN_PORT',
-    payload: setMinPort
+    payload: setSmaPort
   }
 };
 
-export function setMinLand(setMinLand:boolean) {
+export function setSmaLand(setSmaLand:boolean) {
   return {
     type: 'MIN_LAND',
-    payload: setMinLand
+    payload: setSmaLand
   }
 };
 

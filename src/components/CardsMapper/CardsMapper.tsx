@@ -5,8 +5,10 @@ import { useSelector , useDispatch } from 'react-redux';
 import { Box } from '@mui/material';
 import { recipesI } from '../../interfaces/interfaces';
 import {
-  fetchRecipesFromAPI, allRecipesLoaded, getDietsFromDB, getDishesFromDB
+  fetchRecipesFromAPI, allRecipesLoaded, getDietsFromDB,
+  getDishesFromDB, setHasScroll
 } from '../../actions';
+import $ from 'jquery';
 
 const CardsMapper = ({ retrieveLogin, userData }: any)  => {
 
@@ -28,7 +30,10 @@ const CardsMapper = ({ retrieveLogin, userData }: any)  => {
     },[])
   }
 
-  FirstFunc().then(() => dispatch(allRecipesLoaded(true)))
+  FirstFunc().then(() => {
+    dispatch(allRecipesLoaded(true))
+    dispatch(setHasScroll(window.innerWidth !== $('body').width() ? true : false))
+  })
 
   console.log("in CARDS MAPPER", userData)
 

@@ -16,8 +16,8 @@ interface initialStateI {
   addNew: recipesI[],
   width: number,
   height: number,
-  minPort: boolean,
-  minLand: boolean,
+  smaPort: boolean,
+  smaLand: boolean,
   medPort: boolean,
   medLand: boolean,
   larPort: boolean,
@@ -45,8 +45,8 @@ const initialState: initialStateI = {
   addNew: [],
   width: window.screen.width,
   height: window.screen.height,
-  minPort: window.screen.width < 425 && window.matchMedia("(orientation: portrait)").matches ? true : false,
-  minLand: window.screen.height < 425 && !window.matchMedia("(orientation: portrait)").matches ? true : false,
+  smaPort: window.screen.width < 425 && window.matchMedia("(orientation: portrait)").matches ? true : false,
+  smaLand: window.screen.height < 425 && !window.matchMedia("(orientation: portrait)").matches ? true : false,
   medPort: window.screen.width >= 425 && window.screen.width <= 825 && window.matchMedia("(orientation: portrait)").matches ? true : false,
   medLand: window.screen.height >= 425 && window.screen.height <= 825 && !window.matchMedia("(orientation: portrait)").matches ? true : false,
   larPort: window.screen.width > 825 && window.matchMedia("(orientation: portrait)").matches ? true : false,
@@ -196,12 +196,12 @@ const reducer = (state = initialState, action: {type: string; payload: any}) => 
     case 'MIN_PORT':
       return {
         ...state,
-        minPort: action.payload
+        smaPort: action.payload
       };
     case 'MIN_LAND':
       return {
         ...state,
-        minLand: action.payload
+        smaLand: action.payload
       };
     case 'MED_PORT':
       return {

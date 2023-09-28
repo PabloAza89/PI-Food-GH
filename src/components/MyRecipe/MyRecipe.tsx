@@ -6,6 +6,7 @@ import noImage1 from "../../images/noImage1.jpg";
 import noImage2 from "../../images/noImage2.jpg";
 import noImage3 from "../../images/noImage3.jpg";
 import noLoaded from "../../images/noLoaded.jpg";
+import GoBack from "../GoBack/GoBack";
 import logo from "../../images/logo.png";
 import { useLocation, useNavigate } from "react-router-dom";
 import { addNew } from '../../actions';
@@ -19,7 +20,7 @@ import dicEn from '../../dictionary/en.json';
 import $ from 'jquery';
 import GoogleAuth from '../GoogleAuth/GoogleAuth';
 
-const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreated }: any) => {
+const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: any) => {
 
   let arrImages = [noImage1, noImage2, noImage3]
 
@@ -464,19 +465,24 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreated }: any) => {
 
   const handleCancelEdit = () => {
 
-    Swal.fire({
-      title: 'Do you want to cancel editing ?',
-      text: 'Every changes you have made gonna be lost.',
-      icon: 'info',
-      showDenyButton: true,
-      showCancelButton: false,
-      confirmButtonText: 'CANCEL EDITING',
-      denyButtonText: `CONTINUE EDITING`,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        navigate("/")
-      }
-    })
+    
+      Swal.fire({
+        title: 'Do you want to cancel editing and go back ?',
+        text: 'Any changes you have made gonna be lost.',
+        icon: 'info',
+        showDenyButton: true,
+        showCancelButton: false,
+        confirmButtonText: 'CANCEL EDITING',
+        denyButtonText: `CONTINUE EDITING`,
+        confirmButtonColor: '#d14141', // NEW ACTION COLOR
+        denyButtonColor: '#3085d6' // NO ACTION COLOR
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          navigate("/")
+        }
+      })
+
   }
 
   $(function(){
@@ -721,7 +727,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreated }: any) => {
           })
           setSaveButtonDisabled(true)
           setAllDisabled(true)
-          retrieveRecipeCreated({ saveButtonDisabled: true, allDisabled: true })
+          //retrieveRecipeCreated({ saveButtonDisabled: true, allDisabled: true })
         }
 
         if (res.status === 400 && res.message === 'Invalid Credentials') {
@@ -822,6 +828,12 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreated }: any) => {
       }
   },[])
 
+  useEffect(() => {
+    if (saveButtonDisabled && allDisabled) retrieveRecipeCreatedOrEdited(true)
+    else retrieveRecipeCreatedOrEdited(false)
+    
+  },[saveButtonDisabled, allDisabled])
+
   //console.log("StepsState StepsState", stepsState)
   //console.log("imageLoaded imageLoaded", imageLoaded)
   //console.log("imageValue imageValue", imageValue)
@@ -881,7 +893,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreated }: any) => {
 
 
 
-      <GoogleAuth retrieveLogin={retrieveLogin} userData={userData} />
+      {/* <GoogleAuth retrieveLogin={retrieveLogin} userData={userData} /> */}
 
       <Box sx={s.eachRow}>
         <Box sx={s.text}>Title:</Box>
@@ -1247,10 +1259,10 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreated }: any) => {
           variant="contained"
           onClick={() =>
             saveButtonDisabled && allDisabled ?
-            navigate("/") :
+            navigate("/") : // `GO BACK`
             isEditing ?
-            handleCancelEdit() :
-            clearFieldsNotif()
+            handleCancelEdit() : // `CANCEL`
+            clearFieldsNotif() // `CLEAR`
           }
         >
           {
