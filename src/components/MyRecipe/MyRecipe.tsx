@@ -9,7 +9,7 @@ import noLoaded from "../../images/noLoaded.jpg";
 import GoBack from "../GoBack/GoBack";
 import logo from "../../images/logo.png";
 import { useLocation, useNavigate } from "react-router-dom";
-import { addNew } from '../../actions';
+import { addNew, setHasScroll } from '../../actions';
 import { Box, Button, OutlinedInput, Input, InputBase, TextField, ListItemText, Checkbox, Dialog, Typography,FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material/';
 import dietsEntireArray from '../../db/diets.json';
 import dishesEntireArray from '../../db/dishes.json';

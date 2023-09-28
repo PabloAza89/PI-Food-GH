@@ -1,13 +1,18 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useGoogleLogin } from '@react-oauth/google';
+import { useSelector } from 'react-redux';
 import { Box, Button } from '@mui/material/';
 import { ReactComponent as MySvg } from '../../images/googleLogo.svg';
 import * as s from "../../styles/GoogleAuthSX";
 import Swal from 'sweetalert2';
+import $ from 'jquery';
 
 const GoogleAuth = ({ retrieveLogin, userData }: any) => {
 
   //console.log("userData", userData)
+
+  const hasScroll = useSelector((state: {hasScroll:boolean}) => state.hasScroll)
+  const scrollWidth = useSelector((state: {scrollWidth:number}) => state.scrollWidth)
 
   const login = useGoogleLogin({
     onSuccess: (codeResponse) => {
@@ -90,14 +95,75 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
       .catch(rej => console.log(rej))
   }
 
+  const [ shown, setShown ] = useState<boolean>(false)
+
+  let qq = $(`.bgIn`).width()
+ 
+    $(`.bgIn`) // when hover image, extra pixels helper on right
+    .on( "mouseenter", function(){
+      
+      
+      $(`.bgIn`)
+        .css("transition", "all 1s ease-in-out")
+        //.width(`600px`)
+        //.width(`${qq}`)
+        .width(`290px`)
+        setShown(true)
+        //.css('height', 'fit-content');
+        //.css('width', 'fit-content');
+        //.css('min-width', 'fit-content')
+        
+        //.width( minPort || minLand ? `calc((${array.map(e => e.media).flat().length} * 414px) + 3px)` : `calc((${array.map(e => e.media).flat().length} * 564px) + 3px)` )
+      //$(`.extraPXCenterStripe`)
+       // .css("transition", "all .2s ease-in-out")
+        //.width( minPort || minLand ? `calc((${array.map(e => e.media).flat().length} * 414px) + 3px)` : `calc((${array.map(e => e.media).flat().length} * 564px) + 3px)` )
+    })
+    .on( "mouseleave", function(){
+      $(`.bgIn`)
+        .css("transition", "all 1s ease-in-out")
+        .width(`50px`)
+        setTimeout(() => {
+          setShown(false)
+        }, 1000)
+        
+        //.width( minPort || minLand ? `calc(${array.map(e => e.media).flat().length} * 414px)` : `calc(${array.map(e => e.media).flat().length} * 564px)` )
+      //$(`.extraPXCenterStripe`)
+        //.width( minPort || minLand ? `calc(${array.map(e => e.media).flat().length} * 414px)` : `calc(${array.map(e => e.media).flat().length} * 564px)` )
+    })
+    //$(`.extraPXSolid`)
+      //.width( minPort || minLand ? `calc(${array.map(e => e.media).flat().length} * 414px)` : `calc(${array.map(e => e.media).flat().length} * 564px)` )
+    //$(`.extraPXCenterStripe`)
+      //.width( minPort || minLand ? `calc(${array.map(e => e.media).flat().length} * 414px)` : `calc(${array.map(e => e.media).flat().length} * 564px)` )
+  
+
   return (
-    <Box sx={s.background}>
-      <Button variant="contained" sx={s.bgIn} onClick={() => login()} ><MySvg/>{ userData.email ? `  Signed in as ${userData.email}` : `  Sign in with Google` }</Button>
-      { userData.email ?
-      <Button variant="contained" sx={s.bgOut} onClick={() => logout()} >
-        <Box className="fa fa-sign-out fa-lg" aria-hidden="true"></Box>
+    <Box sx={s.background({ hasScroll, scrollWidth })}>
+      <Button className={`bgIn`} variant="contained" sx={s.bgIn} onClick={() => login()} >
+        
+        <Box sx={{ background: 'yellow', width: '60px', textWrap: 'nowrap',
+    overflow: 'hidden',
+    justifyContent: 'flex-start', }}>
+        <MySvg/>
+        {
+          userData.email && shown ?
+          `  Signed in as ${userData.email}` :
+          userData.email && !shown ?
+          `  Signed in as ${userData.email}` :
+          //`  ✔` :
+          !userData.email && shown ?
+          `  Sign in with Google` :
+          `  ❌`
+          
+        }
+        </Box>
       </Button>
-      : null }
+      {
+        userData.email ?
+        <Button variant="contained" sx={s.bgOut} onClick={() => logout()}>
+          <Box className="fa fa-sign-out fa-lg" aria-hidden="true"></Box>
+        </Button> :
+        null
+      }
     </Box>
   )
 }

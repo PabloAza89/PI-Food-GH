@@ -4,13 +4,16 @@ import {
   jcsb, jcse, jsc, jic, noDeco, mix, noSelect
 } from './CommonsSX';
 
+interface backgroundI {
+  hasScroll: boolean,
+  scrollWidth: number
+}
 
-
-export const background = () => {
+export const background = ({ hasScroll, scrollWidth }: backgroundI) => {
   return {
     display: 'flex',
     position: 'absolute',
-    right: '17px',
+    right: hasScroll ? `${scrollWidth}px` : '0px',
     marginRight: '10px',
     marginTop: '10px',
     flexDirection: 'row',
@@ -21,12 +24,20 @@ export const background = () => {
 export const bgIn = () => {
   return {
     textTransform: 'none',
+    width: '50px',
     color: '#3c4043',
     letterSpacing: '0.25px',
     fontFamily: '"Google Sans",arial,sans-serif',
     fontWeight: 500,
     background: 'white',
-    ':hover': { background: '#ededed' }
+    ':hover': { 
+      background: '#ededed',
+      //width: 'unset',
+    },
+    
+    //paddingRight: '20px',
+    //padding: '0px 2px'
+    
   }
 }
 

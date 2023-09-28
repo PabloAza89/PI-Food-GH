@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSelector } from 'react-redux';
 import { Route, Routes } from "react-router-dom";
-//import './App.css';
-import * as s from './styles/AppSX'
+import * as s from './styles/AppSX';
 import { Box } from '@mui/material';
 import CardsMapper from "./components/CardsMapper/CardsMapper";
 import GoogleAuth from './components/GoogleAuth/GoogleAuth';
@@ -32,32 +31,6 @@ function App() {
 
   const dispatch = useDispatch()
 
-  // useEffect(() => {
-  //   function handleResize() {
-  //     dispatch(setWidth(window.screen.width))
-  //     dispatch(setHeight(window.screen.height))
-  //     dispatch(setSmaPort(window.screen.width < 425 && window.matchMedia("(orientation: portrait)").matches ? true : false))
-  //     dispatch(setSmaLand(window.screen.height < 425 && !window.matchMedia("(orientation: portrait)").matches ? true : false))
-  //     dispatch(setMedPort(window.screen.width >= 425 && window.screen.width <= 825 && window.matchMedia("(orientation: portrait)").matches ? true : false))
-  //     dispatch(setMedLand(window.screen.height >= 425 && window.screen.height <= 825 && !window.matchMedia("(orientation: portrait)").matches ? true : false))
-  //     dispatch(setLarPort(window.screen.width > 825 && window.matchMedia("(orientation: portrait)").matches ? true : false))
-  //     dispatch(setLarLand(window.screen.height > 825 && !window.matchMedia("(orientation: portrait)").matches ? true : false))
-  //     dispatch(setCurrentWidth(window.innerWidth))
-  //     dispatch(setPercentageResizedHeight(window.innerHeight / window.screen.height))
-  //     dispatch(setHasScroll(window.innerWidth !== $('body').width() ? true : false))
-  //   }
-  //   function scrollHandler() {
-  //     //console.log($(window).scrollTop())
-  //     dispatch(setScrollPosition($(window).scrollTop()!))
-  //   }
-  //   window.addEventListener("scroll", scrollHandler);
-  //   window.addEventListener("resize", handleResize);
-  //   return () => {
-  //     window.removeEventListener("resize", handleResize);
-  //     window.removeEventListener("scroll", scrollHandler);
-  //   }
-  // });
-
   useEffect(() => {
     function handleResize() {
       let windowScreenWidth = window.screen.width
@@ -65,8 +38,6 @@ function App() {
       let windowMatchMediaPortrait = window.matchMedia("(orientation: portrait)").matches
       let windowInnerWidth = window.innerWidth
       let windowInnerHeight = window.innerHeight
-      let smallViewport = windowScreenWidth < 425
-      //console.log("TEST QQ", qq)
       dispatch(setWidth(windowScreenWidth))
       dispatch(setHeight(windowScreenHeight))
       dispatch(setSmaPort(windowScreenWidth < 425 && windowMatchMediaPortrait ? true : false)) // Port = Portrait
@@ -79,17 +50,14 @@ function App() {
       dispatch(setPercentageResizedHeight(windowInnerHeight / windowScreenHeight))
       dispatch(setHasScroll(windowInnerWidth !== $('body').width() ? true : false))
     }
-    function scrollHandler() {
-      //console.log($(window).scrollTop())
-      dispatch(setScrollPosition($(window).scrollTop()!))
-    }
+    function scrollHandler() { dispatch(setScrollPosition($(window).scrollTop()!)) }
     window.addEventListener("scroll", scrollHandler);
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("scroll", scrollHandler);
     }
-  });
+  },[]);
 
   useEffect(() => {
     $(function() {
@@ -102,7 +70,6 @@ function App() {
       typeof scrollDiv.offsetWidth === 'number' ? dispatch(setScrollWidth(scrollDiv.offsetWidth)) : dispatch(setScrollWidth(0))
       document.body.removeChild(scrollDiv); // Delete the div
     })
-
   },[dispatch])
 
   const currentWidth = useSelector((state: {currentWidth:number}) => state.currentWidth)
@@ -139,10 +106,6 @@ function App() {
     console.log("SE EJECUTO")
     setRecipeCreatedOrEdited(response)
   }
-
-  // useEffect(() => {
-  //   console.log("recipeCreated 2", recipeCreated)
-  // },[retrieveRecipeCreated])
 
   useEffect(() => {
     //if (userData.fd_tkn !== '') {
@@ -183,6 +146,7 @@ function App() {
           <GoUp />
         </>}/>
         <Route path="/:recipeId" element={<>
+          <GoogleAuth retrieveLogin={retrieveLogin} userData={userData} />
           <ServerStatus />
           <GoBack />
           <Detail retrieveLogin={retrieveLogin} userData={userData}/>
