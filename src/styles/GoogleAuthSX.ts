@@ -11,20 +11,29 @@ interface backgroundI {
 
 export const background = ({ hasScroll, scrollWidth }: backgroundI) => {
   return {
+    //width: '700px', // dev
     display: 'flex',
     position: 'absolute',
     right: hasScroll ? `${scrollWidth}px` : '0px',
     marginRight: '10px',
     marginTop: '10px',
     flexDirection: 'row',
+    //flexDirection: 'column', // dev
     zIndex: '2'
   }
 }
 
-export const bgIn = () => {
+interface buttonInI {
+  clicked: boolean
+}
+
+export const buttonIn = ({ clicked }:buttonInI) => {
   return {
+    display: 'flex',
     textTransform: 'none',
-    width: '50px',
+    padding: '6px 6px !important',
+    //width: clicked ? '300px' : '30px',
+    width: '30px',
     color: '#3c4043',
     letterSpacing: '0.25px',
     fontFamily: '"Google Sans",arial,sans-serif',
@@ -32,12 +41,66 @@ export const bgIn = () => {
     background: 'white',
     ':hover': { 
       background: '#ededed',
-      //width: 'unset',
     },
-    
-    //paddingRight: '20px',
-    //padding: '0px 2px'
-    
+
+    alignItems: 'flex-start',
+  }
+}
+
+export const buttonInInner = () => {
+  return {
+    display: 'flex',
+    minHeight: '0vh !important',
+    height: '25px !important',
+    //display: 'flex',
+    //background: 'yellow', //dev
+    background: 'inherit', //dev
+    // background: 'white', //dev
+    // ':hover': { 
+    //   background: '#ededed',
+    // },
+    /* width: '60px', */
+    textWrap: 'nowrap',
+    overflow: 'hidden',
+    justifyContent: 'flex-start',
+    padding: '0px 6px !important',
+  }
+}
+
+export const buttonWidthHelper = () => {
+  return {
+    //display: 'flex',
+    display: 'none',
+    textTransform: 'none',
+    padding: '6px 6px !important',
+    //width: '30px',
+    width: 'fit-content',
+    //width: 'unset',
+    color: '#3c4043',
+    letterSpacing: '0.25px',
+    fontFamily: '"Google Sans",arial,sans-serif',
+    fontWeight: 500,
+    background: 'white',
+    ':hover': { 
+      background: '#ededed',
+    },
+
+    alignItems: 'flex-start',
+  }
+}
+
+export const buttonWidthHelperInner = () => {
+  return {
+    display: 'flex',
+    minHeight: '0vh !important',
+    height: '25px !important',
+    //display: 'flex',
+    background: 'yellow',
+    /* width: '60px', */
+    textWrap: 'nowrap',
+    //overflow: 'hidden',
+    justifyContent: 'flex-start',
+    padding: '0px 6px !important',
   }
 }
 

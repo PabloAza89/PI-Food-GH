@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useGoogleLogin } from '@react-oauth/google';
 import { useSelector } from 'react-redux';
 import { Box, Button } from '@mui/material/';
+import { easings } from '../../styles/CommonsSX';
 import { ReactComponent as MySvg } from '../../images/googleLogo.svg';
 import * as s from "../../styles/GoogleAuthSX";
 import Swal from 'sweetalert2';
@@ -9,10 +10,11 @@ import $ from 'jquery';
 
 const GoogleAuth = ({ retrieveLogin, userData }: any) => {
 
-  //console.log("userData", userData)
+  easings() // Jquery easings..
 
   const hasScroll = useSelector((state: {hasScroll:boolean}) => state.hasScroll)
   const scrollWidth = useSelector((state: {scrollWidth:number}) => state.scrollWidth)
+  const [ popUp, setPopUp ] = useState<boolean>(false)
 
   const login = useGoogleLogin({
     onSuccess: (codeResponse) => {
@@ -22,12 +24,16 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
       .then((res) => res.json())
       .then((res) => {
         retrieveLogin({ email: res.email, fd_tkn: codeResponse.access_token })
-        return { email: res.email, fd_tkn: codeResponse.access_token }
-      })
-      .catch(rej => console.log(rej))
 
+        //return { email: res.email, fd_tkn: codeResponse.access_token }
+      })
+      .catch(rej => { console.log(rej) })
     },
-    onError: (error) => {console.log(error)}
+    onError: (error) => { console.log(error) },
+    onNonOAuthError: () => {
+      setPopUp(false)
+      setClicked(false)
+    }
   })
 
   useEffect(() => {
@@ -45,6 +51,20 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
       })
       .then((res) => res.json())
       .then((res) => {
+        setClicked(false)
+
+        $(`.buttonIn`)
+          setTimeout(() => {
+            $(`.buttonIn`)
+            .animate({ width: '30px' }, { queue: false, easing: 'easeOutBounce', duration: 1000 , complete: () => setShown(false) })
+          }, 2000)
+          $(`.buttonIn`)
+          //.stop(true, true)
+          .css("animation", "none")
+          .css("transition", "none")
+
+
+
         console.log("RES APP", res)
         if (res.status === 400 && res.message === `Invalid Credentials`) {
           retrieveLogin({ email: "", fd_tkn: "" })
@@ -96,65 +116,102 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
   }
 
   const [ shown, setShown ] = useState<boolean>(false)
+  const [ buttonLoggedInHelperWidth, setButtonLoggedInHelperWidth ] = useState<number | undefined>(undefined)
+  const [ buttonLoggedOutHelperWidth, setButtonLoggedOutHelperWidth ] = useState<number | undefined>(undefined)
+  const [ buttonHelperWidth, setButtonHelperWidth ] = useState<number | undefined>(undefined)
+  const [ clicked, setClicked ] = useState<boolean>(false)
 
-  let qq = $(`.bgIn`).width()
- 
-    $(`.bgIn`) // when hover image, extra pixels helper on right
-    .on( "mouseenter", function(){
-      
-      
-      $(`.bgIn`)
-        .css("transition", "all 1s ease-in-out")
-        //.width(`600px`)
-        //.width(`${qq}`)
-        .width(`290px`)
+  $(`.buttonIn`)
+    .on( "mouseenter", function() {
+      if (clicked) {
+        $(this)
+          .stop()
+      }
+      else {
         setShown(true)
-        //.css('height', 'fit-content');
-        //.css('width', 'fit-content');
-        //.css('min-width', 'fit-content')
-        
-        //.width( minPort || minLand ? `calc((${array.map(e => e.media).flat().length} * 414px) + 3px)` : `calc((${array.map(e => e.media).flat().length} * 564px) + 3px)` )
-      //$(`.extraPXCenterStripe`)
-       // .css("transition", "all .2s ease-in-out")
-        //.width( minPort || minLand ? `calc((${array.map(e => e.media).flat().length} * 414px) + 3px)` : `calc((${array.map(e => e.media).flat().length} * 564px) + 3px)` )
+        $(this) // NECESSARY FOR ANIMATION WORKS PROPERLY
+          .stop() // NECESSARY FOR ANIMATION WORKS PROPERLY
+          .animate({ width: buttonHelperWidth }, { queue: false, easing: 'easeOutBounce', duration: 1000 })
+      }
     })
-    .on( "mouseleave", function(){
-      $(`.bgIn`)
-        .css("transition", "all 1s ease-in-out")
-        .width(`50px`)
-        setTimeout(() => {
-          setShown(false)
-        }, 1000)
-        
-        //.width( minPort || minLand ? `calc(${array.map(e => e.media).flat().length} * 414px)` : `calc(${array.map(e => e.media).flat().length} * 564px)` )
-      //$(`.extraPXCenterStripe`)
-        //.width( minPort || minLand ? `calc(${array.map(e => e.media).flat().length} * 414px)` : `calc(${array.map(e => e.media).flat().length} * 564px)` )
+    .on("mouseleave", function() {
+      if (clicked) {
+        $(this)
+          .stop()
+          .animate({ width: buttonHelperWidth }, { queue: false, easing: 'easeOutCubic', duration: 1000 })
+      }
+      else {
+        $(this) // NECESSARY FOR ANIMATION WORKS PROPERLY
+          .stop() // NECESSARY FOR ANIMATION WORKS PROPERLY
+          .animate({ width: '30px' }, { queue: false, easing: 'easeOutBounce', duration: 1000 , complete: () => setShown(false) })
+      }
     })
-    //$(`.extraPXSolid`)
-      //.width( minPort || minLand ? `calc(${array.map(e => e.media).flat().length} * 414px)` : `calc(${array.map(e => e.media).flat().length} * 564px)` )
-    //$(`.extraPXCenterStripe`)
-      //.width( minPort || minLand ? `calc(${array.map(e => e.media).flat().length} * 414px)` : `calc(${array.map(e => e.media).flat().length} * 564px)` )
-  
+
+    useEffect(() => {
+      console.log("userData.email", userData.email)
+      console.log("XXXX", $(`.buttonWidthHelper`).outerWidth())
+      if (userData.email) {
+        console.log("SE EJECUTO ESTE 1")
+        setClicked(false)
+        setButtonHelperWidth($(`.buttonWidthHelper`).outerWidth())
+        $(`.buttonIn`)
+          .animate({ width: $(`.buttonWidthHelper`).outerWidth() }, { queue: false, easing: 'easeOutBounce', duration: 1000 })
+          setTimeout(() => {
+            $(`.buttonIn`)
+            .animate({ width: '30px' }, { queue: false, easing: 'easeOutBounce', duration: 1000 , complete: () => setShown(false) })
+          }, 2000)
+          $(`.buttonIn`)
+          //.stop(true, true)
+          .css("animation", "none")
+          .css("transition", "none")
+      }
+      else {
+        console.log("SE EJECUTO ESTE 2")
+        setClicked(false)
+        setButtonHelperWidth($(`.buttonWidthHelper`).outerWidth())
+      }
+
+    },[userData.email])
+
+  if (!popUp) {
+    $(`.buttonIn`)
+      .stop() // NECESSARY FOR ANIMATION WORKS PROPERLY
+      .animate({ width: '30px' }, { queue: false, easing: 'easeOutBounce', duration: 1000 , complete: () => setShown(false) })
+  }
+
+  console.log("shown shown", shown)
+  console.log("clicked clicked", clicked)
 
   return (
     <Box sx={s.background({ hasScroll, scrollWidth })}>
-      <Button className={`bgIn`} variant="contained" sx={s.bgIn} onClick={() => login()} >
+      <Button className={`buttonWidthHelper`} variant="contained" sx={s.buttonWidthHelper}>
+        <Box sx={s.buttonWidthHelperInner}>
+          <Box><MySvg/></Box>
+            {
+              userData.email ?
+              `  Signed in as ${userData.email}` :
+              `  Sign in with Google`
+            }
+        </Box>
+      </Button>
+      <Button id={`buttonIn`} className={`buttonIn`} variant="contained" sx={s.buttonIn({ clicked })} onClick={() => { login(); setClicked(true); setPopUp(true) }} >
         
-        <Box sx={{ background: 'yellow', width: '60px', textWrap: 'nowrap',
-    overflow: 'hidden',
-    justifyContent: 'flex-start', }}>
-        <MySvg/>
-        {
-          userData.email && shown ?
-          `  Signed in as ${userData.email}` :
-          userData.email && !shown ?
-          `  Signed in as ${userData.email}` :
-          //`  ✔` :
-          !userData.email && shown ?
-          `  Sign in with Google` :
-          `  ❌`
+        <Box sx={s.buttonInInner}>
+          <Box><MySvg/></Box>
           
-        }
+          {
+            userData.email && shown ?
+            `  Signed in as ${userData.email}` :
+            userData.email && !shown ?
+            //`  Signed in as ${userData.email}` :
+            ` ✔️` :
+            //`  ` :
+            !userData.email && shown ?
+            `  Sign in with Google` :
+            ` ❌`
+            
+          }
+          
         </Box>
       </Button>
       {
