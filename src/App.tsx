@@ -14,7 +14,7 @@ import ServerStatus from "./components/ServerStatus/ServerStatus";
 import Error from './components/Error/Error';
 import MyRecipe from "./components/MyRecipe/MyRecipe";
 import About from "./components/About/About";
-
+import { userDataObjI } from './interfaces/interfaces';
 import { useDispatch } from 'react-redux';
 import {
   fetchRecipesFromAPI, allRecipesLoaded,
@@ -87,12 +87,10 @@ function App() {
   //   }
   // }
 
-  const [ userData, setUserData ] = useState({
+  const [ userData, setUserData ] = useState<userDataObjI>({
     email: '',
     fd_tkn: ''
   })
-
-  console.log("in APP", userData)
 
   const retrieveLogin = (props: any) => {
     setUserData({ email:props.email, fd_tkn: props.fd_tkn })
@@ -100,38 +98,30 @@ function App() {
 
   const [ recipeCreatedOrEdited, setRecipeCreatedOrEdited ] = useState<boolean>(false)
 
-  console.log("recipeCreated recipeCreated", recipeCreatedOrEdited)
-
   const retrieveRecipeCreatedOrEdited = (response: boolean) => {
     console.log("SE EJECUTO")
     setRecipeCreatedOrEdited(response)
   }
 
   useEffect(() => {
-    //if (userData.fd_tkn !== '') {
-      fetch(`http://localhost:3001/user`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-type': 'application/json; charset=UTF-8',
-        },
-        body: JSON.stringify({
-          email: userData.email,
-          fd_tkn: userData.fd_tkn
-        })
+    fetch(`http://localhost:3001/user`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+      body: JSON.stringify({
+        email: userData.email,
+        fd_tkn: userData.fd_tkn
       })
-      .then((res) => res.json())
-      .then((res) => {
-        console.log("RES APP", res)
-        setUserData({ email: res.email, fd_tkn: res.fd_tkn })
-      })
-      .catch(rej => console.log(rej))
-   // }
-      
-   
+    })
+    .then((res) => res.json())
+    .then((res) => {
+      console.log("RES APP", res)
+      setUserData({ email: res.email, fd_tkn: res.fd_tkn })
+    })
+    .catch(rej => console.log(rej))
   },[])
-
-  
 
   return (
     <Box sx={s.background}>

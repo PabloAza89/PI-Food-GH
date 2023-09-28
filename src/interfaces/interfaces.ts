@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from "react";
+
 interface analyzedInstructionsI {
   0?: number
   name?: string,
@@ -21,4 +23,17 @@ export interface serverStatusI {
   online: boolean,
   validKey: boolean,
   try: number,
+}
+
+interface userDataObjI {
+  email: string,
+  fd_tkn: string
+}
+
+export interface userDataI {
+  userData: userDataObjI[]
+}
+
+export interface retrieveLoginI {
+  retrieveLogin: any
 }

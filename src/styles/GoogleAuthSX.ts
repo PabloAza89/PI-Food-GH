@@ -13,8 +13,10 @@ export const background = ({ hasScroll, scrollWidth }: backgroundI) => {
   return {
     //width: '700px', // dev
     display: 'flex',
-    position: 'absolute',
-    right: hasScroll ? `${scrollWidth}px` : '0px',
+    //position: 'absolute',
+    position: 'fixed',
+    //right: hasScroll ? `${scrollWidth}px` : '0px',
+    right: '0px',
     marginRight: '10px',
     marginTop: '10px',
     flexDirection: 'row',

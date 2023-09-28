@@ -18,7 +18,6 @@ import Swal from 'sweetalert2';
 import dicEs from '../../dictionary/es.json';
 import dicEn from '../../dictionary/en.json';
 import $ from 'jquery';
-import GoogleAuth from '../GoogleAuth/GoogleAuth';
 
 const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: any) => {
 
@@ -35,28 +34,8 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
   let dishesArrayLS: string | null = localStorage.getItem('dishesArray');
   let dietsArrayLS: string | null = localStorage.getItem('dietsArray');
   let stepsStateLS: string | null = localStorage.getItem('stepsState');
-
-  
-
-  //console.log("TEST", test)
-  //console.log("TEST", location.state && location.state.editing)
-  console.log("TEST", location.state && location.state)
-  //const history = useHistory();
-
-  //console.log("HISTORY", history)
-  //console.log("NAVIGATE", navigate)
-  console.log("LOCATION", location)
-  
-
-  let target = location.hash
-
-  let start = target.indexOf(`#access_token=`)
-  let end = target.indexOf(`&token_type=`)
-
-  let authTk = target.slice(start+14,end)
-
+ 
   const [isEditing, setIsEditing] = useState<boolean>( location.state && location.state.editing ? true : false );
-
   const [titlePlaceholder, setTitlePlaceholder] = useState<string>('e.g. Pasta with tomatoes..');
   const [healthScorePlaceholder, setHealthScorePlaceholder] = useState<string>('e.g. 73');
   const [summaryPlaceholder, setSummaryPlaceholder] = useState<string>('e.g. Healthy pasta recipe');
@@ -492,6 +471,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
   })
 
   const handleSubmit = (e:any) => {
+    
     let emptyInputs = []
 
     if (titleValue.replaceAll(" ","").replaceAll("\n", "") === "") emptyInputs.push("Title")
@@ -508,6 +488,9 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
         `Step ${indexNumbers[0]} on Instructions`,
       )
     }
+
+    //console.log("YYY", emptyInputs.length)
+    //console.log("YYYYY", userData.email === undefined)
 
     //console.log("emptyInputs.length", emptyInputs.length)
     //console.log("emptyInputs", emptyInputs)
@@ -528,8 +511,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
       })
     } // qq.some(e => e.includes('Instructions'))
 
-
-    else if (emptyInputs.length === 0 && userData.email === '') {
+    else if (emptyInputs.length === 0 && !userData.email) {
     //if (userData.email === '') {
       Swal.fire({
         title: `You must be logged to do that ! `,
@@ -663,7 +645,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
     } // qq.some(e => e.includes('Instructions'))
 
 
-    else if (emptyInputs.length === 0 && userData.email === '') {
+    else if (emptyInputs.length === 0 && !userData.email) {
     //if (userData.email === '') {
       Swal.fire({
         title: `You must be logged to do that ! `,

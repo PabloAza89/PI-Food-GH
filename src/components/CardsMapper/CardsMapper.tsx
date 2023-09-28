@@ -3,14 +3,16 @@ import * as s from  '../../styles/CardsMapperSX';
 import Card from '../Card/Card';
 import { useSelector , useDispatch } from 'react-redux';
 import { Box } from '@mui/material';
-import { recipesI } from '../../interfaces/interfaces';
+import { recipesI, userDataI, retrieveLoginI  } from '../../interfaces/interfaces';
 import {
   fetchRecipesFromAPI, allRecipesLoaded, getDietsFromDB,
   getDishesFromDB, setHasScroll
 } from '../../actions';
 import $ from 'jquery';
 
-const CardsMapper = ({ retrieveLogin, userData }: any)  => {
+interface CardsMapperI extends userDataI, retrieveLoginI {}
+
+const CardsMapper = ({ retrieveLogin, userData }: CardsMapperI)  => {
 
   const dispatch = useDispatch()
 
@@ -35,8 +37,6 @@ const CardsMapper = ({ retrieveLogin, userData }: any)  => {
     //dispatch(setHasScroll(window.innerWidth !== $('body').width() ? true : false))
     dispatch(setHasScroll(window.innerWidth !== $('body').width() ? true : false))
   })
-
-  console.log("in CARDS MAPPER", userData)
 
   return toShow[0] !== undefined ?
   (
