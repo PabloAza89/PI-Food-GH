@@ -35,7 +35,7 @@ const CardsMapper = ({ retrieveLogin, userData }: CardsMapperI)  => {
   FirstFunc().then(() => {
     dispatch(allRecipesLoaded(true))
     //dispatch(setHasScroll(window.innerWidth !== $('body').width() ? true : false))
-    dispatch(setHasScroll(window.innerWidth !== $('body').width() ? true : false))
+    //dispatch(setHasScroll(window.innerWidth !== $('body').width() ? true : false))
   })
 
   return toShow[0] !== undefined ?

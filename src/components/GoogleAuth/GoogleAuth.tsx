@@ -63,9 +63,6 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
           .css("animation", "none")
           .css("transition", "none")
 
-
-
-        console.log("RES APP", res)
         if (res.status === 400 && res.message === `Invalid Credentials`) {
           retrieveLogin({ email: "", fd_tkn: "" })
           Swal.fire({
@@ -90,7 +87,6 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
       .then((res) => res.json())
       .then((res) => {
         if (res.error !== undefined) {
-          console.log("User is already log out..");
           retrieveLogin({email: "", fd_tkn: ""})
           fetch(`http://localhost:3001/user`, {
             method: 'POST',
@@ -101,7 +97,6 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
           })
         }
         if (res.error === undefined) {
-          console.log("User logout successfully")
           retrieveLogin({email: "", fd_tkn: ""})
           fetch(`http://localhost:3001/user`, {
             method: 'POST',
@@ -148,10 +143,7 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
     })
 
     useEffect(() => {
-      console.log("userData.email", userData.email)
-      console.log("XXXX", $(`.buttonWidthHelper`).outerWidth())
       if (userData.email) {
-        console.log("SE EJECUTO ESTE 1")
         setClicked(false)
         setButtonHelperWidth($(`.buttonWidthHelper`).outerWidth())
         $(`.buttonIn`)
@@ -166,7 +158,6 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
           .css("transition", "none")
       }
       else {
-        console.log("SE EJECUTO ESTE 2")
         setClicked(false)
         setButtonHelperWidth($(`.buttonWidthHelper`).outerWidth())
       }
@@ -178,9 +169,6 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
       .stop() // NECESSARY FOR ANIMATION WORKS PROPERLY
       .animate({ width: '30px' }, { queue: false, easing: 'easeOutBounce', duration: 1000 , complete: () => setShown(false) })
   }
-
-  console.log("shown shown", shown)
-  console.log("clicked clicked", clicked)
 
   return (
     <Box sx={s.background({ hasScroll, scrollWidth })}>

@@ -5,7 +5,10 @@ import logo from "../../images/logo.png";
 import * as s from '../../styles/NavBarSX';
 import { useDispatch, useSelector } from 'react-redux';
 import MenuIcon from '@mui/icons-material/Menu';
-import { Box, Button, TextField, Dialog, Typography,FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material/';
+import {
+  Box, Button, TextField, Typography, FormControl,
+  InputLabel, MenuItem, Select, SelectChangeEvent
+} from '@mui/material/';
 import {
   setIndexChoosen, filter, setMenuShown
 } from '../../actions';
@@ -80,8 +83,6 @@ const NavBar = () =>  {
     if (currentWidth > 800) dispatch(setMenuShown(false))
   },[ dispatch, entireFilter, currentWidth ])
 
-  console.log("entireFilter", entireFilter)
-
   return (
     <Box sx={s.background({ menuShown })}>
       <Box sx={s.logoAndMenuContainer({ currentWidth, scrollWidth })}>
@@ -138,7 +139,7 @@ const NavBar = () =>  {
               className="button"
             >CREATE RECIPE !</Button>
           </Link>
-          <Link to="/about">
+          <Link to="/About">
             <Button
               variant="contained"
               disableElevation

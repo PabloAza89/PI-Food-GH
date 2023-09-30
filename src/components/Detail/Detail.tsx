@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector , useDispatch } from 'react-redux';
 import "../../styles/Detail.css";
@@ -8,10 +8,8 @@ import noImage2 from "../../images/noImage2.jpg";
 import noImage3 from "../../images/noImage3.jpg";
 import notAvailable from "../../images/notAvailable.jpg";
 import { handleDelete, handleEdit } from '../CommonsFunc/CommonsFunc';
-import Swal from 'sweetalert2';
 import { Link } from "react-router-dom";
-import logo from "../../images/logo.png";
-import { Box, Button, TextField, Dialog, Divider, Typography, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material/';
+import { Box, Button, Divider, Typography } from '@mui/material/';
 import { recipesI } from '../../interfaces/interfaces';
 import EditIcon from '@mui/icons-material/Edit';
 import ClearIcon from '@mui/icons-material/Clear';
@@ -19,7 +17,7 @@ import {
   fetchRecipesFromAPI, allRecipesLoaded, getDietsFromDB, getDishesFromDB
 } from '../../actions';
 
-export default function Detail({ userData, retrieveLogin }: any) {
+export default function Detail({ userData, retrieveLogin, retrieveRecipeNotFound }: any) {
 
   const dispatch = useDispatch()
   const navigate = useNavigate();
@@ -56,7 +54,10 @@ export default function Detail({ userData, retrieveLogin }: any) {
     .catch((err) => console.error(err))
   }
 
-  console.log("RECIPE", recipe)
+  useEffect(() => {
+    if (recipe) retrieveRecipeNotFound(false)
+    else retrieveRecipeNotFound(true)
+  },[recipe, retrieveRecipeNotFound])
 
   if (recipe !== undefined) {
     return (

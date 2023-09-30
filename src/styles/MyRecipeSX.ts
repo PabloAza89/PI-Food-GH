@@ -4,25 +4,40 @@ import {
   jcsb, jcse, jsc, jic, noDeco, mix, noSelect
 } from './CommonsSX';
 
-export const background = () => {
-  return {
-    display: 'flex',
-    flexDirection: 'row',
-    background: 'gray', // dev
-    
-  }
+interface formI {
+  hasScroll: boolean,
+  scrollWidth: number
 }
 
-export const form = () => {
+export const form = ({ hasScroll, scrollWidth }: formI) => {
   return {
-    //...noSelect,
-    display: 'flex',
-    flexDirection: 'column',
     background: 'darkred', // dev
-    width: '100vw',
-    height: '100vh',
+    //...noSelect,
+    //width: '70vw',
+    display: 'flex',
+    position: 'relative',
+    //display: 'none',
+    flexDirection: 'column',
+    
+    //width: '85vw',
+    //width: '83vw',
+    minWidth: '400px',
+    //height: '100vh',
     alignItems: 'center',
+    //marginLeft: 'max(101px, 10%)',
+    //marginLeft: 'min(151px, 100%)',
+    marginLeft: '101px',
+    //marginLeft: '118px',
+    //marginLeft: hasScroll ? `${101 + scrollWidth}px` : `101px`, // 16 + 64 + 16 + scrollWidth ~ 96 + scrollWidth
+    marginRight: hasScroll ? `${96 + scrollWidth}px` : `96px`, // 16 + 64 + 16 + scrollWidth ~ 96 + scrollWidth
     marginTop: '16px',
+    //alignSelf: 'center',
+
+    // background: 'linear-gradient(135deg, rgba(196, 34, 147, 0.1), rgba(196, 34, 147, 0))',
+    // backdropFilter: 'blur(20px)',
+    // boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
+    // border: '1px solid rgb(255, 255, 255, 0.18)',
+    // borderRadius: '4px',
   }
 }
 
@@ -82,10 +97,13 @@ export const eachRow = () => {
     background: 'gray', // dev
     margin: '6px 0px',
     display: 'flex',
+    position: 'relative',
     flexDirection: 'row',
     width: '80vw',
+    //minWidth: '900px',
+    minWidth: '600px',
     //height: '56px',
-    justifyContent: 'center',
+    //justifyContent: 'center',
   }
 }
 
@@ -95,6 +113,7 @@ export const text = () => {
     flexDirection: 'row',
     color: 'black',
     width: '12vw',
+    minWidth: '113px',
     height: '56px',
     background: 'green',
     justifyContent: 'center',
@@ -283,11 +302,13 @@ export const eachStep = () => {
 
 export const stepTitle = () => {
   return {
+    background: 'yellow',
     display: 'flex',
     flexDirection: 'row',
     width: '6vw',
+    minWidth: '57px',
     height: '56px',
-    background: 'lightred',
+    //background: 'lightred',
     justifyContent: 'center',
     alignItems: 'center'
   }
@@ -359,6 +380,8 @@ export const buttonDelete = () => {
     color: 'white',
     alignSelf: 'center',
     padding: '0px !important',
+    //paddingRight: '10px',
+    marginLeft: '10px',
   }
 }
 

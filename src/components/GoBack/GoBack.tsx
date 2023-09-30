@@ -1,43 +1,22 @@
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
 import '../../styles/Nav.css';
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import logo from "../../images/logo.png";
 import * as s from '../../styles/GoBackSX';
 import Swal from 'sweetalert2';
-import { useDispatch, useSelector } from 'react-redux';
-import { Box, Button, TextField, Dialog, Typography,FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material/';
-import { 
-  setIndexChoosen, filter
-} from '../../actions';
-import dietss from '../../db/diets.json';
+import { Box, Typography } from '@mui/material/';
 
-const GoBack = ({ recipeCreatedOrEdited }: any) =>  {
+interface GoBackI {
+  recipeCreatedOrEdited?: boolean,
+  recipeNotFound?: boolean
+}
 
-  
+const GoBack = ({ recipeCreatedOrEdited, recipeNotFound }: GoBackI) =>  {
 
   const location = useLocation()
   const navigate = useNavigate()
 
   const [isEditing, setIsEditing] = useState<boolean>( location.state && location.state.editing ? true : false );
-
-  console.log("location.state", location.state && location.state)
-  console.log("location.pathname", location.pathname)
-  //console.log("location.pathname", location.pathname.toLowerCase() === `myrecipe`,  location.state && location.state === )
-  console.log("location.pathname", location.pathname.toLowerCase() === `/myrecipe`, "isEditing", isEditing)
-
-  // useEffect(() => {
-  //   if (location.pathname.toLowerCase() === `/myrecipe` && isEditing) {
-  //     Swal.fire({
-  //       title: 'Do you want go back and cancel editing ?',
-  //       text: 'Every changes you have made gonna be lost.',
-  //       icon: 'info',
-  //       showDenyButton: true,
-  //       showCancelButton: false,
-  //       confirmButtonText: 'CANCEL EDITING',
-  //       denyButtonText: `CONTINUE EDITING`,
-  //     })
-  //   }
-  // },[])
 
   const handleReturn = () => {
     if (location.pathname.toLowerCase() === `/myrecipe` && isEditing && !recipeCreatedOrEdited) {
@@ -53,9 +32,7 @@ const GoBack = ({ recipeCreatedOrEdited }: any) =>  {
         denyButtonColor: '#3085d6' // NO ACTION COLOR
       })
       .then((result) => {
-        if (result.isConfirmed) {
-          navigate("/")
-        }
+        if (result.isConfirmed) navigate("/")
       })
     } 
     else if (location.pathname.toLowerCase() === `/myrecipe` && !isEditing && !recipeCreatedOrEdited) {
@@ -71,27 +48,27 @@ const GoBack = ({ recipeCreatedOrEdited }: any) =>  {
         denyButtonColor: '#3085d6' // NO ACTION COLOR
       })
       .then((result) => {
-        if (result.isConfirmed) {
-          navigate("/")
-        }
+        if (result.isConfirmed) navigate("/")
       })
-    } 
+    }
     else navigate("/")
-  }  
-
-  // useEffect(() => {
-
-  // },[])
-
-  //console.log("recipeCreated", recipeCreated)
-  console.log("recipeCreated goBACK", recipeCreatedOrEdited, "isEditing", isEditing)
+  }
 
   return (
-    <Box sx={s.background}>
-      <Box onClick={() => handleReturn()} sx={s.logoTextContainer}>
-        <Box component="img" sx={s.logo} src={logo} alt=""/>
-        <Typography sx={s.linkText}>Go Back !</Typography>
-      </Box>
+    <Box onClick={() => handleReturn()}sx={s.background({ recipeNotFound })}>
+      <Box component="img" sx={s.logo} src={logo} alt=""/>
+    {
+      location.pathname.toLowerCase() === `/myrecipe`  ?
+      <Box sx={s.columnContainer}>
+        <Box sx={s.letters}>
+          <Box>G</Box><Box>o</Box><Box sx={{ marginTop: '13px' }} /><Box>B</Box><Box>a</Box><Box>c</Box><Box sx={{ marginTop: '2px' }}>k</Box>
+        </Box>
+        <Box sx={s.exclamationMarkContainer}>
+          <Box sx={s.exclamationMark}>!</Box>
+        </Box>
+      </Box> :
+      `G<br/>o<br/><br/>B<br/>a<br/>c<br/>k<br/>!`
+    }
     </Box>
   );
 }

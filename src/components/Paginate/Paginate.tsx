@@ -1,8 +1,7 @@
 import { useSelector , useDispatch } from 'react-redux';
 import { setIndexChoosen } from '../../actions';
-//import '../../styles/Paginate.css';
 import * as s from '../../styles/PaginateSX';
-import { Box, Button, TextField, Dialog, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material/';
+import { Box, Button } from '@mui/material/';
 import $ from 'jquery';
 import { recipesI } from '../../interfaces/interfaces';
 

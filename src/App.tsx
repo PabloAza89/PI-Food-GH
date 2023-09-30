@@ -32,34 +32,6 @@ function App() {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    function handleResize() {
-      let windowScreenWidth = window.screen.width
-      let windowScreenHeight = window.screen.height
-      let windowMatchMediaPortrait = window.matchMedia("(orientation: portrait)").matches
-      let windowInnerWidth = window.innerWidth
-      let windowInnerHeight = window.innerHeight
-      dispatch(setWidth(windowScreenWidth))
-      dispatch(setHeight(windowScreenHeight))
-      dispatch(setSmaPort(windowScreenWidth < 425 && windowMatchMediaPortrait ? true : false)) // Port = Portrait
-      dispatch(setSmaLand(windowScreenHeight < 425 && !windowMatchMediaPortrait ? true : false)) // Land = Landscape
-      dispatch(setMedPort(windowScreenWidth >= 425 && windowScreenWidth <= 825 && windowMatchMediaPortrait ? true : false))
-      dispatch(setMedLand(windowScreenHeight >= 425 && windowScreenHeight <= 825 && !windowMatchMediaPortrait ? true : false))
-      dispatch(setLarPort(windowScreenWidth > 825 && windowMatchMediaPortrait ? true : false))
-      dispatch(setLarLand(windowScreenHeight > 825 && !windowMatchMediaPortrait ? true : false))
-      dispatch(setCurrentWidth(windowInnerWidth))
-      dispatch(setPercentageResizedHeight(windowInnerHeight / windowScreenHeight))
-      dispatch(setHasScroll(windowInnerWidth !== $('body').width() ? true : false))
-    }
-    function scrollHandler() { dispatch(setScrollPosition($(window).scrollTop()!)) }
-    window.addEventListener("scroll", scrollHandler);
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      window.removeEventListener("scroll", scrollHandler);
-    }
-  },[]);
-
-  useEffect(() => {
     $(function() {
       var scrollDiv = document.createElement("div"); // Creates the div
       scrollDiv.className = "scrollbar-measure";
@@ -99,8 +71,14 @@ function App() {
   const [ recipeCreatedOrEdited, setRecipeCreatedOrEdited ] = useState<boolean>(false)
 
   const retrieveRecipeCreatedOrEdited = (response: boolean) => {
-    console.log("SE EJECUTO")
     setRecipeCreatedOrEdited(response)
+  }
+
+  const [ recipeNotFound, setRecipeNotFound ] = useState<boolean>(false)
+
+  const retrieveRecipeNotFound = (response: boolean) => {
+    console.log("SE EJECUTO")
+    setRecipeNotFound(response)
   }
 
   useEffect(() => {
@@ -123,6 +101,61 @@ function App() {
     .catch(rej => console.log(rej))
   },[])
 
+  //console.log("recipeNotFound", recipeNotFound)
+  
+  // useEffect(() => {
+  //   console.log("TT qq1", qq1)
+  //   console.log("TT qq2", qq2)
+  //   console.log("TT qq3", qq3)
+  // })
+
+  // useEffect(() => {
+  //   console.log("TT qq1", window.innerHeight)
+  //   console.log("TT qq2", $('body').height())
+  //   console.log("TT qq3", window.innerWidth)
+  //   console.log("TT qq4", $('body').width())
+  // })
+
+//new create a new instance of ResizeObserver
+//let resizeObserver = new ResizeObserver(entry => {
+let resizeObserver = new ResizeObserver(entry => {
+
+
+  let windowScreenWidth = window.screen.width
+      let windowScreenHeight = window.screen.height
+      let windowMatchMediaPortrait = window.matchMedia("(orientation: portrait)").matches
+      let windowInnerWidth = window.innerWidth
+      let windowInnerHeight = window.innerHeight
+      dispatch(setWidth(windowScreenWidth))
+      dispatch(setHeight(windowScreenHeight))
+      dispatch(setSmaPort(windowScreenWidth < 425 && windowMatchMediaPortrait ? true : false)) // Port = Portrait
+      dispatch(setSmaLand(windowScreenHeight < 425 && !windowMatchMediaPortrait ? true : false)) // Land = Landscape
+      dispatch(setMedPort(windowScreenWidth >= 425 && windowScreenWidth <= 825 && windowMatchMediaPortrait ? true : false))
+      dispatch(setMedLand(windowScreenHeight >= 425 && windowScreenHeight <= 825 && !windowMatchMediaPortrait ? true : false))
+      dispatch(setLarPort(windowScreenWidth > 825 && windowMatchMediaPortrait ? true : false))
+      dispatch(setLarLand(windowScreenHeight > 825 && !windowMatchMediaPortrait ? true : false))
+      dispatch(setCurrentWidth(windowInnerWidth))
+      dispatch(setPercentageResizedHeight(windowInnerHeight / windowScreenHeight))
+
+      //function scrollHandler() { dispatch(setScrollPosition($(window).scrollTop()!)) }
+
+  // for (let entry of entries) {
+  //   console.log('Element:', entry.target);
+  //   console.log('Element size:', entry.contentRect);
+  //   console.log(`TT Resized: New width: ${entry.contentRect.width},
+  //                New height: ${entry.contentRect.height}`);
+  // }
+  dispatch(setHasScroll(window.innerWidth !== $('body').width() ? true : false))
+  console.log('TT Element:', entry)
+}).observe(document.querySelector('body') as Element);;
+
+// Start observing an element
+//let elementToObserve = document.querySelector('.some-element');
+//let elementToObserve = document.querySelector('body');
+//resizeObserver.observe(elementToObserve!);
+//resizeObserver.observe(document.querySelector('body')!);
+  
+
   return (
     <Box sx={s.background}>
       <Box sx={s.wallpaperBody} />
@@ -132,14 +165,18 @@ function App() {
           <ServerStatus />
           <NavBar />
           <Paginate />
-          <CardsMapper retrieveLogin={retrieveLogin} userData={userData}/>
+          <CardsMapper retrieveLogin={retrieveLogin} userData={userData} />
           <GoUp />
         </>}/>
         <Route path="/:recipeId" element={<>
           <GoogleAuth retrieveLogin={retrieveLogin} userData={userData} />
           <ServerStatus />
-          <GoBack />
-          <Detail retrieveLogin={retrieveLogin} userData={userData}/>
+          <GoBack recipeNotFound={recipeNotFound} />
+          <Detail
+            retrieveLogin={retrieveLogin}
+            userData={userData}
+            retrieveRecipeNotFound={retrieveRecipeNotFound}
+          />
         </>}/>
         <Route path="/MyRecipe" element={<>
           <GoogleAuth retrieveLogin={retrieveLogin} userData={userData} />
@@ -151,8 +188,7 @@ function App() {
             retrieveRecipeCreatedOrEdited={retrieveRecipeCreatedOrEdited}
           />
         </>}/>
-        <Route path="/about" element={<>
-          <ServerStatus />
+        <Route path="/About" element={<>
           <About />
         </>}/>
         <Route path="*" element={<>

@@ -2,6 +2,8 @@ import '../../styles/DisableAutoFocusSweetAlert2.css';
 import Swal from 'sweetalert2';
 import { recipesI } from '../../interfaces/interfaces';
 
+// USED IN CARD & DETAIL
+
 interface handleDeleteI {
   id: string | number,
   fd_tkn: string,
@@ -88,6 +90,8 @@ export const handleDelete = async ({ id, fd_tkn, retrieveLogin, handleReload }: 
     })
   })
 }
+
+// USED IN CARD & DETAIL
 
 interface handleEditI { navigate: any }
 interface handleEditRecipesI extends handleEditI, recipesI {}

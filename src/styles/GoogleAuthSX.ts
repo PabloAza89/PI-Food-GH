@@ -17,11 +17,11 @@ export const background = ({ hasScroll, scrollWidth }: backgroundI) => {
     position: 'fixed',
     //right: hasScroll ? `${scrollWidth}px` : '0px',
     right: '0px',
-    marginRight: '10px',
-    marginTop: '10px',
+    marginRight: '16px',
+    marginTop: '16px',
     flexDirection: 'row',
     //flexDirection: 'column', // dev
-    zIndex: '2'
+    zIndex: 3
   }
 }
 

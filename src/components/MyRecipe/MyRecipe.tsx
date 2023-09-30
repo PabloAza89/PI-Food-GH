@@ -1,13 +1,11 @@
 import { useState, useEffect, useRef } from "react";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as s from "../../styles/MyRecipeSX";
 import "../../styles/MyRecipeSX.css";
 import noImage1 from "../../images/noImage1.jpg";
 import noImage2 from "../../images/noImage2.jpg";
 import noImage3 from "../../images/noImage3.jpg";
 import noLoaded from "../../images/noLoaded.jpg";
-import GoBack from "../GoBack/GoBack";
-import logo from "../../images/logo.png";
 import { useLocation, useNavigate } from "react-router-dom";
 import { addNew, setHasScroll } from '../../actions';
 import { Box, Button, OutlinedInput, Input, InputBase, TextField, ListItemText, Checkbox, Dialog, Typography,FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material/';
@@ -18,14 +16,21 @@ import Swal from 'sweetalert2';
 import dicEs from '../../dictionary/es.json';
 import dicEn from '../../dictionary/en.json';
 import $ from 'jquery';
+import {
+  errorI, handlerUpdateInstructionsI, handlerAddInstructionsI,
+  validateStringI, highlighterI, handlerDeleteInstructionsI
+} from '../../interfaces/interfaces';
 
 const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: any) => {
 
-  let arrImages = [noImage1, noImage2, noImage3]
+  const arrImages = [noImage1, noImage2, noImage3];
 
   const dispatch = useDispatch()
   const location = useLocation()
   const navigate = useNavigate()
+
+  const hasScroll = useSelector((state: { hasScroll: boolean }) => state.hasScroll)
+  const scrollWidth = useSelector((state: { scrollWidth: number }) => state.scrollWidth)
 
   let titleValueLS: string | null = localStorage.getItem('titleValue');
   let imageValueLS: string | null = localStorage.getItem('imageValue');
@@ -39,8 +44,6 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
   const [titlePlaceholder, setTitlePlaceholder] = useState<string>('e.g. Pasta with tomatoes..');
   const [healthScorePlaceholder, setHealthScorePlaceholder] = useState<string>('e.g. 73');
   const [summaryPlaceholder, setSummaryPlaceholder] = useState<string>('e.g. Healthy pasta recipe');
-  //const [doNothing, setDoNothing] = useState<boolean>(false);
-
   const [titleValue, setTitleValue] = useState<string>('');
   const [imageValue, setImageValue] = useState<string>('');
   const [imageValueDoubleCheck, setImageValueDoubleCheck] = useState<string>('');
@@ -48,22 +51,17 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
   const [summaryValue, setSummaryValue] = useState<string>('');
   const [dishesArray, setDishesArray] = useState<string[]>([]);
   const [dietsArray, setDietsArray] = useState<string[]>([]);
-  const [stepsState, setStepsState] = useState(['']);
-
+  const [stepsState, setStepsState] = useState<string[]>(['']);
   const [allDisabled, setAllDisabled] = useState<boolean>(false);
   const [saveButtonDisabled, setSaveButtonDisabled] = useState<boolean>(false);
   const [imageLoaded, setImageLoaded] = useState<boolean>(false);
 
-  interface handlerI {
-    index: number
-  }
-
-  const handlerDeleteInstructions = ({ index }: handlerI) => {
+  const handlerDeleteInstructions = ({ index }: handlerDeleteInstructionsI) => {
     let copyState = [...stepsState]
     copyState.splice(index, 1)
     setStepsState([...copyState])
 
-    localStorage.setItem('stepsState', JSON.stringify([...copyState]))
+    if (!isEditing) localStorage.setItem('stepsState', JSON.stringify([...copyState]))
 
     let copyError = {...error}
     copyError.instructions.splice(index, 1)
@@ -75,11 +73,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
     })
   }
 
-  interface handlerAddInstructionsI {
-    index: number,
-  }
-
-   const handlerAddInstructions = async ({ index }: handlerAddInstructionsI) => {
+  const handlerAddInstructions = async ({ index }: handlerAddInstructionsI) => {
     const firstStep = async () => {
 
       let copyState = [...stepsState]
@@ -93,65 +87,20 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
       copyState.forEach((e,indexx) => {
         highlighter({value: e, type: 'instructions', index: indexx})
       })
-
-      localStorage.setItem('stepsState', JSON.stringify([...copyState]))
-
+      if (!isEditing) localStorage.setItem('stepsState', JSON.stringify([...copyState]))
     }
-
     const secondStep = async () => { // only highlight for last index
       let copyState2 = [...stepsState]
       if (copyState2.length > 1 && index !== copyState2.length - 1 ) highlighter({value: copyState2.slice(copyState2.length-1)[0], type: 'instructions', index: copyState2.length})
     }
-
     firstStep().then(() => secondStep())
-  }
-
-  interface handlerUpdateInstructionsI {
-    index: number,
-    value: string
   }
 
   const handlerUpdateInstructions = ({ index, value }: handlerUpdateInstructionsI) => {
     let copy = [...stepsState]
     copy.splice(index, 1, value)
     setStepsState([...copy])
-    //localStorage.setItem('stepsState', [...copy])
-    localStorage.setItem('stepsState', JSON.stringify([...copy]))
-  }
-
-  const [showAlert, setShowAlert] = useState(false)
-  const [firstInstance, setFirstInstance] = useState(false)
-  const [created, setCreated] = useState(0)
-
-  interface titleI {
-    character: boolean,
-    badWord: boolean,
-    empty: boolean
-  }
-
-  interface healthI {
-    string?: boolean,
-    max?: boolean,
-    empty: boolean
-  }
-
-  interface instructionsI {
-    character: boolean,
-    badWord: boolean,
-    empty: boolean
-  }
-
-  interface summaryI {
-    character: boolean,
-    badWord: boolean,
-    empty: boolean
-  }
-
-  interface errorI {
-    title: titleI,
-    health: healthI,
-    summary: summaryI,
-    instructions: instructionsI[]
+    if (!isEditing) localStorage.setItem('stepsState', JSON.stringify([...copy]))
   }
 
   const [error, setError] = useState<errorI>({
@@ -171,24 +120,18 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
       empty: true
     },
     instructions:
-    stepsStateLS !== null ?
-    Array.from({length: JSON.parse(stepsStateLS).length}, (e,i) => ({character: false, badWord: false, empty: true})) :
-    isEditing ?
-    Array.from({length: location.state.analyzedInstructions.length}, (e,i) => ({character: false, badWord: false, empty: true})) :
-    [
-      {
-        character: false,
-        badWord: false,
-        empty: true
-      },
-    ]
+      stepsStateLS !== null && !isEditing ?
+      Array.from({length: JSON.parse(stepsStateLS).length}, (e,i) => ({character: false, badWord: false, empty: true})) :
+      isEditing ?
+      Array.from({length: location.state.analyzedInstructions.length}, (e,i) => ({character: false, badWord: false, empty: true})) :
+      [
+        {
+          character: false,
+          badWord: false,
+          empty: true
+        },
+      ]
   });
-
-  interface highlighterI {
-    value: string,
-    type: any,
-    index?: number
-  }
 
   const highlighter = ({value, type, index}: highlighterI) => {
 
@@ -201,8 +144,6 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
         .replaceAll("ü", "u").replaceAll("Ü", "U")
         .toLowerCase()
     }
-
-    //console.log("QUE VALUE", value)
 
     let badWordsInDicEs = dicEs.map((e, idx) => {
       return (
@@ -225,8 +166,6 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
             `[-,\n;.:¡!¿?'"()\\][ ]` + e + `[-,\n;.:¡!¿?'"()\\][ ]`  //+ `|` + // ALLOWED CHARACTERS AT START & END // TEST
           , "g" )) !== -1) ? { "target": e, "index": idx } : -1
     }).filter(e => e !== -1)
-
-    //console.log("badWordsInDicEs", badWordsInDicEs)
 
     let firstArrayFilter: any = []
 
@@ -267,13 +206,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
       }
        if (idx === secondArrayFilter.length - 1 && el.start > array[array.length-1].end) array.push(el) // for last index
     })
-
-    //let copyObj: any = {...error}
     let copyObj: any = {...error}
-    //console.log("copyObj", copyObj)
-    //console.log("copyObj", copyObj)
-    //console.log("array", array)
-
 
     if (array[0] && type === 'instructions') {
       copyObj.instructions[index!].badWord = true
@@ -295,15 +228,6 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
       setError({ ...copyObj })
     }
 
-    //console.log("value inside", value)
-    //console.log("array inside", array)
-
-    // if ($(`#target${type.slice(0,1).toUpperCase() + type.slice(1) + index}`).length) {
-    //   alert(`Div ${index} exists`);
-    // } else{
-    //   alert(`Div ${index} does not exists`);
-    // }
-
     $(index !== undefined ? `#target${type.slice(0,1).toUpperCase() + type.slice(1) + index}` : `#target${type.slice(0,1).toUpperCase() + type.slice(1)}`)
       .html( function() {
         let parsedToReturn:string[] = []
@@ -319,18 +243,9 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
         })
         parsedToReturn.unshift("<div>")
         parsedToReturn.push("</div>")
-        //console.log("parsedToReturn", parsedToReturn)
-        //console.log("parsedToReturn", parsedToReturn)
 
         return array[0] ? parsedToReturn.join("") : value
       })
-
-  }
-
-  interface validateStringI {
-    type: string,
-    value: string,
-    index?: number,
   }
 
   const validator = async ({ type, value, index }: validateStringI) => {
@@ -352,14 +267,14 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
         if (parseInt(value, 10) > 100 && value.length !== 0) {copyObj.health.max = true; setError({ ...copyObj })}
         else { copyObj.health.max = false; setError({ ...copyObj })}
         setHealthValue(value);
-        localStorage.setItem('healthValue', value)
+        if (!isEditing) localStorage.setItem('healthValue', value)
       break;
       case (`summary`):
         let copyObjSummary = {...error}
         if (/[^A-Za-z0-9-(áÁéÉíÍóÓúÚüÜñÑ),\n;.:¡!¿?'"()[\] ]/g.test(value) && value.length !== 0) { copyObjSummary[type].character = true; setError({ ...copyObjSummary }) }
         else { copyObjSummary[type].character = false; setError({ ...copyObjSummary })}
         setSummaryValue(value);
-        localStorage.setItem('summaryValue', value)
+        if (!isEditing) localStorage.setItem('summaryValue', value)
         highlighter({value, type})
       break;
       case (`instructions`):
@@ -367,15 +282,11 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
           let copyObjInstructions = {...error}
           copyObjInstructions.instructions[index!].character = true
           copyObjInstructions.instructions[index!].empty = value.replaceAll(" ","").replaceAll("\n", "") === "" ? true : false
-          //console.log("copyObjInstructions.instructions 1", copyObjInstructions.instructions)
-          //title.replaceAll(" ","").replaceAll("\n", "") === ""
           setError({ ...copyObjInstructions })
         } else {
-          //let copyObjInstructions = stepsStateLS !== null ? {...error} : {...error}
           let copyObjInstructions = {...error}
           copyObjInstructions.instructions[index!].character = false
           copyObjInstructions.instructions[index!].empty = value.replaceAll(" ","").replaceAll("\n", "") === "" ? true : false
-          //console.log("copyObjInstructions.instructions 2", copyObjInstructions.instructions)
           setError({ ...copyObjInstructions })
         }
         highlighter({value, type, index})
@@ -386,14 +297,13 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
   const handleChangeDishes = (event: SelectChangeEvent<typeof dishesArray>) => {
     const { target: { value } } = event
     setDishesArray( typeof value === 'string' ? value.split(',') : value );
-    localStorage.setItem('dishesArray', JSON.stringify(value))
+    if (!isEditing) localStorage.setItem('dishesArray', JSON.stringify(value))
   };
-
 
   const handleChangeDiets = (event: SelectChangeEvent<typeof dietsArray>) => {
     const { target: { value } } = event
     setDietsArray( typeof value === 'string' ? value.split(',') : value );
-    localStorage.setItem('dietsArray', JSON.stringify(value))
+    if (!isEditing) localStorage.setItem('dietsArray', JSON.stringify(value))
   };
 
   const clearHandler = () => {
@@ -443,25 +353,22 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
   }
 
   const handleCancelEdit = () => {
-
-    
-      Swal.fire({
-        title: 'Do you want to cancel editing and go back ?',
-        text: 'Any changes you have made gonna be lost.',
-        icon: 'info',
-        showDenyButton: true,
-        showCancelButton: false,
-        confirmButtonText: 'CANCEL EDITING',
-        denyButtonText: `CONTINUE EDITING`,
-        confirmButtonColor: '#d14141', // NEW ACTION COLOR
-        denyButtonColor: '#3085d6' // NO ACTION COLOR
-      })
-      .then((result) => {
-        if (result.isConfirmed) {
-          navigate("/")
-        }
-      })
-
+    Swal.fire({
+      title: 'Do you want to cancel editing and go back ?',
+      text: 'Any changes you have made gonna be lost.',
+      icon: 'info',
+      showDenyButton: true,
+      showCancelButton: false,
+      confirmButtonText: 'CANCEL EDITING',
+      denyButtonText: `CONTINUE EDITING`,
+      confirmButtonColor: '#d14141', // NEW ACTION COLOR
+      denyButtonColor: '#3085d6' // NO ACTION COLOR
+    })
+    .then((result) => {
+      if (result.isConfirmed) {
+        navigate("/")
+      }
+    })
   }
 
   $(function(){
@@ -471,7 +378,6 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
   })
 
   const handleSubmit = (e:any) => {
-    
     let emptyInputs = []
 
     if (titleValue.replaceAll(" ","").replaceAll("\n", "") === "") emptyInputs.push("Title")
@@ -489,12 +395,6 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
       )
     }
 
-    //console.log("YYY", emptyInputs.length)
-    //console.log("YYYYY", userData.email === undefined)
-
-    //console.log("emptyInputs.length", emptyInputs.length)
-    //console.log("emptyInputs", emptyInputs)
-
     if (emptyInputs.length > 0) {
       Swal.fire({
         title:
@@ -509,13 +409,11 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
         showCancelButton: false,
         timer: 1000,
       })
-    } // qq.some(e => e.includes('Instructions'))
+    }
 
     else if (emptyInputs.length === 0 && !userData.email) {
-    //if (userData.email === '') {
       Swal.fire({
         title: `You must be logged to do that ! `,
-        //html: `Please, log-in with Google with the right-upper side button.<br><br>Don't have a Google account ?<br>Please, follow this <a target="_blank" rel="noopener noreferrer" href="https://accounts.google.com/SignUp">link</a> and create a new one !`,
         html: `Please, log-in with Google with the right-upper side button.<br><br>Don't have a Google account ?<br>Please, follow this <a style="color:#0000EE"target="_blank" rel="noopener noreferrer" href="https://accounts.google.com/SignUp">link</a> and create a new one !`,
         icon: 'info',
         showConfirmButton: false,
@@ -546,10 +444,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
       })
       .then((res) => res.json())
       .then((res) => {
-        console.log("RES RES", res)
         if (res.status === 200) {
-          //retrieveRecipeCreated({ saveButtonDisabled: true, allDisabled: true })
-          
           Swal.fire({
             title: 'Recipe saved successfully !',
             icon: 'info',
@@ -562,7 +457,6 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
           setAllDisabled(true)
         }
         if (res.status === 400 && res.message === 'Invalid Credentials') {
-          console.log("PASS BY THIS WAY")
           retrieveLogin({ email: '', fd_tkn: '' })
           Swal.fire({
             title: `There was an error when cheking your loggin.. `,
@@ -577,8 +471,6 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
           setAllDisabled(false)
         }
         if (res.status === 400 && res.message !== 'Invalid Credentials') {
-          console.log("PASS BY THIS WAY")
-          //retrieveLogin({ email: '', fd_tkn: '' })
           Swal.fire({
             title: `There was an error when saving your recipe.. `,
             text: `Please try again.`,
@@ -611,7 +503,6 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
     let emptyInputs = []
 
     if (titleValue.replaceAll(" ","").replaceAll("\n", "") === "") emptyInputs.push("Title")
-    //if (healthValue.replaceAll(" ","").replaceAll("\n", "") === "") emptyInputs.push("Health Score")
     if (summaryValue.replaceAll(" ","").replaceAll("\n", "") === "") emptyInputs.push("Summary")
     if (dishesArray.length === 0) emptyInputs.push("Dishes")
     if (dietsArray.length === 0) emptyInputs.push("Diets")
@@ -624,9 +515,6 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
         `Step ${indexNumbers[0]} on Instructions`,
       )
     }
-
-    //console.log("emptyInputs.length", emptyInputs.length)
-    //console.log("emptyInputs", emptyInputs)
 
     if (emptyInputs.length > 0) {
       Swal.fire({
@@ -642,14 +530,11 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
         showCancelButton: false,
         timer: 1000,
       })
-    } // qq.some(e => e.includes('Instructions'))
-
+    }
 
     else if (emptyInputs.length === 0 && !userData.email) {
-    //if (userData.email === '') {
       Swal.fire({
         title: `You must be logged to do that ! `,
-        //html: `Please, log-in with Google with the right-upper side button.<br><br>Don't have a Google account ?<br>Please, follow this <a target="_blank" rel="noopener noreferrer" href="https://accounts.google.com/SignUp">link</a> and create a new one !`,
         html: `Please, log-in with Google with the right-upper side button.<br><br>Don't have a Google account ?<br>Please, follow this <a style="color:#0000EE"target="_blank" rel="noopener noreferrer" href="https://accounts.google.com/SignUp">link</a> and create a new one !`,
         icon: 'info',
         showConfirmButton: false,
@@ -681,10 +566,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
       })
       .then((res) => res.json())
       .then((res) => {
-        console.log("RES RES", res)
         if (res.status === 400 && res.message.name === 'SequelizeDatabaseError') {
-          //console.log("PASS BY THIS WAY")
-          //retrieveLogin({ email: '', fd_tkn: '' })
           Swal.fire({
             title: `There was an error when updating your recipe.. `,
             text: `Please, try save again.`,
@@ -709,11 +591,9 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
           })
           setSaveButtonDisabled(true)
           setAllDisabled(true)
-          //retrieveRecipeCreated({ saveButtonDisabled: true, allDisabled: true })
         }
 
         if (res.status === 400 && res.message === 'Invalid Credentials') {
-          console.log("PASS BY THIS WAY")
           retrieveLogin({ email: '', fd_tkn: '' })
           Swal.fire({
             title: `There was an error when cheking your loggin.. `,
@@ -727,22 +607,6 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
           setSaveButtonDisabled(false)
           setAllDisabled(false)
         }
-
-        // if (res.status === 400 && res.message !== 'Invalid Credentials') {
-        //   console.log("PASS BY THIS WAY")
-        //   //retrieveLogin({ email: '', fd_tkn: '' })
-        //   Swal.fire({
-        //     title: `There was an error when saving your recipe.. `,
-        //     text: `Please try again.`,
-        //     icon: 'info',
-        //     showConfirmButton: false,
-        //     showDenyButton: false,
-        //     showCancelButton: false,
-        //     timer: 3000,
-        //   })
-        //   setSaveButtonDisabled(false)
-        //   setAllDisabled(false)
-        // }
       })
       .catch((rej) => {
         console.log("rej", rej)
@@ -759,37 +623,15 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
     }
   }
 
-  //console.log("dishesEntireArray", dishesEntireArray)  
-
-  // useEffect(() => { // RETRIEVES INFO FROM LS
-  //   if (titleValueLS !== null) { setTitleValue(titleValueLS); validator({ type: `title`, value: titleValueLS }) }
-  //   if (imageValueLS !== null) setImageValue(imageValueLS)
-  //   if (healthValueLS !== null) { setHealthValue(healthValueLS); validator({ type: `health`, value: healthValueLS }) }
-  //   if (summaryValueLS !== null) { setSummaryValue(summaryValueLS); validator({ type: `summary`, value: summaryValueLS }) }
-  //   if (dishesArrayLS !== null) setDishesArray(JSON.parse(dishesArrayLS))
-  //   if (dietsArrayLS !== null) setDietsArray(JSON.parse(dietsArrayLS))
-  //   if (stepsStateLS !== null) {
-  //     setStepsState(JSON.parse(stepsStateLS))
-  //     setTimeout(() => {
-  //       stepsStateLS !== null && JSON.parse(stepsStateLS).forEach((el:any, idx:any) => {
-  //         validator({ value: el, type: `instructions`, index: idx })
-  //       })
-  //      }, 0)
-  //   }
-  // },[])
-
   useEffect(() => { // RETRIEVES INFO FROM LS
-    console.log("IS EDITING", isEditing)
-
     if (isEditing) {
-        setTitleValue(location.state.title)//; validator({ type: `title`, value: location.state.title })
-        //setImageValue(location.state.image)
-        setHealthValue(location.state.healthScore)//; validator({ type: `health`, value: location.state.healthScore })
+        setTitleValue(location.state.title) // validator not necessary since no badWords are stored.
+        setHealthValue(location.state.healthScore)
         let dishesParsed = location.state.dishTypes.map((e:any, idx: any) => {
           return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ")
         })
         setDishesArray(dishesParsed)
-        setSummaryValue(location.state.summary)//; validator({ type: `summary`, value: location.state.summary })
+        setSummaryValue(location.state.summary)
         setDietsArray(location.state.diets)
         setStepsState(location.state.analyzedInstructions)
       } else {
@@ -813,53 +655,38 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
   useEffect(() => {
     if (saveButtonDisabled && allDisabled) retrieveRecipeCreatedOrEdited(true)
     else retrieveRecipeCreatedOrEdited(false)
-    
   },[saveButtonDisabled, allDisabled])
 
-  //console.log("StepsState StepsState", stepsState)
-  //console.log("imageLoaded imageLoaded", imageLoaded)
-  //console.log("imageValue imageValue", imageValue)
-  
-  // const ww = () => {
-  //   let copyImageValue = imageValue
-  //  return imageValue + 
-  //    setTimeout(() => {
-  //     setImageValue("")
-  //   }, 100) + 
-  //   setTimeout(() => {
-  //     setImageValue(copyImageValue)
-  //   }, 100)
-  // }
+  console.log("isEditing isEditing", isEditing)
+  console.log("imageLoaded imageLoaded", imageLoaded)
+  console.log("error.instructions error.instructions", error.instructions)
+  console.log("location.state.analyzedInstructions.length", location.state && location.state.analyzedInstructions.length)
+  console.log("hasScroll hasScroll", hasScroll)
 
-  //console.log("titleValue", titleValue)
-  //console.log("healthValue", healthValue)
-  //console.log("summaryValue", summaryValue)
-  //console.log("dishesArray", dishesArray)
-  //console.log("imageValue", imageValue)
 
   return (
     <Box
       component="form"
-      sx={s.form}
+      sx={s.form({ hasScroll, scrollWidth })}
     >
-      <Box // HIDDEN. ONLY FOR IMAGE VERIFICATION PURPOSES.
-        component="img"
-        sx={{ width: '0px', height: '0px' }}
-        src={imageValue}
-        onLoad={() => setImageLoaded(true)}
-        onError={() => setImageLoaded(false)}
-      />
-      <Box>
+        <Box // HIDDEN. ONLY FOR IMAGE VERIFICATION PURPOSES.
+          component="img"
+          sx={{ width: '0px', height: '0px' }}
+          src={imageValue}
+          onLoad={() => setImageLoaded(true)}
+          onError={() => setImageLoaded(false)}
+        />
+        <Box>
         <Box
           component="img"
           sx={s.imageSearcher}
           src={
             isEditing && location.state.image.length === 1 && imageValue.length === 0 ?
-            arrImages[parseInt(location.state.image, 10) - 1] : // DEFAULT IMAGE IS RANDOM
+            arrImages[parseInt(location.state.image, 10) - 1] : // DEFAULT IMAGE IS RANDOM // EDITING MODE
             isEditing && location.state.image.length > 1 && imageValue.length === 0 ?
-            `https://res.cloudinary.com/dtembdocm/image/upload/` + location.state.image : // DEFAULT IMAGE IS UUID
+            `https://res.cloudinary.com/dtembdocm/image/upload/` + location.state.image : // DEFAULT IMAGE IS UUID // EDITING MODE
             imageLoaded ?
-            imageValueDoubleCheck : // IMAGE IT'S NEW URL // DOUBLE CHECK/LOADING FOR EDITED ENCODED URL IMAGE
+            imageValue : // IMAGE IT'S NEW URL // DOUBLE CHECK/LOADING FOR EDITED ENCODED URL IMAGE
             noLoaded // IMAGE NOT FOUND
           }
         />
@@ -872,10 +699,6 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
           `Create your own recipe ! Please fill in all fields:`
         }
       </Typography>
-
-
-
-      {/* <GoogleAuth retrieveLogin={retrieveLogin} userData={userData} /> */}
 
       <Box sx={s.eachRow}>
         <Box sx={s.text}>Title:</Box>
@@ -911,17 +734,13 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
           <Box>
             <InputLabel disabled={allDisabled} id={"targetTitle"} shrink={false} sx={s.inputShownTitle({ disabled: allDisabled})}>{ titleValue }</InputLabel>
             <TextField
-              //autoFocus
               className={`testTitle`}
               disabled={allDisabled}
               id="title"
               autoComplete='off'
               sx={s.inputHiddenTitle({ length:titleValue.length })}
               value={titleValue}
-              //placeholder={titlePlaceholder}
               placeholder={`e.g. Pasta with tomatoes..`}
-              //onFocus={() => setTitlePlaceholder("")}
-              //onBlur={() => setTitlePlaceholder(`e.g. Pasta with tomatoes..`)}
               onChange={(e) => { validator({ value: e.target.value, type: e.target.id }) }}
             />
           </Box>
@@ -937,14 +756,14 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
           enterDelay={500}
           leaveDelay={200}
           enterTouchDelay={0}
-          /* open={error.image.start} */
           placement="bottom"
           title={
             <Box sx={{ display: 'flex', flexDirection: 'column', color: '#25252d', background: '#f5f5f9', fontFamily: 'Roboto'}}>
               <Box sx={{ display: 'flex', flexDirection: 'column', color: '#25252d', fontWeight: '400' }}>
-                <Box>{ isEditing ? `Leave it empty for use the same image !` : `Please, copy and paste your food recipe image url here !` }</Box>
-                <Box>{ isEditing ? `Either if you want to use a new image, please, paste your new food recipe image url here !` : `If it's everything OK, you can preview your image in center upper box` }</Box>
-                <Box>{ isEditing ? `If your link its not valid, a random image gonna be used in your recipe.` : `If you dont give a link, or link its not valid, a random image gonna be used in your recipe.` }</Box>
+                { isEditing ? <Box>Leave it empty for use the same image !</Box> : <Box>Please, copy and paste your food recipe image url here !</Box> }
+                { isEditing ? <Box>Either if you want to use a new image, please, paste your new food recipe image url here !</Box> : <Box>If it's everything OK, you can preview your image in center upper box</Box> }
+                { isEditing ? <Box>If your link its not valid, a random image gonna be used in your recipe.</Box> : <Box>If you dont give a link, or link its not valid, a random image gonna be used in your recipe.</Box> }
+                { <Box><b>Tip: </b>If you can see the image in the upper-top box, the image will be saved safely.</Box> }
               </Box>
             </Box>
           }
@@ -954,21 +773,12 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
             id="image"
             disabled={allDisabled}
             sx={s.input}
-            //value={imageValue}
-            //value={ isEditing && imageValue === location.state.image ? "" : imageValue }
             value={imageValue}
             autoComplete='off'
             placeholder={`e.g. https://commons.wikimedia.org/wiki/File:Elaboraci%C3%B3n_del_tomate_frito_(4).jpg`}
-            //onFocus={() => setHealthScorePlaceholder("")}
-            //onBlur={() => setHealthScorePlaceholder(`e.g. https://commons.wikimedia.org/wiki/File:Elaboraci%C3%B3n_del_tomate_frito_(4).jpg`)}
-            // onChange={(e) => {
-            //   setImageValue(e.target.value.trim())
-            //   localStorage.setItem('imageValue', e.target.value)
-            // }}
-
             onChange={(e) => { // DOUBLE CHECK/LOADING FOR EDITED ENCODED URL IMAGE
               let copyImageValue = e.target.value.trim()
-              localStorage.setItem('imageValue', e.target.value)
+              if (!isEditing) localStorage.setItem('imageValue', e.target.value)
               setImageValue(e.target.value.trim())
               setImageValueDoubleCheck(e.target.value.trim())
               setTimeout(() => {
@@ -978,8 +788,6 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
                 setImageValueDoubleCheck(copyImageValue)
               }, 200)
             }}
-
-
           />
         </Tooltip>
       </Box>
@@ -1004,7 +812,6 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
                 `Allowed numbers are between 0 and 100 !`}
               </Box>
             </Box>
-
           }
         >
           <TextField
@@ -1138,15 +945,15 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
                 enterDelay={500}
                 leaveDelay={200}
                 enterTouchDelay={0}
-                open={error.instructions[index].character || error.instructions[index].badWord}
+                open={(error.instructions[index] && error.instructions[index].character) || (error.instructions[index] && error.instructions[index].badWord)}
                 placement={ index % 2 === 0 ? `bottom-end` : `bottom-start` }
                 title={
                   <Box sx={{ display: 'flex', flexDirection: 'column', color: '#25252d', background: '#f5f5f9', fontFamily: 'Roboto'}}>
-                    { error.instructions[index].character ? <Box sx={{ fontWeight: '400', fontSize: '17px' }}>Special characters not allowed in "Instructions" !</Box> : null }
-                    { error.instructions[index].character ? <Box sx={{ color: '#42424f' }}>Allowed characters:</Box> : null }
-                    { error.instructions[index].character ? <Box sx={{ color: '#42424f', textAlign: 'center' }}><b>, ; . : - ! ¡ ¿ ? ' " ( ) [ ] á Á é É í Í ó Ó ú Ú ü Ü ñ Ñ</b></Box> : null }
-                    { error.instructions[index].badWord ? <Box sx={{ fontWeight: '400' }}><em>Please, remove </em><mark>highlighted</mark> <em>bad words on step {index + 1}.</em></Box> : null }
-                    { error.instructions[index].character ?
+                    { error.instructions[index] && error.instructions[index].character ? <Box sx={{ fontWeight: '400', fontSize: '17px' }}>Special characters not allowed in "Instructions" !</Box> : null }
+                    { error.instructions[index] && error.instructions[index].character ? <Box sx={{ color: '#42424f' }}>Allowed characters:</Box> : null }
+                    { error.instructions[index] && error.instructions[index].character ? <Box sx={{ color: '#42424f', textAlign: 'center' }}><b>, ; . : - ! ¡ ¿ ? ' " ( ) [ ] á Á é É í Í ó Ó ú Ú ü Ü ñ Ñ</b></Box> : null }
+                    { error.instructions[index] && error.instructions[index].badWord ? <Box sx={{ fontWeight: '400' }}><em>Please, remove </em><mark>highlighted</mark> <em>bad words on step {index + 1}.</em></Box> : null }
+                    { error.instructions[index] && error.instructions[index].character ?
                       <Box sx={{ display: 'flex', flexDirection: 'row', fontWeight: '400' }}><em>Please, 
                         <Tooltip
                           title={`Ä ä % { } @ / \\ # À à ° ¬ $ & = * etc..`}
@@ -1158,10 +965,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
                   </Box>
                 }
               >
-                
                 <Box id={`testtest${index}`}>
-                  {/* {console.log("a ver esto", index)} */}
-                  {/* <InputLabel disabled={allDisabled} id={`targetInstructions${index}`} shrink={false} sx={s.inputShownInstructions}>{ stepsState[index] }</InputLabel> */}
                   <InputLabel disabled={allDisabled} id={`targetInstructions${index}`} shrink={false} sx={s.inputShownInstructions}>{ stepsState[index] }</InputLabel>
                   <TextField
                     id={`${index}instructions`}
@@ -1195,16 +999,16 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
                   </Box>
                 }
               >
-                <Box sx={s.buttonNewHelper}>
+                {/* <Box sx={s.buttonNewHelper}> */}
                   <Button
                     variant="contained"
                     disabled={allDisabled ? true : stepsState.length >= 10 ? true : false}
                     id={`${index}`}
                     sx={s.buttonNew}
                     onClick={(e) => { handlerAddInstructions({ index: parseInt((e.target as HTMLInputElement).id, 10 )}) }}
-                  >New Step
+                  >NEW STEP
                   </Button>
-                </Box>
+                {/* </Box> */}
               </Tooltip>
 
               <Tooltip
@@ -1218,7 +1022,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
                 placement="bottom-end"
                 title={"You can't delete first step !"}
               >
-                <Box sx={s.buttonDeleteHelper}>
+                {/* <Box sx={s.buttonDeleteHelper}> */}
                   <Button
                     className={`buttonDeleteStep`}
                     variant="contained"
@@ -1226,9 +1030,9 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
                     id={`${index}`}
                     sx={s.buttonDelete}
                     onClick={(e) => { handlerDeleteInstructions({ index: parseInt((e.target as HTMLInputElement).id, 10) }) }}
-                  >Detele Step
+                  >DELETE STEP
                   </Button>
-                </Box>
+                {/* </Box> */}
               </Tooltip>
             </Box>
           ))}
@@ -1258,7 +1062,6 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
         <Button
           sx={s.buttonClearSave}
           variant="contained"
-          //onClick={(e) => handleSubmit(e)}
           onClick={(e) => isEditing ? handleSaveEdit(e) : handleSubmit(e) }
           disabled={
             saveButtonDisabled ||
