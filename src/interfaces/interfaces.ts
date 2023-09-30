@@ -25,7 +25,7 @@ export interface serverStatusI {
   try: number,
 }
 
-interface userDataObjI {
+export interface userDataObjI {
   email: string,
   fd_tkn: string
 }
