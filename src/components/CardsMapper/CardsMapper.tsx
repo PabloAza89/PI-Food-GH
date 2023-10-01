@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import './CardsMapperCSS.css';
-import * as s from  './CardsMapperSX';
+import css from './CardsMapperCSS.module.css';
+import * as sx from  './CardsMapperSX';
 import Card from '../Card/Card';
 import { useSelector , useDispatch } from 'react-redux';
 import { Box } from '@mui/material';
@@ -33,15 +33,10 @@ const CardsMapper = ({ retrieveLogin, userData }: CardsMapperI)  => {
     },[])
   }
 
-  FirstFunc().then(() => {
-    dispatch(allRecipesLoaded(true))
-    //dispatch(setHasScroll(window.innerWidth !== $('body').width() ? true : false))
-    //dispatch(setHasScroll(window.innerWidth !== $('body').width() ? true : false))
-  })
+  FirstFunc().then(() => dispatch(allRecipesLoaded(true)))
 
   return toShow[0] !== undefined ?
-  (
-    <Box sx={s.backgroundSX({ scrollWidth, scrollPosition, menuShown })} className={`backgroundCSS`} >
+    (<Box className={css.background} sx={sx.backgroundSX({ scrollWidth, scrollPosition, menuShown })} >
       {arraySplitedBy9.map((e:any) =>
         <Card
           key={e.id}
@@ -59,13 +54,10 @@ const CardsMapper = ({ retrieveLogin, userData }: CardsMapperI)  => {
           analyzedInstructions={e.analyzedInstructions}
         />
       )}
-    </Box>
-  )
-  :
-  (<Box>
-    <Box className={`notFoundCSS`} >No recipe was found !</Box>
-  </Box>)
-
+    </Box>) :
+    (<div>
+      <div className={css.notFound} >No recipe was found !</div>
+    </div>)
 }
 
 export default CardsMapper;

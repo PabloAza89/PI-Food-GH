@@ -1,5 +1,5 @@
-.backgroundCSS {
-  z-index: -1;
+.background {
+  z-index: 0;
   display: flex;
   position: relative;
   justify-content: center;
@@ -7,7 +7,7 @@
   align-self: center;
 }
 
-.notFoundCSS {
+.notFound {
   background: rgba(138, 179, 179, 0.171);
   position: absolute;
   display: flex;
@@ -19,6 +19,6 @@
   justify-content: center;
   color: rgba(240, 248, 255, 0.726);
   font-size: 87px;
-  text-wrap: nowrap;
+  white-space:nowrap;
   margin-top: 7px;
 }

@@ -1,8 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useSelector } from 'react-redux';
 import { Route, Routes } from "react-router-dom";
-import * as s from './styles/AppSX';
-import './App.css';
+import css from './App.module.css';
 import { Box } from '@mui/material';
 import CardsMapper from "./components/CardsMapper/CardsMapper";
 import GoogleAuth from './components/GoogleAuth/GoogleAuth';
@@ -157,8 +156,8 @@ function App() {
   // console.log("BBB", color);
 
   return (
-    <div id={`background`}>
-      <div className={`wallpaperBody`} />
+    <div className={css.background}>
+      <div className={css.wallpaperBody} />
       <Routes>
         <Route path="/" element={<>
           <GoogleAuth retrieveLogin={retrieveLogin} userData={userData} />
