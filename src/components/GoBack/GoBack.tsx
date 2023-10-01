@@ -1,5 +1,4 @@
 import { useState } from "react";
-import '../../styles/Nav.css';
 import { useLocation, useNavigate } from "react-router-dom";
 import logo from "../../images/logo.png";
 import * as s from '../../styles/GoBackSX';

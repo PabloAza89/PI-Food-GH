@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import css from "./CardCSS.module.css";
+import * as sx from "./CardSX";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector , useDispatch } from 'react-redux';
 import '../../styles/DisableAutoFocusSweetAlert2.css';
@@ -10,7 +12,7 @@ import Swal from 'sweetalert2';
 import { Box, Typography, Button, Divider } from '@mui/material';
 import Tooltip from '@mui/joy/Tooltip';
 import { handleDelete, handleEdit } from '../CommonsFunc/CommonsFunc';
-import * as s from "../../styles/CardSX";
+
 import $ from 'jquery';
 import EditIcon from '@mui/icons-material/Edit';
 import ClearIcon from '@mui/icons-material/Clear';
@@ -67,35 +69,33 @@ const Card = ({
   }
 
   return (
-    <Box sx={s.background}>
+    <div className={css.background}>
       <Box
-        sx={s.editDeleteContainer({ show: userRecipe && userData.email === email ? true : false })}
+        id={css.editDeleteContainer}
+        sx={sx.editDeleteContainer({ show: userRecipe && userData.email === email ? true : false })}
       >
         <Button
-          className={`linkButton`}
           variant="contained"
-          sx={s.buttonEditDelete}
+          id={css.buttonEditDelete}
           onClick={() => handleEdit({
             navigate, id, title, image, healthScore,
             diets, email, dishTypes, userRecipe,
             summary, analyzedInstructions
           })}
         >
-          <EditIcon sx={s.iconEdit} />
+          <EditIcon className={css.iconEdit} />
         </Button>
         <Button
-          className={`linkButton`}
           variant="contained"
-          sx={s.buttonEditDelete}
+          id={css.buttonEditDelete}
           onClick={() => handleDelete({ id: id, fd_tkn: userData.fd_tkn, retrieveLogin, handleReload })}
         >
-          <ClearIcon sx={s.iconDelete} />
+          <ClearIcon className={css.iconDelete} />
         </Button>
       </Box>
       <Link to={`/${id}`}>
-        <Box
-          component="img"
-          sx={s.image}
+        <img
+          className={css.image}
           src={
             brokenImage ?
             notAvailable :
@@ -120,7 +120,12 @@ const Card = ({
           placement="bottom"
           title={title}
         >
-          <Typography className={`titleCard${id}`} sx={s.title}>{title}</Typography>
+          <div
+            className={`titleCard${id}`}
+            id={css.title}
+          >
+            {title}
+          </div>
         </Tooltip>
       </Link>
       <Tooltip
@@ -133,18 +138,18 @@ const Card = ({
         disableHoverListener={fitDiet}
         placement="bottom"
         title={
-          <Box>
+          <div>
             <b>Diets: </b>
             {diets[0] && diets.map((e:any) => {
               if ((diets.indexOf(e) !== diets.length - 1)) return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ") + " + "
               else return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ")
             })}
-          </Box>
+          </div>
         }
       >
-        <Typography
+        <div
           className={`dietCard${id}`}
-          sx={s.text}
+          id={css.text}
         >
           <b>Diets: </b>
           {
@@ -155,33 +160,33 @@ const Card = ({
             }) :
             `Not specified`
           }
-        </Typography>
+        </div>
       </Tooltip>
-      <Typography sx={s.text}>
+      <div id={css.text}>
         <b>Healt Score: </b>{healthScore}
-      </Typography>
+      </div>
       <Tooltip
-          arrow
-          enterDelay={700}
-          enterNextDelay={700}
-          leaveDelay={200}
-          enterTouchDelay={0}
-          disableFocusListener={fitDish}
-          disableHoverListener={fitDish}
-          placement="bottom"
-          title={
-            <Box>
-              <b>Dish Types: </b>
-              {dishTypes && dishTypes.map((e:any) => {
-                if ((dishTypes.indexOf(e) !== dishTypes.length - 1)) return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join("  ") + " + "
-                else return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ")
-              })}
-            </Box>
-          }
+        arrow
+        enterDelay={700}
+        enterNextDelay={700}
+        leaveDelay={200}
+        enterTouchDelay={0}
+        disableFocusListener={fitDish}
+        disableHoverListener={fitDish}
+        placement="bottom"
+        title={
+          <div>
+            <b>Dish Types: </b>
+            {dishTypes && dishTypes.map((e:any) => {
+              if ((dishTypes.indexOf(e) !== dishTypes.length - 1)) return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join("  ") + " + "
+              else return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ")
+            })}
+          </div>
+        }
       >
-        <Typography
+        <div
           className={`dishCard${id}`}
-          sx={s.text}
+          id={css.text}
         >
           <b>Dish Types: </b>
           {
@@ -192,9 +197,9 @@ const Card = ({
             }) :
             `Not specified`
           }
-        </Typography>
+        </div>
       </Tooltip>
-    </Box>
+    </div>
   );
 }
 

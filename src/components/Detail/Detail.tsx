@@ -1,15 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector , useDispatch } from 'react-redux';
-import "../../styles/Detail.css";
-import * as s from "../../styles/DetailSX";
+import css from "./DetailCSS.module.css";
 import noImage1 from "../../images/noImage1.jpg";
 import noImage2 from "../../images/noImage2.jpg";
 import noImage3 from "../../images/noImage3.jpg";
 import notAvailable from "../../images/notAvailable.jpg";
 import { handleDelete, handleEdit } from '../CommonsFunc/CommonsFunc';
 import { Link } from "react-router-dom";
-import { Box, Button, Divider, Typography } from '@mui/material/';
+import { Button } from '@mui/material/';
 import { recipesI } from '../../interfaces/interfaces';
 import EditIcon from '@mui/icons-material/Edit';
 import ClearIcon from '@mui/icons-material/Clear';
@@ -61,23 +60,22 @@ export default function Detail({ userData, retrieveLogin, retrieveRecipeNotFound
 
   if (recipe !== undefined) {
     return (
-      <Box sx={s.background}>
-        <Box sx={s.card}>
-          <Box
-            sx={s.editDeleteContainer({ show: recipe.userRecipe && userData.email === recipe.email ? true : false })}
+      <div className={css.background}>
+        <div className={css.card}>
+          <div
+            id={css.editDeleteContainer}
+            style={{ display: recipe.userRecipe && userData.email === recipe.email ? `flex` : `none` }}
           >
             <Button
-              className={`linkButton`}
               variant="contained"
-              sx={s.buttonEditDelete}
+              id={css.buttonEditDelete}
               onClick={() => handleDelete({ id: recipe.id, fd_tkn: userData.fd_tkn, retrieveLogin, handleReload })}
             >
-              <ClearIcon sx={s.iconDelete} />
+              <ClearIcon className={css.iconDelete} />
             </Button>
             <Button
-              className={`linkButton`}
               variant="contained"
-              sx={s.buttonEditDelete}
+              id={css.buttonEditDelete}
               onClick={() => handleEdit({
                 navigate, id: recipe.id, title: recipe.title, image: recipe.image,
                 healthScore: recipe.healthScore, diets: recipe.diets, email: recipe.email,
@@ -85,12 +83,11 @@ export default function Detail({ userData, retrieveLogin, retrieveRecipeNotFound
                 summary: recipe.summary, analyzedInstructions: recipe.analyzedInstructions
               })}
             >
-              <EditIcon sx={s.iconEdit} />
+              <EditIcon className={css.iconEdit} />
             </Button>
-          </Box>
-          <Box
-            component="img"
-            sx={s.image}
+          </div>
+          <img
+            className={css.image}
             src={
               brokenImage ?
               notAvailable :
@@ -102,8 +99,8 @@ export default function Detail({ userData, retrieveLogin, retrieveRecipeNotFound
             }
             alt=""
           />
-          <Typography sx={s.text}><b>Title: </b>{recipe.title}</Typography>
-          <Typography sx={s.text}>
+          <div className={css.text}><b>Title: </b>{recipe.title}</div>
+          <div className={css.text}>
             <b>Diets: </b>
             {
               recipe.diets[0] !== undefined ?
@@ -113,11 +110,11 @@ export default function Detail({ userData, retrieveLogin, retrieveRecipeNotFound
               }) :
               `Not specified`
             }
-          </Typography>
-          <Typography sx={s.text}>
+          </div>
+          <div className={css.text}>
             <b>Healt Score: </b>{recipe.healthScore}
-          </Typography>
-          <Typography sx={s.text}>
+          </div>
+          <div className={css.text}>
             <b>Dish Types: </b>
             {
               recipe.dishTypes[0] !== undefined ?
@@ -127,67 +124,67 @@ export default function Detail({ userData, retrieveLogin, retrieveRecipeNotFound
               }) :
               `Not specified`
             }
-          </Typography>
-          <Divider sx={s.dividerTop}/>
-          <Typography sx={s.text}>
+          </div>
+          <hr className={css.divider}/>
+          <div className={css.text}>
             <b>Summary: </b>
             {regexInSummary(recipe.summary)}
-          </Typography>
-          <Divider sx={s.dividerBottom({ show: recipe.analyzedInstructions[0] !== undefined ? true : false })}/>
-          <Box sx={s.instructions}>
-            <Typography sx={s.text}>
+          </div>
+          <hr className={css.divider} style={{ display: recipe.analyzedInstructions[0] !== undefined ? `flex` : `none` }}/>
+          <div className={css.instructions}>
+            <div className={css.text}>
               {
                 recipe.analyzedInstructions[0] !== undefined ?
                 <b>Instructions: </b> :
                  null
               }
-            </Typography>
+            </div>
               {
                 recipe.analyzedInstructions[0] !== undefined && Object.prototype.toString.call( recipe.analyzedInstructions[0] ) === '[object Object]' ?
                 recipe.analyzedInstructions[0].steps!.map((e: any, index: any) => {
                   return (
-                    <Box key={index} sx={s.eachStep}>
-                      <Typography sx={s.eachStepTitle}>
+                    <div key={index} className={css.eachStep}>
+                      <div className={css.eachStepTitle}>
                         <b>Step {++index}: </b>
-                      </Typography>
-                      <Typography sx={s.eachStepContent}>
+                      </div>
+                      <div className={css.eachStepContent}>
                         {e.step}
-                      </Typography>
-                    </Box>
+                      </div>
+                    </div>
                   )
                 }) :
                 recipe.analyzedInstructions[0] !== undefined && Object.prototype.toString.call( recipe.analyzedInstructions[0] ) !== '[object Object]' ?
                 recipe.analyzedInstructions.map((e: any, index: any) => {
                   return (
-                    <Box key={index} sx={s.eachStep}>
-                      <Typography sx={s.eachStepTitle}>
+                    <div key={index} className={css.eachStep}>
+                      <div className={css.eachStepTitle}>
                         <b>Step {++index}: </b>
-                      </Typography>
-                      <Typography sx={s.eachStepContent}>
+                      </div>
+                      <div className={css.eachStepContent}>
                         {e}
-                      </Typography>
-                    </Box>
+                      </div>
+                    </div>
                   )
                 }) :
                 null
               }
-          </Box>
-        </Box>
-        <Box sx={s.helperBottom}></Box>
-      </Box>
+          </div>
+        </div>
+        <div className={css.helperBottom}></div>
+      </div>
     )
   } else return (
-    <Box sx={s.backgroundError}>
-      <Box sx={s.errorCard}>
+    <div className={css.backgroundError}>
+      <div className={css.errorCard}>
         <b>THERE ARE NO MATCHING RECIPES WITH THAT ID !</b>
         <Link to="/" style={{ textDecoration: 'none' }}>
           <Button
             variant="contained"
-            sx={s.button}
+            className={css.button}
           >GO BACK !
           </Button>
         </Link>
-      </Box>
-    </Box>
+      </div>
+    </div>
   )
 }

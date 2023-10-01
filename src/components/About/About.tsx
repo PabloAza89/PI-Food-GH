@@ -21,7 +21,7 @@ function About() {
         <Link to="/" style={{ textDecoration: 'none' }}>
           <Button
             variant="contained"
-            className={css.button}
+            id={css.button}
             sx={sx.button}
           >GO BACK !
           </Button>

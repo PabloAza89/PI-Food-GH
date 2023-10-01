@@ -1,12 +1,11 @@
 import { useState, useEffect } from "react";
-import '../../styles/Nav.css';
 import { Link } from "react-router-dom";
 import logo from "../../images/logo.png";
-import * as s from '../../styles/NavBarSX';
+import css from './NavBarCSS.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import MenuIcon from '@mui/icons-material/Menu';
 import {
-  Box, Button, TextField, Typography, FormControl,
+  Button, TextField, FormControl,
   InputLabel, MenuItem, Select, SelectChangeEvent
 } from '@mui/material/';
 import {
@@ -15,7 +14,6 @@ import {
 import Tooltip from '@mui/joy/Tooltip';
 import serverSDDietsArray from '../../db/diets.json'; // SD = Shut Down
 import serverSDDishesArray from '../../db/dishes.json'; // SD = Shut Down
-import $ from 'jquery';
 
 const NavBar = () =>  {
 
@@ -84,16 +82,26 @@ const NavBar = () =>  {
   },[ dispatch, entireFilter, currentWidth ])
 
   return (
-    <Box sx={s.background({ menuShown })}>
-      <Box sx={s.logoAndMenuContainer({ currentWidth, scrollWidth })}>
-        <Box sx={s.logoTextContainer}>
+    <div
+      className={css.background}
+      style={{
+        flexDirection: menuShown ? 'column' : 'row',
+        minHeight: menuShown ? '200px' : '100px',
+        height: menuShown ? '200px' : '100px',
+      }}
+    >
+      <div
+        className={css.logoAndMenuContainer}
+        style={{ width: currentWidth <= 800 ? `calc(100vw - ${scrollWidth}px)` : '200px' }}
+      >
+        <div className={css.logoTextContainer}>
           <Link to="/">
-            <Box component="img" sx={s.logo} src={logo} alt=""></Box>
+            <img className={css.logo} src={logo} alt=""></img>
           </Link>
-          <Link style={s.linkLink()} to="/">
-            <Typography sx={s.linkText}>Foodify !</Typography>
+          <Link className={css.noDeco} to="/">
+            <div className={css.linkText}>Foodify !</div>
           </Link>
-        </Box>
+        </div>
         <Tooltip
           arrow
           enterDelay={500}
@@ -105,104 +113,117 @@ const NavBar = () =>  {
           <Button
             variant="contained"
             onClick={() => dispatch(setMenuShown(!menuShown))}
-            sx={s.menuButton({ currentWidth })}
+            className={css.menuButton}
+            sx={{
+              display: currentWidth <= 800 ? 'flex' : 'none',
+              background: '#F0F0F0',
+              ':hover': { background: '#e8e8e8' },
+            }}
           >
-            <MenuIcon sx={{ fontSize: 40 }} />
+            <MenuIcon style={{ fontSize: 40 }} />
           </Button>
         </Tooltip>
-      </Box>
-      <Box sx={s.selectsAndButtons({ menuShown, currentWidth, scrollWidth })}>
-        <Box sx={s.upper({ currentWidth, scrollWidth })}>
-          <Box
-            component="form"
-            onSubmit={(e: any) => { e.preventDefault(); dispatch(filter(entireFilter)) }}
-          >
+      </div>
+      <div
+        style={{ display: currentWidth <= 800 && !menuShown ? 'none' : 'flex' }}
+        className={css.selectsAndButtons}
+      >
+        <div
+          style={{
+            width: currentWidth <= 800 ? `95vw` : '50vw',
+            minWidth: currentWidth <= 800 ? 'unset' : '570px',
+          }}
+          className={css.upper}
+        >
 
-            <TextField
-              className={`inputPos`}
-              type="text"
-              autoComplete='off'
-              placeholder={placeholder}
-              onFocus={() => setPlaceholder("")}
-              onBlur={() => setPlaceholder(`Find recipe..`)}
-              InputProps={{ style: s.inputProps() }}
-              sx={s.input()}
-              onChange={(e) => {setEntireFilter({...entireFilter, text: e.target.value}); dispatch(setIndexChoosen(0))}}
-            />
+          <TextField
+            type="text"
+            autoComplete='off'
+            placeholder={placeholder}
+            onFocus={() => setPlaceholder("")}
+            onBlur={() => setPlaceholder(`Find recipe..`)}
+            InputProps={{ className: css.inputProps }}
+            className={css.input}
+            onChange={(e) => {setEntireFilter({...entireFilter, text: e.target.value}); dispatch(setIndexChoosen(0))}}
+          />
 
-          </Box>
+          
           <Link to="/MyRecipe">
             <Button
               variant="contained"
               disableElevation
-              sx={s.button}
-              className="button"
+              className={css.button}
             >CREATE RECIPE !</Button>
           </Link>
           <Link to="/About">
             <Button
               variant="contained"
               disableElevation
-              sx={s.button}
-              className="button"
+              className={css.button}
             >ABOUT !</Button>
           </Link>
-        </Box>
-        <Box sx={s.lower({ currentWidth, scrollWidth })}>
-          <FormControl>
-            <Select
-              sx={s.selectDietsHealthAlpha}
-              value={entireFilter.diet}
-              onChange={(e) => { setEntireFilter({...entireFilter, diet:e.target.value}); dispatch(setIndexChoosen(0)) }}
-            >
-              { allDietsOnline ?
-                allDietsArray.map(e => {
+        </div>
+        <div
+          style={{
+            width: currentWidth <= 800 ? `95vw` : '50vw',
+            minWidth: currentWidth <= 800 ? 'unset' : '570px',
+          }}
+          className={css.lower}
+        >
+          
+          <Select
+            className={css.selectDietsHealthAlpha}
+            value={entireFilter.diet}
+            onChange={(e) => { setEntireFilter({...entireFilter, diet:e.target.value}); dispatch(setIndexChoosen(0)) }}
+          >
+            { allDietsOnline ?
+              allDietsArray.map(e => {
+              return (
+                <MenuItem
+                  key={e.title}
+                  value={`${e.title}`}
+                >{e.title}</MenuItem>
+              )}) :
+              serverSDDietsArray.map(e => {
                 return (
                   <MenuItem
                     key={e.title}
                     value={`${e.title}`}
                   >{e.title}</MenuItem>
-                )}) :
-                serverSDDietsArray.map(e => {
-                  return (
-                    <MenuItem
-                      key={e.title}
-                      value={`${e.title}`}
-                    >{e.title}</MenuItem>
-                  )})
-              }
-            </Select>
-          </FormControl>
-          <FormControl>
-            <Select
-              sx={s.selectDietsHealthAlpha}
-              value={entireFilter.dish}
-              onChange={(e) => { setEntireFilter({...entireFilter, dish:e.target.value}); dispatch(setIndexChoosen(0)) }}
-            >
-              { allDishesOnline ?
-                allDishesArray.map(e => {
+                )})
+            }
+          </Select>
+          
+          
+          <Select
+            className={css.selectDietsHealthAlpha}
+            value={entireFilter.dish}
+            onChange={(e) => { setEntireFilter({...entireFilter, dish:e.target.value}); dispatch(setIndexChoosen(0)) }}
+          >
+            { allDishesOnline ?
+              allDishesArray.map(e => {
+              return (
+                <MenuItem
+                  key={e.title}
+                  value={`${e.title}`}
+                >{e.title}</MenuItem>
+              )}) :
+              serverSDDishesArray.map(e => {
                 return (
                   <MenuItem
                     key={e.title}
                     value={`${e.title}`}
                   >{e.title}</MenuItem>
-                )}) :
-                serverSDDishesArray.map(e => {
-                  return (
-                    <MenuItem
-                      key={e.title}
-                      value={`${e.title}`}
-                    >{e.title}</MenuItem>
-                  )})
-              }
-            </Select>
-          </FormControl>
+                )
+              })
+            }
+          </Select>
+          
           <FormControl>
-            <InputLabel size="small" sx={s.labelHealth({ healthLabelShown })}>  Sort by Healthy  </InputLabel>
+            <InputLabel size="small" className={css.labelHealth} style={{ width: healthLabelShown ? '130px' : '80%' }}>  Sort by Healthy  </InputLabel>
             <Select
-              sx={s.selectDietsHealthAlpha}
+              className={css.selectDietsHealthAlpha}
               onFocus={() => setHealthLabelShown(true)}
-              inputProps={{ style: { background: 'red' }}}
               value={healthLevel}
               onChange={(e) => {setEntireFilter({...entireFilter, alphaOrHealthy: e.target.value}); healthLevelHandler(e)}}
             >
@@ -211,12 +232,10 @@ const NavBar = () =>  {
             </Select>
           </FormControl>
           <FormControl>
-            <InputLabel size="small" sx={s.labelAlpha({ alphaLabelShown })}>  Sort alphabetically  </InputLabel>
+            <InputLabel size="small" className={css.labelAlpha} style={{ width: alphaLabelShown ? '155px' : '80%' }} >  Sort alphabetically  </InputLabel>
             <Select
-
               onFocus={() => setAlphaLabelShown(true)}
-
-              sx={s.selectDietsHealthAlpha}
+              className={css.selectDietsHealthAlpha}
               label="Sort alphabetically"
               value={sortAlpha}
               onChange={(e) => {setEntireFilter({...entireFilter, alphaOrHealthy: e.target.value}); sortAlphaHandler(e)}}
@@ -225,9 +244,9 @@ const NavBar = () =>  {
               <MenuItem value={"Z-A"}>Z-A</MenuItem>
             </Select>
           </FormControl>
-        </Box>
-      </Box>
-    </Box>
+        </div>
+      </div>
+    </div>
   );
 }
 
