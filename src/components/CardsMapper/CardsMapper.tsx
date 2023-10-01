@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import * as s from  '../../styles/CardsMapperSX';
+import './CardsMapperCSS.css';
+import * as s from  './CardsMapperSX';
 import Card from '../Card/Card';
 import { useSelector , useDispatch } from 'react-redux';
 import { Box } from '@mui/material';
@@ -40,7 +41,7 @@ const CardsMapper = ({ retrieveLogin, userData }: CardsMapperI)  => {
 
   return toShow[0] !== undefined ?
   (
-    <Box sx={s.background({ scrollWidth, scrollPosition, menuShown })}>
+    <Box sx={s.backgroundSX({ scrollWidth, scrollPosition, menuShown })} className={`backgroundCSS`} >
       {arraySplitedBy9.map((e:any) =>
         <Card
           key={e.id}
@@ -62,7 +63,7 @@ const CardsMapper = ({ retrieveLogin, userData }: CardsMapperI)  => {
   )
   :
   (<Box>
-    <Box sx={s.notFound} >No recipe was found !</Box>
+    <Box className={`notFoundCSS`} >No recipe was found !</Box>
   </Box>)
 
 }

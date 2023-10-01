@@ -99,45 +99,10 @@ export function setHeight(setHeight:number) {
   }
 };
 
-export function setSmaPort(setSmaPort:boolean) {
+export function viewPort( viewPort: string ) {
   return {
-    type: 'MIN_PORT',
-    payload: setSmaPort
-  }
-};
-
-export function setSmaLand(setSmaLand:boolean) {
-  return {
-    type: 'MIN_LAND',
-    payload: setSmaLand
-  }
-};
-
-export function setMedPort(setMedPort:boolean) {
-  return {
-    type: 'MED_PORT',
-    payload: setMedPort
-  }
-};
-
-export function setMedLand(setMedLand:boolean) {
-  return {
-    type: 'MED_LAND',
-    payload: setMedLand
-  }
-};
-
-export function setLarPort(setLarPort:boolean) {
-  return {
-    type: 'LAR_PORT',
-    payload: setLarPort
-  }
-};
-
-export function setLarLand(setLarLand:boolean) {
-  return {
-    type: 'LAR_LAND',
-    payload: setLarLand
+    type: 'VIEW_PORT',
+    payload: viewPort
   }
 };
 

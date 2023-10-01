@@ -1,0 +1,24 @@
+.backgroundCSS {
+  z-index: -1;
+  display: flex;
+  position: relative;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-self: center;
+}
+
+.notFoundCSS {
+  background: rgba(138, 179, 179, 0.171);
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  min-width: 925px;
+  width: 100vw;
+  height: 260px;
+  align-items: center;
+  justify-content: center;
+  color: rgba(240, 248, 255, 0.726);
+  font-size: 87px;
+  text-wrap: nowrap;
+  margin-top: 7px;
+}

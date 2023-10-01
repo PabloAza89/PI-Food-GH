@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useSelector } from 'react-redux';
 import { Route, Routes } from "react-router-dom";
 import * as s from './styles/AppSX';
-import './App.css';
+import './styles/App.css';
 import { Box } from '@mui/material';
 import CardsMapper from "./components/CardsMapper/CardsMapper";
 import GoogleAuth from './components/GoogleAuth/GoogleAuth';
@@ -100,8 +100,6 @@ function App() {
     .catch(rej => console.log(rej))
   },[])
 
-  
-
   useEffect(() => {
     function handleResize() {
       let windowScreenWidth = window.screen.width
@@ -131,34 +129,9 @@ function App() {
     }
   },[dispatch]);
 
-  //let ww = useRef(document.getElementsByClassName(`wallpaperBodyAAA`)[0])
-
-  //console.log(document.getElementsByClassName(`wallpaperBodyAAA`)[0])
-  //let qq = document.getElementsByClassName(`.wallpaperBodyAAA`)[0]
-  //let qq = document.getElementsByClassName(`wallpaperBodyAAA`)
-
-  //qq.style.setproperty(--color, blue);
-
-  //getComputedStyle(qq).getPropertyValue("--color");
-  //console.log("AA", getComputedStyle(qq).getPropertyValue("--color"))
-  //console.log("AA", window.getComputedStyle(qq).getPropertyValue("--color"))
-  //console.log("AA", window.getComputedStyle(ww).getPropertyValue("--color"))
-  
-  //element.style.setproperty("--my-var", jsVar + 4);
-  //console.log("document.documentElement", document.getElementById(`backgroundAAA`))
-  //let root = document.getElementById(`backgroundAAA`)
-  //root && root.style.setProperty('--color', 'blue')
-
-  //console.log("GG", window.getComputedStyle(document.getElementById("backgroundAAA")as Element ))
-
-  
-
-  // const color = getComputedStyle(qq).getPropertyValue('--color');
-  // console.log("BBB", color);
-
   return (
-    <div id={`background`}>
-      <div className={`wallpaperBody`} />
+    <Box sx={s.background}>
+      <Box sx={s.wallpaperBody} />
       <Routes>
         <Route path="/" element={<>
           <GoogleAuth retrieveLogin={retrieveLogin} userData={userData} />
@@ -196,7 +169,7 @@ function App() {
           <Error />
         </>}/>
       </Routes>
-    </div>
+    </Box>
   )
 }
 

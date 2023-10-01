@@ -16,12 +16,7 @@ interface initialStateI {
   addNew: recipesI[],
   width: number,
   height: number,
-  smaPort: boolean,
-  smaLand: boolean,
-  medPort: boolean,
-  medLand: boolean,
-  larPort: boolean,
-  larLand: boolean,
+  viewPort: string,
   currentWidth: number,
   percentageResizedHeight: number,
   scrollWidth: number,
@@ -45,12 +40,7 @@ const initialState: initialStateI = {
   addNew: [],
   width: window.screen.width,
   height: window.screen.height,
-  smaPort: window.screen.width < 425 && window.matchMedia("(orientation: portrait)").matches ? true : false,
-  smaLand: window.screen.height < 425 && !window.matchMedia("(orientation: portrait)").matches ? true : false,
-  medPort: window.screen.width >= 425 && window.screen.width <= 825 && window.matchMedia("(orientation: portrait)").matches ? true : false,
-  medLand: window.screen.height >= 425 && window.screen.height <= 825 && !window.matchMedia("(orientation: portrait)").matches ? true : false,
-  larPort: window.screen.width > 825 && window.matchMedia("(orientation: portrait)").matches ? true : false,
-  larLand: window.screen.height > 825 && !window.matchMedia("(orientation: portrait)").matches ? true : false,
+  viewPort: `larLand`,
   currentWidth: window.innerWidth,
   percentageResizedHeight: window.innerHeight / window.screen.height,
   scrollWidth: 0,
@@ -193,35 +183,10 @@ const reducer = (state = initialState, action: {type: string; payload: any}) => 
         ...state,
         height: action.payload
       };
-    case 'MIN_PORT':
+    case 'VIEW_PORT':
       return {
         ...state,
-        smaPort: action.payload
-      };
-    case 'MIN_LAND':
-      return {
-        ...state,
-        smaLand: action.payload
-      };
-    case 'MED_PORT':
-      return {
-        ...state,
-        medPort: action.payload
-      };
-    case 'MED_LAND':
-      return {
-        ...state,
-        medLand: action.payload
-      };
-    case 'LAR_PORT':
-      return {
-        ...state,
-        larPort: action.payload
-      };
-    case 'LAR_LAND':
-      return {
-        ...state,
-        larLand: action.payload
+        viewPort: action.payload
       };
     case 'CURRENT_WIDTH':
       return {

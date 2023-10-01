@@ -1,0 +1,17 @@
+.background {
+  display: flex;
+  position: relative;
+  flex-direction : column;
+  width: 100vw;
+  height: 0vh;
+}
+
+.wallpaperBody {
+  display: flex;
+  position: fixed;
+  z-index: -1;
+  width: 100vw;
+  height: 100vh;
+  background-image: url('./images/bgImage.webp');
+  background-size: cover;
+}
