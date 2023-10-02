@@ -6,7 +6,7 @@ import noImage1 from "../../images/noImage1.jpg";
 import noImage2 from "../../images/noImage2.jpg";
 import noImage3 from "../../images/noImage3.jpg";
 import notAvailable from "../../images/notAvailable.jpg";
-import { handleDelete, handleEdit } from '../CommonsFunc/CommonsFunc';
+import { handleDelete, handleEdit } from '../../commons/commonsFunc';
 import { Link } from "react-router-dom";
 import { Button } from '@mui/material/';
 import { recipesI } from '../../interfaces/interfaces';

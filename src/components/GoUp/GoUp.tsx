@@ -1,4 +1,4 @@
-import * as s from '../../styles/GoUpSX';
+import css from './GoUpCSS.module.css';
 import { useSelector } from 'react-redux';
 import { Button } from '@mui/material/';
 import $ from 'jquery';
@@ -12,7 +12,8 @@ const GoUp = () =>  {
     <Button
       variant="contained"
       onClick={() => $(window).scrollTop(0)}
-      sx={s.button({ scrollPosition })}
+      className={css.button}
+      style={{ display: scrollPosition >= 270 ? 'flex' : 'none' }}
     >
       <TurnLeftIcon sx={{ fontSize: 35 }} />
     </Button>

@@ -31,7 +31,7 @@ export interface userDataObjI {
 }
 
 export interface userDataI {
-  userData: userDataObjI[]
+  userData: userDataObjI
 }
 
 export interface retrieveLoginI {

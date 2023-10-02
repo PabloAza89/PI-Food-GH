@@ -1,0 +1,95 @@
+.background {
+  display: flex;
+  position: fixed;
+  right: -250px;
+  top: 200px;
+  z-index: 3000;
+}
+
+#button {
+  display: flex;
+  position: fixed;
+  /*  ...noSelect; */
+  z-index: 3001;
+  min-width: 30px !important;
+  width: 30px !important;
+  min-height: 120px !important;
+  height: 120px !important;
+  color: darkblue;
+  font-size: 14px;
+  border-radius: 0px;
+  background: lightblue;
+  /* :hover {
+    background: #91bfcf
+  } */
+}
+
+.buttonTypo {
+  display: flex;
+  align-items: center;
+      /*  ...noSelect;  */
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: 500;
+  transform: rotate(270deg);
+  height: 30px;
+  white-space: nowrap
+}
+
+.eachRow {
+  display: flex;
+  flex-direction: row;
+  width: 273px;
+  align-items: center;
+  margin-left: 7px;
+}
+
+.eachRowSmall {
+  display: flex;
+  flex-direction: row;
+  width: 260px; /* 280 total */
+  align-items: center;
+  margin-left: 20px;
+}
+
+.circleBig {
+  display: flex;
+  flex-direction: row;
+  /* background: online ? green : red;  */
+  width: 13px;
+  height: 13px;
+  border: 2px solid darkslategray;
+  right: 0px;
+  border-radius: 50%;
+}
+
+.circleSmall {
+  display: flex;
+  flex-direction: row;
+  /* background: red ? red : blue ? blue : green; */
+  width: 10px;
+  height: 10px;
+  border: 2px solid darkslategray;
+  right: 0px;
+  border-radius: 50%;
+}
+
+.title {
+/*   display: block;
+  block-size: 24px; */
+  font-family: Roboto;
+  letter-spacing: 0.15008px;
+  line-height: 24px
+}
+
+
+
+.sliderBox {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  justify-content: center;
+  background: cadetblue;
+  width: 310px;
+  right: -200px;
+}

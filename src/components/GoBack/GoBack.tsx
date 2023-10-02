@@ -1,7 +1,9 @@
 import { useState } from "react";
+import css from "./GoBackCSS.module.css";
+import com from '../../commons/commonsCSS.module.css';
+//import * as s from './GoBackSX';
 import { useLocation, useNavigate } from "react-router-dom";
 import logo from "../../images/logo.png";
-import * as s from '../../styles/GoBackSX';
 import Swal from 'sweetalert2';
 import { Box, Typography } from '@mui/material/';
 
@@ -54,21 +56,21 @@ const GoBack = ({ recipeCreatedOrEdited, recipeNotFound }: GoBackI) =>  {
   }
 
   return (
-    <Box onClick={() => handleReturn()}sx={s.background({ recipeNotFound })}>
-      <Box component="img" sx={s.logo} src={logo} alt=""/>
+    <div onClick={() => handleReturn()} className={css.background} style={{ display: recipeNotFound ? 'none' : 'flex' }} >
+      <img className={css.logo} src={logo} alt=""/>
     {
       location.pathname.toLowerCase() === `/myrecipe`  ?
-      <Box sx={s.columnContainer}>
-        <Box sx={s.letters}>
-          <Box>G</Box><Box>o</Box><Box sx={{ marginTop: '13px' }} /><Box>B</Box><Box>a</Box><Box>c</Box><Box sx={{ marginTop: '2px' }}>k</Box>
-        </Box>
-        <Box sx={s.exclamationMarkContainer}>
-          <Box sx={s.exclamationMark}>!</Box>
-        </Box>
-      </Box> :
+      <div className={`${css.columnContainer} ${com.noDeco}`}>
+        <div className={css.letters}>
+          <div>G</div><div>o</div><div style={{ marginTop: '13px' }} /><div>B</div><div>a</div><div>c</div><div style={{ marginTop: '2px' }}>k</div>
+        </div>
+        <div className={css.exclamationMarkContainer}>
+          <div className={css.exclamationMark}>!</div>
+        </div>
+      </div> :
       `G<br/>o<br/><br/>B<br/>a<br/>c<br/>k<br/>!`
     }
-    </Box>
+    </div>
   );
 }
 

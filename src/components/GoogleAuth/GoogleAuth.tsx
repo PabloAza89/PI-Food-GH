@@ -1,10 +1,10 @@
 import { useEffect, useState, useRef } from "react";
+import css from './GoogleAuthCSS.module.css';
 import { useGoogleLogin } from '@react-oauth/google';
 import { useSelector } from 'react-redux';
 import { Box, Button } from '@mui/material/';
-import { easings } from '../../styles/CommonsSX';
+import { easings } from '../../commons/easingsCSS';
 import { ReactComponent as MySvg } from '../../images/googleLogo.svg';
-import * as s from "../../styles/GoogleAuthSX";
 import Swal from 'sweetalert2';
 import $ from 'jquery';
 
@@ -22,11 +22,7 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
         method: 'GET',
       })
       .then((res) => res.json())
-      .then((res) => {
-        retrieveLogin({ email: res.email, fd_tkn: codeResponse.access_token })
-
-        //return { email: res.email, fd_tkn: codeResponse.access_token }
-      })
+      .then((res) => retrieveLogin({ email: res.email, fd_tkn: codeResponse.access_token }))
       .catch(rej => { console.log(rej) })
     },
     onError: (error) => { console.log(error) },
@@ -52,13 +48,12 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
       .then((res) => res.json())
       .then((res) => {
         setClicked(false)
-
-        $(`.buttonIn`)
+        $(`#buttonIn`)
           setTimeout(() => {
-            $(`.buttonIn`)
+            $(`#buttonIn`)
             .animate({ width: '30px' }, { queue: false, easing: 'easeOutBounce', duration: 1000 , complete: () => setShown(false) })
           }, 2000)
-          $(`.buttonIn`)
+          $(`#buttonIn`)
           //.stop(true, true)
           .css("animation", "none")
           .css("transition", "none")
@@ -116,7 +111,7 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
   const [ buttonHelperWidth, setButtonHelperWidth ] = useState<number | undefined>(undefined)
   const [ clicked, setClicked ] = useState<boolean>(false)
 
-  $(`.buttonIn`)
+  $(`#buttonIn`)
     .on( "mouseenter", function() {
       if (clicked) {
         $(this)
@@ -145,47 +140,45 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
     useEffect(() => {
       if (userData.email) {
         setClicked(false)
-        setButtonHelperWidth($(`.buttonWidthHelper`).outerWidth())
-        $(`.buttonIn`)
-          .animate({ width: $(`.buttonWidthHelper`).outerWidth() }, { queue: false, easing: 'easeOutBounce', duration: 1000 })
+        setButtonHelperWidth($(`#buttonWidthHelper`).outerWidth())
+        $(`#buttonIn`)
+          .animate({ width: $(`#buttonWidthHelper`).outerWidth() }, { queue: false, easing: 'easeOutBounce', duration: 1000 })
           setTimeout(() => {
-            $(`.buttonIn`)
+            $(`#buttonIn`)
             .animate({ width: '30px' }, { queue: false, easing: 'easeOutBounce', duration: 1000 , complete: () => setShown(false) })
           }, 2000)
-          $(`.buttonIn`)
-          //.stop(true, true)
+          $(`#buttonIn`)
           .css("animation", "none")
           .css("transition", "none")
       }
       else {
         setClicked(false)
-        setButtonHelperWidth($(`.buttonWidthHelper`).outerWidth())
+        setButtonHelperWidth($(`#buttonWidthHelper`).outerWidth())
       }
-
     },[userData.email])
 
   if (!popUp) {
-    $(`.buttonIn`)
+    $(`#buttonIn`)
       .stop() // NECESSARY FOR ANIMATION WORKS PROPERLY
       .animate({ width: '30px' }, { queue: false, easing: 'easeOutBounce', duration: 1000 , complete: () => setShown(false) })
   }
 
   return (
-    <Box sx={s.background({ hasScroll, scrollWidth })}>
-      <Button className={`buttonWidthHelper`} variant="contained" sx={s.buttonWidthHelper}>
-        <Box sx={s.buttonWidthHelperInner}>
-          <Box><MySvg/></Box>
+    <div className={css.background}>
+      <Button variant="contained" id={`buttonWidthHelper`} className={css.buttonWidthHelper} sx={{ display: 'none' }}>
+        <div className={css.buttonWidthHelperInner}>
+          <div><MySvg/></div>
             {
               userData.email ?
               `  Signed in as ${userData.email}` :
               `  Sign in with Google`
             }
-        </Box>
+        </div>
       </Button>
-      <Button id={`buttonIn`} className={`buttonIn`} variant="contained" sx={s.buttonIn({ clicked })} onClick={() => { login(); setClicked(true); setPopUp(true) }} >
+      <Button variant="contained" id={`buttonIn`} className={css.buttonIn} onClick={() => { login(); setClicked(true); setPopUp(true) }} >
         
-        <Box sx={s.buttonInInner}>
-          <Box><MySvg/></Box>
+        <div className={css.buttonInInner}>
+          <div><MySvg/></div>
           
           {
             userData.email && shown ?
@@ -200,16 +193,16 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
             
           }
           
-        </Box>
+        </div>
       </Button>
       {
         userData.email ?
-        <Button variant="contained" sx={s.bgOut} onClick={() => logout()}>
-          <Box className="fa fa-sign-out fa-lg" aria-hidden="true"></Box>
+        <Button variant="contained" className={css.bgOut} onClick={() => logout()}>
+          <div className="fa fa-sign-out fa-lg" aria-hidden="true"></div>
         </Button> :
         null
       }
-    </Box>
+    </div>
   )
 }
 

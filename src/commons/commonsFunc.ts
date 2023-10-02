@@ -1,6 +1,6 @@
-import '../../styles/DisableAutoFocusSweetAlert2.css';
+import './disableAutoFocusSA2.module.css';
 import Swal from 'sweetalert2';
-import { recipesI } from '../../interfaces/interfaces';
+import { recipesI } from '../interfaces/interfaces';
 
 // USED IN CARD & DETAIL
 

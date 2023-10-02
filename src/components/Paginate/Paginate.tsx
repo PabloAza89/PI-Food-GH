@@ -1,6 +1,7 @@
 import { useSelector , useDispatch } from 'react-redux';
+import css from './PaginateCSS.module.css';
+import comm from '../../styles/commons.module.css';
 import { setIndexChoosen } from '../../actions';
-import * as s from '../../styles/PaginateSX';
 import { Box, Button } from '@mui/material/';
 import $ from 'jquery';
 import { recipesI } from '../../interfaces/interfaces';
@@ -30,11 +31,28 @@ const Paginate = () => {
   })
 
   return (
-    <Box sx={s.background({ scrollWidth, scrollPosition, menuShown })}>
+    <div
+      className={css.background}
+      style={{
+        backdropFilter:
+          menuShown && scrollPosition >= 209 ? 'blur(40px)' :
+          !menuShown && scrollPosition >= 109 ? 'blur(40px)' :
+          'blur(0px)',
+        position:
+          menuShown && scrollPosition >= 209 ? 'fixed' :
+          !menuShown && scrollPosition >= 109 ? 'fixed' :
+          'relative',
+        marginTop:
+          menuShown && scrollPosition >= 209 ? '0px' :
+          !menuShown && scrollPosition >= 109 ? '0px' :
+          '9px',
+        width: `calc(100vw - ${scrollWidth}px)`
+      }}
+    >
       {[...Array(Math.ceil(toShow.length/9))].map((e, i) => {
           return (
             <Button
-              sx={s.eachButton}
+              id={css.eachButton}
               className={`Page${i}`}
               key={i}
               value={i}
@@ -42,7 +60,7 @@ const Paginate = () => {
             >{++i}</Button>
           )
       })}
-    </Box>
+    </div>
   );
 }
 

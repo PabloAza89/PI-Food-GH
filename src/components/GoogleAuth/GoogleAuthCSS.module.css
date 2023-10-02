@@ -1,0 +1,70 @@
+.background {
+  display: flex;
+  position: fixed;
+  right: 0px;
+  margin-right: 16px;
+  margin-top: 16px;
+  flex-direction: row;
+  z-index: 3
+}
+
+.buttonIn {
+  display: flex;
+  text-transform: none !important;
+  padding: 6px 6px !important;
+  width: 30px;
+  color: #3c4043 !important;
+  letter-spacing: 0.25px;
+  font-family: "Google Sans", arial, sans-serif;
+  font-weight: 500;
+  background: white !important;
+  align-items: flex-start;
+}
+
+.buttonIn:hover {
+  background: #ededed !important
+}
+
+.buttonInInner {
+  display: flex;
+  min-height: 0vh !important;
+  height: 25px !important;
+  background: inherit; /* dev */
+  /* text-wrap: nowrap; */
+  white-space: nowrap;
+  overflow: hidden;
+  justify-content: flex-start;
+  padding: 0px 6px !important;
+}
+
+.buttonWidthHelper {
+  /* display: none !important; */
+  text-transform: none !important;
+  padding: 6px 6px !important;
+  width: fit-content;
+  letter-spacing: 0.25px;
+  font-family: "Google Sans", arial, sans-serif;
+  font-weight: 500;
+  align-items: flex-start;
+}
+
+.buttonWidthHelperInner {
+  display: flex !important;
+  display: flex;
+  min-height: 0vh !important;
+  height: 25px !important;
+  background: yellow;
+  /* text-wrap: nowrap; */
+  white-space: nowrap;
+  justify-content: flex-start;
+  padding: 0px 6px !important;
+}
+
+.bgOut {
+  margin-left: 4px !important;
+  padding: 0vw !important;
+  min-width: 0vh !important;
+  min-height: 0vh !important;
+  width: 36.5px !important;
+  height: 36.5px !important;
+}

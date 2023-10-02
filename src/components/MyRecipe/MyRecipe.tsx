@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from "react";
+import * as s from "./MyRecipeSX";
+import css from "./MyRecipeCSS.module.css";
+import '../../commons/disableAutoFocusSA2.module.css';
 import { useDispatch, useSelector } from 'react-redux';
-import * as s from "../../styles/MyRecipeSX";
-import "../../styles/MyRecipeSX.css";
 import noImage1 from "../../images/noImage1.jpg";
 import noImage2 from "../../images/noImage2.jpg";
 import noImage3 from "../../images/noImage3.jpg";
@@ -665,9 +666,9 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
 
 
   return (
-    <Box
-      component="form"
-      sx={s.form({ hasScroll, scrollWidth })}
+    <div
+      /* sx={s.form({ hasScroll, scrollWidth })} */
+      className={css.form}
     >
         <Box // HIDDEN. ONLY FOR IMAGE VERIFICATION PURPOSES.
           component="img"
@@ -1078,7 +1079,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
         >{ isEditing ? `SAVE EDIT` : `SAVE RECIPE` }
         </Button>
       </Box>
-    </Box>
+    </div>
   )
 }
 

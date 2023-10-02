@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import css from './ErrorCSS.module.css';
-import com from '../../styles/commons.module.css';
-import { Box, Typography } from '@mui/material';
+import com from '../../commons/commonsCSS.module.css';
 import { useSelector } from 'react-redux';
 import error from '../../images/error.gif';
 import loadingImage from '../../images/loadingImage.png';
@@ -9,10 +8,6 @@ import loadingImage from '../../images/loadingImage.png';
 function Error() {
 
   const english = useSelector((state: {english:boolean}) => state.english)
-  const smaPort = useSelector((state: {smaPort:boolean}) => state.smaPort)
-  const smaLand = useSelector((state: {smaLand:boolean}) => state.smaLand)
-  const medPort = useSelector((state: {medPort:boolean}) => state.medPort)
-  const medLand = useSelector((state: {medLand:boolean}) => state.medLand)
   const viewPort = useSelector((state: {viewPort: string}) => state.viewPort)
 
   const [loaded, setLoaded] = useState<boolean>(false)
@@ -24,7 +19,7 @@ function Error() {
         <div>
           <img
             src={error}
-            //onLoad={() => setLoaded(true)}
+            onLoad={() => setLoaded(true)}
             style={{
               visibility: loaded ? 'visible' : 'hidden',
               width: viewPort === 'smaPort' ? '65vw' : viewPort === 'smaLand' ? '50vh' : (viewPort === 'medPort' || viewPort === 'medLand') ? '300px' : '400px',
@@ -41,8 +36,7 @@ function Error() {
               width: viewPort === 'smaPort' ? '65vw' : viewPort === 'smaLand' ? '50vh' : (viewPort === 'medPort' || viewPort === 'medLand') ? '300px' : '400px',
               height: viewPort === 'smaPort' ? '65vw' : viewPort === 'smaLand' ? '50vh' : (viewPort === 'medPort' || viewPort === 'medLand') ? '300px' : '400px'
             }}
-            /* className={`${css.placeholderAnimation} ${com.noSelect}`} */
-            className={css.placeholderAnimation}
+            className={`${css.placeholderAnimation} ${com.noSelect}`}
             alt=""
           />
         </div>
