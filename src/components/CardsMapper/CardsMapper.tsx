@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import css from './CardsMapperCSS.module.css';
-import * as sx from  './CardsMapperSX';
 import Card from '../Card/Card';
 import { useSelector , useDispatch } from 'react-redux';
 import { Box } from '@mui/material';
@@ -36,7 +35,17 @@ const CardsMapper = ({ retrieveLogin, userData }: CardsMapperI)  => {
   FirstFunc().then(() => dispatch(allRecipesLoaded(true)))
 
   return toShow[0] !== undefined ?
-    (<Box className={css.background} sx={sx.backgroundSX({ scrollWidth, scrollPosition, menuShown })} >
+    (<div
+      className={css.background}
+      style={{
+        width: `calc(100vw - ${scrollWidth}px)`,
+        marginRight: `${scrollWidth}px`,
+        marginTop:
+          menuShown && scrollPosition >= 209 ? '46px' :
+          !menuShown && scrollPosition >= 109 ? '46px' :
+          '0px'
+      }}
+    >
       {arraySplitedBy9.map((e:any) =>
         <Card
           key={e.id}
@@ -54,7 +63,7 @@ const CardsMapper = ({ retrieveLogin, userData }: CardsMapperI)  => {
           analyzedInstructions={e.analyzedInstructions}
         />
       )}
-    </Box>) :
+    </div>) :
     (<div>
       <div className={css.notFound} >No recipe was found !</div>
     </div>)

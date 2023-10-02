@@ -1,4 +1,3 @@
-import * as sx from "./AboutSX";
 import css from "./AboutCSS.module.css";
 import { Link } from "react-router-dom";
 import { Box, Button, Typography } from '@mui/material/';
@@ -21,8 +20,7 @@ function About() {
         <Link to="/" style={{ textDecoration: 'none' }}>
           <Button
             variant="contained"
-            id={css.button}
-            sx={sx.button}
+            className={css.button}
           >GO BACK !
           </Button>
         </Link>

@@ -22,6 +22,7 @@
 }
 
 .selectsAndButtons {
+  /* background: gray; */
   display: flex;
   flex-direction: column;
   min-width: 570px;

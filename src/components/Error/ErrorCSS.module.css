@@ -1,0 +1,50 @@
+.background {
+  display: flex;
+  justify-content: space-between;
+  position: fixed;
+  height: 100vh;
+  width: 100vw;
+  /* minHeight: smaPort || smaLand ? none : 530px; */
+  z-index: -1
+}
+
+.leftRightHelper {
+  display: flex;
+}
+
+.mainContainer {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.errorGif {
+  /* ...relative; ...noSelect; ...flex; */
+  /* visibility: loaded ? visible : hidden; */
+  /* width: smaPort ? 65vw : smaLand ? 50vh : medPort || medLand ? 300px : 400px; */
+  /* height: smaPort ? 65vw : smaLand ? 50vh : medPort || medLand ? 300px : 400px; */
+}
+
+.placeholderAnimation {
+  /* ...noSelect; ...relative; */
+  /* display: loaded ? none : flex; */
+  /* marginTop: smaPort ? -65vw : smaLand ? -50vh : medPort || medLand ? -300px : -400px; */
+  /* width: smaPort ? 65vw : smaLand ? 50vh : medPort || medLand ? 300px : 400px; */
+  /* height: smaPort ? 65vw : smaLand ? 50vh : medPort || medLand ? 300px : 400px; */
+  z-index: 1001;
+  animation: error .8s linear infinite;
+  animation-timing-function: steps(12, end);
+  @keyframes error {
+    0% { transform: rotate(0deg) };
+    100% { transform: rotate(360deg) };
+  }
+}
+
+.message {
+  /* ...flex; ...relative; ...noSelect; */
+  color: antiquewhite;
+  text-shadow: 0px 0px 10px black;
+  /* font-size: smaPort ? 7vw : smaLand ? 5.5vh : medPort || medLand ? 31px : 35px; */
+}

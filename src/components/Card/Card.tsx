@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import css from "./CardCSS.module.css";
-import * as sx from "./CardSX";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector , useDispatch } from 'react-redux';
 import '../../styles/DisableAutoFocusSweetAlert2.css';
@@ -70,9 +69,9 @@ const Card = ({
 
   return (
     <div className={css.background}>
-      <Box
-        id={css.editDeleteContainer}
-        sx={sx.editDeleteContainer({ show: userRecipe && userData.email === email ? true : false })}
+      <Divider
+        className={css.editDeleteContainer}
+        style={{ display: userRecipe && userData.email === email ? 'flex' : 'none' }}
       >
         <Button
           variant="contained"
@@ -92,7 +91,7 @@ const Card = ({
         >
           <ClearIcon className={css.iconDelete} />
         </Button>
-      </Box>
+      </Divider>
       <Link to={`/${id}`}>
         <img
           className={css.image}

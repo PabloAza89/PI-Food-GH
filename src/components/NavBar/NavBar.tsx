@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import logo from "../../images/logo.png";
 import css from './NavBarCSS.module.css';
+import comm from '../../styles/commons.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import MenuIcon from '@mui/icons-material/Menu';
 import {
@@ -126,6 +127,9 @@ const NavBar = () =>  {
       </div>
       <div
         style={{ display: currentWidth <= 800 && !menuShown ? 'none' : 'flex' }}
+        /* className={css.selectsAndButtons} */
+        /* className={'css.selectsAndButtons rtrtrt'} */
+        /* className={`${css.selectsAndButtons} ${comm.rtrtrt}`} */
         className={css.selectsAndButtons}
       >
         <div

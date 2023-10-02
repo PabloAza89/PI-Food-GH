@@ -13,7 +13,7 @@
   border-radius: 4px;
 }
 
-#editDeleteContainer {
+.editDeleteContainer {
   position: absolute;
   flex-direction: row;
   right: 5px;

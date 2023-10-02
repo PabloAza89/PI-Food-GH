@@ -45,10 +45,14 @@
   text-align: center;
 }
 
-#button {
+.button {
+  background: #859e7d !important;
+  color: antiquewhite !important;
   margin-top: 40px;
   min-width: 122px;
   width: 122px;
   height: 36.5px;
   align-self: center;
 }
+
+.button:hover { background: #7b9174 !important }

@@ -1,52 +1,7 @@
 import {
   column, flex, mix, jcsb, jcc,
   aic, noSelect, relative
-} from '../styles/CommonsSX';
-
-interface backgroundI {
-  smaPort: boolean,
-  smaLand: boolean,
-}
-
-export const background = ({ smaPort, smaLand }: backgroundI) => {
-  return {
-    ...flex, ...jcsb,
-    position: 'fixed',
-    //background: 'darkorange', //dev
-    height: '100vh',
-    width: '100vw',
-    minHeight: smaPort || smaLand ? 'none' : '530px',
-    zIndex: -1
-  }
-}
-
-interface leftRightHelperI {
-  smaPort: boolean,
-  smaLand: boolean,
-}
-
-export const leftRightHelper = ({ smaPort, smaLand }: leftRightHelperI) => {
-  return {
-    ...flex,
-    //background: 'blue',
-    minWidth: smaPort || smaLand ? 'none' : '30px',
-  }
-}
-
-interface mainContainerI {
-  smaPort: boolean,
-  smaLand: boolean,
-  medPort: boolean,
-  medLand: boolean,
-}
-
-export const mainContainer = ({ smaPort, smaLand, medPort, medLand }: mainContainerI) => {
-  return {
-    ...flex, ...relative, ...column, ...aic, ...jcc,
-    //background: 'red',
-    width: smaPort ? '90vw' : smaLand ? '40vw' : medPort || medLand ? '430px' : '500px',
-  }
-}
+} from '../../styles/CommonsSX';
 
 interface errorGifI {
   loaded: boolean,

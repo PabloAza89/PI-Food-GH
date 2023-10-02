@@ -1,8 +1,10 @@
 import { Box, Typography } from '@mui/material';
 import { useState } from 'react';
+import comm from '../../styles/commons.module.css';
 import { useSelector } from 'react-redux';
 import error from '../../images/error.gif';
-import * as s from '../../styles/ErrorSX';
+import * as s from './ErrorSX';
+import css from './ErrorCSS.module.css';
 import loadingImage from '../../images/loadingImage.png';
 
 function Error() {
@@ -12,32 +14,34 @@ function Error() {
   const smaLand = useSelector((state: {smaLand:boolean}) => state.smaLand)
   const medPort = useSelector((state: {medPort:boolean}) => state.medPort)
   const medLand = useSelector((state: {medLand:boolean}) => state.medLand)
+  const viewPort = useSelector((state: {viewPort: string}) => state.viewPort)
+
+  console.log("viewPort", viewPort)
 
   const [loaded, setLoaded] = useState<boolean>(false)
+  /* className={`${css.selectsAndButtons} ${comm.rtrtrt}`} */
 
   return (
-    <Box sx={s.background({ smaPort, smaLand })}>
-      <Box sx={s.leftRightHelper({ smaPort, smaLand })} />
-      <Box sx={s.mainContainer({ smaPort, smaLand, medPort, medLand })}>
-        <Box>
-          <Box
-            component="img"
+    <div className={css.background} style={{ minHeight: (viewPort === 'smaPort' || viewPort === 'smaLand') ? 'none' : '530px' }}>
+      <div className={css.leftRightHelper} style={{ minWidth: (viewPort === 'smaPort' || viewPort === 'smaLand') ? 'none' : '30px' }} />
+      <div className={css.mainContainer} style={{ width: viewPort === 'smaPort' ? '90vw' : viewPort === 'smaLand' ? '40vw' : (viewPort === 'medPort' || viewPort === 'medLand') ? '430px' : '500px' }}>
+        <div>
+          <img
             src={error}
             onLoad={() => setLoaded(true)}
             sx={s.errorGif({ loaded, smaPort, smaLand, medPort, medLand })}
           />
-          <Box
-            component="img"
+          <img
             src={loadingImage}
             sx={s.placeholderAnimation({ loaded, smaPort, smaLand, medPort, medLand })}
           />
-        </Box>
-        <Typography sx={s.message({ smaPort, smaLand, medPort, medLand })}>
+        </div>
+        <div sx={s.message({ smaPort, smaLand, medPort, medLand })}>
           { english ? `This page does not exist.` : `Esta página no existe.` }
-        </Typography>
-      </Box>
-      <Box sx={s.leftRightHelper({ smaPort, smaLand })} />
-    </Box>
+        </div>
+      </div>
+      <div className={css.leftRightHelper} style={{ minWidth: (viewPort === 'smaPort' || viewPort === 'smaLand') ? 'none' : '30px' }} />
+    </div>
   )
 }
 
