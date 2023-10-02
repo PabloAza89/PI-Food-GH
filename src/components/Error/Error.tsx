@@ -1,10 +1,9 @@
-import { Box, Typography } from '@mui/material';
 import { useState } from 'react';
-import comm from '../../styles/commons.module.css';
+import css from './ErrorCSS.module.css';
+import com from '../../styles/commons.module.css';
+import { Box, Typography } from '@mui/material';
 import { useSelector } from 'react-redux';
 import error from '../../images/error.gif';
-import * as s from './ErrorSX';
-import css from './ErrorCSS.module.css';
 import loadingImage from '../../images/loadingImage.png';
 
 function Error() {
@@ -16,10 +15,7 @@ function Error() {
   const medLand = useSelector((state: {medLand:boolean}) => state.medLand)
   const viewPort = useSelector((state: {viewPort: string}) => state.viewPort)
 
-  console.log("viewPort", viewPort)
-
   const [loaded, setLoaded] = useState<boolean>(false)
-  /* className={`${css.selectsAndButtons} ${comm.rtrtrt}`} */
 
   return (
     <div className={css.background} style={{ minHeight: (viewPort === 'smaPort' || viewPort === 'smaLand') ? 'none' : '530px' }}>
@@ -28,15 +24,29 @@ function Error() {
         <div>
           <img
             src={error}
-            onLoad={() => setLoaded(true)}
-            sx={s.errorGif({ loaded, smaPort, smaLand, medPort, medLand })}
+            //onLoad={() => setLoaded(true)}
+            style={{
+              visibility: loaded ? 'visible' : 'hidden',
+              width: viewPort === 'smaPort' ? '65vw' : viewPort === 'smaLand' ? '50vh' : (viewPort === 'medPort' || viewPort === 'medLand') ? '300px' : '400px',
+              height: viewPort === 'smaPort' ? '65vw' : viewPort === 'smaLand' ? '50vh' : (viewPort === 'medPort' || viewPort === 'medLand') ? '300px' : '400px',
+            }}
+            className={`${css.errorGif} ${com.noSelect}`}
+            alt=""
           />
           <img
             src={loadingImage}
-            sx={s.placeholderAnimation({ loaded, smaPort, smaLand, medPort, medLand })}
+            style={{
+              display: loaded ? 'none' : 'flex',
+              marginTop: viewPort === 'smaPort' ? '-65vw' : viewPort === 'smaLand' ? '-50vh' : (viewPort === 'medPort' || viewPort === 'medLand') ? '-300px' : '-400px',
+              width: viewPort === 'smaPort' ? '65vw' : viewPort === 'smaLand' ? '50vh' : (viewPort === 'medPort' || viewPort === 'medLand') ? '300px' : '400px',
+              height: viewPort === 'smaPort' ? '65vw' : viewPort === 'smaLand' ? '50vh' : (viewPort === 'medPort' || viewPort === 'medLand') ? '300px' : '400px'
+            }}
+            /* className={`${css.placeholderAnimation} ${com.noSelect}`} */
+            className={css.placeholderAnimation}
+            alt=""
           />
         </div>
-        <div sx={s.message({ smaPort, smaLand, medPort, medLand })}>
+        <div className={`${css.message} ${com.noSelect}`} style={{ fontSize: viewPort === 'smaPort' ? '7vw' : viewPort === 'smaLand' ? '5.5vh' : (viewPort === 'medPort' || viewPort === 'medLand') ? '31px' : '35px' }} >
           { english ? `This page does not exist.` : `Esta página no existe.` }
         </div>
       </div>
