@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import css from './GoogleAuthCSS.module.css';
 import { useGoogleLogin } from '@react-oauth/google';
 import { useSelector } from 'react-redux';
-import { Box, Button } from '@mui/material/';
+import { Button } from '@mui/material/';
 import { easings } from '../../commons/easingsCSS';
 import { ReactComponent as MySvg } from '../../images/googleLogo.svg';
 import Swal from 'sweetalert2';

@@ -1,4 +1,5 @@
-import './disableAutoFocusSA2.module.css';
+//import './disableAutoFocusSA2.module.css';
+//import './disableAutoFocusSA2.css';
 import Swal from 'sweetalert2';
 import { recipesI } from '../interfaces/interfaces';
 

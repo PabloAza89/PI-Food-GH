@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from "react";
+import css from './App.module.css';
+import './commons/globalSweetAlert2.css';
 import { useSelector } from 'react-redux';
 import { Route, Routes } from "react-router-dom";
-import css from './App.module.css';
-import { Box } from '@mui/material';
 import CardsMapper from "./components/CardsMapper/CardsMapper";
 import GoogleAuth from './components/GoogleAuth/GoogleAuth';
 import Detail from "./components/Detail/Detail";
@@ -99,8 +99,6 @@ function App() {
     .catch(rej => console.log(rej))
   },[])
 
-  
-
   useEffect(() => {
     function handleResize() {
       let windowScreenWidth = window.screen.width
@@ -129,31 +127,6 @@ function App() {
       window.removeEventListener("scroll", scrollHandler);
     }
   },[dispatch]);
-
-  //let ww = useRef(document.getElementsByClassName(`wallpaperBodyAAA`)[0])
-
-  //console.log(document.getElementsByClassName(`wallpaperBodyAAA`)[0])
-  //let qq = document.getElementsByClassName(`.wallpaperBodyAAA`)[0]
-  //let qq = document.getElementsByClassName(`wallpaperBodyAAA`)
-
-  //qq.style.setproperty(--color, blue);
-
-  //getComputedStyle(qq).getPropertyValue("--color");
-  //console.log("AA", getComputedStyle(qq).getPropertyValue("--color"))
-  //console.log("AA", window.getComputedStyle(qq).getPropertyValue("--color"))
-  //console.log("AA", window.getComputedStyle(ww).getPropertyValue("--color"))
-  
-  //element.style.setproperty("--my-var", jsVar + 4);
-  //console.log("document.documentElement", document.getElementById(`backgroundAAA`))
-  //let root = document.getElementById(`backgroundAAA`)
-  //root && root.style.setProperty('--color', 'blue')
-
-  //console.log("GG", window.getComputedStyle(document.getElementById("backgroundAAA")as Element ))
-
-  
-
-  // const color = getComputedStyle(qq).getPropertyValue('--color');
-  // console.log("BBB", color);
 
   return (
     <div className={css.background}>

@@ -1,5 +1,5 @@
 .form {
-  /* background: darkred !important; */
+  background: darkred !important;
   /* ...noSelect; */
   display: flex;
   position: relative;
@@ -7,14 +7,13 @@
   min-width: 400px;
   align-items: center;
   margin-left: 101px;
-  /* margin-right: hasScroll ? `${96 + scrollWidth}px` : `96px`; // 16 + 64 + 16 + scrollWidth ~ 96 + scrollWidth */
   margin-top: 16px;
 
-  background: linear-gradient(135deg, rgba(196, 34, 147, 0.1), rgba(196, 34, 147, 0));
+  /* background: linear-gradient(135deg, rgba(196, 34, 147, 0.1), rgba(196, 34, 147, 0));
   backdrop-filter: blur(20px);
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
   border: 1px solid rgb(255, 255, 255, 0.18);
-  border-radius: 4px;
+  border-radius: 4px; */
 }
 
 
@@ -27,6 +26,35 @@
   height: 300px !important;
   align-items: center;
   margin-top: 16px;
+}
+
+.title {
+  font-family: Roboto;
+  letter-spacing: 0.15008px;
+  line-height: 24px
+}
+
+.eachRow {
+  /* ...noSelect; */
+  background: gray; /* dev */
+  margin: 6px 0px;
+  display: flex;
+  position: relative;
+  flex-direction: row;
+  width: 80vw;
+  min-width: 600px;
+}
+
+.text {
+  display: flex;
+  flex-direction: row;
+  color: black;
+  width: 12vw;
+  min-width: 113px;
+  height: 56px;
+  background: green;
+  justify-content: center;
+  align-items: center;
 }
 
 
@@ -58,29 +86,10 @@
 /* eachRow 80vw */
 /* (text) 12vw + 68vw (input) */
 
-.eachRow {
-  /* ...noSelect; */
-  background: gray; /* dev */
-  margin: 6px 0px;
-  display: flex;
-  position: relative;
-  flex-direction: row;
-  width: 80vw;
-  min-width: 600px;
-}
 
 
-.text {
-  display: flex;
-  flex-direction: row;
-  color: black;
-  width: 12vw;
-  min-width: 113px;
-  height: 56px;
-  background: green;
-  justify-content: center;
-  align-items: center
-}
+
+
 
 
 .textFieldLabel {
@@ -98,66 +107,48 @@
 }
 
 .inputShownTitle {
-  display: flex;
-  white-space: pre;
-  width: calc(68vw - 28px);
-  margin-left: 14px;
-  padding: 16.5px 0px 16.5px 0px;
-  position: absolute;
-  /* color: yellow; // IF SETTING TO !IMPORTANT; JQUERY CANNOT OVERRIDE STYLE ! */
-  /* color: disabled ? transparent !important : rgba(0; 0; 0; 0.87) !important; // IF TextField IS MULTILINE; PLACEHOLDER MUST BE LIKE THIS */
+  display: flex !important;
+  white-space: pre !important;
+  width: calc(68vw - 28px) !important;
+  margin-left: 14px !important;
+  padding: 16.5px 0px 16.5px 0px !important;
+  position: absolute !important
 }
-
-
 
 .inputHiddenTitle {
   /* ...noSelect; */
-  display: flex;
-  position: relative;
-  width: 68vw;
-  /* input: {
-    color: length > 0 ? transparent !important : rgba(0; 0; 0; 0.87) !important; // IF TextField IS MULTILINE; PLACEHOLDER MUST BE LIKE THIS
-    caretColor: rgba(0; 0; 0; 0.87) !important;
-    ::selection: {  
-    }
-  } */
+  display: flex !important;
+  position: relative !important;
+  width: 68vw !important;
 }
 
 .inputShownSummary {
-  flex-wrap: wrap;
-  white-space: pre-wrap;
-  display: flex;
-  width: calc(68vw - 28px);
-  margin-left: 14px;
-  padding: 16.5px 0px 16.5px 0px;
-  position: absolute;
-  font-weight: 400;
-  color: transparent !important;
+  flex-wrap: wrap !important;
+  white-space: pre-wrap !important;
+  display: flex !important;
+  width: calc(68vw - 28px) !important;
+  margin-left: 14px !important;
+  padding: 16.5px 0px 16.5px 0px !important;
+  position: absolute !important;
+  font-weight: 400 !important;
+  color: rgba(0, 0, 0, 0.87) !important;
 }
-
 
 .inputHiddenSummary {
-  display: flex;
-  position: relative;
-  width: 68vw;
-  /* input: {
-    color: transparent !important;
-    caretColor: rgba(0; 0; 0; 0.87) !important;
-    ::selection: { 
-    }
-  } */
+  display: flex !important;
+  position: relative !important;
+  width: 68vw !important;
 }
 
-
-.inputShownInstructions {    
-  flex-wrap: wrap;
-  white-space: pre-wrap;
-  display: flex;  
-  width: calc(48vw - 28px);
-  margin-left: 14px;
-  padding: 16.5px 0px 16.5px 0px;
-  position: absolute;
-  font-weight: 400;
+.inputShownInstructions {
+  flex-wrap: wrap !important;
+  white-space: pre-wrap !important;
+  display: flex !important;
+  width: calc(48vw - 28px) !important;
+  margin-left: 14px !important;
+  padding: 16.5px 0px 16.5px 0px !important;
+  position: absolute !important;
+  font-weight: 400 !important;
   color: transparent !important;
 }
 

@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import * as s from "./MyRecipeSX";
 import css from "./MyRecipeCSS.module.css";
-import '../../commons/disableAutoFocusSA2.module.css';
+//import '../../commons/disableAutoFocusSA2.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import noImage1 from "../../images/noImage1.jpg";
 import noImage2 from "../../images/noImage2.jpg";
@@ -9,7 +8,7 @@ import noImage3 from "../../images/noImage3.jpg";
 import noLoaded from "../../images/noLoaded.jpg";
 import { useLocation, useNavigate } from "react-router-dom";
 import { addNew, setHasScroll } from '../../actions';
-import { Box, Button, OutlinedInput, Input, InputBase, TextField, ListItemText, Checkbox, Dialog, Typography,FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material/';
+import { Button, TextField, ListItemText, Checkbox, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material/';
 import dietsEntireArray from '../../db/diets.json';
 import dishesEntireArray from '../../db/dishes.json';
 import Tooltip from '@mui/joy/Tooltip';
@@ -669,18 +668,18 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
     <div
       /* sx={s.form({ hasScroll, scrollWidth })} */
       className={css.form}
+      style={{ marginRight: hasScroll ? `${96 + scrollWidth}px` : `96px` }}
     >
-        <Box // HIDDEN. ONLY FOR IMAGE VERIFICATION PURPOSES.
-          component="img"
-          sx={{ width: '0px', height: '0px' }}
+        <img // HIDDEN. ONLY FOR IMAGE VERIFICATION PURPOSES.
+          style={{ width: '0px', height: '0px' }}
           src={imageValue}
           onLoad={() => setImageLoaded(true)}
           onError={() => setImageLoaded(false)}
+          alt=""
         />
-        <Box>
-        <Box
-          component="img"
-          sx={s.imageSearcher}
+      
+        <img
+          className={css.imageSearcher}
           src={
             isEditing && location.state.image.length === 1 && imageValue.length === 0 ?
             arrImages[parseInt(location.state.image, 10) - 1] : // DEFAULT IMAGE IS RANDOM // EDITING MODE
@@ -690,21 +689,22 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
             imageValue : // IMAGE IT'S NEW URL // DOUBLE CHECK/LOADING FOR EDITED ENCODED URL IMAGE
             noLoaded // IMAGE NOT FOUND
           }
+          alt=""
         />
-      </Box>
+      
 
-      <Typography>
+      <div className={css.title}>
         {
           isEditing ?
           `Edit your recipe. Don't forget to save it !` :
           `Create your own recipe ! Please fill in all fields:`
         }
-      </Typography>
+      </div>
 
-      <Box sx={s.eachRow}>
-        <Box sx={s.text}>Title:</Box>
+      <div className={css.eachRow}>
+        <div className={css.text}>Title:</div>
         <Tooltip
-          sx={s.tooltipCenter}
+          className={css.tooltipCenter}
           arrow
           variant="outlined"
           size="lg"
@@ -716,41 +716,52 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
           placement="bottom"
 
           title={
-            <Box sx={{ display: 'flex', flexDirection: 'column', color: '#25252d', background: '#f5f5f9', fontFamily: 'Roboto'}}>
-              { error.title.character ? <Box sx={{ fontWeight: '400', fontSize: '17px' }}>Special characters not allowed in "Title" !</Box> : null }
-              { error.title.character ? <Box sx={{ color: '#42424f' }}>Allowed characters:</Box> : null }
-              { error.title.character ? <Box sx={{ color: '#42424f', textAlign: 'center' }}><b>, ; . : - ! ¡ ¿ ? ' " ( ) [ ] á Á é É í Í ó Ó ú Ú ü Ü ñ Ñ</b></Box> : null }
-              { error.title.badWord ? <Box sx={{ fontWeight: '400' }}><em>Please, remove </em><mark>highlighted</mark> <em>bad words.</em></Box> : null }
-              { error.title.character ? <Box sx={{ display: 'flex', flexDirection: 'row', fontWeight: '400' }}><em>Please, 
+            <div style={{ display: 'flex', flexDirection: 'column', color: '#25252d', background: '#f5f5f9', fontFamily: 'Roboto'}}>
+              { error.title.character ? <div style={{ fontWeight: '400', fontSize: '17px' }}>Special characters not allowed in "Title" !</div> : null }
+              { error.title.character ? <div style={{ color: '#42424f' }}>Allowed characters:</div> : null }
+              { error.title.character ? <div style={{ color: '#42424f', textAlign: 'center' }}><b>, ; . : - ! ¡ ¿ ? ' " ( ) [ ] á Á é É í Í ó Ó ú Ú ü Ü ñ Ñ</b></div> : null }
+              { error.title.badWord ? <div style={{ fontWeight: '400' }}><em>Please, remove </em><mark>highlighted</mark> <em>bad words.</em></div> : null }
+              { error.title.character ? <div style={{ display: 'flex', flexDirection: 'row', fontWeight: '400', fontStyle: 'italic' }}>Please, 
                 <Tooltip
                   title={`Ä ä % { } @ / \\ # À à ° ¬ $ & = * etc..`}
-                  sx={{ display: 'flex', flexDirection: 'column', color: '#42424f', background: '#f5f5f9', fontFamily: 'Roboto'}}
+                  style={{ display: 'flex', flexDirection: 'column', color: '#42424f', background: '#f5f5f9', fontFamily: 'Roboto'}}
                 >
-                  <u>remove unallowed characters</u>
-                </Tooltip>.</em>
-              </Box> : null }
-            </Box>
+                  <u>remove unallowed characters</u></Tooltip>.
+                
+              </div> : null }
+            </div>
           }
         >
-          <Box>
-            <InputLabel disabled={allDisabled} id={"targetTitle"} shrink={false} sx={s.inputShownTitle({ disabled: allDisabled})}>{ titleValue }</InputLabel>
+          <div>
+            <InputLabel
+              id={"targetTitle"}
+              disabled={allDisabled}
+              shrink={false}
+              className={css.inputShownTitle}
+              style={{ color: 'rgba(0, 0, 0, 0.87)' }}
+            >{ titleValue }</InputLabel>
             <TextField
-              className={`testTitle`}
               disabled={allDisabled}
               id="title"
               autoComplete='off'
-              sx={s.inputHiddenTitle({ length:titleValue.length })}
+              className={css.inputHiddenTitle}
+              inputProps={{
+                style: {
+                  color: 'transparent',
+                  caretColor: 'rgba(0, 0, 0, 0.87)'
+                }
+              }}
               value={titleValue}
               placeholder={`e.g. Pasta with tomatoes..`}
               onChange={(e) => { validator({ value: e.target.value, type: e.target.id }) }}
             />
-          </Box>
+          </div>
         </Tooltip>
-      </Box>
-      <Box sx={s.eachRow}>
-        <Box sx={s.text}>Image:</Box>
+      </div>
+      <div className={css.eachRow}>
+        <div className={css.text}>Image:</div>
         <Tooltip
-          sx={s.tooltipLeft}
+          className={css.tooltipLeft}
           arrow
           variant="outlined"
           size="lg"
@@ -759,21 +770,20 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
           enterTouchDelay={0}
           placement="bottom"
           title={
-            <Box sx={{ display: 'flex', flexDirection: 'column', color: '#25252d', background: '#f5f5f9', fontFamily: 'Roboto'}}>
-              <Box sx={{ display: 'flex', flexDirection: 'column', color: '#25252d', fontWeight: '400' }}>
-                { isEditing ? <Box>Leave it empty for use the same image !</Box> : <Box>Please, copy and paste your food recipe image url here !</Box> }
-                { isEditing ? <Box>Either if you want to use a new image, please, paste your new food recipe image url here !</Box> : <Box>If it's everything OK, you can preview your image in center upper box</Box> }
-                { isEditing ? <Box>If your link its not valid, a random image gonna be used in your recipe.</Box> : <Box>If you dont give a link, or link its not valid, a random image gonna be used in your recipe.</Box> }
-                { <Box><b>Tip: </b>If you can see the image in the upper-top box, the image will be saved safely.</Box> }
-              </Box>
-            </Box>
+            <div style={{ display: 'flex', flexDirection: 'column', color: '#25252d', background: '#f5f5f9', fontFamily: 'Roboto'}}>
+              <div style={{ display: 'flex', flexDirection: 'column', color: '#25252d', fontWeight: '400' }}>
+                { isEditing ? <div>Leave it empty for use the same image !</div> : <div>Please, copy and paste your food recipe image url here !</div> }
+                { isEditing ? <div>Either if you want to use a new image, please, paste your new food recipe image url here !</div> : <div>If it's everything OK, you can preview your image in center upper box</div> }
+                { isEditing ? <div>If your link its not valid, a random image gonna be used in your recipe.</div> : <div>If you dont give a link, or link its not valid, a random image gonna be used in your recipe.</div> }
+                { <div><b>Tip: </b>If you can see the image in the upper-top box, the image will be saved safely.</div> }
+              </div>
+            </div>
           }
         >
           <TextField
-            className={`inputPos`}
-            id="image"
+            id={`image`}
             disabled={allDisabled}
-            sx={s.input}
+            className={css.input}
             value={imageValue}
             autoComplete='off'
             placeholder={`e.g. https://commons.wikimedia.org/wiki/File:Elaboraci%C3%B3n_del_tomate_frito_(4).jpg`}
@@ -791,11 +801,11 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
             }}
           />
         </Tooltip>
-      </Box>
-      <Box sx={s.eachRow}>
-        <Box sx={s.text}>Health Score:</Box>
+      </div>
+      <div className={css.eachRow}>
+        <div className={css.text}>Health Score:</div>
         <Tooltip
-          sx={s.tooltipLeft}
+          className={css.tooltipLeft}
           arrow
           variant="outlined"
           size="lg"
@@ -805,20 +815,19 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
           open={error.health.string || error.health.max}
           placement="bottom-start"
           title={
-            <Box sx={{ display: 'flex', flexDirection: 'column', color: '#25252d', background: '#f5f5f9', fontFamily: 'Roboto'}}>
-              <Box
-                sx={{ color: '#25252d', fontWeight: '400' }}
+            <div style={{ display: 'flex', flexDirection: 'column', color: '#25252d', background: '#f5f5f9', fontFamily: 'Roboto'}}>
+              <div
+                style={{ color: '#25252d', fontWeight: '400' }}
               >{error.health.string ?
                 `Only numbers allowed in "Health Score" !` :
                 `Allowed numbers are between 0 and 100 !`}
-              </Box>
-            </Box>
+              </div>
+            </div>
           }
         >
           <TextField
-            className={`inputPos`}
             id="health"
-            sx={s.input}
+            className={css.input}
             disabled={allDisabled}
             value={healthValue}
             autoComplete='off'
@@ -828,13 +837,13 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
             onChange={(e) => { validator({ value: e.target.value, type: e.target.id }) }}
           />
         </Tooltip>
-      </Box>
-      <Box sx={s.eachRow}>
-        <Box sx={s.text}>Dishes:</Box>
+      </div>
+      <div className={css.eachRow}>
+        <div className={css.text}>Dishes:</div>
         <FormControl>
           <InputLabel>Select Dishes</InputLabel>
           <Select
-            sx={s.input}
+            className={css.input}
             placeholder={`Select Dishes`}
             multiple
             value={dishesArray}
@@ -855,11 +864,11 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
             ))}
           </Select>
         </FormControl>
-      </Box>
-      <Box sx={s.eachRow}>
-        <Box sx={s.text}>Summary:</Box>
+      </div>
+      <div className={css.eachRow}>
+        <div className={css.text}>Summary:</div>
         <Tooltip
-          sx={s.tooltipCenter}
+          className={css.tooltipCenter}
           arrow
           variant="outlined"
           size="lg"
@@ -869,28 +878,39 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
           open={error.summary.character || error.summary.badWord}
           placement="bottom"
           title={
-            <Box sx={{ display: 'flex', flexDirection: 'column', color: '#25252d', background: '#f5f5f9', fontFamily: 'Roboto'}}>
-              { error.summary.character ? <Box sx={{ fontWeight: '400', fontSize: '17px' }}>Special characters not allowed in "Summary" !</Box> : null }
-              { error.summary.character ? <Box sx={{ color: '#42424f' }}>Allowed characters:</Box> : null }
-              { error.summary.character ? <Box sx={{ color: '#42424f', textAlign: 'center' }}><b>, ; . : - ! ¡ ¿ ? ' " ( ) [ ] á Á é É í Í ó Ó ú Ú ü Ü ñ Ñ</b></Box> : null }
-              { error.summary.badWord ? <Box sx={{ fontWeight: '400' }}><em>Please, remove </em><mark>highlighted</mark> <em>bad words.</em></Box> : null }
-              { error.summary.character ? <Box sx={{ display: 'flex', flexDirection: 'row', fontWeight: '400' }}><em>Please, 
+            <div style={{ display: 'flex', flexDirection: 'column', color: '#25252d', background: '#f5f5f9', fontFamily: 'Roboto'}}>
+              { error.summary.character ? <div style={{ fontWeight: '400', fontSize: '17px' }}>Special characters not allowed in "Summary" !</div> : null }
+              { error.summary.character ? <div style={{ color: '#42424f' }}>Allowed characters:</div> : null }
+              { error.summary.character ? <div style={{ color: '#42424f', textAlign: 'center' }}><b>, ; . : - ! ¡ ¿ ? ' " ( ) [ ] á Á é É í Í ó Ó ú Ú ü Ü ñ Ñ</b></div> : null }
+              { error.summary.badWord ? <div style={{ fontWeight: '400' }}><em>Please, remove </em><mark>highlighted</mark> <em>bad words.</em></div> : null }
+              { error.summary.character ? <div style={{ display: 'flex', flexDirection: 'row', fontWeight: '400', fontStyle: 'italic' }}>Please, 
                 <Tooltip
                   title={`Ä ä % { } @ / \\ # À à ° ¬ $ & = * etc..`}
-                  sx={{ display: 'flex', flexDirection: 'column', color: '#42424f', background: '#f5f5f9', fontFamily: 'Roboto'}}
+                  style={{ display: 'flex', flexDirection: 'column', color: '#42424f', background: '#f5f5f9', fontFamily: 'Roboto'}}
                 >
                   <u>remove unallowed characters</u>
-                </Tooltip>.</em>
-              </Box> : null }
-            </Box>
+                </Tooltip>.
+              </div> : null }
+            </div>
           }
         >
-          <Box>
-            <InputLabel disabled={allDisabled} id={"targetSummary"} shrink={false} sx={s.inputShownSummary}>{ summaryValue }</InputLabel>
+          <div>
+            <InputLabel
+              id={"targetSummary"}
+              disabled={allDisabled}
+              shrink={false}
+              className={css.inputShownSummary}
+            >{ summaryValue }</InputLabel>
             <TextField
-              id="summary"
+              id={"summary"}
+              className={css.inputHiddenSummary}
+              inputProps={{
+                style: {
+                  color: 'transparent',
+                  caretColor: 'rgba(0, 0, 0, 0.87)'
+                }
+              }}
               autoComplete='off'
-              sx={s.inputHiddenSummary}
               value={summaryValue}
               disabled={allDisabled}
               multiline
@@ -899,15 +919,15 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
               onBlur={() => setSummaryPlaceholder(`e.g. Healthy pasta recipe`)}
               onChange={(e) => { validator({ value: e.target.value, type: e.target.id }) }}
             />
-          </Box>
+          </div>
         </Tooltip>
-      </Box>
-      <Box sx={s.eachRow}>
-        <Box sx={s.text}>Diets:</Box>
+      </div>
+      <div className={css.eachRow}>
+        <div className={css.text}>Diets:</div>
         <FormControl>
           <InputLabel>Select Diets</InputLabel>
           <Select
-            sx={s.input}
+            className={css.input}
             placeholder={`Select Diets`}
             multiple
             value={dietsArray}
@@ -928,17 +948,17 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
             ))}
           </Select>
         </FormControl>
-      </Box>
-      <Box sx={s.eachRow}>
-        <Box sx={s.text}>Instructions:</Box>
-        <Box sx={s.stepsContainer}>
+      </div>
+      <div className={css.eachRow}>
+        <div className={css.text}>Instructions:</div>
+        <div className={css.stepsContainer}>
 
           {stepsState.map((e, index) => (
-            <Box key={index} sx={s.eachStep}>
-              <Box sx={s.stepTitle}>Step {index + 1}:</Box>
+            <div key={index} className={css.eachStep}>
+              <div className={css.stepTitle}>Step {index + 1}:</div>
 
               <Tooltip
-                sx={ index % 2 === 0 ? s.tooltipRight : s.tooltipLeft }
+                className={ index % 2 === 0 ? css.tooltipRight : css.tooltipLeft }
                 key={index}
                 arrow
                 variant="outlined"
@@ -949,25 +969,30 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
                 open={(error.instructions[index] && error.instructions[index].character) || (error.instructions[index] && error.instructions[index].badWord)}
                 placement={ index % 2 === 0 ? `bottom-end` : `bottom-start` }
                 title={
-                  <Box sx={{ display: 'flex', flexDirection: 'column', color: '#25252d', background: '#f5f5f9', fontFamily: 'Roboto'}}>
-                    { error.instructions[index] && error.instructions[index].character ? <Box sx={{ fontWeight: '400', fontSize: '17px' }}>Special characters not allowed in "Instructions" !</Box> : null }
-                    { error.instructions[index] && error.instructions[index].character ? <Box sx={{ color: '#42424f' }}>Allowed characters:</Box> : null }
-                    { error.instructions[index] && error.instructions[index].character ? <Box sx={{ color: '#42424f', textAlign: 'center' }}><b>, ; . : - ! ¡ ¿ ? ' " ( ) [ ] á Á é É í Í ó Ó ú Ú ü Ü ñ Ñ</b></Box> : null }
-                    { error.instructions[index] && error.instructions[index].badWord ? <Box sx={{ fontWeight: '400' }}><em>Please, remove </em><mark>highlighted</mark> <em>bad words on step {index + 1}.</em></Box> : null }
+                  <div style={{ display: 'flex', flexDirection: 'column', color: '#25252d', background: '#f5f5f9', fontFamily: 'Roboto'}}>
+                    { error.instructions[index] && error.instructions[index].character ? <div style={{ fontWeight: '400', fontSize: '17px' }}>Special characters not allowed in "Instructions" !</div> : null }
+                    { error.instructions[index] && error.instructions[index].character ? <div style={{ color: '#42424f' }}>Allowed characters:</div> : null }
+                    { error.instructions[index] && error.instructions[index].character ? <div style={{ color: '#42424f', textAlign: 'center' }}><b>, ; . : - ! ¡ ¿ ? ' " ( ) [ ] á Á é É í Í ó Ó ú Ú ü Ü ñ Ñ</b></div> : null }
+                    { error.instructions[index] && error.instructions[index].badWord ? <div style={{ fontWeight: '400' }}><em>Please, remove </em><mark>highlighted</mark> <em>bad words on step {index + 1}.</em></div> : null }
                     { error.instructions[index] && error.instructions[index].character ?
-                      <Box sx={{ display: 'flex', flexDirection: 'row', fontWeight: '400' }}><em>Please, 
+                      <div style={{ display: 'flex', flexDirection: 'row', fontWeight: '400', fontStyle: 'italic' }}>Please, 
                         <Tooltip
                           title={`Ä ä % { } @ / \\ # À à ° ¬ $ & = * etc..`}
-                          sx={{ display: 'flex', flexDirection: 'column', color: '#42424f', background: '#f5f5f9', fontFamily: 'Roboto'}}
+                          style={{ display: 'flex', flexDirection: 'column', color: '#42424f', background: '#f5f5f9', fontFamily: 'Roboto'}}
                         >
                           <u>remove unallowed characters</u>
-                        </Tooltip> on step {index + 1}.</em>
-                      </Box> : null }
-                  </Box>
+                        </Tooltip> on step {index + 1}.
+                      </div> : null }
+                  </div>
                 }
               >
-                <Box id={`testtest${index}`}>
-                  <InputLabel disabled={allDisabled} id={`targetInstructions${index}`} shrink={false} sx={s.inputShownInstructions}>{ stepsState[index] }</InputLabel>
+                <div>
+                  <InputLabel
+                    disabled={allDisabled}
+                    id={`targetInstructions${index}`}
+                    shrink={false}
+                    className={css.inputShownInstructions}
+                  >{ stepsState[index] }</InputLabel>
                   <TextField
                     id={`${index}instructions`}
                     autoComplete='off'
@@ -975,13 +1000,13 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
                     disabled={allDisabled}
                     value={stepsState[index]}
                     placeholder={`e.g. Cut pasta, fry tomatoes..`}
-                    sx={s.inputHiddenInstructions}
+                    className={css.inputHiddenInstructions}
                     onChange={(e) => {
                       handlerUpdateInstructions({ index: parseInt((e.target as HTMLInputElement).id, 10), value: e.target.value });
                       validator({ value: e.target.value, type: e.target.id.replace(/[0-9]/g, ''), index: parseInt((e.target as HTMLInputElement).id, 10) })
                     }}
                   />
-                </Box>
+                </div>
               </Tooltip>
 
               <Tooltip
@@ -994,10 +1019,10 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
                 disableHoverListener={stepsState.length >= 10 ? false : true}
                 placement="bottom-end"
                 title={
-                  <Box sx={s.newStepTooltip}>
-                    <Box>Max steps {`<`}10{`>`} reached !</Box>
-                    <Box>Please, delete some old step to add new one.</Box>
-                  </Box>
+                  <div className={css.newStepTooltip}>
+                    <div>Max steps {`<`}10{`>`} reached !</div>
+                    <div>Please, delete some old step to add new one.</div>
+                  </div>
                 }
               >
                 {/* <Box sx={s.buttonNewHelper}> */}
@@ -1005,7 +1030,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
                     variant="contained"
                     disabled={allDisabled ? true : stepsState.length >= 10 ? true : false}
                     id={`${index}`}
-                    sx={s.buttonNew}
+                    className={css.buttonNew}
                     onClick={(e) => { handlerAddInstructions({ index: parseInt((e.target as HTMLInputElement).id, 10 )}) }}
                   >NEW STEP
                   </Button>
@@ -1025,24 +1050,23 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
               >
                 {/* <Box sx={s.buttonDeleteHelper}> */}
                   <Button
-                    className={`buttonDeleteStep`}
                     variant="contained"
                     disabled={allDisabled ? true : stepsState.length === 1 ? true : false}
                     id={`${index}`}
-                    sx={s.buttonDelete}
+                    className={css.buttonDelete}
                     onClick={(e) => { handlerDeleteInstructions({ index: parseInt((e.target as HTMLInputElement).id, 10) }) }}
                   >DELETE STEP
                   </Button>
                 {/* </Box> */}
               </Tooltip>
-            </Box>
+            </div>
           ))}
 
-        </Box>
-      </Box>
-      <Box sx={s.eachRow}>
+        </div>
+      </div>
+      <div className={css.eachRow}>
         <Button
-          sx={s.buttonClearSave}
+          className={css.buttonClearSave}
           variant="contained"
           onClick={() =>
             saveButtonDisabled && allDisabled ?
@@ -1061,7 +1085,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
           }
         </Button>
         <Button
-          sx={s.buttonClearSave}
+          className={css.buttonClearSave}
           variant="contained"
           onClick={(e) => isEditing ? handleSaveEdit(e) : handleSubmit(e) }
           disabled={
@@ -1078,7 +1102,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
           }
         >{ isEditing ? `SAVE EDIT` : `SAVE RECIPE` }
         </Button>
-      </Box>
+      </div>
     </div>
   )
 }

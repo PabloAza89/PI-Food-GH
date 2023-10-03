@@ -1,3 +1,7 @@
 .swal2-popup .swal2-styled:focus {
   box-shadow: none !important;
 }
+
+.swal2-container {
+  z-index: 10000 !important;
+}

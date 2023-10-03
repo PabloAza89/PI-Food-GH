@@ -2,7 +2,7 @@ import { useSelector , useDispatch } from 'react-redux';
 import css from './PaginateCSS.module.css';
 import comm from '../../styles/commons.module.css';
 import { setIndexChoosen } from '../../actions';
-import { Box, Button } from '@mui/material/';
+import { Button } from '@mui/material/';
 import $ from 'jquery';
 import { recipesI } from '../../interfaces/interfaces';
 

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import css from "./CardCSS.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector , useDispatch } from 'react-redux';
-import '../../commons/disableAutoFocusSA2.module.css';
+//import '../../commons/disableAutoFocusSA2.module.css';
 import noImage1 from "../../images/noImage1.jpg";
 import noImage2 from "../../images/noImage2.jpg";
 import noImage3 from "../../images/noImage3.jpg";

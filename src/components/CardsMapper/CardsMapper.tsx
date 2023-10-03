@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import css from './CardsMapperCSS.module.css';
 import Card from '../Card/Card';
 import { useSelector , useDispatch } from 'react-redux';
-import { Box } from '@mui/material';
 import { recipesI, userDataI, retrieveLoginI  } from '../../interfaces/interfaces';
 import {
   fetchRecipesFromAPI, allRecipesLoaded, getDietsFromDB,

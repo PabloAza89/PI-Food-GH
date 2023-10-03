@@ -1,6 +1,6 @@
 import css from "./AboutCSS.module.css";
 import { Link } from "react-router-dom";
-import { Box, Button, Typography } from '@mui/material/';
+import { Button } from '@mui/material/';
 
 function About() {
 
