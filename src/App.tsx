@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import css from './App.module.css';
 import './commons/globalSweetAlert2.css';
 import { useSelector } from 'react-redux';
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import CardsMapper from "./components/CardsMapper/CardsMapper";
 import GoogleAuth from './components/GoogleAuth/GoogleAuth';
 import Detail from "./components/Detail/Detail";
@@ -28,6 +28,7 @@ import $ from 'jquery';
 function App() {
 
   const dispatch = useDispatch()
+  const location = useLocation()
 
   useEffect(() => {
     $(function() {
@@ -143,7 +144,7 @@ function App() {
 
   return (
     <div className={css.background}>
-      <div className={css.wallpaperNav} />
+      <div className={css.wallpaperNav} style={{ display: location.pathname === `/` ? 'none' : 'flex' }}/>
       <div className={css.wallpaperBody} />
       <Routes>
         <Route path="/" element={<>
@@ -168,9 +169,10 @@ function App() {
           />
         </>}/>
         <Route id={'abcabc'} path="/MyRecipe" element={<>
+          <NavBar />
           <GoogleAuth retrieveLogin={retrieveLogin} userData={userData} />
           <ServerStatus />
-          <GoBack recipeCreatedOrEdited={recipeCreatedOrEdited} />
+          {/* <GoBack recipeCreatedOrEdited={recipeCreatedOrEdited} /> */}
           <MyRecipe
             retrieveLogin={retrieveLogin}
             userData={userData}

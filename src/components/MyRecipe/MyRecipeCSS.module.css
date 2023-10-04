@@ -1,11 +1,14 @@
 .container {
-  background: yellow;
-  margin-left: 101px;
-  /* margin-right: 101px; */
+  background: yellow; /* DEV */
   display: flex;
   position: relative;
   justify-content: center;
-  min-width: 800px;
+  margin-top: 100px;
+  margin-left: 16px;
+  padding-bottom: 16px;
+  
+  
+  /* min-width: 800px; */
 
 }
 
@@ -14,13 +17,15 @@
   display: flex;
   position: relative;
   flex-direction: column;
-  min-width: 800px !important;
   align-items: center;
   align-self: center;
+  /* max-width: 800px; */
+  width: 800px;
   margin-top: 16px;
-  margin-bottom: 16px;
+  /* margin-bottom: 16px; */
+  /* min-width: 800px !important; */
   padding-bottom: 6px;
-  align-self: center;
+  
 
   /* margin-left: 101px !important; */
   /* background: linear-gradient(135deg, rgba(196, 34, 147, 0.1), rgba(196, 34, 147, 0));
@@ -57,10 +62,11 @@
   flex-direction: row;
   margin-left: 20px;
   margin-right: 20px;
-  min-width: 760px;
+  /* min-width: 760px; */
+  /* width: calc(100% - 40px); */
+  /* min-width: 760px; */
   width: calc(100% - 40px);
-  /* width: 80vw;
-  min-width: 800px; */
+  
 }
 
 .eachRow:last-child { justify-content: center; }
@@ -182,34 +188,44 @@ width: calc(100% - 40px); */
 .instructionsContainer {
   /* width: calc(100% - 213px); */
   width: calc(100% - 57px - 80px - 80px - 20px) !important;
-  background: red
+  /* background: red; */ /* DEV */
+  /* min-inline-size: fit-content !important; */
+  /* min-inline-size: fit-content; */
 }
 
 .inputShownInstructions {
-  display: flex !important;
+  /* background: lightblue; */ /* DEV */
+  display: flex;
   flex-wrap: wrap !important; /* MULTILINE */
   white-space: pre-wrap !important; /* MULTILINE */
   /* width: calc(48vw - 28px) !important; */
   margin-left: 14px !important;
+  /* margin-right: 14px !important; */
   padding: 16.5px 0px 16.5px 0px !important;
+  /* position: fixed !important; */
   position: absolute !important;
+  /* position: relative !important; */
+  /* color: transparent; */
   color: transparent !important;
+  /* width: calc(100% - 113px - 57px - 80px - 80px ) !important; */
+  width: calc(100% - 113px - 57px - 80px - 80px - 48px) !important;
+  overflow-wrap: break-word;
+  /* min-inline-size: fit-content; */
+  /* min-inline-size: fit-content !important; */
   /* width: 100% !important; */
     /* width: calc(100% - 300px) */
     /* width: calc(100% - 113px - 57px - 80px - 80px - 40px); */
     /* width: 100%; */
+    /* white-space: nowrap; */
 }
 
 .inputHiddenInstructions {
   display: flex;
   position: relative;
-  background: orange;
+  /* background: orange; */ /* DEV */
   width: 100% !important;
-  /* width: calc(100% - 300px) */
-  /* width: calc(100% - 160px); */
-  /* width: 48vw; */
-
 }
+
 
 .inputStep {
   width: 48vw;
@@ -231,7 +247,7 @@ width: calc(100% - 40px); */
 }
 
 .stepsContainer {
-  background: darkcyan;
+  /* background: darkcyan; */ /* DEV */
   width: calc(100% - 113px);
   display: flex;
   flex-direction: column;
@@ -244,7 +260,7 @@ width: calc(100% - 40px); */
   flex-direction: row;
   /* width: 68vw; */
   width: 100%;
-  background: salmon !important;
+  /* background: salmon !important; */ /* DEV */
   margin-bottom: 12px;
   /* justify-content: space-evenly; */
   justify-content: flex-start;

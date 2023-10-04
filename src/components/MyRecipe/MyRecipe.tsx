@@ -661,15 +661,29 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
     else retrieveRecipeCreatedOrEdited(false)
   },[saveButtonDisabled, allDisabled])
 
+  useEffect(() => {
+    dispatch(setHasScroll(window.innerWidth !== $('body').width() ? true : false))
+  },[dispatch])
+
   console.log("isEditing isEditing", isEditing)
   console.log("imageLoaded imageLoaded", imageLoaded)
   console.log("error.instructions error.instructions", error.instructions)
   console.log("location.state.analyzedInstructions.length", location.state && location.state.analyzedInstructions.length)
   console.log("hasScroll hasScroll", hasScroll)
 
+  
+
+  useEffect(() => {
+    console.log("PPP", $("#0instructions").width())
+  })
+
+  console.log("OOO", stepsState[0] === '\n')
 
   return (
-    <div className={css.container} style={{ marginRight: hasScroll ? `${101 + scrollWidth}px` : `101px` }}>
+    <div 
+      className={css.container}
+      style={{ marginRight: hasScroll ? `${16 + scrollWidth}px` : `16px` }}
+    >
     <div
       /* sx={s.form({ hasScroll, scrollWidth })} */
       className={css.form}
@@ -983,6 +997,13 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
                     disabled={allDisabled}
                     shrink={false}
                     className={css.inputShownInstructions}
+                    sx={{
+                      "& .MuiInputLabel-root": {
+                        //color: "yellow",
+                      },
+                      "& .MuiFormLabel-root": {
+                      },
+                    }}
                   >{ stepsState[index] }</InputLabel>
                   <TextField
                     id={`${index}instructions`}
@@ -992,6 +1013,29 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
                     multiline
                     value={stepsState[index]}
                     placeholder={`e.g. Cut pasta, fry tomatoes..`}
+                    //sx={{ whiteSpace: stepsState[index].length ? 'nowrap' : 'nowrap'}}
+                    
+                    sx={{
+                      "& .MuiInputBase-root": {
+                        //color: "yellow",
+                        //whiteSpace: stepsState[index].length !== 0 ? 'nowrap' : 'nowrap'
+                        //whiteSpace: 'nowrap !important'
+                        //whiteSpace: /* stepsState[index] !== undefined || */ stepsState[index] === '\n' ? 'normal' : 'normal'
+                      },
+                      "& .MuiInputBase-input": {
+                        
+                        //whiteSpace: 'pre-wrap' // AUTO-FITS
+                        //whiteSpace: 'nowrap' // 1 SINGLE LINE
+                        whiteSpace: stepsState[index] !== '' ? 'pre-wrap' : 'nowrap'
+
+
+                        //whiteSpaceCollapse: 'preserve'
+                        //whiteSpace: /* stepsState[index] !== undefined || */ stepsState[index] === '\n' ? 'normal' : 'normal'
+                        //color: "yellow",
+                        //whiteSpace: 'nowrap'
+                        //whiteSpace: stepsState[index].length !== 0 ? 'normal' : 'nowrap'
+                      },
+                    }}
                     onChange={(e) => {
                       handlerUpdateInstructions({ index: parseInt((e.target as HTMLInputElement).id, 10), value: e.target.value });
                       validator({ value: e.target.value, type: e.target.id.replace(/[0-9]/g, ''), index: parseInt((e.target as HTMLInputElement).id, 10) })

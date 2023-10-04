@@ -36,9 +36,9 @@ const CardsMapper = ({ retrieveLogin, userData }: CardsMapperI)  => {
     dispatch(setHasScroll(window.innerWidth !== $('body').width() ? true : false))
   })
 
-  let toShoww = [undefined]
+  //let toShoww = [undefined]
 
-  return toShoww[0] !== undefined ?
+  return toShow[0] !== undefined ?
     (<div
       className={css.background}
       style={{
