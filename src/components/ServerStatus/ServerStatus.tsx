@@ -35,7 +35,7 @@ const ServerStatus = () =>  {
         })
         $(`#sliderBox`)
           .css("left", "auto")
-          .css("right", "250px")
+          .css("right", "310px")
       }
       else if (!show) { // hidden -> show
         $(`.buttonShow`)
@@ -51,7 +51,7 @@ const ServerStatus = () =>  {
               .css(`animationIterationCount`,`none`)
             $(`#sliderBox`)
               .stop()
-              .animate( { right: '250px' }, { queue: false, easing: 'easeOutCubic', duration: 800 })
+              .animate( { right: '310px' }, { queue: false, easing: 'easeOutCubic', duration: 800 })
           })
         $(`#sliderBox`)
           .css("left", "auto")

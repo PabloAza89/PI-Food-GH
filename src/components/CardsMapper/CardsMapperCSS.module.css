@@ -12,13 +12,14 @@
   position: absolute;
   display: flex;
   flex-direction: column;
-  min-width: 925px;
+  /* min-width: 925px; */
   width: 100vw;
   height: 260px;
   align-items: center;
   justify-content: center;
   color: rgba(240, 248, 255, 0.726);
-  font-size: 87px;
+  /* font-size: 87px; */
+  font-size: calc(32px + 3vw);
   white-space:nowrap;
   margin-top: 7px;
 }

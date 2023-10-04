@@ -13,14 +13,19 @@ import { recipesI } from '../../interfaces/interfaces';
 import EditIcon from '@mui/icons-material/Edit';
 import ClearIcon from '@mui/icons-material/Clear';
 import {
-  fetchRecipesFromAPI, allRecipesLoaded, getDietsFromDB, getDishesFromDB
+  fetchRecipesFromAPI, allRecipesLoaded, getDietsFromDB,
+  getDishesFromDB, setHasScroll
 } from '../../actions';
+import $ from 'jquery';
 
 export default function Detail({ userData, retrieveLogin, retrieveRecipeNotFound }: any) {
 
   const dispatch = useDispatch()
   const navigate = useNavigate();
   const params = useParams()
+
+  const hasScroll = useSelector((state: {hasScroll:boolean}) => state.hasScroll)
+  const scrollWidth = useSelector((state: {scrollWidth: number}) => state.scrollWidth)
 
   let arrImages = [noImage1, noImage2, noImage3]
   const [ brokenImage, setBrokenImage ] = useState<boolean>(false)
@@ -58,9 +63,19 @@ export default function Detail({ userData, retrieveLogin, retrieveRecipeNotFound
     else retrieveRecipeNotFound(true)
   },[recipe, retrieveRecipeNotFound])
 
+  useEffect(() => {
+    dispatch(setHasScroll(window.innerWidth !== $('body').width() ? true : false))
+  },[dispatch])
+
+  
+
+  console.log("NN window.innerWidth", window.innerWidth)
+  console.log("NN $('body').width()", $('body').width())
+
   if (recipe !== undefined) {
     return (
-      <div className={css.background}>
+      <div className={css.container} style={{ marginRight: hasScroll ? `${16 + scrollWidth}px` : `16px` }}>
+      
         <div className={css.card}>
           <div
             id={css.editDeleteContainer}
@@ -170,7 +185,8 @@ export default function Detail({ userData, retrieveLogin, retrieveRecipeNotFound
               }
           </div>
         </div>
-        <div className={css.helperBottom}></div>
+        {/* <div className={css.helperBottom}></div> */}
+      
       </div>
     )
   } else return (

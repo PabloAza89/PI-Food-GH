@@ -15,7 +15,7 @@ const GoBack = ({ recipeCreatedOrEdited, recipeNotFound }: GoBackI) =>  {
 
   const location = useLocation()
   const navigate = useNavigate()
-
+  
   const [isEditing, setIsEditing] = useState<boolean>( location.state && location.state.editing ? true : false );
 
   const handleReturn = () => {

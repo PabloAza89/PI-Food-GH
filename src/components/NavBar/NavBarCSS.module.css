@@ -1,8 +1,18 @@
 .background {
   display: flex;
-  width: 100vw;
+  /* display: none; */
+  /* width: 100vw !important; */
+  /* position: relative; */
+  /* position: fixed; */
   background-color: rgba(0, 255, 255, .264);
+  /* background-image: url('../../images/bgImage.webp');
+  background-size: 100vw; */
+  /* z-index: 2000; */
+  z-index: 3;
+  /* border: 10px solid red; */
 }
+
+
 
 .logoAndMenuContainer {
   display: flex;
@@ -12,13 +22,17 @@
 }
 
 .logoTextContainer {
+  display: flex;
+  background: red; /* DEV */
+  margin: 16px 0px 0px 16px;
   flex-direction: row;
-  min-width: 200px;
-  width: 200px;
-  min-height: 100px;
-  height: 100px;
+  /* min-width: 200px;
+  width: 200px; */
+  min-height: 69px;
+  height: 69px;
   justify-content: flex-end;
   align-items: center;
+  align-self: flex-start;
 }
 
 .selectsAndButtons {
@@ -67,6 +81,7 @@
   width: 115px;
   text-align: right;
   color: #FFFFFF;
+  text-decoration: none !important;
 }
 
 .button {
@@ -103,6 +118,7 @@
   -moz-user-select: none !important;
   -ms-user-select: none !important;
   user-select: none !important;
+  text-decoration: none !important;
 }
 
 /* .input {

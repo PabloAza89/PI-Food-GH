@@ -8,7 +8,7 @@ import noImage3 from "../../images/noImage3.jpg";
 import noLoaded from "../../images/noLoaded.jpg";
 import { useLocation, useNavigate } from "react-router-dom";
 import { addNew, setHasScroll } from '../../actions';
-import { Button, TextField, ListItemText, Checkbox, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material/';
+import { Box, Button, TextField, ListItemText, Checkbox, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material/';
 import dietsEntireArray from '../../db/diets.json';
 import dishesEntireArray from '../../db/dishes.json';
 import Tooltip from '@mui/joy/Tooltip';
@@ -273,6 +273,8 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
         let copyObjSummary = {...error}
         if (/[^A-Za-z0-9-(áÁéÉíÍóÓúÚüÜñÑ),\n;.:¡!¿?'"()[\] ]/g.test(value) && value.length !== 0) { copyObjSummary[type].character = true; setError({ ...copyObjSummary }) }
         else { copyObjSummary[type].character = false; setError({ ...copyObjSummary })}
+        if (value.replaceAll(" ","").replaceAll("\n", "") === "") { copyObjSummary[type].empty = true; setError({ ...copyObjSummary }) }
+        else { copyObjSummary[type].empty = false; setError({ ...copyObjSummary }) }
         setSummaryValue(value);
         if (!isEditing) localStorage.setItem('summaryValue', value)
         highlighter({value, type})
@@ -323,9 +325,11 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
       instructions: [{ character: false, badWord: false, empty: false },]
     });
     localStorage.clear()
-    $(`#targetInstructions0`)
-      .html("<div></div>")
     $(`#targetTitle`)
+      .html("<div></div>") // clear all highlighted
+    $(`#targetSummary`)
+      .html("<div></div>")
+    $(`#targetInstructions0`)
       .html("<div></div>")
   };
 
@@ -665,10 +669,12 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
 
 
   return (
+    <div className={css.container} style={{ marginRight: hasScroll ? `${101 + scrollWidth}px` : `101px` }}>
     <div
       /* sx={s.form({ hasScroll, scrollWidth })} */
       className={css.form}
-      style={{ marginRight: hasScroll ? `${96 + scrollWidth}px` : `96px` }}
+      /* style={{ marginRight: hasScroll ? `${96 + scrollWidth}px` : `96px` }} */
+      /* style={{ marginRight: hasScroll ? `${scrollWidth}px` : `0px` }} */
     >
         <img // HIDDEN. ONLY FOR IMAGE VERIFICATION PURPOSES.
           style={{ width: '0px', height: '0px' }}
@@ -723,7 +729,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
               { error.title.badWord ? <div style={{ fontWeight: '400' }}><em>Please, remove </em><mark>highlighted</mark> <em>bad words.</em></div> : null }
               { error.title.character ? <div style={{ display: 'flex', flexDirection: 'row', fontWeight: '400', fontStyle: 'italic' }}>Please, 
                 <Tooltip
-                  title={`Ä ä % { } @ / \\ # À à ° ¬ $ & = * etc..`}
+                  title={`Ä ä % { } @ / \\ # À à ° + ¬ $ & = * etc..`}
                   style={{ display: 'flex', flexDirection: 'column', color: '#42424f', background: '#f5f5f9', fontFamily: 'Roboto'}}
                 >
                   <u>remove unallowed characters</u></Tooltip>.
@@ -732,25 +738,18 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
             </div>
           }
         >
-          <div>
+          <div style={{ width: '100%' }}>
             <InputLabel
               id={"targetTitle"}
               disabled={allDisabled}
               shrink={false}
               className={css.inputShownTitle}
-              style={{ color: 'rgba(0, 0, 0, 0.87)' }}
             >{ titleValue }</InputLabel>
             <TextField
-              disabled={allDisabled}
               id="title"
+              disabled={allDisabled}
               autoComplete='off'
               className={css.inputHiddenTitle}
-              inputProps={{
-                style: {
-                  color: 'transparent',
-                  caretColor: 'rgba(0, 0, 0, 0.87)'
-                }
-              }}
               value={titleValue}
               placeholder={`e.g. Pasta with tomatoes..`}
               onChange={(e) => { validator({ value: e.target.value, type: e.target.id }) }}
@@ -840,7 +839,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
       </div>
       <div className={css.eachRow}>
         <div className={css.text}>Dishes:</div>
-        <FormControl>
+        <FormControl className={css.titleAndTextFieldContainer}>
           <InputLabel>Select Dishes</InputLabel>
           <Select
             className={css.input}
@@ -894,7 +893,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
             </div>
           }
         >
-          <div>
+          <div className={css.titleAndTextFieldContainer}>
             <InputLabel
               id={"targetSummary"}
               disabled={allDisabled}
@@ -904,19 +903,11 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
             <TextField
               id={"summary"}
               className={css.inputHiddenSummary}
-              inputProps={{
-                style: {
-                  color: 'transparent',
-                  caretColor: 'rgba(0, 0, 0, 0.87)'
-                }
-              }}
-              autoComplete='off'
-              value={summaryValue}
               disabled={allDisabled}
+              autoComplete='off'
               multiline
-              placeholder={summaryPlaceholder}
-              onFocus={() => setSummaryPlaceholder("")}
-              onBlur={() => setSummaryPlaceholder(`e.g. Healthy pasta recipe`)}
+              value={summaryValue}
+              placeholder={`e.g. Healthy pasta recipe`}
               onChange={(e) => { validator({ value: e.target.value, type: e.target.id }) }}
             />
           </div>
@@ -924,7 +915,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
       </div>
       <div className={css.eachRow}>
         <div className={css.text}>Diets:</div>
-        <FormControl>
+        <FormControl className={css.titleAndTextFieldContainer}>
           <InputLabel>Select Diets</InputLabel>
           <Select
             className={css.input}
@@ -986,21 +977,21 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
                   </div>
                 }
               >
-                <div>
+                <div className={css.instructionsContainer}>
                   <InputLabel
-                    disabled={allDisabled}
                     id={`targetInstructions${index}`}
+                    disabled={allDisabled}
                     shrink={false}
                     className={css.inputShownInstructions}
                   >{ stepsState[index] }</InputLabel>
                   <TextField
                     id={`${index}instructions`}
+                    className={css.inputHiddenInstructions}
+                    disabled={allDisabled}
                     autoComplete='off'
                     multiline
-                    disabled={allDisabled}
                     value={stepsState[index]}
                     placeholder={`e.g. Cut pasta, fry tomatoes..`}
-                    className={css.inputHiddenInstructions}
                     onChange={(e) => {
                       handlerUpdateInstructions({ index: parseInt((e.target as HTMLInputElement).id, 10), value: e.target.value });
                       validator({ value: e.target.value, type: e.target.id.replace(/[0-9]/g, ''), index: parseInt((e.target as HTMLInputElement).id, 10) })
@@ -1025,16 +1016,17 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
                   </div>
                 }
               >
-                {/* <Box sx={s.buttonNewHelper}> */}
+                <div className={css.buttonNewHelper}>
                   <Button
                     variant="contained"
                     disabled={allDisabled ? true : stepsState.length >= 10 ? true : false}
                     id={`${index}`}
                     className={css.buttonNew}
+                    sx={{ background: 'green' }}
                     onClick={(e) => { handlerAddInstructions({ index: parseInt((e.target as HTMLInputElement).id, 10 )}) }}
-                  >NEW STEP
+                  >ADD
                   </Button>
-                {/* </Box> */}
+                </div>
               </Tooltip>
 
               <Tooltip
@@ -1048,16 +1040,17 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
                 placement="bottom-end"
                 title={"You can't delete first step !"}
               >
-                {/* <Box sx={s.buttonDeleteHelper}> */}
+                <div className={css.buttonDeleteHelper}>
                   <Button
                     variant="contained"
                     disabled={allDisabled ? true : stepsState.length === 1 ? true : false}
                     id={`${index}`}
                     className={css.buttonDelete}
+                    sx={{ background: 'red' }}
                     onClick={(e) => { handlerDeleteInstructions({ index: parseInt((e.target as HTMLInputElement).id, 10) }) }}
-                  >DELETE STEP
+                  >DELETE
                   </Button>
-                {/* </Box> */}
+                </div>
               </Tooltip>
             </div>
           ))}
@@ -1103,6 +1096,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
         >{ isEditing ? `SAVE EDIT` : `SAVE RECIPE` }
         </Button>
       </div>
+    </div>
     </div>
   )
 }

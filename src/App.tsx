@@ -127,9 +127,23 @@ function App() {
       window.removeEventListener("scroll", scrollHandler);
     }
   },[dispatch]);
+  //})
+
+  //.then(() => console.log("asd"))
+
+  // dispatch(setHasScroll(window.innerWidth !== $('body').width() ? true : false))
+  // dispatch(setHasScroll(window.innerWidth !== $('body').width() ? true : false))
+
+  // console.log("CC window.innerWidth", window.innerWidth)
+  // console.log("CC $('body').width()", $('body').width())
+
+  // setTimeout(() => {
+  //   dispatch(setHasScroll(window.innerWidth !== $('body').width() ? true : false))
+  // },1000)
 
   return (
     <div className={css.background}>
+      <div className={css.wallpaperNav} />
       <div className={css.wallpaperBody} />
       <Routes>
         <Route path="/" element={<>
@@ -140,10 +154,13 @@ function App() {
           <CardsMapper retrieveLogin={retrieveLogin} userData={userData} />
           <GoUp />
         </>}/>
+        
+        
         <Route path="/:recipeId" element={<>
+          <NavBar />
           <GoogleAuth retrieveLogin={retrieveLogin} userData={userData} />
           <ServerStatus />
-          <GoBack recipeNotFound={recipeNotFound} />
+          {/* <GoBack recipeNotFound={recipeNotFound} /> */}
           <Detail
             retrieveLogin={retrieveLogin}
             userData={userData}

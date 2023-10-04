@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import logo from "../../images/logo.png";
 import css from './NavBarCSS.module.css';
-import comm from '../../styles/commons.module.css';
+import comm from './commonsCSS.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import MenuIcon from '@mui/icons-material/Menu';
 import {
@@ -19,9 +19,14 @@ import serverSDDishesArray from '../../db/dishes.json'; // SD = Shut Down
 const NavBar = () =>  {
 
   const dispatch = useDispatch()
+  const location = useLocation()
+
+  //location.pathname.toLowerCase() === `/myrecipe`
+  //console.log("BBB", location.pathname === `/`)
 
   const allRecipesLoaded = useSelector((state: {allRecipesLoaded: boolean}) => state.allRecipesLoaded)
   const scrollWidth = useSelector((state: {scrollWidth: number}) => state.scrollWidth)
+  const hasScroll = useSelector((state: {hasScroll:boolean}) => state.hasScroll)
 
   const [healthLevel, setHealthLevel] = useState<string>('');
   const [healthLabelShown, setHealthLabelShown] = useState<boolean>(false);
@@ -86,9 +91,12 @@ const NavBar = () =>  {
     <div
       className={css.background}
       style={{
+        position: location.pathname !== `/` ? 'fixed' : 'relative',
         flexDirection: menuShown ? 'column' : 'row',
         minHeight: menuShown ? '200px' : '100px',
         height: menuShown ? '200px' : '100px',
+        width: hasScroll ? `calc(100vw - ${scrollWidth}px)` : `100vw`
+        //width: `100vw`
       }}
     >
       <div
@@ -116,9 +124,9 @@ const NavBar = () =>  {
             onClick={() => dispatch(setMenuShown(!menuShown))}
             className={css.menuButton}
             sx={{
-              display: currentWidth <= 800 ? 'flex' : 'none',
+              display: location.pathname === `/` && currentWidth <= 800 ? 'flex' : 'none',
               background: '#F0F0F0',
-              ':hover': { background: '#e8e8e8' },
+              ':hover': { background: '#e8e8e8' }
             }}
           >
             <MenuIcon style={{ fontSize: 40 }} />
@@ -126,7 +134,7 @@ const NavBar = () =>  {
         </Tooltip>
       </div>
       <div
-        style={{ display: currentWidth <= 800 && !menuShown ? 'none' : 'flex' }}
+        style={{ display: location.pathname !== `/` ? 'none' : currentWidth <= 800 && !menuShown ? 'none' : 'flex' }}
         /* className={css.selectsAndButtons} */
         /* className={'css.selectsAndButtons rtrtrt'} */
         /* className={`${css.selectsAndButtons} ${comm.rtrtrt}`} */

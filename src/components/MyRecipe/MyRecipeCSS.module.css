@@ -1,14 +1,28 @@
-.form {
+.container {
+  background: yellow;
+  margin-left: 101px;
+  /* margin-right: 101px; */
+  display: flex;
+  position: relative;
+  justify-content: center;
+  min-width: 800px;
+
+}
+
+.form { /* ...noSelect; */
   background: darkred !important;
-  /* ...noSelect; */
   display: flex;
   position: relative;
   flex-direction: column;
-  min-width: 400px;
+  min-width: 800px !important;
   align-items: center;
-  margin-left: 101px;
+  align-self: center;
   margin-top: 16px;
+  margin-bottom: 16px;
+  padding-bottom: 6px;
+  align-self: center;
 
+  /* margin-left: 101px !important; */
   /* background: linear-gradient(135deg, rgba(196, 34, 147, 0.1), rgba(196, 34, 147, 0));
   backdrop-filter: blur(20px);
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
@@ -41,16 +55,23 @@
   display: flex;
   position: relative;
   flex-direction: row;
-  width: 80vw;
-  min-width: 600px;
+  margin-left: 20px;
+  margin-right: 20px;
+  min-width: 760px;
+  width: calc(100% - 40px);
+  /* width: 80vw;
+  min-width: 800px; */
 }
+
+.eachRow:last-child { justify-content: center; }
 
 .text {
   display: flex;
   flex-direction: row;
   color: black;
-  width: 12vw;
+  /* width: 12vw; */
   min-width: 113px;
+  width: 113px;
   height: 56px;
   background: green;
   justify-content: center;
@@ -106,62 +127,88 @@
   } */
 }
 
+.titleAndTextFieldContainer {
+  width: 100%
+}
+
 .inputShownTitle {
   display: flex !important;
-  white-space: pre !important;
-  width: calc(68vw - 28px) !important;
-  margin-left: 14px !important;
-  padding: 16.5px 0px 16.5px 0px !important;
-  position: absolute !important
-}
-
-.inputHiddenTitle {
-  /* ...noSelect; */
-  display: flex !important;
-  position: relative !important;
-  width: 68vw !important;
-}
-
-.inputShownSummary {
-  flex-wrap: wrap !important;
-  white-space: pre-wrap !important;
-  display: flex !important;
-  width: calc(68vw - 28px) !important;
+  white-space: pre !important; /* SINGLE LINE */
+  /* width: calc(68vw - 28px) !important; */
   margin-left: 14px !important;
   padding: 16.5px 0px 16.5px 0px !important;
   position: absolute !important;
-  font-weight: 400 !important;
-  color: rgba(0, 0, 0, 0.87) !important;
+  color: transparent !important;
+}
+
+.inputHiddenTitle { /* ...noSelect; */
+  display: flex !important;
+  position: relative !important;
+  /* width: 68vw !important; */
+}
+
+/* margin-left: 20px;
+margin-right: 20px;
+min-width: 760px;
+width: calc(100% - 40px); */
+
+.inputShownSummary {
+  display: flex !important;
+  /* flex-wrap: wrap !important; */ /* MULTILINE */
+  /* white-space: pre-wrap !important; */ /* MULTILINE */
+  /* width: calc(68vw - 20px) !important; */
+  margin-left: 14px !important;
+  padding: 16.5px 0px 16.5px 0px !important;
+  position: absolute !important;
+  /* color: transparent !important; */
+  /* width: 100%; */
+  width: calc(100% - 113px - 14px);
+  
 }
 
 .inputHiddenSummary {
   display: flex !important;
   position: relative !important;
-  width: 68vw !important;
+  /* margin-left: 20px;
+  margin-right: 20px; */
+  /* min-width: 760px; */
+  /* width: calc(100% - 40px); */
+  /* width: calc(100% - 113px); */
+  width: 100%;
+  background: orange !important;
+  /* width: calc(68vw - 0px) !important; */
+}
+
+.instructionsContainer {
+  /* width: calc(100% - 213px); */
+  width: calc(100% - 57px - 80px - 80px - 20px) !important;
+  background: red
 }
 
 .inputShownInstructions {
-  flex-wrap: wrap !important;
-  white-space: pre-wrap !important;
   display: flex !important;
-  width: calc(48vw - 28px) !important;
+  flex-wrap: wrap !important; /* MULTILINE */
+  white-space: pre-wrap !important; /* MULTILINE */
+  /* width: calc(48vw - 28px) !important; */
   margin-left: 14px !important;
   padding: 16.5px 0px 16.5px 0px !important;
   position: absolute !important;
-  font-weight: 400 !important;
   color: transparent !important;
+  /* width: 100% !important; */
+    /* width: calc(100% - 300px) */
+    /* width: calc(100% - 113px - 57px - 80px - 80px - 40px); */
+    /* width: 100%; */
 }
 
 .inputHiddenInstructions {
   display: flex;
   position: relative;
-  width: 48vw;
-  /* input: {
-    color: transparent !important;
-    caretColor: rgba(0; 0; 0; 0.87) !important;
-    ::selection: {
-    }
-  } */
+  background: orange;
+  width: 100% !important;
+  /* width: calc(100% - 300px) */
+  /* width: calc(100% - 160px); */
+  /* width: 48vw; */
+
 }
 
 .inputStep {
@@ -173,7 +220,8 @@
   /* ...noSelect; */
   display: flex;
   position: relative;
-  width: 68vw;
+  /* width: 68vw; */
+  width: 100% !important;
   /* input: {
     color: rgba(0; 0; 0; 0.87) !important;
     caretColor: rgba(0; 0; 0; 0.87) !important;
@@ -183,18 +231,27 @@
 }
 
 .stepsContainer {
-  background: gray;
+  background: darkcyan;
+  width: calc(100% - 113px);
   display: flex;
-  flex-direction: column
+  flex-direction: column;
+  
 }
 
 .eachStep {
+  z-index: 1;
   display: flex;
   flex-direction: row;
-  width: 68vw;
+  /* width: 68vw; */
+  width: 100%;
+  background: salmon !important;
   margin-bottom: 12px;
+  /* justify-content: space-evenly; */
+  justify-content: flex-start;
   /* :last-child: {  marginBottom: 0px } */
 }
+
+.eachStep:last-child { margin-bottom: 0px }
 
 /* eachRow 80vw */
 /* (text) 12vw + 68vw (input) */
@@ -205,7 +262,7 @@
   background: yellow;
   display: flex;
   flex-direction: row;
-  width: 6vw;
+  width: 57px;
   min-width: 57px;
   height: 56px;
   justify-content: center;
@@ -213,51 +270,77 @@
 }
 
 .newStepTooltip {
-  display: flex;
+  display: flex !important;
   flex-direction: column;
   text-align: center
 }
 
-.buttonNewHelper {
-  min-width: 122px;
-  width: 122px;
+/* NEXT HELPS TOOLTIP WHEN
+BUTTON IS DISABLED */
+
+.buttonNewHelper { 
+  min-width: 80px;
+  width: 80px;
   height: 36.5px;
   color: white;
   align-self: center;
-  margin-left: 5px;
-  margin-right: 5px;
+  margin-left: 10px !important;
+  /* margin-right: 10px !important; */
+  /* margin-right: 10px !important; */
 }
 
 .buttonNew {
-  min-width: 122px;
-  width: 122px;
+  white-space: nowrap;
+  min-width: 80px !important;
+  width: 80px !important;
   height: 36.5px;
-  background: green;
+  /* background: green !important; */
   /* :hover: { background: darkgreen }; */
   color: white;
   align-self: center;
+  /* margin-left: px !important; */
+  /* margin-right: 10px !important; */
+  /* margin-right: 10px !important; */
 }
 
+.buttonNew:hover {
+  background: #047a04 !important
+}
+
+/* NEXT HELPS TOOLTIP WHEN
+BUTTON IS DISABLED */
+
+
 .buttonDeleteHelper {
-  min-width: 122px;
-  width: 122px;
+  min-width: 80px;
+  width: 80px;
   height: 36.5px;
   color: white;
   align-self: center;
   padding: 0px !important;
-  margin-right: 5px;
+  margin-left: 10px !important;
+  /* margin-right: 1px !important; */
+  /* margin-left: 5px !important; */
+  /* margin-right: 10px !important; */
 }
 
 .buttonDelete {
-  min-width: 122px;
-  width: 122px;
+  white-space: nowrap;
+  min-width: 80px !important;
+  width: 80px !important;
   height: 36.5px;
-  background: red;
+  /* background: red; */
   /* :hover: { background: darkred }; */
   color: white;
   align-self: center;
   padding: 0px !important;
-  margin-left: 10px;
+  /* margin-right: 1px !important; */
+  /* margin-left: 5px !important; */
+  /* margin-right: 10px !important; */
+}
+
+.buttonDelete:hover {
+  background: #eb0909 !important
 }
 
 .optionsLeft {
@@ -273,5 +356,6 @@
 }
 
 .buttonClearSave {
-  margin: 0px 7px;
+  /* margin: 0px 7px; */
+  margin: 0px 5px !important;
 }

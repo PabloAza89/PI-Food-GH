@@ -1,18 +1,47 @@
-.background {
+.container {
+  /* background: darkolivegreen; */ /* DEV */
+  /* margin-left: 101px; */
+  /* margin-right: 101px; */
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  align-self: center;
+  position: relative;
+  justify-content: center;
+  /* width: 100vw; */
+  /* min-width: 400px; */
+  /* width: 100vw; */
+  margin-top: 100px;
+  margin-left: 16px;
+  z-index: 1;
+  
+  /* width: min(100vw, 400px); */
+
+
+  /* margin-left: 0px;  
+  min-width: 800px; */
+
 }
 
-.card {
+/* .background {
+  background: red;
   display: flex;
   flex-direction: column;
-  width: 55vw;
-  padding: 18px;
   align-items: center;
   align-self: center;
+} */
+
+.card {
+  /* background: red; */ /* DEV */
+  display: flex;
+  position: relative;
+  align-items: center;
+  flex-direction: column;
+  padding: 16px !important;
+  /* min-width: 300px; */
+  max-width: 750px;
+  /* width: 55vw; */
+  /* padding: 18px; */
+  align-self: center;
   margin-top: 16px;
+
   background: linear-gradient(135deg, rgba(64, 117, 117, 0.1), rgba(64, 117, 117, 0));
   -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
@@ -111,8 +140,10 @@
   -moz-user-select: none !important;
   -ms-user-select: none !important;
   user-select: none !important;
+  /* background: yellow; */ /* DEV */
   font-size: 18px;
-  width: 75px;
+  min-width: 78px;
+  width: 78px;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   text-decoration: none;
   color: antiquewhite;
@@ -131,7 +162,7 @@
   font-size: 18px;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   text-decoration: none;
-  width: calc(55vw - 75px);
+  /* width: calc(55vw - 75px); */
   color: antiquewhite;
   letter-spacing: normal;
   white-space: wrap;
@@ -140,7 +171,7 @@
 .helperBottom {
   display: flex;
   height: 16px;
-  width: 50vw;
+  /* width: 50vw; */
 }
 
 .errorCard {

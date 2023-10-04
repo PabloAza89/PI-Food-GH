@@ -1,7 +1,8 @@
 .background {
+  background: red !important; /* DEV */
   display: flex;
   position: fixed;
-  right: -250px;
+  right: -310px; /* SLIDER BOX WIDTH */
   top: 200px;
   z-index: 3000;
 }
