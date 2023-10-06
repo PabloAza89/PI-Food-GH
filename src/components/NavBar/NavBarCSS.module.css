@@ -39,7 +39,7 @@
   /* background: gray; */
   display: flex;
   flex-direction: column;
-  min-width: 570px;
+  /* min-width: 570px; */
   width: 95vw;
   height: 100px;
   align-items: center;
@@ -177,9 +177,13 @@
 }
 
 .menuButton {
+  display: flex;
+  position: relative;
   /* :hover: { background: #e8e8e8 }; */
-  margin-right: 18px;
-  color: black;
+  /* margin-right: 18px !important; */
+  color: black !important;
+  /* background: '#F0F0F0', */
+  background: #F0F0F0 !important;
   height: 45px;
   min-width: 55px !important;
   width: 55px !important;
@@ -187,3 +191,5 @@
   font-weight: 400;
   font-size: 13.33px;
 }
+
+.menuButton:hover { background: #e8e8e8 !important }

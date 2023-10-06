@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import css from './GoogleAuthCSS.module.css';
+import { Route, Routes, useLocation, useMatch } from "react-router-dom";
 import { useGoogleLogin } from '@react-oauth/google';
 import { useSelector } from 'react-redux';
 import { Button } from '@mui/material/';
@@ -14,7 +15,17 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
 
   const hasScroll = useSelector((state: {hasScroll:boolean}) => state.hasScroll)
   const scrollWidth = useSelector((state: {scrollWidth:number}) => state.scrollWidth)
+  const currentWidth = useSelector((state: {currentWidth:number}) => state.currentWidth)
   const [ popUp, setPopUp ] = useState<boolean>(false)
+
+  //const showHelpBG = [useMatch("/:route")?.params.route?.toLowerCase()].filter(e => e !== "about")[0]
+  //const aa = useMatch("/")?.params.route?.toLowerCase()
+  //const inHome = useMatch("/")?.pattern.path // "/" === Home
+  const inHome = useMatch("/")?.pattern.path === "/" ? true : false;// "/" === Home
+  //const aa = useLocation()
+  
+  //console.log("HHH", aa )
+  //console.log("HHH aa", inHome )
 
   const login = useGoogleLogin({
     onSuccess: (codeResponse) => {
@@ -164,7 +175,22 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
   }
 
   return (
-    <div className={css.background}>
+    <div
+      className={css.background}
+      style={{
+        position: inHome ? 'absolute' : 'fixed', // inHome
+        //marginRight: hasScroll ? `${87 + scrollWidth}px` : `16px` // 16 + 55 + 16 = 87
+        //currentWidth <= 800 ? `100vw` : '200px'
+        marginRight:
+          currentWidth <= 800 && inHome && hasScroll ?
+          `${87 + scrollWidth}px` :
+          currentWidth <= 800 && inHome ?
+          `87px` :
+          hasScroll ?
+          `${16 + scrollWidth}px` :
+          '16px' // 16 + 55 + 16 = 87
+      }}
+    >
       <Button variant="contained" id={`buttonWidthHelper`} className={css.buttonWidthHelper} sx={{ display: 'none' }}>
         <div className={css.buttonWidthHelperInner}>
           <div><MySvg/></div>

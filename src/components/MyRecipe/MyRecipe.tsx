@@ -31,6 +31,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
 
   const hasScroll = useSelector((state: { hasScroll: boolean }) => state.hasScroll)
   const scrollWidth = useSelector((state: { scrollWidth: number }) => state.scrollWidth)
+  const currentWidth = useSelector((state: {currentWidth:number}) => state.currentWidth)
 
   let titleValueLS: string | null = localStorage.getItem('titleValue');
   let imageValueLS: string | null = localStorage.getItem('imageValue');
@@ -674,13 +675,29 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
   
 
   useEffect(() => {
+    // $(window).scrollTop(0)
+    // $(window).scrollTop(0)
     console.log("PPP", $("#0instructions").width())
-  })
+    //return () => $(window).scrollTop(0)
+   })
 
+  //$(window).scrollTop(0)
+  //$(window).scrollTop(0)
+  $(window).scrollTop(0)
+  // window.onbeforeunload = function () {
+  //   window.scrollTo(0, 0);
+  // }
+  //$(".MyRecipeCSS_container").scrollTop(0)
+  
+  //window.scrollTo(0,0)
+  //document.querySelector("body")!.scrollTo(0,0)
   console.log("OOO", stepsState[0] === '\n')
+
+  //$(window).scrollTop(0)
 
   return (
     <div 
+      id={"bhgt"}
       className={css.container}
       style={{ marginRight: hasScroll ? `${16 + scrollWidth}px` : `16px` }}
     >
@@ -997,13 +1014,21 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
                     disabled={allDisabled}
                     shrink={false}
                     className={css.inputShownInstructions}
-                    sx={{
+                    style={{
+                      //width: `calc(100% - 113px - 57px - 80px - 80px - 40px)`
+                      width: 
+                        currentWidth <= 650 ?
+                        `calc(100% - 298px)` : // 100% - 113px - 57px - 10px - 40px - 10px - 40px - 28px
+                        `calc(100% - 358px)`   // 100% - 113px - 57px - 10px - 60px - 10px - 80px - 28px
+                      
+                    }}
+                   /*  sx={{
                       "& .MuiInputLabel-root": {
-                        //color: "yellow",
+                        color: "yellow",
                       },
                       "& .MuiFormLabel-root": {
                       },
-                    }}
+                    }} */
                   >{ stepsState[index] }</InputLabel>
                   <TextField
                     id={`${index}instructions`}
@@ -1060,15 +1085,25 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
                   </div>
                 }
               >
-                <div className={css.buttonNewHelper}>
+                <div 
+                  className={css.buttonNewHelper}
+                  style={{
+                    minWidth: currentWidth <= 650 ? '40px' : '60px',
+                    width: currentWidth <= 650 ? '40px' : '60px',
+                  }}
+                >
                   <Button
                     variant="contained"
                     disabled={allDisabled ? true : stepsState.length >= 10 ? true : false}
                     id={`${index}`}
                     className={css.buttonNew}
+                    style={{
+                      minWidth: currentWidth <= 650 ? '40px' : '60px',
+                      width: currentWidth <= 650 ? '40px' : '60px',
+                    }}
                     sx={{ background: 'green' }}
                     onClick={(e) => { handlerAddInstructions({ index: parseInt((e.target as HTMLInputElement).id, 10 )}) }}
-                  >ADD
+                  >{ currentWidth <= 650 ? `✔️` : `ADD` }
                   </Button>
                 </div>
               </Tooltip>
@@ -1084,15 +1119,25 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
                 placement="bottom-end"
                 title={"You can't delete first step !"}
               >
-                <div className={css.buttonDeleteHelper}>
+                <div
+                  className={css.buttonDeleteHelper}
+                  style={{
+                    minWidth: currentWidth <= 650 ? '40px' : '80px',
+                    width: currentWidth <= 650 ? '40px' : '80px',
+                  }}
+                >
                   <Button
                     variant="contained"
                     disabled={allDisabled ? true : stepsState.length === 1 ? true : false}
                     id={`${index}`}
                     className={css.buttonDelete}
+                    style={{ 
+                      minWidth: currentWidth <= 650 ? '40px' : '80px',
+                      width: currentWidth <= 650 ? '40px' : '80px',
+                    }}
                     sx={{ background: 'red' }}
                     onClick={(e) => { handlerDeleteInstructions({ index: parseInt((e.target as HTMLInputElement).id, 10) }) }}
-                  >DELETE
+                  >{ currentWidth <= 650 ? `❌` : `DELETE` }
                   </Button>
                 </div>
               </Tooltip>

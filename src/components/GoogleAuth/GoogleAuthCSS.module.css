@@ -1,9 +1,10 @@
 .background {
   display: flex;
-  position: fixed;
+  /* position: fixed; */
+  /* position: absolute; */
   right: 0px;
-  margin-right: 16px;
-  margin-top: 16px;
+  /* margin-right: 16px; */
+  margin-top: 30.5px;
   flex-direction: row;
   z-index: 4
 }

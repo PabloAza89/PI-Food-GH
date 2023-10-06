@@ -7,7 +7,7 @@ import noImage2 from "../../images/noImage2.jpg";
 import noImage3 from "../../images/noImage3.jpg";
 import notAvailable from "../../images/notAvailable.jpg";
 import { handleDelete, handleEdit } from '../../commons/commonsFunc';
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Button } from '@mui/material/';
 import { recipesI } from '../../interfaces/interfaces';
 import EditIcon from '@mui/icons-material/Edit';
@@ -22,6 +22,7 @@ export default function Detail({ userData, retrieveLogin, retrieveRecipeNotFound
 
   const dispatch = useDispatch()
   const navigate = useNavigate();
+  const location = useLocation()
   const params = useParams()
 
   const hasScroll = useSelector((state: {hasScroll:boolean}) => state.hasScroll)
@@ -69,8 +70,10 @@ export default function Detail({ userData, retrieveLogin, retrieveRecipeNotFound
 
   
 
-  console.log("NN window.innerWidth", window.innerWidth)
-  console.log("NN $('body').width()", $('body').width())
+  //console.log("NN window.innerWidth", window.innerWidth)
+  //console.log("NN $('body').width()", $('body').width())
+  
+  $(window).scrollTop(0)
 
   if (recipe !== undefined) {
     return (

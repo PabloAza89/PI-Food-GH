@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import css from './App.module.css';
 import './commons/globalSweetAlert2.css';
 import { useSelector } from 'react-redux';
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes, useLocation, useMatch } from "react-router-dom";
 import CardsMapper from "./components/CardsMapper/CardsMapper";
 import GoogleAuth from './components/GoogleAuth/GoogleAuth';
 import Detail from "./components/Detail/Detail";
@@ -29,6 +29,8 @@ function App() {
 
   const dispatch = useDispatch()
   const location = useLocation()
+  const showHelpBG = [useMatch("/:route")?.params.route?.toLowerCase()].filter(e => e !== "about")[0]
+  //console.log(`LLRR showHelpNavbar`, showHelpBG)
 
   useEffect(() => {
     $(function() {
@@ -142,9 +144,14 @@ function App() {
   //   dispatch(setHasScroll(window.innerWidth !== $('body').width() ? true : false))
   // },1000)
 
+  
+
   return (
     <div className={css.background}>
-      <div className={css.wallpaperNav} style={{ display: location.pathname === `/` ? 'none' : 'flex' }}/>
+      <div
+        className={css.wallpaperNav}
+        style={{ display: showHelpBG ? 'flex' : 'none' }}
+      />
       <div className={css.wallpaperBody} />
       <Routes>
         <Route path="/" element={<>
@@ -168,7 +175,7 @@ function App() {
             retrieveRecipeNotFound={retrieveRecipeNotFound}
           />
         </>}/>
-        <Route id={'abcabc'} path="/MyRecipe" element={<>
+        <Route path="/MyRecipe/" element={<>
           <NavBar />
           <GoogleAuth retrieveLogin={retrieveLogin} userData={userData} />
           <ServerStatus />
@@ -182,7 +189,7 @@ function App() {
         <Route path="/About" element={<>
           <About />
         </>}/>
-        <Route path="*" element={<>
+        <Route path="/*" element={<>
           <GoBack />
           <Error />
         </>}/>

@@ -186,9 +186,11 @@ width: calc(100% - 40px); */
 }
 
 .instructionsContainer {
-  /* width: calc(100% - 213px); */
-  width: calc(100% - 57px - 80px - 80px - 20px) !important;
   /* background: red; */ /* DEV */
+  /* width: calc(100% - 213px); */
+  /* width: calc(100% - 57px - 80px - 80px - 20px) !important; */
+  width: 100% !important;
+  
   /* min-inline-size: fit-content !important; */
   /* min-inline-size: fit-content; */
 }
@@ -203,12 +205,18 @@ width: calc(100% - 40px); */
   /* margin-right: 14px !important; */
   padding: 16.5px 0px 16.5px 0px !important;
   /* position: fixed !important; */
+  /* position: absolute !important; */
+  /* z-index: 4; */
   position: absolute !important;
-  /* position: relative !important; */
-  /* color: transparent; */
   color: transparent !important;
+  /* color: black !important; */
   /* width: calc(100% - 113px - 57px - 80px - 80px ) !important; */
-  width: calc(100% - 113px - 57px - 80px - 80px - 48px) !important;
+  /* width: calc(100% - 113px - 57px - 80px - 80px - 48px) !important; */
+  /* width: calc(100% - 113px - 57px) !important; */
+  /* width: calc(100% - 113px - 57px) !important; */
+
+  /* width: 100% !important; */
+  /* width: 100% !important; */
   overflow-wrap: break-word;
   /* min-inline-size: fit-content; */
   /* min-inline-size: fit-content !important; */
@@ -219,7 +227,12 @@ width: calc(100% - 40px); */
     /* white-space: nowrap; */
 }
 
+/* .inputShownInstructions + inputHiddenInstructions {
+  width: 100%
+} */
+
 .inputHiddenInstructions {
+  /* background: lightgreen; */ /* DEV */
   display: flex;
   position: relative;
   /* background: orange; */ /* DEV */
@@ -247,7 +260,8 @@ width: calc(100% - 40px); */
 }
 
 .stepsContainer {
-  /* background: darkcyan; */ /* DEV */
+  background: darkcyan; /* DEV */
+  /* width: calc(100% - 113px); */
   width: calc(100% - 113px);
   display: flex;
   flex-direction: column;
@@ -255,12 +269,12 @@ width: calc(100% - 40px); */
 }
 
 .eachStep {
+  /* background: salmon !important; */ /* DEV */
   z-index: 1;
   display: flex;
   flex-direction: row;
   /* width: 68vw; */
   width: 100%;
-  /* background: salmon !important; */ /* DEV */
   margin-bottom: 12px;
   /* justify-content: space-evenly; */
   justify-content: flex-start;
@@ -295,8 +309,8 @@ width: calc(100% - 40px); */
 BUTTON IS DISABLED */
 
 .buttonNewHelper { 
-  min-width: 80px;
-  width: 80px;
+  /* min-width: 80px;
+  width: 80px; */
   height: 36.5px;
   color: white;
   align-self: center;
@@ -307,16 +321,10 @@ BUTTON IS DISABLED */
 
 .buttonNew {
   white-space: nowrap;
-  min-width: 80px !important;
-  width: 80px !important;
   height: 36.5px;
-  /* background: green !important; */
-  /* :hover: { background: darkgreen }; */
   color: white;
   align-self: center;
-  /* margin-left: px !important; */
-  /* margin-right: 10px !important; */
-  /* margin-right: 10px !important; */
+  min-width: 0px !important;
 }
 
 .buttonNew:hover {
@@ -326,10 +334,9 @@ BUTTON IS DISABLED */
 /* NEXT HELPS TOOLTIP WHEN
 BUTTON IS DISABLED */
 
-
 .buttonDeleteHelper {
-  min-width: 80px;
-  width: 80px;
+  /* min-width: 80px;
+  width: 80px; */
   height: 36.5px;
   color: white;
   align-self: center;
@@ -342,17 +349,10 @@ BUTTON IS DISABLED */
 
 .buttonDelete {
   white-space: nowrap;
-  min-width: 80px !important;
-  width: 80px !important;
   height: 36.5px;
-  /* background: red; */
-  /* :hover: { background: darkred }; */
   color: white;
   align-self: center;
-  padding: 0px !important;
-  /* margin-right: 1px !important; */
-  /* margin-left: 5px !important; */
-  /* margin-right: 10px !important; */
+  min-width: 0px !important;
 }
 
 .buttonDelete:hover {

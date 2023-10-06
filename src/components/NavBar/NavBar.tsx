@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useMatch } from "react-router-dom";
 import logo from "../../images/logo.png";
 import css from './NavBarCSS.module.css';
 import comm from './commonsCSS.module.css';
@@ -20,6 +20,8 @@ const NavBar = () =>  {
 
   const dispatch = useDispatch()
   const location = useLocation()
+
+  const inHome = useMatch("/")?.pattern.path === "/" ? true : false; // "/" === Home
 
   //location.pathname.toLowerCase() === `/myrecipe`
   //console.log("BBB", location.pathname === `/`)
@@ -85,6 +87,7 @@ const NavBar = () =>  {
   useEffect(() => {
     dispatch(filter(entireFilter))
     if (currentWidth > 800) dispatch(setMenuShown(false))
+    // return () => {dispatch(setMenuShown(false))}
   },[ dispatch, entireFilter, currentWidth ])
 
   return (
@@ -93,15 +96,23 @@ const NavBar = () =>  {
       style={{
         position: location.pathname !== `/` ? 'fixed' : 'relative',
         flexDirection: menuShown ? 'column' : 'row',
+        //width: `calc(100vw - ${scrollWidth}px)`,
+        width: hasScroll ? `calc(100vw - ${scrollWidth}px)` : `100vw`,
         minHeight: menuShown ? '200px' : '100px',
         height: menuShown ? '200px' : '100px',
-        width: hasScroll ? `calc(100vw - ${scrollWidth}px)` : `100vw`
+        //width: hasScroll ? `calc(100vw - ${scrollWidth}px)` : `100vw`
         //width: `100vw`
       }}
     >
       <div
         className={css.logoAndMenuContainer}
-        style={{ width: currentWidth <= 800 ? `calc(100vw - ${scrollWidth}px)` : '200px' }}
+        //style={{ width: currentWidth <= 800 ? `calc(100vw - ${scrollWidth}px)` : '200px' }}
+        style={{
+          //width: currentWidth <= 800 ? `100vw` : '200px',
+          width: currentWidth <= 800 ? `100%` : '200px',
+          //width: '483px',
+          height: '100px'
+        }}
       >
         <div className={css.logoTextContainer}>
           <Link to="/">
@@ -123,10 +134,10 @@ const NavBar = () =>  {
             variant="contained"
             onClick={() => dispatch(setMenuShown(!menuShown))}
             className={css.menuButton}
-            sx={{
-              display: location.pathname === `/` && currentWidth <= 800 ? 'flex' : 'none',
-              background: '#F0F0F0',
-              ':hover': { background: '#e8e8e8' }
+            style={{
+              //marginRight: hasScroll ? `${16 + scrollWidth}px` : `16px`,
+              marginRight: `16px`,
+              display: inHome && currentWidth <= 800 ? 'flex' : 'none',
             }}
           >
             <MenuIcon style={{ fontSize: 40 }} />
@@ -134,7 +145,14 @@ const NavBar = () =>  {
         </Tooltip>
       </div>
       <div
-        style={{ display: location.pathname !== `/` ? 'none' : currentWidth <= 800 && !menuShown ? 'none' : 'flex' }}
+        style={{
+          display:
+            location.pathname !== `/` ?
+            'none' :
+            currentWidth <= 800 && !menuShown ?
+            'none' :
+            'flex'
+        }}
         /* className={css.selectsAndButtons} */
         /* className={'css.selectsAndButtons rtrtrt'} */
         /* className={`${css.selectsAndButtons} ${comm.rtrtrt}`} */
@@ -142,8 +160,13 @@ const NavBar = () =>  {
       >
         <div
           style={{
-            width: currentWidth <= 800 ? `95vw` : '50vw',
-            minWidth: currentWidth <= 800 ? 'unset' : '570px',
+            //width: currentWidth <= 800 ? `95vw` : '50vw',
+            //minWidth: currentWidth <= 800 ? 'unset' : '570px',
+            //width: currentWidth <= 800 ? `100vw` : '50vw',
+            //width: currentWidth <= 800 ? `100vw` : '50vw',
+            width: currentWidth <= 800 && hasScroll ? `calc(100vw - ${scrollWidth}px)` : '50vw',
+            //hasScroll
+            height: '100px'
           }}
           className={css.upper}
         >
@@ -178,7 +201,7 @@ const NavBar = () =>  {
         <div
           style={{
             width: currentWidth <= 800 ? `95vw` : '50vw',
-            minWidth: currentWidth <= 800 ? 'unset' : '570px',
+            //minWidth: currentWidth <= 800 ? 'unset' : '570px',
           }}
           className={css.lower}
         >
