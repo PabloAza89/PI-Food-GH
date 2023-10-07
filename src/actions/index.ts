@@ -134,7 +134,6 @@ export function setHasScroll(setHasScroll:boolean) {
   }
 };
 
-
 export function setScrollPosition(setScrollPosition:number) {
   return {
     type: 'SET_SCROLL_POSITION',
@@ -146,5 +145,12 @@ export function setMenuShown(setMenuShown:boolean) {
   return {
     type: 'SET_MENU_SHOWN',
     payload: setMenuShown
+  }
+};
+
+export function landingShown(landingShown:boolean) {
+  return {
+    type: 'LANDING_SHOWN',
+    payload: landingShown
   }
 };

@@ -23,6 +23,7 @@ interface initialStateI {
   hasScroll: boolean,
   scrollPosition: number,
   menuShown: boolean,
+  landingShown: boolean
 }
 
 const initialState: initialStateI = {
@@ -47,6 +48,7 @@ const initialState: initialStateI = {
   hasScroll: false,
   scrollPosition: 0,
   menuShown: false,
+  landingShown: true
 }
 
 const reducer = (state = initialState, action: {type: string; payload: any}) => {
@@ -217,6 +219,11 @@ const reducer = (state = initialState, action: {type: string; payload: any}) => 
       return {
         ...state,
         menuShown: action.payload
+      };
+    case 'LANDING_SHOWN':
+      return {
+        ...state,
+        landingShown: action.payload
       };
     default:
       return state

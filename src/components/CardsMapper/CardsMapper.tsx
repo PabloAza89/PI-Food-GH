@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import css from './CardsMapperCSS.module.css';
 import Card from '../Card/Card';
-import { useSelector , useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { recipesI, userDataI, retrieveLoginI  } from '../../interfaces/interfaces';
 import {
   fetchRecipesFromAPI, allRecipesLoaded, getDietsFromDB,
@@ -21,6 +21,7 @@ const CardsMapper = ({ retrieveLogin, userData }: CardsMapperI)  => {
   const menuShown = useSelector((state: {menuShown: boolean}) => state.menuShown)
   const toShow = useSelector((state: { toShow: recipesI[] }) => state.toShow)
   const allRecipes = useSelector((state: { allRecipes: recipesI[] }) => state.allRecipes)
+  const landingShown = useSelector((state: { landingShown: boolean }) => state.landingShown)
 
   let arraySplitedBy9: any[] = toShow.slice( indexChoosen * 9, (indexChoosen * 9) + 9 )
 
@@ -48,6 +49,7 @@ const CardsMapper = ({ retrieveLogin, userData }: CardsMapperI)  => {
     (<div
       className={css.background}
       style={{
+        overflow: landingShown ? 'hidden' : 'inherit',
         width: `calc(100vw - ${scrollWidth}px)`,
         marginRight: `${scrollWidth}px`,
         marginTop:

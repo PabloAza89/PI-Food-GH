@@ -3,6 +3,7 @@ import css from './App.module.css';
 import './commons/globalSweetAlert2.css';
 import { useSelector } from 'react-redux';
 import { Route, Routes, useLocation, useMatch } from "react-router-dom";
+import Landing from "./components/Landing/Landing";
 import CardsMapper from "./components/CardsMapper/CardsMapper";
 import GoogleAuth from './components/GoogleAuth/GoogleAuth';
 import Detail from "./components/Detail/Detail";
@@ -148,6 +149,7 @@ function App() {
 
   return (
     <div className={css.background}>
+      <Landing />
       <div
         className={css.wallpaperNav}
         style={{ display: showHelpBG ? 'flex' : 'none' }}
