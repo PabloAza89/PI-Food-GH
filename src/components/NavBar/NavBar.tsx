@@ -146,6 +146,9 @@ const NavBar = () =>  {
       </div>
       <div
         style={{
+          //alignItems: currentWidth <= 800 ? 'center' : 'unset',
+          //marginRight: '132.5px', // 132.5 ===  "8" 64 8 36.5 16
+          marginRight: currentWidth <= 800 ? 'unset' : '132.5px', // 132.5 ===  "8" 64 8 36.5 16
           display:
             location.pathname !== `/` ?
             'none' :
@@ -153,19 +156,11 @@ const NavBar = () =>  {
             'none' :
             'flex'
         }}
-        /* className={css.selectsAndButtons} */
-        /* className={'css.selectsAndButtons rtrtrt'} */
-        /* className={`${css.selectsAndButtons} ${comm.rtrtrt}`} */
         className={css.selectsAndButtons}
       >
         <div
           style={{
-            //width: currentWidth <= 800 ? `95vw` : '50vw',
-            //minWidth: currentWidth <= 800 ? 'unset' : '570px',
-            //width: currentWidth <= 800 ? `100vw` : '50vw',
-            //width: currentWidth <= 800 ? `100vw` : '50vw',
-            width: currentWidth <= 800 && hasScroll ? `calc(100vw - ${scrollWidth}px)` : '50vw',
-            //hasScroll
+            width: currentWidth <= 800 ? `calc(100% - 8px)` : '50vw',
             height: '100px'
           }}
           className={css.upper}
@@ -200,14 +195,17 @@ const NavBar = () =>  {
         </div>
         <div
           style={{
-            width: currentWidth <= 800 ? `95vw` : '50vw',
+            //width: currentWidth <= 800 ? `95vw` : '50vw',
+            //width: currentWidth <= 800 && hasScroll ? `100%` : '50vw',
+            //width: currentWidth <= 800 && hasScroll ? `calc(100% - 8px)` : '50vw',
+            width: currentWidth <= 800 ? `calc(100% - 8px)` : '50vw',
             //minWidth: currentWidth <= 800 ? 'unset' : '570px',
           }}
           className={css.lower}
         >
           
           <Select
-            className={css.selectDietsHealthAlpha}
+            className={css.containerDietsDishesHealthAlpha}
             value={entireFilter.diet}
             onChange={(e) => { setEntireFilter({...entireFilter, diet:e.target.value}); dispatch(setIndexChoosen(0)) }}
           >
@@ -231,7 +229,7 @@ const NavBar = () =>  {
           
           
           <Select
-            className={css.selectDietsHealthAlpha}
+            className={css.containerDietsDishesHealthAlpha}
             value={entireFilter.dish}
             onChange={(e) => { setEntireFilter({...entireFilter, dish:e.target.value}); dispatch(setIndexChoosen(0)) }}
           >
@@ -254,10 +252,16 @@ const NavBar = () =>  {
             }
           </Select>
           
-          <FormControl>
-            <InputLabel size="small" className={css.labelHealth} style={{ width: healthLabelShown ? '130px' : '80%' }}>  Sort by Healthy  </InputLabel>
+          <FormControl className={css.containerDietsDishesHealthAlpha}>
+            <InputLabel
+              size="small"
+              className={css.labelHealthOrAlpha}
+              style={{
+                width: healthLabelShown ? 'fit-content' : 'calc(100% - 30px)',
+              }}
+            >  Sort by Healthy  </InputLabel>
             <Select
-              className={css.selectDietsHealthAlpha}
+              className={css.selectWithLabel}
               onFocus={() => setHealthLabelShown(true)}
               value={healthLevel}
               onChange={(e) => {setEntireFilter({...entireFilter, alphaOrHealthy: e.target.value}); healthLevelHandler(e)}}
@@ -266,11 +270,17 @@ const NavBar = () =>  {
               <MenuItem value={"Less Healthy"}>Less Healthy</MenuItem>
             </Select>
           </FormControl>
-          <FormControl>
-            <InputLabel size="small" className={css.labelAlpha} style={{ width: alphaLabelShown ? '155px' : '80%' }} >  Sort alphabetically  </InputLabel>
+          <FormControl className={css.containerDietsDishesHealthAlpha}>
+            <InputLabel
+              size="small"
+              className={css.labelHealthOrAlpha}
+              style={{
+                width: alphaLabelShown ? 'fit-content' : 'calc(100% - 30px)'
+              }}
+            >  Sort alphabetically  </InputLabel>
             <Select
               onFocus={() => setAlphaLabelShown(true)}
-              className={css.selectDietsHealthAlpha}
+              className={css.selectWithLabel}
               label="Sort alphabetically"
               value={sortAlpha}
               onChange={(e) => {setEntireFilter({...entireFilter, alphaOrHealthy: e.target.value}); sortAlphaHandler(e)}}

@@ -14,6 +14,7 @@
 }
 
 .editDeleteContainer {
+  /* display: none; */
   position: absolute;
   flex-direction: row;
   right: 5px;

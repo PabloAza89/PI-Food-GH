@@ -67,9 +67,10 @@ const Card = ({
 
   return (
     <div className={css.background}>
-      <Divider
+      <div
         className={css.editDeleteContainer}
         style={{ display: userRecipe && userData.email === email ? 'flex' : 'none' }}
+        //style={{ display: 'none' }}
       >
         <Button
           variant="contained"
@@ -89,7 +90,7 @@ const Card = ({
         >
           <ClearIcon className={css.iconDelete} />
         </Button>
-      </Divider>
+      </div>
       <Link to={`/${id}`}>
         <img
           className={css.image}

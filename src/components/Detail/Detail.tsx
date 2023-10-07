@@ -14,7 +14,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import ClearIcon from '@mui/icons-material/Clear';
 import {
   fetchRecipesFromAPI, allRecipesLoaded, getDietsFromDB,
-  getDishesFromDB, setHasScroll
+  getDishesFromDB, setHasScroll, setMenuShown
 } from '../../actions';
 import $ from 'jquery';
 
@@ -27,6 +27,7 @@ export default function Detail({ userData, retrieveLogin, retrieveRecipeNotFound
 
   const hasScroll = useSelector((state: {hasScroll:boolean}) => state.hasScroll)
   const scrollWidth = useSelector((state: {scrollWidth: number}) => state.scrollWidth)
+  const currentWidth = useSelector((state: {currentWidth:number}) => state.currentWidth)
 
   let arrImages = [noImage1, noImage2, noImage3]
   const [ brokenImage, setBrokenImage ] = useState<boolean>(false)
@@ -66,6 +67,7 @@ export default function Detail({ userData, retrieveLogin, retrieveRecipeNotFound
 
   useEffect(() => {
     dispatch(setHasScroll(window.innerWidth !== $('body').width() ? true : false))
+    dispatch(setMenuShown(false))
   },[dispatch])
 
   
@@ -75,14 +77,28 @@ export default function Detail({ userData, retrieveLogin, retrieveRecipeNotFound
   
   $(window).scrollTop(0)
 
+  //let recipee = undefined // DEV
+
   if (recipe !== undefined) {
     return (
-      <div className={css.container} style={{ marginRight: hasScroll ? `${16 + scrollWidth}px` : `16px` }}>
+      <div
+        className={css.container}
+        style={{
+          marginRight: hasScroll ? `${16 + scrollWidth}px` : `16px`
+        }}
+      >
       
         <div className={css.card}>
           <div
             id={css.editDeleteContainer}
-            style={{ display: recipe.userRecipe && userData.email === recipe.email ? `flex` : `none` }}
+            style={{
+              display:
+                recipe.userRecipe && userData.email === recipe.email ?
+                `flex` :
+                `none`,
+              flexDirection: currentWidth <= 535 ? 'row-reverse' : 'column'
+            }}
+            //style={{ display: `none` }}
           >
             <Button
               variant="contained"
@@ -106,6 +122,9 @@ export default function Detail({ userData, retrieveLogin, retrieveRecipeNotFound
           </div>
           <img
             className={css.image}
+            style={{
+              marginTop: currentWidth <= 535 && userData.email === recipe.email ? '24px' : '0px' // 24 === 40 - 16
+            }}
             src={
               brokenImage ?
               notAvailable :

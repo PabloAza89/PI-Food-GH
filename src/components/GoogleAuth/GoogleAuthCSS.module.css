@@ -63,10 +63,12 @@
 }
 
 .bgOut {
-  margin-left: 4px !important;
+  margin-left: 8px !important;
   padding: 0vw !important;
   min-width: 0vh !important;
-  min-height: 0vh !important;
   width: 36.5px !important;
-  height: 36.5px !important;
+  /* min-height: 0vh !important;
+  height: 36.5px !important; */
+  /* min-height: 0vh !important;
+  height: 25px !important; */
 }

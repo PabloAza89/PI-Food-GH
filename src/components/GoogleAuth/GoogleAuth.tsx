@@ -184,11 +184,16 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
         marginRight:
           currentWidth <= 800 && inHome && hasScroll ?
           `${87 + scrollWidth}px` :
+          //`${87 + scrollWidth}px` :
           currentWidth <= 800 && inHome ?
           `87px` :
-          hasScroll ?
-          `${16 + scrollWidth}px` :
-          '16px' // 16 + 55 + 16 = 87
+          inHome && hasScroll ?
+          `${16 + scrollWidth}px` : 
+          '16px'
+          //hasScroll ?
+          //`${16 + scrollWidth}px` :
+          //`16px` :
+          //'16px' // 16 + 55 + 16 = 87
       }}
     >
       <Button variant="contained" id={`buttonWidthHelper`} className={css.buttonWidthHelper} sx={{ display: 'none' }}>

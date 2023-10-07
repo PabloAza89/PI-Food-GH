@@ -7,7 +7,7 @@ import noImage2 from "../../images/noImage2.jpg";
 import noImage3 from "../../images/noImage3.jpg";
 import noLoaded from "../../images/noLoaded.jpg";
 import { useLocation, useNavigate } from "react-router-dom";
-import { addNew, setHasScroll } from '../../actions';
+import { addNew, setHasScroll, setMenuShown } from '../../actions';
 import { Box, Button, TextField, ListItemText, Checkbox, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material/';
 import dietsEntireArray from '../../db/diets.json';
 import dishesEntireArray from '../../db/dishes.json';
@@ -53,9 +53,15 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
   const [dishesArray, setDishesArray] = useState<string[]>([]);
   const [dietsArray, setDietsArray] = useState<string[]>([]);
   const [stepsState, setStepsState] = useState<string[]>(['']);
+  /* const [allDisabled, setAllDisabled] = useState<boolean>(false); */
+  //const [allDisabled, setAllDisabled] = useState<boolean>(false);
+  const recipeCreated = useRef(false);
+  //const allDisabled = useRef(false);
   const [allDisabled, setAllDisabled] = useState<boolean>(false);
   const [saveButtonDisabled, setSaveButtonDisabled] = useState<boolean>(false);
+  //const saveButtonDisabled = useRef(false);
   const [imageLoaded, setImageLoaded] = useState<boolean>(false);
+  
 
   const handlerDeleteInstructions = ({ index }: handlerDeleteInstructionsI) => {
     let copyState = [...stepsState]
@@ -317,8 +323,8 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
     setDishesArray([]);
     setDietsArray([]);
     setStepsState(['']);
-    setSaveButtonDisabled(false);
-    setAllDisabled(false)
+    // setSaveButtonDisabled(false);
+    // setAllDisabled(false)
     setError({
       title: { character: false, badWord: false, empty: false },
       health: { string: false, max: false, empty: false },
@@ -369,11 +375,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
       confirmButtonColor: '#d14141', // NEW ACTION COLOR
       denyButtonColor: '#3085d6' // NO ACTION COLOR
     })
-    .then((result) => {
-      if (result.isConfirmed) {
-        navigate("/")
-      }
-    })
+    .then((result) => { if (result.isConfirmed) navigate("/") })
   }
 
   $(function(){
@@ -450,6 +452,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
       .then((res) => res.json())
       .then((res) => {
         if (res.status === 200) {
+          console.log("YYY YYY YYY ENTRO ACA")
           Swal.fire({
             title: 'Recipe saved successfully !',
             icon: 'info',
@@ -460,8 +463,13 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
           })
           setSaveButtonDisabled(true)
           setAllDisabled(true)
+          recipeCreated.current = true
+          //saveButtonDisabled.current = true;
+          //allDisabled.current = true;
+          
         }
         if (res.status === 400 && res.message === 'Invalid Credentials') {
+          console.log("YYY", "OJO QUE ENTRO ACA")
           retrieveLogin({ email: '', fd_tkn: '' })
           Swal.fire({
             title: `There was an error when cheking your loggin.. `,
@@ -472,10 +480,13 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
             showCancelButton: false,
             timer: 3000,
           })
+          //saveButtonDisabled.current = false;
+          //allDisabled.current = false;
           setSaveButtonDisabled(false)
           setAllDisabled(false)
         }
         if (res.status === 400 && res.message !== 'Invalid Credentials') {
+          console.log("YYY", "OJO QUE ENTRO ACA")
           Swal.fire({
             title: `There was an error when saving your recipe.. `,
             text: `Please try again.`,
@@ -485,6 +496,8 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
             showCancelButton: false,
             timer: 3000,
           })
+          //saveButtonDisabled.current = false;
+          //allDisabled.current = false;
           setSaveButtonDisabled(false)
           setAllDisabled(false)
         }
@@ -572,6 +585,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
       .then((res) => res.json())
       .then((res) => {
         if (res.status === 400 && res.message.name === 'SequelizeDatabaseError') {
+          console.log("YYY", "OJO QUE ENTRO ACA")
           Swal.fire({
             title: `There was an error when updating your recipe.. `,
             text: `Please, try save again.`,
@@ -581,11 +595,14 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
             showCancelButton: false,
             timer: 3000,
           })
+          //saveButtonDisabled.current = false;
+          //allDisabled.current = false;
           setSaveButtonDisabled(false)
           setAllDisabled(false)
         }
 
         if (res.status === 200 && res.message === `1 item updated`) {
+          console.log("YYY", "OJO QUE ENTRO ACA")
           Swal.fire({
             title: 'Recipe updated successfully !',
             icon: 'success',
@@ -594,11 +611,14 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
             showCancelButton: false,
             timer: 1500,
           })
+          //saveButtonDisabled.current = true;
+          //allDisabled.current = true;
           setSaveButtonDisabled(true)
           setAllDisabled(true)
         }
 
         if (res.status === 400 && res.message === 'Invalid Credentials') {
+          console.log("YYY", "OJO QUE ENTRO ACA")
           retrieveLogin({ email: '', fd_tkn: '' })
           Swal.fire({
             title: `There was an error when cheking your loggin.. `,
@@ -609,6 +629,8 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
             showCancelButton: false,
             timer: 3000,
           })
+          //saveButtonDisabled.current = false;
+          //allDisabled.current = false;
           setSaveButtonDisabled(false)
           setAllDisabled(false)
         }
@@ -629,6 +651,12 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
   }
 
   useEffect(() => { // RETRIEVES INFO FROM LS
+    console.log("YYY Ejecutado 1")
+    // window.onbeforeunload = function() {
+    //   return "";
+    // }
+    // console.log("YYY 1 saveButtonDisabled", saveButtonDisabled)
+    // console.log("YYY 1 allDisabled", allDisabled)
     if (isEditing) {
         setTitleValue(location.state.title) // validator not necessary since no badWords are stored.
         setHealthValue(location.state.healthScore)
@@ -655,15 +683,32 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
           }, 0)
        }
       }
+      return () => {
+        console.log("YYY 1 YYYYYY saveButtonDisabled", saveButtonDisabled)
+        console.log("YYY 1 YYYYYY allDisabled", allDisabled)
+        if (recipeCreated.current) {
+          //console.log("YYY", "acaaa")
+          clearHandler() // RESET ALL FORM
+        }
+        
+        console.log("YYY Ejecutado al salir")
+      }
+  //},[allDisabled])
   },[])
 
   useEffect(() => {
+    console.log("YYY Ejecutado 2")
     if (saveButtonDisabled && allDisabled) retrieveRecipeCreatedOrEdited(true)
     else retrieveRecipeCreatedOrEdited(false)
-  },[saveButtonDisabled, allDisabled])
+    
+  //},[saveButtonDisabled, allDisabled])
+  },[allDisabled])
+  
 
   useEffect(() => {
+    console.log("YYY Ejecutado 3")
     dispatch(setHasScroll(window.innerWidth !== $('body').width() ? true : false))
+    
   },[dispatch])
 
   console.log("isEditing isEditing", isEditing)
@@ -674,16 +719,26 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
 
   
 
-  useEffect(() => {
-    // $(window).scrollTop(0)
-    // $(window).scrollTop(0)
-    console.log("PPP", $("#0instructions").width())
-    //return () => $(window).scrollTop(0)
-   })
+  // useEffect(() => {
+  //   console.log("YYY Ejecutado 4")
+  //   // $(window).scrollTop(0)
+  //   // $(window).scrollTop(0)
+  //   //console.log("PPP", $("#0instructions").width())
+  //   //if (saveButtonDisabled && allDisabled)
+  //   return () => {
+  //     //if (saveButtonDisabled && allDisabled) clearHandler() // RESET ALL FORM
+  //     console.log("YYY", "EJECUTADO")
+  //     //if (saveButtonDisabled && allDisabled) clearHandler() // RESET ALL FORM
+  //     //console.log("YYY", "se fue")
+  //   }
+  //   //return () => $(window).scrollTop(0)
+  //  })
+
+   dispatch(setMenuShown(false))
 
   //$(window).scrollTop(0)
   //$(window).scrollTop(0)
-  $(window).scrollTop(0)
+  //$(window).scrollTop(0)
   // window.onbeforeunload = function () {
   //   window.scrollTo(0, 0);
   // }
@@ -695,9 +750,92 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
 
   //$(window).scrollTop(0)
 
+  // window.onbeforeunload = function() {
+  //   //return "";
+  //   console.log("YYY", "se fue")
+  //   if (saveButtonDisabled && allDisabled) clearHandler()
+  // }
+
+  // useEffect(() => {
+  //   console.log("YYY TTT saveButtonDisabled", saveButtonDisabled)
+  //   console.log("YYY TTT allDisabled", allDisabled)
+  // },[saveButtonDisabled])
+
+   useEffect(() => {
+    console.log("YYY WWW saveButtonDisabled", saveButtonDisabled)
+    console.log("YYY WWW allDisabled", allDisabled)
+  },[ saveButtonDisabled, allDisabled ])
+
+  // window.onbeforeunload = function() {
+  //   return true;
+  // };
+
+  // window.onbeforeunload = function() {
+  //   return "";
+  // }
+    //console.log("YYY", "se fue")
+    //if (saveButtonDisabled && allDisabled) clearHandler()
+
+    //let qwe = document.getElementById("hgtyh")
+  
+
+    // window.onbeforeunload  = function() {
+    //   return "";
+    // }
+
+  // AAA
+  //   useEffect(() => {
+  //     const unloadCallback = (e: any) => {
+  //          e.preventDefault();
+  //          e.returnValue = "";
+  //         //return "";
+  //     };
+      
+  //     window.addEventListener("beforeunload", unloadCallback);
+  //     return () => {
+  //         //window.addEventListener("popstate", confirmation());
+  //         window.removeEventListener("beforeunload", unloadCallback);
+  //     }
+  // }, []);
+
+    // window.onbeforeunload = function() {
+    //   return "";
+    // }
+
+    // useEffect(() => {
+    //   function onUnload() {
+    //     return ""
+    //   }
+    //   window.addEventListener("beforeunload", onUnload);
+    //   return () => {
+    //     window.removeEventListener("beforeunload", onUnload);
+    //   }
+    // });
+
+  //    useEffect(() => {
+  //     const unloadCallback = (e: any) => {
+  //         return "Confirm refresh"
+  //          //e.preventDefault();
+  //          //e.returnValue = "";
+  //         //return "";
+  //     };
+      
+  //     window.addEventListener("beforeunload", unloadCallback);
+  //     return () => {
+  //         //window.addEventListener("popstate", confirmation());
+  //         window.removeEventListener("beforeunload", unloadCallback);
+  //     }
+  // }, []);
+
+    $( window ).on('unload', function( event ) {
+      console.log('RRR XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
+      clearHandler()
+  });
+
+
   return (
-    <div 
-      id={"bhgt"}
+    <div
+      id={"hgtyh"}
       className={css.container}
       style={{ marginRight: hasScroll ? `${16 + scrollWidth}px` : `16px` }}
     >

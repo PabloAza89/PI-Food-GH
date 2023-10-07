@@ -1,14 +1,16 @@
 .background {
-  background: rgba(148, 179, 138, 0.171);
+  /* background: darkred; */ /* DEV */
+  /* background: rgba(148, 179, 138, 0.171); */
   position: absolute;
   display: flex;
   flex-direction: column;
   width: 100vw;
   height: 100vh;
+  min-height: 300px;
   align-items: center;
   justify-content: center;
   color: rgba(240, 248, 255, 0.726);
-  font-size: 4vh;
+  /* font-size: 4vh; */
   text-decoration: none;
 }
 
@@ -19,6 +21,7 @@
   -moz-user-select: none !important;
   -ms-user-select: none !important;
   user-select: none !important;
+  /* background: green; */ /* DEV */
   line-height: 27px;
   color: antiquewhite;
   font-size: 18px;
@@ -26,7 +29,7 @@
   font-weight: 400;
   text-align: center;
   padding: 0px 40px;
-  margin-bottom: 30px;
+  /* margin-bottom: 30px; */
 }
 
 .link {
@@ -36,6 +39,7 @@
   -moz-user-select: none !important;
   -ms-user-select: none !important;
   user-select: none !important;
+  /* background: goldenrod; */ /* DEV */
   line-height: 27px;
   color: rgb(0, 86, 179);
   font-size: 18px;
@@ -43,16 +47,18 @@
   font-weight: 400;
   text-underline-position: under;
   text-align: center;
+  margin: 15px 0px;
 }
 
 .button {
   background: #859e7d !important;
   color: antiquewhite !important;
-  margin-top: 40px;
+  /* margin-top: 40px; */
   min-width: 122px;
   width: 122px;
   height: 36.5px;
   align-self: center;
+  /* font-size: 15px !important; */
 }
 
 .button:hover { background: #7b9174 !important }
