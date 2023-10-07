@@ -44,7 +44,7 @@ const CardsMapper = ({ retrieveLogin, userData }: CardsMapperI)  => {
   console.log("PPP allRecipes", allRecipes)
   console.log("PPP allRecipes[0]", allRecipes[0])
 
-  return allRecipes[0] !== undefined && toShow[0] !== undefined ?
+  return toShow[0] !== undefined ?
     (<div
       className={css.background}
       style={{
@@ -74,12 +74,8 @@ const CardsMapper = ({ retrieveLogin, userData }: CardsMapperI)  => {
         />
       )}
     </div>) :
-    allRecipes[0] !== undefined && toShow[0] === undefined ?
     (<div>
       <div className={css.notFound} >No recipe was found !</div>
-    </div>) :
-    (<div>
-      <div className={css.notFound} >Loading..</div>
     </div>)
 }
 

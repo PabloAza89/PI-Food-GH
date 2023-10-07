@@ -389,8 +389,8 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
 
     if (titleValue.replaceAll(" ","").replaceAll("\n", "") === "") emptyInputs.push("Title")
     if (healthValue.replaceAll(" ","").replaceAll("\n", "") === "") emptyInputs.push("Health Score")
-    if (summaryValue.replaceAll(" ","").replaceAll("\n", "") === "") emptyInputs.push("Summary")
     if (dishesArray.length === 0) emptyInputs.push("Dishes")
+    if (summaryValue.replaceAll(" ","").replaceAll("\n", "") === "") emptyInputs.push("Summary")
     if (dietsArray.length === 0) emptyInputs.push("Diets")
     if (stepsState.map((e) => {if (e.replaceAll(" ","").replaceAll("\n", "") === "") return 1; else return -1}).some(e => e !== -1)) {
       let indexNumbers: any = []
@@ -464,9 +464,6 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
           setSaveButtonDisabled(true)
           setAllDisabled(true)
           recipeCreated.current = true
-          //saveButtonDisabled.current = true;
-          //allDisabled.current = true;
-          
         }
         if (res.status === 400 && res.message === 'Invalid Credentials') {
           console.log("YYY", "OJO QUE ENTRO ACA")
@@ -480,8 +477,6 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
             showCancelButton: false,
             timer: 3000,
           })
-          //saveButtonDisabled.current = false;
-          //allDisabled.current = false;
           setSaveButtonDisabled(false)
           setAllDisabled(false)
         }
@@ -496,8 +491,6 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
             showCancelButton: false,
             timer: 3000,
           })
-          //saveButtonDisabled.current = false;
-          //allDisabled.current = false;
           setSaveButtonDisabled(false)
           setAllDisabled(false)
         }
@@ -595,8 +588,6 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
             showCancelButton: false,
             timer: 3000,
           })
-          //saveButtonDisabled.current = false;
-          //allDisabled.current = false;
           setSaveButtonDisabled(false)
           setAllDisabled(false)
         }
@@ -611,8 +602,6 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
             showCancelButton: false,
             timer: 1500,
           })
-          //saveButtonDisabled.current = true;
-          //allDisabled.current = true;
           setSaveButtonDisabled(true)
           setAllDisabled(true)
         }
@@ -629,8 +618,6 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
             showCancelButton: false,
             timer: 3000,
           })
-          //saveButtonDisabled.current = false;
-          //allDisabled.current = false;
           setSaveButtonDisabled(false)
           setAllDisabled(false)
         }
@@ -652,11 +639,6 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
 
   useEffect(() => { // RETRIEVES INFO FROM LS
     console.log("YYY Ejecutado 1")
-    // window.onbeforeunload = function() {
-    //   return "";
-    // }
-    // console.log("YYY 1 saveButtonDisabled", saveButtonDisabled)
-    // console.log("YYY 1 allDisabled", allDisabled)
     if (isEditing) {
         setTitleValue(location.state.title) // validator not necessary since no badWords are stored.
         setHealthValue(location.state.healthScore)
@@ -684,14 +666,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
        }
       }
       return () => {
-        console.log("YYY 1 YYYYYY saveButtonDisabled", saveButtonDisabled)
-        console.log("YYY 1 YYYYYY allDisabled", allDisabled)
-        if (recipeCreated.current) {
-          //console.log("YYY", "acaaa")
-          clearHandler() // RESET ALL FORM
-        }
-        
-        console.log("YYY Ejecutado al salir")
+        if (recipeCreated.current) clearHandler() // CLEAR FORM: SAVED && FIRES WHEN USER GO TO ANOTHER ROUTE/COMPONENT
       }
   //},[allDisabled])
   },[])
@@ -736,114 +711,28 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
 
    dispatch(setMenuShown(false))
 
-  //$(window).scrollTop(0)
-  //$(window).scrollTop(0)
-  //$(window).scrollTop(0)
-  // window.onbeforeunload = function () {
-  //   window.scrollTo(0, 0);
-  // }
-  //$(".MyRecipeCSS_container").scrollTop(0)
-  
-  //window.scrollTo(0,0)
-  //document.querySelector("body")!.scrollTo(0,0)
-  console.log("OOO", stepsState[0] === '\n')
+ 
+  //console.log("OOO", stepsState[0] === '\n')
 
-  //$(window).scrollTop(0)
 
-  // window.onbeforeunload = function() {
-  //   //return "";
-  //   console.log("YYY", "se fue")
-  //   if (saveButtonDisabled && allDisabled) clearHandler()
-  // }
+    window.onbeforeunload = function() { // CLEAR FORM: SAVED && FIRES WHEN WINDOW IS CLOSED OR REFRESH
+    if (recipeCreated.current) {
+      clearHandler() // RESET ALL FORM
+    }
+  }
 
-  // useEffect(() => {
-  //   console.log("YYY TTT saveButtonDisabled", saveButtonDisabled)
-  //   console.log("YYY TTT allDisabled", allDisabled)
-  // },[saveButtonDisabled])
-
-   useEffect(() => {
+  useEffect(() => {
     console.log("YYY WWW saveButtonDisabled", saveButtonDisabled)
     console.log("YYY WWW allDisabled", allDisabled)
   },[ saveButtonDisabled, allDisabled ])
 
-  // window.onbeforeunload = function() {
-  //   return true;
-  // };
-
-  // window.onbeforeunload = function() {
-  //   return "";
-  // }
-    //console.log("YYY", "se fue")
-    //if (saveButtonDisabled && allDisabled) clearHandler()
-
-    //let qwe = document.getElementById("hgtyh")
-  
-
-    // window.onbeforeunload  = function() {
-    //   return "";
-    // }
-
-  // AAA
-  //   useEffect(() => {
-  //     const unloadCallback = (e: any) => {
-  //          e.preventDefault();
-  //          e.returnValue = "";
-  //         //return "";
-  //     };
-      
-  //     window.addEventListener("beforeunload", unloadCallback);
-  //     return () => {
-  //         //window.addEventListener("popstate", confirmation());
-  //         window.removeEventListener("beforeunload", unloadCallback);
-  //     }
-  // }, []);
-
-    // window.onbeforeunload = function() {
-    //   return "";
-    // }
-
-    // useEffect(() => {
-    //   function onUnload() {
-    //     return ""
-    //   }
-    //   window.addEventListener("beforeunload", onUnload);
-    //   return () => {
-    //     window.removeEventListener("beforeunload", onUnload);
-    //   }
-    // });
-
-  //    useEffect(() => {
-  //     const unloadCallback = (e: any) => {
-  //         return "Confirm refresh"
-  //          //e.preventDefault();
-  //          //e.returnValue = "";
-  //         //return "";
-  //     };
-      
-  //     window.addEventListener("beforeunload", unloadCallback);
-  //     return () => {
-  //         //window.addEventListener("popstate", confirmation());
-  //         window.removeEventListener("beforeunload", unloadCallback);
-  //     }
-  // }, []);
-
-    $( window ).on('unload', function( event ) {
-      console.log('RRR XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
-      clearHandler()
-  });
-
-
   return (
     <div
-      id={"hgtyh"}
       className={css.container}
       style={{ marginRight: hasScroll ? `${16 + scrollWidth}px` : `16px` }}
     >
     <div
-      /* sx={s.form({ hasScroll, scrollWidth })} */
       className={css.form}
-      /* style={{ marginRight: hasScroll ? `${96 + scrollWidth}px` : `96px` }} */
-      /* style={{ marginRight: hasScroll ? `${scrollWidth}px` : `0px` }} */
     >
         <img // HIDDEN. ONLY FOR IMAGE VERIFICATION PURPOSES.
           style={{ width: '0px', height: '0px' }}
