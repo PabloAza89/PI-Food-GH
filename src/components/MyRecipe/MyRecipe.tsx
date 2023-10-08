@@ -331,7 +331,16 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
       summary: { character: false, badWord: false, empty: false },
       instructions: [{ character: false, badWord: false, empty: false },]
     });
-    localStorage.clear()
+    //localStorage.removeItem("miGato");
+    localStorage.removeItem('titleValue');
+    localStorage.removeItem('imageValue');
+    localStorage.removeItem('healthValue');
+    localStorage.removeItem('summaryValue');
+    localStorage.removeItem('dishesArray');
+    localStorage.removeItem('dietsArray');
+    localStorage.removeItem('stepsState');
+    //localStorage.setItem('stepsState', JSON.stringify([...copyState]))
+    //localStorage.clear()
     $(`#targetTitle`)
       .html("<div></div>") // clear all highlighted
     $(`#targetSummary`)
@@ -715,7 +724,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
   //console.log("OOO", stepsState[0] === '\n')
 
 
-    window.onbeforeunload = function() { // CLEAR FORM: SAVED && FIRES WHEN WINDOW IS CLOSED OR REFRESH
+  window.onbeforeunload = function() { // CLEAR FORM: SAVED && FIRES WHEN WINDOW IS CLOSED OR REFRESH
     if (recipeCreated.current) {
       clearHandler() // RESET ALL FORM
     }
@@ -832,7 +841,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
                 { isEditing ? <div>Leave it empty for use the same image !</div> : <div>Please, copy and paste your food recipe image url here !</div> }
                 { isEditing ? <div>Either if you want to use a new image, please, paste your new food recipe image url here !</div> : <div>If it's everything OK, you can preview your image in center upper box</div> }
                 { isEditing ? <div>If your link its not valid, a random image gonna be used in your recipe.</div> : <div>If you dont give a link, or link its not valid, a random image gonna be used in your recipe.</div> }
-                { <div><b>Tip: </b>If you can see the image in the upper-top box, the image will be saved safely.</div> }
+                { <div><b>Tip: </b>If you can see the {isEditing ? `new ` : null}image in the upper-top box, the image will be saved safely.</div> }
               </div>
             </div>
           }

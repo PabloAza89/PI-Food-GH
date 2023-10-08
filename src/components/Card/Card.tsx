@@ -69,7 +69,10 @@ const Card = ({
     <div className={css.background}>
       <div
         className={css.editDeleteContainer}
-        style={{ display: userRecipe && userData.email === email ? 'flex' : 'none' }}
+        style={{
+          overflow: 'hidden', // TEST
+          display: userRecipe && userData.email === email ? 'flex' : 'none'
+        }}
         //style={{ display: 'none' }}
       >
         <Button

@@ -9,8 +9,9 @@
 
 .notFound {
   background: rgba(138, 179, 179, 0.171);
-  position: absolute;
   display: flex;
+  /* position: absolute; */
+  position: relative;
   flex-direction: column;
   /* min-width: 925px; */
   width: 100vw;
@@ -22,4 +23,6 @@
   font-size: calc(32px + 3vw);
   white-space:nowrap;
   margin-top: 7px;
+  /* overflow-y: hidden !important;
+  overflow-x: hidden !important; */
 }

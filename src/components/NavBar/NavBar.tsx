@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation, useMatch } from "react-router-dom";
+import { Link, useLocation, useMatch, useNavigate } from "react-router-dom";
 import logo from "../../images/logo.png";
 import css from './NavBarCSS.module.css';
 import comm from './commonsCSS.module.css';
@@ -94,6 +94,9 @@ const NavBar = () =>  {
     <div
       className={css.background}
       style={{
+        // overflow: 'hidden !important', // TEST
+        // overflowX: 'hidden', // TEST
+        // overflowY: 'hidden', // TEST
         position: location.pathname !== `/` ? 'fixed' : 'relative',
         flexDirection: menuShown ? 'column' : 'row',
         //width: `calc(100vw - ${scrollWidth}px)`,

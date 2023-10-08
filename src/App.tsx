@@ -21,7 +21,7 @@ import {
   fetchRecipesFromAPI, allRecipesLoaded,
   setCurrentWidth, setHeight, setPercentageResizedHeight, setWidth,
   setScrollWidth, setHasScroll, setScrollPosition,
-  getDietsFromDB, viewPort
+  getDietsFromDB, viewPort, landingShown
 } from './actions';
 import store from './store/store';
 import $ from 'jquery';
@@ -29,8 +29,15 @@ import $ from 'jquery';
 function App() {
 
   const dispatch = useDispatch()
+
+  //let landHiddenLS: string | null = localStorage.getItem('landHidden');
+  //if (landHiddenLS && JSON.parse(landHiddenLS)) dispatch(landingShown(true))
+
   const location = useLocation()
   const showHelpBG = [useMatch("/:route")?.params.route?.toLowerCase()].filter(e => e !== "about")[0]
+
+  let landHiddenLS: string | null = localStorage.getItem('landHidden');
+  
   //console.log(`LLRR showHelpNavbar`, showHelpBG)
 
   useEffect(() => {
@@ -47,6 +54,7 @@ function App() {
   },[dispatch])
 
   const currentWidth = useSelector((state: {currentWidth:number}) => state.currentWidth)
+  const landingShown = useSelector((state: { landingShown: boolean }) => state.landingShown)
 
   const [isLoading, setIsLoading] = useState({
     main: true,
@@ -101,6 +109,13 @@ function App() {
       setUserData({ email: res.email, fd_tkn: res.fd_tkn })
     })
     .catch(rej => console.log(rej))
+
+    //console.log("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT")
+    // return () => {
+    //   //if (recipeCreated.current) clearHandler() // CLEAR FORM: SAVED && FIRES WHEN USER GO TO ANOTHER ROUTE/COMPONENT
+    //   console.log("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT")
+    // }
+
   },[])
 
   useEffect(() => {
@@ -145,16 +160,43 @@ function App() {
   //   dispatch(setHasScroll(window.innerWidth !== $('body').width() ? true : false))
   // },1000)
 
-  
+  // useEffect(() => {
+  //   return () => {
+  //     console.log("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT")
+  //   }
+  // })
+
+  window.onbeforeunload = function() { // CLEAR FORM: SAVED && FIRES WHEN WINDOW IS CLOSED OR REFRESH
+    // if (recipeCreated.current) {
+    //   clearHandler() // RESET ALL FORM
+    // }
+    if (!userData.email && landHiddenLS && JSON.parse(landHiddenLS)) {
+      console.log("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT")
+      localStorage.removeItem('landHidden');
+    }
+    
+    
+  }
 
   return (
-    <div className={css.background}>
-      <Landing />
+    <div 
+      className={css.background}
+      style={{ overflow: landingShown ? 'hidden' : 'inherit' }}
+    >
+      <Landing retrieveLogin={retrieveLogin} userData={userData} />
       <div
         className={css.wallpaperNav}
-        style={{ display: showHelpBG ? 'flex' : 'none' }}
+        style={{
+          display: showHelpBG ? 'flex' : 'none',
+          /* overflow: 'hidden' */
+        }}
       />
-      <div className={css.wallpaperBody} />
+      <div
+        className={css.wallpaperBody}
+        /* style={{
+          overflow: 'hidden'
+        }} */
+      />
       <Routes>
         <Route path="/" element={<>
           <GoogleAuth retrieveLogin={retrieveLogin} userData={userData} />

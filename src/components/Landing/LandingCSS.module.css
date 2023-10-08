@@ -1,15 +1,9 @@
 .background {
-  /* display: flex; */
-  position: absolute;
-  z-index: 40000;
-  /* overflow: hidden !important; */
+  position: fixed;
+  z-index: 10000;
+  width: 100vw;
+  height: 100vh;
 }
-
-
-/* .body {
-  overflow-x: hidden !important;
-}
- */
 
 .bgImg {
   display: flex;
@@ -18,8 +12,9 @@
   height: 100vh;
 }
 
-.bgImageLanding {
+.bgImage {
   position: fixed;
+  
   width: 100vw;
   height: 100vh;
   background-image: url("../../images/landingBG.jpg");
@@ -32,45 +27,58 @@
   padding-bottom: 10px; 
 }
 
-.landingContainer {
+.buttonsAndText {
+  /* background: gray; */ /* DEV */
+  min-height: 150px !important;
   display: flex;
   flex-direction: row;
   width: 100vw;
   height: 100vh;
   align-items: center;
   justify-content: center;  
+  z-index: 10001;
 }
 
-.welcomeText {
+.text {
+  /* background: red; */ /* DEV */
   display: flex;
   color: lightgray;
-  font-size: 3rem;
-  z-index: 2;  
-}
-  
-.welcomeButton {
-  display: flex;
-  justify-content: center;
-  padding-top: 0.1%;
-  align-items: center;
-  margin-top: 0.9%;    
-  background: rgba(139, 0, 139, 0.285) !important;
-  border-color: aliceblue;
-  color: beige;
-  font-style: oblique;
-  /* border-style :solid; */
-  /* border-width: 2px; */
-  width: 110px;
-  height: 35px;
-  margin-left: 30px;
-  /* border-radius: 15%; */
-  font-size: 1rem;
-  z-index: 2;
+  font-size: calc(20px + 3vw);
+  text-align: center;
+  padding: 0px 10px;
+  margin: 5px 10px !important;
 }
 
-.welcomeButton:hover {
-  background-color: rgba(139, 0, 139, 0.424);
-  font-size: 1.01rem;
-  border-width: 2.5px;
+.divider {
+  width: 6px;
+  height: calc(100vh - 32px);
+  background: white;
+  min-height: 118px !important;
+  border-bottom: 10px solid white;
 }
-  
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+}
+
+.button {
+  margin: 5px 10px !important;
+  background: rgba(139, 0, 139, 0.285) !important;
+  color: beige !important;
+  font-style: oblique;
+  height: 35px;
+}
+
+.buttonInner {
+  display: flex;
+  flex-direction: row;
+  height: 25px !important;
+  white-space: nowrap;
+  padding: 0px 6px !important;
+  align-self: baseline;
+}
+
+.button:hover {
+  background: rgba(139, 0, 139, 0.424) !important;
+}

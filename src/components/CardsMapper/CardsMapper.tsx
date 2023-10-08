@@ -49,7 +49,7 @@ const CardsMapper = ({ retrieveLogin, userData }: CardsMapperI)  => {
     (<div
       className={css.background}
       style={{
-        overflow: landingShown ? 'hidden' : 'inherit',
+        /* overflow: landingShown ? 'hidden' : 'inherit', */
         width: `calc(100vw - ${scrollWidth}px)`,
         marginRight: `${scrollWidth}px`,
         marginTop:
@@ -78,10 +78,13 @@ const CardsMapper = ({ retrieveLogin, userData }: CardsMapperI)  => {
     </div>) :
     allRecipes[0] !== undefined && toShow[0] === undefined ?
     (<div>
-      <div className={css.notFound} >No recipe was found !</div>
+      <div
+        className={css.notFound}
+        /* style={{ overflow: landingShown ? 'hidden' : 'inherit' }} */
+      >No recipe was found !</div>
     </div>) :
-    (<div>
-      <div className={css.notFound} >Loading..</div>
+    (<div /* style={{ overflow: landingShown ? 'hidden' : 'inherit' }} */ >
+      <div className={css.notFound}>Loading..</div>
     </div>)
 }
 

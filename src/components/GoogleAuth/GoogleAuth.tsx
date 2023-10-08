@@ -2,15 +2,17 @@ import { useEffect, useState, useRef } from "react";
 import css from './GoogleAuthCSS.module.css';
 import { Route, Routes, useLocation, useMatch } from "react-router-dom";
 import { useGoogleLogin } from '@react-oauth/google';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Button } from '@mui/material/';
 import { easings } from '../../commons/easingsCSS';
 import { ReactComponent as MySvg } from '../../images/googleLogo.svg';
+import { landingShown } from '../../actions';
 import Swal from 'sweetalert2';
 import $ from 'jquery';
 
 const GoogleAuth = ({ retrieveLogin, userData }: any) => {
 
+  const dispatch = useDispatch()
   easings() // Jquery easings..
 
   const hasScroll = useSelector((state: {hasScroll:boolean}) => state.hasScroll)
@@ -33,7 +35,13 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
         method: 'GET',
       })
       .then((res) => res.json())
-      .then((res) => retrieveLogin({ email: res.email, fd_tkn: codeResponse.access_token }))
+      //.then((res) => retrieveLogin({ email: res.email, fd_tkn: codeResponse.access_token }))
+      .then((res) => { 
+        //console.log("YUI", codeResponse)
+        retrieveLogin({ email: res.email, fd_tkn: codeResponse.access_token })
+        dispatch(landingShown(false))
+        localStorage.setItem('landHidden', 'true')
+      })
       .catch(rej => { console.log(rej) })
     },
     onError: (error) => { console.log(error) },
@@ -92,8 +100,9 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
       })
       .then((res) => res.json())
       .then((res) => {
-        if (res.error !== undefined) {
+        if (res.error !== undefined) { // USER HAS ALREADY LOGOUT..
           retrieveLogin({email: "", fd_tkn: ""})
+          localStorage.removeItem('landHidden')
           fetch(`http://localhost:3001/user`, {
             method: 'POST',
             credentials: 'include',
@@ -102,8 +111,9 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
             }
           })
         }
-        if (res.error === undefined) {
+        if (res.error === undefined) { // USER LOGOUT SUCCESSFULLY
           retrieveLogin({email: "", fd_tkn: ""})
+          localStorage.removeItem('landHidden')
           fetch(`http://localhost:3001/user`, {
             method: 'POST',
             credentials: 'include',
