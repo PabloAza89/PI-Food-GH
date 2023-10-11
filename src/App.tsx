@@ -108,7 +108,13 @@ function App() {
     setRecipeNotFound(response)
   }
 
-  useEffect(() => { // FIRST ONE-TIME AUTO-CHECK USER (CHECK USER TOKEN)
+  useEffect(() => { // FIRST ONLY-ONE-TIME AUTO-CHECK USER (CHECK USER TOKEN)
+
+    const bc = new BroadcastChannel("test_channel");
+    bc.postMessage("This is a test message.");
+    bc.onmessage = (event) => {
+      console.log("SARARA",event);
+    };
 
     let tabsLS: string | null = localStorage.getItem('tabsLS');
 
@@ -147,18 +153,43 @@ function App() {
       //sessionStorage.setItem('tabsLS', '["rr"]')
     }
     else {
-      console.log("DDDDD")
-      let qq = JSON.parse(tabsLS)//.push("b")
-      //let rr = JSON.stringify(Math.floor(100000 + Math.random() * 900000))
-      //let rr = Math.floor(100000 + Math.random() * 900000)
-      //qq.push(rr)
-      //qq.push("rr")
-      qq.push(tabID)
-      //console.log("qqq", qq)
-      //localStorage.setItem('tabsLS', JSON.stringify(qq))
-      localStorage.setItem('tabsLS', JSON.stringify(qq))
-      //sessionStorage.setItem('tabsLS', JSON.stringify(qq))
-      //console.log("bbb", tabsLS)
+      //let qq = JSON.parse(tabsLS)//.push("b")
+      //let tabsLS: string | null = localStorage.getItem('tabsLS');
+
+      
+
+      do {
+        let tabsLS: string | null = localStorage.getItem('tabsLS');
+
+        //console.log("tabsLS tabsLS", typeof JSON.parse(tabsLS!))
+
+        let tabsLSParsed = tabsLS && JSON.parse(tabsLS)
+
+        //let tabIndexInLS = tabsLS && JSON.parse(tabsLS).map((e: any, i: any) => { return e === tabID ? i : undefined }).filter((e: any) => e !== undefined)[0]
+
+        //console.log("checkIndexcheckIndex", checkIndex)
+
+        //tabsLS && tabsLS.splice(checkIndex,1)
+
+        tabsLSParsed.push(tabID)
+
+        localStorage.setItem('tabsLS', JSON.stringify(tabsLSParsed))
+
+        //console.log("UYUYUY", typeof JSON.parse(localStorage.getItem('tabsLS')!)[0]) // === number
+
+        //console.log("TIME 1")
+     }
+      while (
+        //!localStorage.getItem('tabsLS')
+        //!(tabsLS && JSON.parse(tabsLS).includes(tabID))
+        //(tabsLS && JSON.parse(tabsLS).includes(tabID) !== true)
+        //tabsLS && JSON.parse(tabsLS).includes(tabID) !== true
+        //tabsLS.includes(tabID)
+        !(JSON.parse(localStorage.getItem('tabsLS')!).includes(tabID))
+        //JSON.parse(localStorage.getItem('tabsLS')) && JSON.parse(localStorage.getItem('tabsLS')).includes(tabID)
+        //JSON.parse(localStorage.getItem('tabsLS')!)
+      )
+
     }
 
     console.log("AUTO-CHECK")
