@@ -148,9 +148,9 @@ export function setMenuShown(setMenuShown:boolean) {
   }
 };
 
-export function landingShown(landingShown:boolean) {
+export function landingHidden(landingHidden:boolean) {
   return {
-    type: 'LANDING_SHOWN',
-    payload: landingShown
+    type: 'LANDING_HIDDEN',
+    payload: landingHidden
   }
 };

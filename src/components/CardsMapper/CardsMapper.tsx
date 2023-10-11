@@ -40,10 +40,10 @@ const CardsMapper = ({ retrieveLogin, userData }: CardsMapperI)  => {
 
   //let toShoww = [undefined]
 
-  console.log("PPP toShow", toShow)
-  console.log("PPP toShow[0]", toShow[0])
-  console.log("PPP allRecipes", allRecipes)
-  console.log("PPP allRecipes[0]", allRecipes[0])
+  // console.log("PPP toShow", toShow)
+  // console.log("PPP toShow[0]", toShow[0])
+  // console.log("PPP allRecipes", allRecipes)
+  // console.log("PPP allRecipes[0]", allRecipes[0])
 
   return allRecipes[0] !== undefined && toShow[0] !== undefined ?
     (<div

@@ -1,7 +1,15 @@
 //import './disableAutoFocusSA2.module.css';
 //import './disableAutoFocusSA2.css';
 import Swal from 'sweetalert2';
+import { useDispatch, useSelector } from 'react-redux';
+import { useGoogleLogin } from '@react-oauth/google';
+import { landingHidden, setMenuShown } from '../actions';
 import { recipesI } from '../interfaces/interfaces';
+//import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
+//import navigate from "react-router-dom";
+//import type { RootState, AppDispatch } from '../store/store'
+import store from '../store/store'
 
 // USED IN CARD & DETAIL
 
@@ -134,4 +142,58 @@ export const handleEdit = async ({
       timer: 3000,
     })
   })
+}
+
+//const dispatch = useDispatch
+//const navigate = useNavigate
+//const dispatch: () => any = useDispatch
+
+export function checkPrevLogin ({
+  retrieveLogin, userData, navigate
+}: any) {
+
+//export function checkPrevLogin (props: any) {
+
+      //const navigate = () => useNavigate
+      //const navigate = useNavigate()
+
+      fetch(`http://localhost:3001/user`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+        },
+        /* body: JSON.stringify({
+          email: userData.email,
+          fd_tkn: userData.fd_tkn
+        }) */
+      })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log("AV ERGG", res)
+        //return {res}
+        if (res.status === 200) {
+          //navigate("/")
+          console.log("entro aca ?!?")
+          retrieveLogin({ email: res.email, fd_tkn: res.fd_tkn })
+          store.dispatch(landingHidden(true))
+          //store.dispatch(setMenuShown(true))
+          //dispatch()
+          localStorage.setItem('landingHidden', 'true')
+          //Navigate({ to:"/" })
+          //navigate.navigate("/")
+          //useNavigate("/")
+          
+          //navigate
+        }
+
+        if (res.status === 400 && res.message === `User not logged`) {
+          retrieveLogin({ email: "", fd_tkn: "" })
+        }
+
+        if (res.status === 400 && res.message === `Invalid Credentials`) {
+          retrieveLogin({ email: "", fd_tkn: "" })
+        }
+      })
+      .catch(rej => console.log(rej))
 }

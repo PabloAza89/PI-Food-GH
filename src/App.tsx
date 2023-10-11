@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import css from './App.module.css';
 import './commons/globalSweetAlert2.css';
+import { checkPrevLogin } from './commons/commonsFunc';
 import { useSelector } from 'react-redux';
 import { Route, Routes, useLocation, useMatch } from "react-router-dom";
 import Landing from "./components/Landing/Landing";
@@ -21,12 +22,35 @@ import {
   fetchRecipesFromAPI, allRecipesLoaded,
   setCurrentWidth, setHeight, setPercentageResizedHeight, setWidth,
   setScrollWidth, setHasScroll, setScrollPosition,
-  getDietsFromDB, viewPort, landingShown
+  getDietsFromDB, viewPort, landingHidden
 } from './actions';
 import store from './store/store';
 import $ from 'jquery';
 
 function App() {
+
+  
+
+  // useEffect(() => {
+
+  //   console.log("ASDASDASD typeof window.name" , window.name)
+
+  // if (window.name === "") {
+  //   console.log("ASDASDASD IS THE FIRST")
+  //   window.name = "myWindow"
+  // } else {
+  //   console.log("ASDASDASD OTHER OPEN")
+  // }
+
+  // },[])
+
+  //if (window.name === "myWindow") console.log("ASD ASD ASD IS THE FIRST")
+
+  //window.name = "myWindow";
+
+  //if (window.name === "myWindow") console.log("ASD ASD ASD OTHER OPEN")
+
+  
 
   const dispatch = useDispatch()
 
@@ -36,8 +60,9 @@ function App() {
   const location = useLocation()
   const showHelpBG = [useMatch("/:route")?.params.route?.toLowerCase()].filter(e => e !== "about")[0]
 
-  let landHiddenLS: string | null = localStorage.getItem('landHidden');
-  
+  let landingHiddenLS: string | null = localStorage.getItem('landingHidden');
+  let newLoginLS: string | null = localStorage.getItem('newLogin');
+
   //console.log(`LLRR showHelpNavbar`, showHelpBG)
 
   useEffect(() => {
@@ -54,20 +79,12 @@ function App() {
   },[dispatch])
 
   const currentWidth = useSelector((state: {currentWidth:number}) => state.currentWidth)
-  const landingShown = useSelector((state: { landingShown: boolean }) => state.landingShown)
+  const landingHidden = useSelector((state: { landingHidden: boolean }) => state.landingHidden)
 
   const [isLoading, setIsLoading] = useState({
     main: true,
     refresh: false
   });
-
-  // function GetAfterCreated () {
-  //   setIsLoading({ ...isLoading , refresh : true})
-
-  //   if (isLoading) {
-  //     setIsLoading({...isLoading , main: false})
-  //   }
-  // }
 
   const [ userData, setUserData ] = useState<userDataObjI>({
     email: '',
@@ -75,7 +92,7 @@ function App() {
   })
 
   const retrieveLogin = (props: any) => {
-    setUserData({ email:props.email, fd_tkn: props.fd_tkn })
+    setUserData({ email: props.email, fd_tkn: props.fd_tkn })
   }
 
   const [ recipeCreatedOrEdited, setRecipeCreatedOrEdited ] = useState<boolean>(false)
@@ -91,17 +108,70 @@ function App() {
     setRecipeNotFound(response)
   }
 
-  useEffect(() => {
+  useEffect(() => { // FIRST ONE-TIME AUTO-CHECK USER (CHECK USER TOKEN)
+
+    let tabsLS: string | null = localStorage.getItem('tabsLS');
+
+    console.log("UNA SOLA VEZ EJECUTADO")
+    const tabID = Math.floor(100000 + Math.random() * 900000)
+    
+
+    sessionStorage.setItem('tabID', JSON.stringify(tabID))
+
+    //console.log("asdasdasd",tabsLS && JSON.parse(tabsLS))
+
+    if (!(tabsLS && JSON.parse(tabsLS))) {
+
+      
+      //Math.floor(100000 + Math.random() * 900000)
+      //localStorage.setItem('tabsLS', '["a"]')
+      //let rr = JSON.stringify(Math.floor(100000 + Math.random() * 900000))
+      //let rr = Math.floor(100000 + Math.random() * 900000)
+      //localStorage.setItem('tabsLS', JSON.stringify([rr]))
+      //localStorage.setItem('tabsLS', '["rr"]')
+      //localStorage.setItem('tabsLS', '2')
+
+      
+
+      do {
+        localStorage.setItem('tabsLS', JSON.stringify([tabID]))
+        console.log("TIME 1")
+      }
+      while (
+        !localStorage.getItem('tabsLS')
+      )
+      console.log("FINISHED")
+
+
+      
+      //sessionStorage.setItem('tabsLS', '["rr"]')
+    }
+    else {
+      console.log("DDDDD")
+      let qq = JSON.parse(tabsLS)//.push("b")
+      //let rr = JSON.stringify(Math.floor(100000 + Math.random() * 900000))
+      //let rr = Math.floor(100000 + Math.random() * 900000)
+      //qq.push(rr)
+      //qq.push("rr")
+      qq.push(tabID)
+      //console.log("qqq", qq)
+      //localStorage.setItem('tabsLS', JSON.stringify(qq))
+      localStorage.setItem('tabsLS', JSON.stringify(qq))
+      //sessionStorage.setItem('tabsLS', JSON.stringify(qq))
+      //console.log("bbb", tabsLS)
+    }
+
+    console.log("AUTO-CHECK")
     fetch(`http://localhost:3001/user`, {
       method: 'POST',
       credentials: 'include',
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
       },
-      body: JSON.stringify({
-        email: userData.email,
-        fd_tkn: userData.fd_tkn
-      })
+      // body: JSON.stringify({
+      //   email: userData.email,
+      //   fd_tkn: userData.fd_tkn
+      // })
     })
     .then((res) => res.json())
     .then((res) => {
@@ -110,10 +180,20 @@ function App() {
     })
     .catch(rej => console.log(rej))
 
+    // return () => {
+    //   //if (recipeCreated.current) clearHandler() // CLEAR FORM: SAVED && FIRES WHEN USER GO TO ANOTHER ROUTE/COMPONENT
+    //   console.log("GOING TO ANOTHER COMPONENT")
+    // }
+
     //console.log("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT")
     // return () => {
     //   //if (recipeCreated.current) clearHandler() // CLEAR FORM: SAVED && FIRES WHEN USER GO TO ANOTHER ROUTE/COMPONENT
     //   console.log("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT")
+    // }
+
+    // return () => {
+    //   //if (recipeCreated.current) clearHandler() // CLEAR FORM: SAVED && FIRES WHEN USER GO TO ANOTHER ROUTE/COMPONENT
+    //   console.log("CLOSED TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT")
     // }
 
   },[])
@@ -170,18 +250,54 @@ function App() {
     // if (recipeCreated.current) {
     //   clearHandler() // RESET ALL FORM
     // }
-    if (!userData.email && landHiddenLS && JSON.parse(landHiddenLS)) {
-      console.log("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT")
-      localStorage.removeItem('landHidden');
+
+    // if (!userData.email && landingHiddenLS && JSON.parse(landingHiddenLS)) {
+    //   console.log("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT")
+    //   localStorage.removeItem('landingHidden');
+    // }
+
+    console.log("CLOSED TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT")
+
+    let tabsLS: string | null = localStorage.getItem('tabsLS');
+
+    if (tabsLS && JSON.parse(tabsLS)) {
+      let qq = JSON.parse(tabsLS)
+      if (qq.length === 1) localStorage.removeItem('tabsLS');
+      else {
+        qq.pop()
+        //console.log("RRRR qq", qq)
+        //alert(qq)
+        localStorage.setItem('tabsLS', JSON.stringify(qq))
+      }
     }
-    
-    
+
   }
 
+  
+
+  //if (document.hasFocus()) console.log("ASD FOCUSED DOCUMENT")
+
+  window.onfocus = function() { // FIRED WHEN TAB IS FOCUSED, CHECK VALID USER
+    
+    // if (!(newLoginLS && JSON.parse(newLoginLS))) {
+    //   console.log("ASD", "FOCUSED")
+    //   checkPrevLogin({ retrieveLogin, userData })
+      
+    // }
+      console.log("ASD", "FOCUSED")
+      checkPrevLogin({ retrieveLogin, userData })
+  }
+
+  console.log("TTTTTT", userData)
+
+  //console.log("ASDASDASD", window.name)
+
+  
+
   return (
-    <div 
+    <div
       className={css.background}
-      style={{ overflow: landingShown ? 'hidden' : 'inherit' }}
+      style={{ overflow: landingHidden ? 'inherit' : 'hidden' }}
     >
       <Landing retrieveLogin={retrieveLogin} userData={userData} />
       <div

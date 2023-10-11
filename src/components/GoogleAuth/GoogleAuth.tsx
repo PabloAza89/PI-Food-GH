@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Button } from '@mui/material/';
 import { easings } from '../../commons/easingsCSS';
 import { ReactComponent as MySvg } from '../../images/googleLogo.svg';
-import { landingShown } from '../../actions';
+import { landingHidden } from '../../actions';
 import Swal from 'sweetalert2';
 import $ from 'jquery';
 
@@ -25,7 +25,7 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
   //const inHome = useMatch("/")?.pattern.path // "/" === Home
   const inHome = useMatch("/")?.pattern.path === "/" ? true : false;// "/" === Home
   //const aa = useLocation()
-  
+
   //console.log("HHH", aa )
   //console.log("HHH aa", inHome )
 
@@ -36,63 +36,124 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
       })
       .then((res) => res.json())
       //.then((res) => retrieveLogin({ email: res.email, fd_tkn: codeResponse.access_token }))
-      .then((res) => { 
-        //console.log("YUI", codeResponse)
-        retrieveLogin({ email: res.email, fd_tkn: codeResponse.access_token })
-        dispatch(landingShown(false))
-        localStorage.setItem('landHidden', 'true')
+      // .then((res) => {
+      //   //console.log("YUI", codeResponse)
+      //   retrieveLogin({ email: res.email, fd_tkn: codeResponse.access_token })
+      //   dispatch(landingHidden(true))
+      //   localStorage.setItem('landingHidden', 'true')
+      //   return { fd_tkn: codeResponse.access_token }
+      // })
+      .then((res) => {
+        //console.log("HHH", res.fd_tkn)
+        console.log("HHH", res)
+        fetch(`http://localhost:3001/user`, {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+          },
+          body: JSON.stringify({
+            //email: res.email,
+            fd_tkn: codeResponse.access_token,
+            overwrite: true
+          })
+        })
+        .then((res) => res.json())
+        .then((res) => {
+          if (res.status === 200) {
+            console.log("res res res", res)
+            retrieveLogin({ email: res.email, fd_tkn: res.fd_tkn })
+            dispatch(landingHidden(true))
+            localStorage.setItem('landingHidden', 'true')
+          }
+
+          if (res.status === 400 && res.message === `User not logged`) {
+            retrieveLogin({ email: "", fd_tkn: "" })
+            /* Swal.fire({
+              title: `There was an error when cheking your loggin.. `,
+              text: `Please, log in again.`,
+              icon: 'info',
+              showConfirmButton: false,
+              showDenyButton: false,
+              showCancelButton: false,
+              timer: 3000,
+            }) */
+          }
+          if (res.status === 400 && res.message === `Invalid Credentials`) {
+            retrieveLogin({ email: "", fd_tkn: "" })
+            Swal.fire({
+              title: `There was an error when cheking your loggin.. `,
+              text: `Please, log in again.`,
+              icon: 'info',
+              showConfirmButton: false,
+              showDenyButton: false,
+              showCancelButton: false,
+              timer: 3000,
+            })
+          }
+        })//.then(() => localStorage.removeItem('newLogin'))
       })
+      
+
+      
+        
+      
       .catch(rej => { console.log(rej) })
     },
-    onError: (error) => { console.log(error) },
+    onError: (error) => { console.log(error); /* localStorage.removeItem('newLogin') */ },
     onNonOAuthError: () => {
       setPopUp(false)
       setClicked(false)
+      /* localStorage.removeItem('newLogin') */
     }
   })
+  
 
-  useEffect(() => {
-    if (userData.email !== '') {
-      fetch(`http://localhost:3001/user`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-type': 'application/json; charset=UTF-8',
-        },
-        body: JSON.stringify({
-          email: userData.email,
-          fd_tkn: userData.fd_tkn
-        })
-      })
-      .then((res) => res.json())
-      .then((res) => {
-        setClicked(false)
-        $(`#buttonIn`)
-          setTimeout(() => {
-            $(`#buttonIn`)
-            .animate({ width: '30px' }, { queue: false, easing: 'easeOutBounce', duration: 1000 , complete: () => setShown(false) })
-          }, 2000)
-          $(`#buttonIn`)
-          //.stop(true, true)
-          .css("animation", "none")
-          .css("transition", "none")
+  // useEffect(() => {
+  //   if (userData.email !== '') {
+  //     fetch(`http://localhost:3001/user`, {
+  //       method: 'POST',
+  //       credentials: 'include',
+  //       headers: {
+  //         'Content-type': 'application/json; charset=UTF-8',
+  //       },
+  //       body: JSON.stringify({
+  //         email: userData.email,
+  //         fd_tkn: userData.fd_tkn
+  //       })
+  //     })
+  //     .then((res) => res.json())
+  //     .then((res) => {
+  //       setClicked(false)
+  //       $(`#buttonIn`)
+  //         setTimeout(() => {
+  //           $(`#buttonIn`)
+  //           .animate({ width: '30px' }, { queue: false, easing: 'easeOutBounce', duration: 1000 , complete: () => setShown(false) })
+  //         }, 2000)
+  //         $(`#buttonIn`)
+  //         //.stop(true, true)
+  //         .css("animation", "none")
+  //         .css("transition", "none")
 
-        if (res.status === 400 && res.message === `Invalid Credentials`) {
-          retrieveLogin({ email: "", fd_tkn: "" })
-          Swal.fire({
-            title: `There was an error when cheking your loggin.. `,
-            text: `Please, log in again.`,
-            icon: 'info',
-            showConfirmButton: false,
-            showDenyButton: false,
-            showCancelButton: false,
-            timer: 3000,
-          })
-        }
-      })
-      .catch(rej => console.log(rej))
-    }
-  },[userData.email, userData.fd_tkn])
+  //       if (res.status === 400 && res.message === `Invalid Credentials`) {
+  //         retrieveLogin({ email: "", fd_tkn: "" })
+  //         Swal.fire({
+  //           title: `There was an error when cheking your loggin.. `,
+  //           text: `Please, log in again.`,
+  //           icon: 'info',
+  //           showConfirmButton: false,
+  //           showDenyButton: false,
+  //           showCancelButton: false,
+  //           timer: 3000,
+  //         })
+  //       }
+  //     })
+  //     .catch(rej => console.log(rej))
+  //   }
+  //},[userData.email, userData.fd_tkn, retrieveLogin])
+  //},[userData.email, userData.fd_tkn, retrieveLogin])
+  //},[retrieveLogin])
+  //},[])
  
   const logout = () => {
     fetch(`https://oauth2.googleapis.com/revoke?token=${userData.fd_tkn}`, {
@@ -102,7 +163,7 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
       .then((res) => {
         if (res.error !== undefined) { // USER HAS ALREADY LOGOUT..
           retrieveLogin({email: "", fd_tkn: ""})
-          localStorage.removeItem('landHidden')
+          localStorage.removeItem('landingHidden')
           fetch(`http://localhost:3001/user`, {
             method: 'POST',
             credentials: 'include',
@@ -113,7 +174,7 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
         }
         if (res.error === undefined) { // USER LOGOUT SUCCESSFULLY
           retrieveLogin({email: "", fd_tkn: ""})
-          localStorage.removeItem('landHidden')
+          localStorage.removeItem('landingHidden')
           fetch(`http://localhost:3001/user`, {
             method: 'POST',
             credentials: 'include',
@@ -216,11 +277,16 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
             }
         </div>
       </Button>
-      <Button variant="contained" id={`buttonIn`} className={css.buttonIn} onClick={() => { login(); setClicked(true); setPopUp(true) }} >
-        
+      <Button
+        variant="contained"
+        id={`buttonIn`}
+        className={css.buttonIn}
+        onClick={() => {
+          login(); setClicked(true); setPopUp(true); /* localStorage.setItem('newLogin', 'true') */
+        }}
+      >
         <div className={css.buttonInInner}>
           <div><MySvg/></div>
-          
           {
             userData.email && shown ?
             `  Signed in as ${userData.email}` :
