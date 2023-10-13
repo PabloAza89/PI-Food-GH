@@ -1,8 +1,12 @@
 let qq = [1,2,3,4]
 
 
-//let rr = qq.map((e,i) => { return e === 1 ?  i : undefined}).filter(e => e !== undefined)[0]
-//qq.splice(rr,1)
+//let rr = qq.map((e,i) => { return e !== 2 ?  e : undefined})//.filter(e => e !== undefined)
+let rr = qq.filter(e => e !== 3)
+
 console.log(
-  qq.includes(3)
+  //qq.splice(rr)
+  //rr
+  qq.filter(e => e !== 5)
+  //qq.includes(3)
 )

@@ -15,6 +15,7 @@ import {
 import Tooltip from '@mui/joy/Tooltip';
 import serverSDDietsArray from '../../db/diets.json'; // SD = Shut Down
 import serverSDDishesArray from '../../db/dishes.json'; // SD = Shut Down
+import $ from 'jquery';
 
 const NavBar = () =>  {
 
@@ -89,9 +90,28 @@ const NavBar = () =>  {
     if (currentWidth > 800) dispatch(setMenuShown(false))
     // return () => {dispatch(setMenuShown(false))}
   },[ dispatch, entireFilter, currentWidth ])
+  
+  // useEffect(() => {
+  //   //$("#focusTarget").focus();
+  //   //$("#focusTarget").trigger("click")
+  //   //$("#focussTarget").click()
+  //   //let qq = document.getElementById("focussTarget")
+  //   //if (qq !== null) qq.click()
+  //   //$("#focusTarget").on("focus", function() { console.log("FOCUSEDD 123")})
+
+  //   $(document).ready(function() {
+  //     console.log("loaded");
+  //     window.onbeforeunload = confirmExit;
+  //     function confirmExit(){
+  //         console.log("closed");
+  //         return true;
+  //     }
+  // });
+  // },[])
 
   return (
     <div
+      //id={`focusTarget`}
       className={css.background}
       style={{
         // overflow: 'hidden !important', // TEST
@@ -160,6 +180,7 @@ const NavBar = () =>  {
             'flex'
         }}
         className={css.selectsAndButtons}
+        //id={'focussTarget'}
       >
         <div
           style={{
