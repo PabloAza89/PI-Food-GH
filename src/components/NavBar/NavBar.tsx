@@ -129,11 +129,8 @@ const NavBar = () =>  {
     >
       <div
         className={css.logoAndMenuContainer}
-        //style={{ width: currentWidth <= 800 ? `calc(100vw - ${scrollWidth}px)` : '200px' }}
         style={{
-          //width: currentWidth <= 800 ? `100vw` : '200px',
           width: currentWidth <= 800 ? `100%` : '200px',
-          //width: '483px',
           height: '100px'
         }}
       >
@@ -158,9 +155,8 @@ const NavBar = () =>  {
             onClick={() => dispatch(setMenuShown(!menuShown))}
             className={css.menuButton}
             style={{
-              //marginRight: hasScroll ? `${16 + scrollWidth}px` : `16px`,
               marginRight: `16px`,
-              display: inHome && currentWidth <= 800 ? 'flex' : 'none',
+              display: inHome && currentWidth <= 800 ? 'flex' : 'none'
             }}
           >
             <MenuIcon style={{ fontSize: 40 }} />

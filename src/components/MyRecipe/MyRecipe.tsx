@@ -739,6 +739,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
     <div
       className={css.container}
       style={{ marginRight: hasScroll ? `${16 + scrollWidth}px` : `16px` }}
+      //style={{ marginRight: `16px` }}
     >
     <div
       className={css.form}
@@ -800,7 +801,6 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
                   style={{ display: 'flex', flexDirection: 'column', color: '#42424f', background: '#f5f5f9', fontFamily: 'Roboto'}}
                 >
                   <u>remove unallowed characters</u></Tooltip>.
-                
               </div> : null }
             </div>
           }
@@ -817,6 +817,9 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
               disabled={allDisabled}
               autoComplete='off'
               className={css.inputHiddenTitle}
+              InputProps={{
+                className: css.inputStyle
+              }}
               value={titleValue}
               placeholder={`e.g. Pasta with tomatoes..`}
               onChange={(e) => { validator({ value: e.target.value, type: e.target.id }) }}
@@ -850,6 +853,9 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
             id={`image`}
             disabled={allDisabled}
             className={css.input}
+            InputProps={{
+              className: css.inputStyle
+            }}
             value={imageValue}
             autoComplete='off'
             placeholder={`e.g. https://commons.wikimedia.org/wiki/File:Elaboraci%C3%B3n_del_tomate_frito_(4).jpg`}
@@ -907,7 +913,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
       <div className={css.eachRow}>
         <div className={css.text}>Dishes:</div>
         <FormControl className={css.titleAndTextFieldContainer}>
-          <InputLabel>Select Dishes</InputLabel>
+          <InputLabel className={css.label}>Select Dishes</InputLabel>
           <Select
             className={css.input}
             placeholder={`Select Dishes`}
@@ -983,7 +989,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
       <div className={css.eachRow}>
         <div className={css.text}>Diets:</div>
         <FormControl className={css.titleAndTextFieldContainer}>
-          <InputLabel>Select Diets</InputLabel>
+          <InputLabel className={css.label}>Select Diets</InputLabel>
           <Select
             className={css.input}
             placeholder={`Select Diets`}
@@ -1051,20 +1057,11 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
                     shrink={false}
                     className={css.inputShownInstructions}
                     style={{
-                      //width: `calc(100% - 113px - 57px - 80px - 80px - 40px)`
-                      width: 
+                      width:
                         currentWidth <= 650 ?
                         `calc(100% - 298px)` : // 100% - 113px - 57px - 10px - 40px - 10px - 40px - 28px
                         `calc(100% - 358px)`   // 100% - 113px - 57px - 10px - 60px - 10px - 80px - 28px
-                      
                     }}
-                   /*  sx={{
-                      "& .MuiInputLabel-root": {
-                        color: "yellow",
-                      },
-                      "& .MuiFormLabel-root": {
-                      },
-                    }} */
                   >{ stepsState[index] }</InputLabel>
                   <TextField
                     id={`${index}instructions`}
@@ -1074,28 +1071,10 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
                     multiline
                     value={stepsState[index]}
                     placeholder={`e.g. Cut pasta, fry tomatoes..`}
-                    //sx={{ whiteSpace: stepsState[index].length ? 'nowrap' : 'nowrap'}}
-                    
                     sx={{
-                      "& .MuiInputBase-root": {
-                        //color: "yellow",
-                        //whiteSpace: stepsState[index].length !== 0 ? 'nowrap' : 'nowrap'
-                        //whiteSpace: 'nowrap !important'
-                        //whiteSpace: /* stepsState[index] !== undefined || */ stepsState[index] === '\n' ? 'normal' : 'normal'
-                      },
-                      "& .MuiInputBase-input": {
-                        
-                        //whiteSpace: 'pre-wrap' // AUTO-FITS
-                        //whiteSpace: 'nowrap' // 1 SINGLE LINE
+                      "& .MuiInputBase-input": { // 'pre-wrap' - AUTO-FITS // 'nowrap' - 1 SINGLE LINE
                         whiteSpace: stepsState[index] !== '' ? 'pre-wrap' : 'nowrap'
-
-
-                        //whiteSpaceCollapse: 'preserve'
-                        //whiteSpace: /* stepsState[index] !== undefined || */ stepsState[index] === '\n' ? 'normal' : 'normal'
-                        //color: "yellow",
-                        //whiteSpace: 'nowrap'
-                        //whiteSpace: stepsState[index].length !== 0 ? 'normal' : 'nowrap'
-                      },
+                      }
                     }}
                     onChange={(e) => {
                       handlerUpdateInstructions({ index: parseInt((e.target as HTMLInputElement).id, 10), value: e.target.value });

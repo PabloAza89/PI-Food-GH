@@ -1,82 +1,51 @@
-.background {
-  background: lightblue; /* dev */
-  /* display: recipeNotFound ? none : flex; */
-  position: fixed;
-  cursor: pointer; /* dev */
-  flex-direction: column;
+.logoTextContainer {
+  display: flex;
+  /* background: red; */ /* DEV */
   margin: 16px 0px 0px 16px;
-  width: 69px;
-  z-index: 2;
+  flex-direction: row;
+  /* min-width: 200px;
+  width: 200px; */
+  /* min-height: 69px; */
+  height: 69px;
+  justify-content: flex-end;
+  align-items: center;
+  align-self: flex-start;
 }
 
 .logo {
-  background: yellow; /* dev */
   display: flex;
   flex-direction: row;
   width: 69px;
   height: 69px;
+  align-self: center
 }
 
-.columnContainer {
-  background: blue; /* dev */
-  width: 36px; /* 61 + 8 = 69 */
-  height: 155px;
+.noDeco {
+  -webkit-touch-callout: none !important;
+  -webkit-user-select: none !important;
+  -khtml-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+  text-decoration: none !important;
+}
+
+.linkText {
+  -webkit-touch-callout: none !important;
+  -webkit-user-select: none !important;
+  -khtml-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   text-decoration: none;
-  color: white;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  justify-content: center;
   font-size: 24px;
   font-weight: 700;
-  line-height: 23px;
-  text-align: center;
-  margin-left: 18px;
-  margin-top: 8px;
-}
-
-.letters {
-  background: gray;
-  flex-direction: column;
-  display: flex;
-  position: relative;
-  height: 155px;
-  width: 18px;
-}
-
-
-
-.logoTextContainer {
-  background: red; /* dev */
-  cursor: pointer; /* dev */
-  display: flex;
-  flex-direction: row;
-  min-width: 200px;
-  width: 200px;
-  justify-content: flex-end;
-  align-items: center;
-}
-
-
-
-
-
-
-
-.exclamationMarkContainer {
-  display: flex;
-  position: relative;
-  height: 155px;
-  width: 18px;
-  background: orange;
-}
-
-.exclamationMark {
-  background: yellow;
-  width: 18px; /* scale(.5; 1) 36 = 18 */
-  height: 112px;
-  font-size: 123px;
-  transform: scale(.5, 1);
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
+  width: 115px;
+  text-align: right;
+  color: #FFFFFF;
+  text-decoration: none !important;
 }

@@ -16,6 +16,7 @@
 
 
 .logoAndMenuContainer {
+  /* background: orange; */ /* DEV */
   display: flex;
   flex-direction: row;
   justify-content: space-between;

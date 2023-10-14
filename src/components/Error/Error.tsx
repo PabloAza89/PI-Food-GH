@@ -41,7 +41,8 @@ function Error() {
           />
         </div>
         <div className={`${css.message} ${com.noSelect}`} style={{ fontSize: viewPort === 'smaPort' ? '7vw' : viewPort === 'smaLand' ? '5.5vh' : (viewPort === 'medPort' || viewPort === 'medLand') ? '31px' : '35px' }} >
-          { english ? `This page does not exist.` : `Esta página no existe.` }
+          {/* { english ? `This page does not exist.` : `Esta página no existe.` } */}
+          This page does not exist.
         </div>
       </div>
       <div className={css.leftRightHelper} style={{ minWidth: (viewPort === 'smaPort' || viewPort === 'smaLand') ? 'none' : '30px' }} />

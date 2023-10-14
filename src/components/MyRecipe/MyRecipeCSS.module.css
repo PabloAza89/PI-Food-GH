@@ -1,19 +1,15 @@
 .container {
-  background: yellow; /* DEV */
+  /* background: yellow; */ /* DEV */
   display: flex;
   position: relative;
   justify-content: center;
   margin-top: 100px;
   margin-left: 16px;
   padding-bottom: 16px;
-  
-  
-  /* min-width: 800px; */
-
 }
 
 .form { /* ...noSelect; */
-  background: darkred !important;
+  /* background: darkred !important; */
   display: flex;
   position: relative;
   flex-direction: column;
@@ -25,16 +21,12 @@
   /* margin-bottom: 16px; */
   /* min-width: 800px !important; */
   padding-bottom: 6px;
-  
-
-  /* margin-left: 101px !important; */
-  /* background: linear-gradient(135deg, rgba(196, 34, 147, 0.1), rgba(196, 34, 147, 0));
+  background: linear-gradient(135deg, rgba(196, 34, 147, 0.1), rgba(196, 34, 147, 0));
   backdrop-filter: blur(20px);
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
   border: 1px solid rgb(255, 255, 255, 0.18);
-  border-radius: 4px; */
+  border-radius: 4px;
 }
-
 
 .imageSearcher {
   /* ...noSelect; */
@@ -48,14 +40,19 @@
 }
 
 .title {
+  /* background: orange; */ /* DEV */
   font-family: Roboto;
   letter-spacing: 0.15008px;
-  line-height: 24px
+  line-height: 24px;
+  margin-top: 7px;
+  /* color: antiquewhite */
+  color: beige
 }
 
 .eachRow {
   /* ...noSelect; */
-  background: gray; /* dev */
+  /* background: gray; */ /* DEV */
+  /* background: rgba(128, 128, 128, 0.2); */
   margin: 6px 0px;
   display: flex;
   position: relative;
@@ -66,7 +63,6 @@
   /* width: calc(100% - 40px); */
   /* min-width: 760px; */
   width: calc(100% - 40px);
-  
 }
 
 .eachRow:last-child { justify-content: center; }
@@ -74,21 +70,22 @@
 .text {
   display: flex;
   flex-direction: row;
-  color: black;
+  /* color: black; */
+  color: beige;
+  /* background: red; */
+  background: transparent !important;
   /* width: 12vw; */
   min-width: 113px;
   width: 113px;
   height: 56px;
-  background: green;
+  /* background: green; */ /* DEV */
   justify-content: center;
   align-items: center;
 }
 
-
 .tooltipCenter {
   z-index: 1;
 }
-
 
 .tooltipLeft {
   z-index: 1;
@@ -97,7 +94,6 @@
     width: 90%;
   } */
 }
-
 
 .tooltipRight {
   z-index: 1;
@@ -109,15 +105,8 @@
   } */
 }
 
-
 /* eachRow 80vw */
 /* (text) 12vw + 68vw (input) */
-
-
-
-
-
-
 
 .textFieldLabel {
   /* paddingTop: 0.5px;
@@ -137,6 +126,10 @@
   width: 100%
 }
 
+.titleAndTextFieldContainer ::placeholder {
+  color: rgba(245, 245, 220, 0.3) !important
+}
+
 .inputShownTitle {
   display: flex !important;
   white-space: pre !important; /* SINGLE LINE */
@@ -144,13 +137,24 @@
   margin-left: 14px !important;
   padding: 16.5px 0px 16.5px 0px !important;
   position: absolute !important;
-  color: transparent !important;
+  width: calc(100% - 113px - 28px);
+  /* color: orange !important */
 }
 
 .inputHiddenTitle { /* ...noSelect; */
   display: flex !important;
   position: relative !important;
-  /* width: 68vw !important; */
+  background: rgba(128, 128, 128, 0.2);
+  border-radius: 4px;
+}
+
+.inputStyle {
+  color: rgba(245, 245, 220, 0.85) !important
+}
+
+.inputHiddenTitle ::placeholder {
+  color: rgba(245, 245, 220, 0.3) !important
+  /* color: transparent !important; */
 }
 
 /* margin-left: 20px;
@@ -158,41 +162,44 @@ margin-right: 20px;
 min-width: 760px;
 width: calc(100% - 40px); */
 
-.inputShownSummary {
+/* .inputShownSummary {
   display: flex !important;
-  /* flex-wrap: wrap !important; */ /* MULTILINE */
-  /* white-space: pre-wrap !important; */ /* MULTILINE */
-  /* width: calc(68vw - 20px) !important; */
   margin-left: 14px !important;
   padding: 16.5px 0px 16.5px 0px !important;
   position: absolute !important;
-  /* color: transparent !important; */
-  /* width: 100%; */
   width: calc(100% - 113px - 14px);
-  
 }
 
 .inputHiddenSummary {
   display: flex !important;
   position: relative !important;
-  /* margin-left: 20px;
-  margin-right: 20px; */
-  /* min-width: 760px; */
-  /* width: calc(100% - 40px); */
-  /* width: calc(100% - 113px); */
   width: 100%;
-  background: orange !important;
-  /* width: calc(68vw - 0px) !important; */
+  background: rgba(128, 128, 128, 0.2);
+  border-radius: 4px;
+} */
+
+.inputShownSummary {
+  display: flex !important;
+  flex-wrap: wrap !important; /* MULTILINE */
+  white-space: pre-wrap !important; /* MULTILINE */
+  overflow-wrap: break-word; /* MULTILINE */
+  margin-left: 14px !important;
+  padding: 16.5px 0px 16.5px 0px !important;
+  position: absolute !important;
+  width: calc(100% - 113px - 28px);
+}
+
+.inputHiddenSummary {
+  display: flex;
+  position: relative;
+  width: 100% !important;
+  background: rgba(128, 128, 128, 0.2);
+  border-radius: 4px;
 }
 
 .instructionsContainer {
   /* background: red; */ /* DEV */
-  /* width: calc(100% - 213px); */
-  /* width: calc(100% - 57px - 80px - 80px - 20px) !important; */
   width: 100% !important;
-  
-  /* min-inline-size: fit-content !important; */
-  /* min-inline-size: fit-content; */
 }
 
 .inputShownInstructions {
@@ -200,57 +207,40 @@ width: calc(100% - 40px); */
   display: flex;
   flex-wrap: wrap !important; /* MULTILINE */
   white-space: pre-wrap !important; /* MULTILINE */
-  /* width: calc(48vw - 28px) !important; */
+  overflow-wrap: break-word; /* MULTILINE */
   margin-left: 14px !important;
-  /* margin-right: 14px !important; */
   padding: 16.5px 0px 16.5px 0px !important;
-  /* position: fixed !important; */
-  /* position: absolute !important; */
-  /* z-index: 4; */
   position: absolute !important;
   color: transparent !important;
-  /* color: black !important; */
-  /* width: calc(100% - 113px - 57px - 80px - 80px ) !important; */
-  /* width: calc(100% - 113px - 57px - 80px - 80px - 48px) !important; */
-  /* width: calc(100% - 113px - 57px) !important; */
-  /* width: calc(100% - 113px - 57px) !important; */
-
-  /* width: 100% !important; */
-  /* width: 100% !important; */
-  overflow-wrap: break-word;
-  /* min-inline-size: fit-content; */
-  /* min-inline-size: fit-content !important; */
-  /* width: 100% !important; */
-    /* width: calc(100% - 300px) */
-    /* width: calc(100% - 113px - 57px - 80px - 80px - 40px); */
-    /* width: 100%; */
-    /* white-space: nowrap; */
 }
-
-/* .inputShownInstructions + inputHiddenInstructions {
-  width: 100%
-} */
 
 .inputHiddenInstructions {
   /* background: lightgreen; */ /* DEV */
+  background: rgba(128, 128, 128, 0.2);
+  border-radius: 4px;
   display: flex;
   position: relative;
-  /* background: orange; */ /* DEV */
   width: 100% !important;
 }
 
+.inputHiddenInstructions ::placeholder {
+  color: rgba(245, 245, 220, 0.3) !important
+}
 
 .inputStep {
   width: 48vw;
-  background: lightblue
+  /* background: lightblue */ /* DEV */
 }
 
 .input {
   /* ...noSelect; */
   display: flex;
   position: relative;
+  background: rgba(128, 128, 128, 0.2);
+  border-radius: 4px;
   /* width: 68vw; */
   width: 100% !important;
+  color: orange !important
   /* input: {
     color: rgba(0; 0; 0; 0.87) !important;
     caretColor: rgba(0; 0; 0; 0.87) !important;
@@ -259,8 +249,19 @@ width: calc(100% - 40px); */
   } */
 }
 
+.input ::placeholder {
+  color: rgba(245, 245, 220, 0.3) !important;
+}
+
+.label {
+  /* color: red !important; */
+  color: rgba(245, 245, 220, 0.3) !important;
+  /* background: red; */
+  /* background: rgba(128, 128, 128, 0.2); */
+}
+
 .stepsContainer {
-  background: darkcyan; /* DEV */
+  /* background: darkcyan; */ /* DEV */
   /* width: calc(100% - 113px); */
   width: calc(100% - 113px);
   display: flex;
@@ -289,7 +290,8 @@ width: calc(100% - 40px); */
 
 
 .stepTitle {
-  background: yellow;
+  /* background: yellow; */ /* DEV */
+  color: beige;
   display: flex;
   flex-direction: row;
   width: 57px;

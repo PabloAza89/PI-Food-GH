@@ -54,6 +54,8 @@ function App() {
 
   const dispatch = useDispatch()
 
+  
+
   //let landHiddenLS: string | null = localStorage.getItem('landHidden');
   //if (landHiddenLS && JSON.parse(landHiddenLS)) dispatch(landingShown(true))
 
@@ -64,6 +66,22 @@ function App() {
   let newLoginLS: string | null = localStorage.getItem('newLogin');
 
   //console.log(`LLRR showHelpNavbar`, showHelpBG)
+
+  // useEffect(() => {
+  //   function checkUserData() {
+  //     //const item = localStorage.getItem('userData')
+  //     if (landingHiddenLS && JSON.parse(landingHiddenLS)) dispatch(landingHidden(true))
+  //     // if (item) {
+  //     //   setUserData(item)
+  //     // }
+  //   }
+  
+  //   window.addEventListener('storage', checkUserData)
+  
+  //   return () => {
+  //     window.removeEventListener('storage', checkUserData)
+  //   }
+  // }, [dispatch, landingHiddenLS])
 
   useEffect(() => {
     $(function() {
@@ -79,7 +97,7 @@ function App() {
   },[dispatch])
 
   const currentWidth = useSelector((state: {currentWidth:number}) => state.currentWidth)
-  const landingHidden = useSelector((state: { landingHidden: boolean }) => state.landingHidden)
+  const landingHiddenState = useSelector((state: { landingHidden: boolean }) => state.landingHidden)
 
   const [isLoading, setIsLoading] = useState({
     main: true,
@@ -91,43 +109,24 @@ function App() {
     fd_tkn: ''
   })
 
-  const retrieveLogin = (props: any) => {
-    setUserData({ email: props.email, fd_tkn: props.fd_tkn })
-  }
+  const retrieveLogin = (props: any) => setUserData({ email: props.email, fd_tkn: props.fd_tkn })
 
   const [ recipeCreatedOrEdited, setRecipeCreatedOrEdited ] = useState<boolean>(false)
 
-  const retrieveRecipeCreatedOrEdited = (response: boolean) => {
-    setRecipeCreatedOrEdited(response)
-  }
+  const retrieveRecipeCreatedOrEdited = (response: boolean) => setRecipeCreatedOrEdited(response)
 
   const [ recipeNotFound, setRecipeNotFound ] = useState<boolean>(false)
 
-  const retrieveRecipeNotFound = (response: boolean) => {
-    console.log("SE EJECUTO")
-    setRecipeNotFound(response)
-  }
+  const retrieveRecipeNotFound = (response: boolean) => setRecipeNotFound(response)
 
-  //let tabIDCopy: number
-  
-  //const eDataCopy = useRef<Array<number>>()
-  //const eDataCopy: any = useRef()
-  //const eDataCopy = useRef<(HTMLDivElement | null)[]>()
-  //const eDataCopy = useRef<(Array[] | number[])[]>()
-  //const eDataCopy = useRef<number[]>()
   const tabsArrREF: any = useRef()
   const tabIDREF = useRef(0)
-  //const eDataCopy = useRef<any>()
-
-  //const eDataCopy2: any
-
-  const bc = new BroadcastChannel("test_channel");
-  const feedbackBC = new BroadcastChannel("test_channel2");
+  const castBC = new BroadcastChannel("cast_BC");
+  const feedbackBC = new BroadcastChannel("feedback_BC");
 
   useEffect(() => { // FIRST ONLY-ONE-TIME AUTO-CHECK USER (CHECK USER TOKEN)
 
-    //$("#focusTarget").focus();
-    //$("#focusTarget").on("focus", function() { console.log("FOCUSEDD 123")})
+    checkPrevLogin({ retrieveLogin, userData })
 
     feedbackBC.onmessage = (e) => {
       console.log("FEEDBACK DE DEVOLUCION", e.data)
@@ -141,11 +140,11 @@ function App() {
 
     tabIDREF.current = tabID
 
-    bc.postMessage({ subscribe: [tabID] });
+    castBC.postMessage({ subscribe: [tabID] });
 
     tabsArrREF.current = { subscribe: [tabID] }
 
-    bc.onmessage = (e) => {
+    castBC.onmessage = (e) => {
       console.log(" aver que llega", e.data)
       if (e.data.unsubscribe && e.data.unsubscribe.length !== 0) {
         console.log("ENTRO ACA UNSUBSCRIBE")
@@ -160,16 +159,6 @@ function App() {
 
         return console.log("ACTUAL UNSUBSCRIBE", tabsArrREF.current.subscribe)
       }
-
-      // if (e.data.subscribe && e.data.subscribe.length !== 0) {
-      //   console.log("ENTRO EN ESTE OTRO", e.data.subscribe)
-      //   if (!e.data.subscribe.includes(tabIDREF.current)) {
-      //     console.log("LLEGO A ENTRAR ACA", tabID)
-      //     tabsArrREF.current.subscribe.push(e.data.subscribe[0])
-      //     console.log("tabsArrREF.current ADENTRO", tabsArrREF.current)
-      //     feedbackBC.postMessage({ subscribe: tabsArrREF.current.subscribe})
-      //   }
-      // }
 
       if (e.data.subscribe && e.data.subscribe.length !== 0 && !e.data.subscribe.includes(tabIDREF.current)) {
         tabsArrREF.current.subscribe.push(e.data.subscribe[0])
@@ -235,8 +224,8 @@ function App() {
       }
     }
     function scrollHandler() { dispatch(setScrollPosition($(window).scrollTop() as number)) }
-    window.addEventListener("scroll", scrollHandler);
     window.addEventListener("resize", handleResize);
+    window.addEventListener("scroll", scrollHandler);
     return () => {
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("scroll", scrollHandler);
@@ -247,7 +236,7 @@ function App() {
   window.onbeforeunload = function(event) { // FIRES WHEN WINDOW IS CLOSED OR REFRESH
     //let rr = tabsArrREF.current.subscribe
     //let ss = rr.filter((e:any) => e !== tabIDREF.current)
-    bc.postMessage({ unsubscribe: [tabIDREF.current] })
+    castBC.postMessage({ unsubscribe: [tabIDREF.current] })
     console.log("LAST TAB DATA", tabsArrREF.current.subscribe)
     //if (tabsArrREF.current.subscribe.length === 1) return ""
     if (tabsArrREF.current.subscribe.length === 1) localStorage.removeItem('landingHidden')
@@ -256,8 +245,9 @@ function App() {
   //if (document.hasFocus()) console.log("ASD FOCUSED DOCUMENT")
 
   window.onfocus = function() { // FIRED WHEN TAB IS FOCUSED, CHECK VALID USER 
-    console.log("ASD", "FOCUSED")
+    console.log("FOCUSED APP")
     checkPrevLogin({ retrieveLogin, userData })
+    //if (landingHiddenLS && JSON.parse(landingHiddenLS)) dispatch(landingHidden(true))
   }
 
   console.log("TTTTTT", userData)
@@ -266,7 +256,7 @@ function App() {
     <div
       //id={`focusTarget`}
       className={css.background}
-      style={{ overflow: landingHidden ? 'inherit' : 'hidden' }}
+      style={{ overflow: landingHiddenState ? 'inherit' : 'hidden' }}
     >
       <Landing retrieveLogin={retrieveLogin} userData={userData} />
       <div

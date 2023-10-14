@@ -35,14 +35,6 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
         method: 'GET',
       })
       .then((res) => res.json())
-      //.then((res) => retrieveLogin({ email: res.email, fd_tkn: codeResponse.access_token }))
-      // .then((res) => {
-      //   //console.log("YUI", codeResponse)
-      //   retrieveLogin({ email: res.email, fd_tkn: codeResponse.access_token })
-      //   dispatch(landingHidden(true))
-      //   localStorage.setItem('landingHidden', 'true')
-      //   return { fd_tkn: codeResponse.access_token }
-      // })
       .then((res) => {
         //console.log("HHH", res.fd_tkn)
         console.log("HHH", res)
@@ -69,15 +61,6 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
 
           if (res.status === 400 && res.message === `User not logged`) {
             retrieveLogin({ email: "", fd_tkn: "" })
-            /* Swal.fire({
-              title: `There was an error when cheking your loggin.. `,
-              text: `Please, log in again.`,
-              icon: 'info',
-              showConfirmButton: false,
-              showDenyButton: false,
-              showCancelButton: false,
-              timer: 3000,
-            }) */
           }
           if (res.status === 400 && res.message === `Invalid Credentials`) {
             retrieveLogin({ email: "", fd_tkn: "" })
@@ -93,11 +76,6 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
           }
         })//.then(() => localStorage.removeItem('newLogin'))
       })
-      
-
-      
-        
-      
       .catch(rej => { console.log(rej) })
     },
     onError: (error) => { console.log(error); /* localStorage.removeItem('newLogin') */ },
@@ -107,89 +85,36 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
       /* localStorage.removeItem('newLogin') */
     }
   })
-  
 
-  // useEffect(() => {
-  //   if (userData.email !== '') {
-  //     fetch(`http://localhost:3001/user`, {
-  //       method: 'POST',
-  //       credentials: 'include',
-  //       headers: {
-  //         'Content-type': 'application/json; charset=UTF-8',
-  //       },
-  //       body: JSON.stringify({
-  //         email: userData.email,
-  //         fd_tkn: userData.fd_tkn
-  //       })
-  //     })
-  //     .then((res) => res.json())
-  //     .then((res) => {
-  //       setClicked(false)
-  //       $(`#buttonIn`)
-  //         setTimeout(() => {
-  //           $(`#buttonIn`)
-  //           .animate({ width: '30px' }, { queue: false, easing: 'easeOutBounce', duration: 1000 , complete: () => setShown(false) })
-  //         }, 2000)
-  //         $(`#buttonIn`)
-  //         //.stop(true, true)
-  //         .css("animation", "none")
-  //         .css("transition", "none")
-
-  //       if (res.status === 400 && res.message === `Invalid Credentials`) {
-  //         retrieveLogin({ email: "", fd_tkn: "" })
-  //         Swal.fire({
-  //           title: `There was an error when cheking your loggin.. `,
-  //           text: `Please, log in again.`,
-  //           icon: 'info',
-  //           showConfirmButton: false,
-  //           showDenyButton: false,
-  //           showCancelButton: false,
-  //           timer: 3000,
-  //         })
-  //       }
-  //     })
-  //     .catch(rej => console.log(rej))
-  //   }
-  //},[userData.email, userData.fd_tkn, retrieveLogin])
-  //},[userData.email, userData.fd_tkn, retrieveLogin])
-  //},[retrieveLogin])
-  //},[])
- 
   const logout = () => {
     fetch(`https://oauth2.googleapis.com/revoke?token=${userData.fd_tkn}`, {
-      method: 'POST',
-      })
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.error !== undefined) { // USER HAS ALREADY LOGOUT..
-          retrieveLogin({email: "", fd_tkn: ""})
-          localStorage.removeItem('landingHidden')
-          fetch(`http://localhost:3001/user`, {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-              'Content-type': 'application/json; charset=UTF-8',
-            }
-          })
-        }
-        if (res.error === undefined) { // USER LOGOUT SUCCESSFULLY
-          retrieveLogin({email: "", fd_tkn: ""})
-          localStorage.removeItem('landingHidden')
-          fetch(`http://localhost:3001/user`, {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-              'Content-type': 'application/json; charset=UTF-8',
-            }
-          })
-        }
-      })
-      .catch(rej => console.log(rej))
+      method: 'POST'
+    })
+    .then((res) => res.json())
+    .then((res) => {
+      if (res.error !== undefined) { // USER HAS ALREADY LOGOUT..
+        retrieveLogin({email: "", fd_tkn: ""})
+        //localStorage.removeItem('landingHidden')
+        fetch(`http://localhost:3001/user`, {
+          method: 'POST',
+          credentials: 'include',
+          headers: { 'Content-type': 'application/json; charset=UTF-8' }
+        })
+      }
+      if (res.error === undefined) { // USER LOGOUT SUCCESSFULLY
+        retrieveLogin({email: "", fd_tkn: ""})
+        //localStorage.removeItem('landingHidden')
+        fetch(`http://localhost:3001/user`, {
+          method: 'POST',
+          credentials: 'include',
+          headers: { 'Content-type': 'application/json; charset=UTF-8' }
+        })
+      }
+    })
+    .catch(rej => console.log(rej))
   }
 
   const [ shown, setShown ] = useState<boolean>(false)
-  const [ buttonLoggedInHelperWidth, setButtonLoggedInHelperWidth ] = useState<number | undefined>(undefined)
-  const [ buttonLoggedOutHelperWidth, setButtonLoggedOutHelperWidth ] = useState<number | undefined>(undefined)
   const [ buttonHelperWidth, setButtonHelperWidth ] = useState<number | undefined>(undefined)
   const [ clicked, setClicked ] = useState<boolean>(false)
 
@@ -220,7 +145,7 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
     })
 
     useEffect(() => {
-      if (userData.email) {
+      if (userData.email !== '' || userData.email !== undefined) {
         setClicked(false)
         setButtonHelperWidth($(`#buttonWidthHelper`).outerWidth())
         $(`#buttonIn`)
@@ -233,11 +158,12 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
           .css("animation", "none")
           .css("transition", "none")
       }
-      else {
-        setClicked(false)
-        setButtonHelperWidth($(`#buttonWidthHelper`).outerWidth())
-      }
+      //else {
+        //setClicked(false)
+        //setButtonHelperWidth($(`#buttonWidthHelper`).outerWidth())
+      //}
     },[userData.email])
+    //},[])
 
   if (!popUp) {
     $(`#buttonIn`)

@@ -1,6 +1,6 @@
 .background {
   /* background: darkred; */ /* DEV */
-  /* background: rgba(148, 179, 138, 0.171); */
+  background: rgba(148, 179, 138, 0.171); /* GREEN EFFECT */
   position: absolute;
   display: flex;
   flex-direction: column;

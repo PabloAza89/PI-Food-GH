@@ -1,5 +1,6 @@
 .background {
   display: flex;
+  background: rgba(148, 179, 138, 0.171); /* GREEN EFFECT */
   justify-content: space-between;
   position: fixed;
   height: 100vh;

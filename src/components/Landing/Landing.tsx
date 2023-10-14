@@ -16,7 +16,7 @@ const LandingPage = ({ retrieveLogin, userData }: any) => {
   const dispatch = useDispatch()
   const navigate = useNavigate();
 
-  let landingHiddenLS: string | null = localStorage.getItem('landingHidden');
+  let landingHiddenLS: string | null = localStorage.getItem('landingHidden'); // EN USO
   //let userGuestLS: string | null = localStorage.getItem('userGuest');
 
   //console.log("RSR", landHiddenLS && JSON.parse(landHiddenLS))
@@ -26,22 +26,46 @@ const LandingPage = ({ retrieveLogin, userData }: any) => {
   // else {
   //   if (landHiddenLS && JSON.parse(landHiddenLS)) dispatch(landingShown(false))
   // }
+
+  // window.onfocus = function() { // FIRED WHEN TAB IS FOCUSED, CHECK VALID USER 
+  //   console.log("ASD", "FOCUSED")
+  //   checkPrevLogin({ retrieveLogin, userData })
+  // }
+  
+  useEffect(() => { // TEST THISS
+    function landingHiddenChecker() {
+      //const item = localStorage.getItem('userData')
+      //if (landingHiddenLS && JSON.parse(landingHiddenLS)) dispatch(landingHidden(true))
+      console.log("PASO ALGO CON EL LOCALSTORAGE")
+      let landingHiddenLS: string | null = localStorage.getItem('landingHidden');
+      if (landingHiddenLS && JSON.parse(landingHiddenLS)) dispatch(landingHidden(true))
+      // if (item) {
+      //   setUserData(item)
+      // }
+    }
+  
+    window.addEventListener('storage', landingHiddenChecker)
+  
+    return () => {
+      window.removeEventListener('storage', landingHiddenChecker)
+    }
+  //}, [dispatch, landingHiddenLS])
+  }, [])
   
 
-  if (landingHiddenLS && JSON.parse(landingHiddenLS)) dispatch(landingHidden(true))
-
-  
-  useEffect(() => { // AUTO-FIRED ONLY ONE TIME, CHECK IF PREVIOUS TOKEN_CK IS VALID, AND LOG THAT TOKEN
-    //checkPrevLogin({ retrieveLogin, userData, navigate })
-    //let qq = checkPrevLogin({ retrieveLogin, userData })
-    //let qq = checkPrevLogin({ retrieveLogin, userData })
-    //console.log("QQQ", qq)
-  },[])
-
-  //else dispatch(landingShown(true))
+  window.onfocus = function() { // FIRED WHEN TAB IS FOCUSED, CHECK VALID USER 
+    console.log("FOCUSED LANDING")
+    checkPrevLogin({ retrieveLogin, userData })
+    if (landingHiddenLS && JSON.parse(landingHiddenLS)) {
+      dispatch(landingHidden(true))
+      console.log("DISPATCHED")
+    }
+  }
 
   
   const landingHiddenState = useSelector((state: { landingHidden: boolean }) => state.landingHidden)
+
+  if (landingHiddenLS && JSON.parse(landingHiddenLS)) dispatch(landingHidden(true))
 
   const login = useGoogleLogin({
     onSuccess: (codeResponse) => {
@@ -50,57 +74,56 @@ const LandingPage = ({ retrieveLogin, userData }: any) => {
       })
       .then((res) => res.json())
       .then((res) => {
-        retrieveLogin({ email: res.email, fd_tkn: codeResponse.access_token });
-        dispatch(landingHidden(true))
-        localStorage.setItem('landingHidden', 'true')
-        //navigate("/")
+        //console.log("HHH", res.fd_tkn)
+        console.log("HHH", res)
+        fetch(`http://localhost:3001/user`, {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+          },
+          body: JSON.stringify({
+            //email: res.email,
+            fd_tkn: codeResponse.access_token,
+            overwrite: true
+          })
+        })
+        .then((res) => res.json())
+        .then((res) => {
+          if (res.status === 200) {
+            console.log("res res res", res)
+            retrieveLogin({ email: res.email, fd_tkn: res.fd_tkn })
+            dispatch(landingHidden(true))
+            localStorage.setItem('landingHidden', 'true')
+            navigate("/")
+          }
+
+          if (res.status === 400 && res.message === `User not logged`) {
+            retrieveLogin({ email: "", fd_tkn: "" })
+          }
+          if (res.status === 400 && res.message === `Invalid Credentials`) {
+            retrieveLogin({ email: "", fd_tkn: "" })
+            Swal.fire({
+              title: `There was an error when cheking your loggin.. `,
+              text: `Please, log in again.`,
+              icon: 'info',
+              showConfirmButton: false,
+              showDenyButton: false,
+              showCancelButton: false,
+              timer: 3000,
+            })
+          }
+        })//.then(() => localStorage.removeItem('newLogin'))
       })
       .catch(rej => { console.log(rej) })
     },
     onError: (error) => { console.log(error) },
     onNonOAuthError: () => {
-      // setPopUp(false)
-      // setClicked(false)
+      //setPopUp(false)
+      //setClicked(false)
+      /* localStorage.removeItem('newLogin') */
     }
   })
-
-  // useEffect(() => {
-  //   if (userData.email !== '') {
-  //     fetch(`http://localhost:3001/user`, {
-  //       method: 'POST',
-  //       credentials: 'include',
-  //       headers: {
-  //         'Content-type': 'application/json; charset=UTF-8',
-  //       },
-  //       body: JSON.stringify({
-  //         email: userData.email,
-  //         fd_tkn: userData.fd_tkn
-  //       })
-  //     })
-  //     .then((res) => res.json())
-  //     .then((res) => {
-  //       console.log("RES RES RES", res)
-
-  //       if (res.status === 200) {
-  //         dispatch(landingShown(false))
-  //       }
-
-  //       if (res.status === 400 && res.message === `Invalid Credentials`) {
-  //         retrieveLogin({ email: "", fd_tkn: "" })
-  //         Swal.fire({
-  //           title: `There was an error when cheking your loggin.. `,
-  //           text: `Please, log in again.`,
-  //           icon: 'info',
-  //           showConfirmButton: false,
-  //           showDenyButton: false,
-  //           showCancelButton: false,
-  //           timer: 3000,
-  //         })
-  //       }
-  //     })
-  //     .catch(rej => console.log(rej))
-  //   }
-  // },[userData.email, userData.fd_tkn])
 
   return (
     <div

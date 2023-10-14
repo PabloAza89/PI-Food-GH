@@ -2,7 +2,7 @@ import { useState } from "react";
 import css from "./GoBackCSS.module.css";
 import com from '../../commons/commonsCSS.module.css';
 //import * as s from './GoBackSX';
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from "../../images/logo.png";
 import Swal from 'sweetalert2';
 
@@ -54,23 +54,38 @@ const GoBack = ({ recipeCreatedOrEdited, recipeNotFound }: GoBackI) =>  {
     else navigate("/")
   }
 
+  // return (
+  //   <div onClick={() => handleReturn()} className={css.background} style={{ display: recipeNotFound ? 'none' : 'flex' }} >
+  //     <img className={css.logo} src={logo} alt=""/>
+  //   {
+  //     location.pathname.toLowerCase() === `/myrecipe`  ?
+  //     <div className={`${css.columnContainer} ${com.noDeco}`}>
+  //       <div className={css.letters}>
+  //         <div>G</div><div>o</div><div style={{ marginTop: '13px' }} /><div>B</div><div>a</div><div>c</div><div style={{ marginTop: '2px' }}>k</div>
+  //       </div>
+  //       <div className={css.exclamationMarkContainer}>
+  //         <div className={css.exclamationMark}>!</div>
+  //       </div>
+  //     </div> :
+  //     `G<br/>o<br/><br/>B<br/>a<br/>c<br/>k<br/>!`
+  //   }
+  //   </div>
+  // );
+
   return (
-    <div onClick={() => handleReturn()} className={css.background} style={{ display: recipeNotFound ? 'none' : 'flex' }} >
-      <img className={css.logo} src={logo} alt=""/>
-    {
-      location.pathname.toLowerCase() === `/myrecipe`  ?
-      <div className={`${css.columnContainer} ${com.noDeco}`}>
-        <div className={css.letters}>
-          <div>G</div><div>o</div><div style={{ marginTop: '13px' }} /><div>B</div><div>a</div><div>c</div><div style={{ marginTop: '2px' }}>k</div>
-        </div>
-        <div className={css.exclamationMarkContainer}>
-          <div className={css.exclamationMark}>!</div>
-        </div>
-      </div> :
-      `G<br/>o<br/><br/>B<br/>a<br/>c<br/>k<br/>!`
-    }
+    <div className={css.logoTextContainer}>
+      <Link to="/">
+        <img className={css.logo} src={logo} alt=""></img>
+      </Link>
+      <Link className={css.noDeco} to="/">
+        <div className={css.linkText}>Go Back !</div>
+      </Link>
     </div>
-  );
+  )
+        
+
+
+
 }
 
 export default GoBack;
