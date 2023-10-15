@@ -176,9 +176,7 @@ function App() {
       <Landing retrieveLogin={retrieveLogin} userData={userData} />
       <div
         className={css.wallpaperNav}
-        style={{
-          display: showHelpBG ? 'flex' : 'none'
-        }}
+        style={{ display: showHelpBG ? 'flex' : 'none' }}
       />
       <div className={css.wallpaperBody} />
       <Routes>

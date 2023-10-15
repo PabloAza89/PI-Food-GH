@@ -16,13 +16,26 @@ const CardsMapper = ({ retrieveLogin, userData }: CardsMapperI)  => {
   const dispatch = useDispatch()
 
   const indexChoosen = useSelector((state: {indexChoosen: number}) => state.indexChoosen)
+  const tabChoosen = useSelector((state: { tabChoosen: number }) => state.tabChoosen )
   const scrollWidth = useSelector((state: {scrollWidth: number}) => state.scrollWidth)
   const scrollPosition = useSelector((state: {scrollPosition: number}) => state.scrollPosition)
   const menuShown = useSelector((state: {menuShown: boolean}) => state.menuShown)
   const toShow = useSelector((state: { toShow: recipesI[] }) => state.toShow)
   const allRecipes = useSelector((state: { allRecipes: recipesI[] }) => state.allRecipes)
   const landingShown = useSelector((state: { landingShown: boolean }) => state.landingShown)
-  let arraySplitedBy9: any[] = toShow.slice( indexChoosen * 9, (indexChoosen * 9) + 9 )
+  //let arraySplitedBy9: any[] = toShow.slice( indexChoosen * 9, (indexChoosen * 9) + 9 )
+  
+
+  let result: any = []
+
+  const chunkSize = 90; // 90 === 9 * 10 === 10 TABS OF 9
+  for (let i = 0; i < toShow.length; i += chunkSize) {
+    result.push(toShow.slice(i, i + chunkSize))
+  }
+
+  let arraySplitedBy9: any[] = result[0] && result[tabChoosen].slice( indexChoosen * 9, (indexChoosen * 9) + 9 )
+
+  console.log("RESULT MAPPER", result)
 
   const FirstFunc = async () => {
     useEffect(() => {

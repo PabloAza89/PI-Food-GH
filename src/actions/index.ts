@@ -78,6 +78,13 @@ export function setIndexChoosen(payload: any) {
   }
 };
 
+export function setTabChoosen(payload: any) {
+  return {
+    type: 'SET_TAB_CHOOSEN',
+    payload: payload
+  }
+};
+
 export function addNew(payload: any) {
   return {
     type: 'ADD_NEW',

@@ -13,6 +13,7 @@ interface initialStateI {
   showMain: boolean,
   indexChoosen: number,
   allIndexes: number,
+  tabChoosen: number,
   addNew: recipesI[],
   width: number,
   height: number,
@@ -38,6 +39,7 @@ const initialState: initialStateI = {
   showMain: false,
   indexChoosen: 0,
   allIndexes: 0,
+  tabChoosen: 0,
   addNew: [],
   width: window.screen.width,
   height: window.screen.height,
@@ -169,6 +171,11 @@ const reducer = (state = initialState, action: {type: string; payload: any}) => 
       return {
         ...state,
         response: state.indexChoosen
+      };
+    case 'SET_TAB_CHOOSEN':
+      return {
+        ...state,
+        tabChoosen: action.payload
       };
     case 'ADD_NEW':
       return {
