@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import css from './GoogleAuthCSS.module.css';
-import { Route, Routes, useLocation, useMatch } from "react-router-dom";
+import { useMatch } from "react-router-dom";
 import { useGoogleLogin } from '@react-oauth/google';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button } from '@mui/material/';
@@ -19,15 +19,7 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
   const scrollWidth = useSelector((state: {scrollWidth:number}) => state.scrollWidth)
   const currentWidth = useSelector((state: {currentWidth:number}) => state.currentWidth)
   const [ popUp, setPopUp ] = useState<boolean>(false)
-
-  //const showHelpBG = [useMatch("/:route")?.params.route?.toLowerCase()].filter(e => e !== "about")[0]
-  //const aa = useMatch("/")?.params.route?.toLowerCase()
-  //const inHome = useMatch("/")?.pattern.path // "/" === Home
   const inHome = useMatch("/")?.pattern.path === "/" ? true : false;// "/" === Home
-  //const aa = useLocation()
-
-  //console.log("HHH", aa )
-  //console.log("HHH aa", inHome )
 
   const login = useGoogleLogin({
     onSuccess: (codeResponse) => {
@@ -36,7 +28,6 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
       })
       .then((res) => res.json())
       .then((res) => {
-        //console.log("HHH", res.fd_tkn)
         console.log("HHH", res)
         fetch(`http://localhost:3001/user`, {
           method: 'POST',
@@ -45,7 +36,6 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
             'Content-type': 'application/json; charset=UTF-8',
           },
           body: JSON.stringify({
-            //email: res.email,
             fd_tkn: codeResponse.access_token,
             overwrite: true
           })
@@ -74,15 +64,14 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
               timer: 3000,
             })
           }
-        })//.then(() => localStorage.removeItem('newLogin'))
+        })
       })
       .catch(rej => { console.log(rej) })
     },
-    onError: (error) => { console.log(error); /* localStorage.removeItem('newLogin') */ },
+    onError: (error) => { console.log(error) },
     onNonOAuthError: () => {
       setPopUp(false)
       setClicked(false)
-      /* localStorage.removeItem('newLogin') */
     }
   })
 
@@ -94,7 +83,6 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
     .then((res) => {
       if (res.error !== undefined) { // USER HAS ALREADY LOGOUT..
         retrieveLogin({email: "", fd_tkn: ""})
-        //localStorage.removeItem('landingHidden')
         fetch(`http://localhost:3001/user`, {
           method: 'POST',
           credentials: 'include',
@@ -103,7 +91,6 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
       }
       if (res.error === undefined) { // USER LOGOUT SUCCESSFULLY
         retrieveLogin({email: "", fd_tkn: ""})
-        //localStorage.removeItem('landingHidden')
         fetch(`http://localhost:3001/user`, {
           method: 'POST',
           credentials: 'include',
@@ -163,7 +150,6 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
         //setButtonHelperWidth($(`#buttonWidthHelper`).outerWidth())
       //}
     },[userData.email])
-    //},[])
 
   if (!popUp) {
     $(`#buttonIn`)
@@ -176,21 +162,14 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
       className={css.background}
       style={{
         position: inHome ? 'absolute' : 'fixed', // inHome
-        //marginRight: hasScroll ? `${87 + scrollWidth}px` : `16px` // 16 + 55 + 16 = 87
-        //currentWidth <= 800 ? `100vw` : '200px'
         marginRight:
           currentWidth <= 800 && inHome && hasScroll ?
           `${87 + scrollWidth}px` :
-          //`${87 + scrollWidth}px` :
           currentWidth <= 800 && inHome ?
           `87px` :
           inHome && hasScroll ?
-          `${16 + scrollWidth}px` : 
+          `${16 + scrollWidth}px` :
           '16px'
-          //hasScroll ?
-          //`${16 + scrollWidth}px` :
-          //`16px` :
-          //'16px' // 16 + 55 + 16 = 87
       }}
     >
       <Button variant="contained" id={`buttonWidthHelper`} className={css.buttonWidthHelper} sx={{ display: 'none' }}>
@@ -207,9 +186,7 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
         variant="contained"
         id={`buttonIn`}
         className={css.buttonIn}
-        onClick={() => {
-          login(); setClicked(true); setPopUp(true); /* localStorage.setItem('newLogin', 'true') */
-        }}
+        onClick={() => { login(); setClicked(true); setPopUp(true) }}
       >
         <div className={css.buttonInInner}>
           <div><MySvg/></div>
@@ -223,9 +200,7 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
             !userData.email && shown ?
             `  Sign in with Google` :
             ` ❌`
-            
           }
-          
         </div>
       </Button>
       {

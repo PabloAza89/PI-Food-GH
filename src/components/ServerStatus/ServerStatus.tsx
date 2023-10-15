@@ -13,7 +13,6 @@ const ServerStatus = () =>  {
   const serverStatus = useSelector((state: { serverStatus: serverStatusI }) => state.serverStatus)
 
   const [ show, setShow ] = useState<boolean>(false)
-  //const [ show, setShow ] = useState<boolean>(true)
 
   useEffect(() => {
     $(function() {
@@ -59,8 +58,6 @@ const ServerStatus = () =>  {
       }
     })
   },[show])
-
-  //console.log("SHOW", show)
 
   return (
     <div className={css.background}>

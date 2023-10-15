@@ -23,7 +23,7 @@ interface handleDeleteI {
 export const handleDelete = async ({ id, fd_tkn, retrieveLogin, handleReload }: handleDeleteI ) => {
 
   Swal.fire({
-    title: 'Are you sure do you want to delete this recipe ?',
+    title: 'Are you sure do you want to&nbspdelete&nbspthis&nbsprecipe&nbsp?',
     text: 'No undo.',
     icon: 'info',
     showDenyButton: true,
@@ -89,7 +89,7 @@ export const handleDelete = async ({ id, fd_tkn, retrieveLogin, handleReload }: 
   .catch((rej) => {
     console.log("rej", rej)
     Swal.fire({
-      title: `It's seems like server its sleeping..`,
+      title: `It looks like server its sleeping..`,
       html: `So you cannot save your recipe.<br>We are sorry. Please try againg later..<br><br>Don't worry about everything you wrote, it will be saved in browser memory :) `,
       icon: 'error',
       showConfirmButton: false,
@@ -105,13 +105,13 @@ export const handleDelete = async ({ id, fd_tkn, retrieveLogin, handleReload }: 
 interface handleEditI { navigate: any }
 interface handleEditRecipesI extends handleEditI, recipesI {}
 
-export const handleEdit = async ({
+export const handleEdit = ({
     navigate, id, title, image, healthScore, diets, email,
     dishTypes, userRecipe, summary, analyzedInstructions
   }: handleEditRecipesI) => {
 
   Swal.fire({
-    title: 'Do you want to edit this recipe ?',
+    title: 'Do you want to edit this&nbsprecipe&nbsp?',
     icon: 'question',
     showDenyButton: true,
     confirmButtonText: 'EDIT',
@@ -133,7 +133,7 @@ export const handleEdit = async ({
   .catch((rej) => {
     console.log("rej", rej)
     Swal.fire({
-      title: `It's seems like server its sleeping..`,
+      title: `It looks like server its sleeping..`,
       html: `So you cannot save your recipe.<br>We are sorry. Please try againg later..<br><br>Don't worry about everything you wrote, it will be saved in browser memory :) `,
       icon: 'error',
       showConfirmButton: false,
@@ -144,9 +144,45 @@ export const handleEdit = async ({
   })
 }
 
-//const dispatch = useDispatch
-//const navigate = useNavigate
-//const dispatch: () => any = useDispatch
+export const handleReturn = ({
+  location, navigate, isEditing, recipeCreatedOrEdited, inDetail
+}: any) => {
+  //if (location.pathname.toLowerCase() === `/myrecipe` && isEditing && !recipeCreatedOrEdited) {
+  console.log("A VERGA", isEditing)
+  if (location.pathname.toLowerCase() === `/myrecipe` && (location.state && location.state.editing) && !recipeCreatedOrEdited) {
+    Swal.fire({
+      title: 'Do you want to cancel editing and go back ?',
+      text: 'Any changes you have made gonna be lost.',
+      icon: 'info',
+      showDenyButton: true,
+      showCancelButton: false,
+      confirmButtonText: 'CANCEL EDITING',
+      denyButtonText: `CONTINUE EDITING`,
+      confirmButtonColor: '#d14141', // NEW ACTION COLOR
+      denyButtonColor: '#3085d6' // NO ACTION COLOR
+    })
+    .then((result) => {
+      if (result.isConfirmed) navigate("/")
+    })
+  }
+  else if (location.pathname.toLowerCase() === `/myrecipe` && !(location.state && location.state.editing) && !recipeCreatedOrEdited) {
+    Swal.fire({
+      title: 'Do you want to cancel create a new recipe and go back ?',
+      text: `Don't worry about everything you wrote, it will be saved in browser memory :)`,
+      icon: 'info',
+      showDenyButton: true,
+      showCancelButton: false,
+      confirmButtonText: 'CANCEL CREATING',
+      denyButtonText: `CONTINUE CREATING`,
+      confirmButtonColor: '#d14141', // NEW ACTION COLOR
+      denyButtonColor: '#3085d6' // NO ACTION COLOR
+    })
+    .then((result) => {
+      if (result.isConfirmed) navigate("/")
+    })
+  }
+  else navigate("/")
+}
 
 export function checkPrevLogin ({
   retrieveLogin, userData, navigate

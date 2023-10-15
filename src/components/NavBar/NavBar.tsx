@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useLocation, useMatch, useNavigate } from "react-router-dom";
 import logo from "../../images/logo.png";
 import css from './NavBarCSS.module.css';
-import comm from './commonsCSS.module.css';
+import { handleReturn } from '../../commons/commonsFunc';
 import { useDispatch, useSelector } from 'react-redux';
 import MenuIcon from '@mui/icons-material/Menu';
 import {
@@ -15,28 +15,28 @@ import {
 import Tooltip from '@mui/joy/Tooltip';
 import serverSDDietsArray from '../../db/diets.json'; // SD = Shut Down
 import serverSDDishesArray from '../../db/dishes.json'; // SD = Shut Down
-import $ from 'jquery';
 
-const NavBar = () =>  {
+interface NavBarI {
+  recipeCreatedOrEdited?: boolean
+}
+
+const NavBar = ({ recipeCreatedOrEdited }: NavBarI) =>  {
 
   const dispatch = useDispatch()
   const location = useLocation()
+  const navigate = useNavigate()
 
   const inHome = useMatch("/")?.pattern.path === "/" ? true : false; // "/" === Home
-
-  //location.pathname.toLowerCase() === `/myrecipe`
-  //console.log("BBB", location.pathname === `/`)
-
+  const inDetail = [useMatch("/:route")?.params.route?.toLowerCase()].filter(e => e !== "about")[0]
+  const [isEditing, setIsEditing] = useState<boolean>( location.state && location.state.editing ? true : false );
   const allRecipesLoaded = useSelector((state: {allRecipesLoaded: boolean}) => state.allRecipesLoaded)
   const scrollWidth = useSelector((state: {scrollWidth: number}) => state.scrollWidth)
   const hasScroll = useSelector((state: {hasScroll:boolean}) => state.hasScroll)
-
   const [healthLevel, setHealthLevel] = useState<string>('');
   const [healthLabelShown, setHealthLabelShown] = useState<boolean>(false);
   const [sortAlpha, setSortAlpha] = useState<string>('');
   const [alphaLabelShown, setAlphaLabelShown] = useState<boolean>(false);
   const [placeholder, setPlaceholder] = useState<string>('Find recipe..');
-
   const currentWidth = useSelector((state: {currentWidth:number}) => state.currentWidth)
   const menuShown = useSelector((state: {menuShown:boolean}) => state.menuShown)
   const allDietsOnline = useSelector((state: {allDietsOnline:boolean}) => state.allDietsOnline)
@@ -54,8 +54,6 @@ const NavBar = () =>  {
 
   const allDietsArray = useSelector((state: {allDiets: allDietsI[]}) => state.allDiets)
   const allDishesArray = useSelector((state: {allDishes: allDishesI[]}) => state.allDishes)
-
-  //const [menuShown, setMenuShown] = useState<boolean>(false);
 
   interface entireFilterI {
     diet: string,
@@ -88,43 +86,17 @@ const NavBar = () =>  {
   useEffect(() => {
     dispatch(filter(entireFilter))
     if (currentWidth > 800) dispatch(setMenuShown(false))
-    // return () => {dispatch(setMenuShown(false))}
   },[ dispatch, entireFilter, currentWidth ])
-  
-  // useEffect(() => {
-  //   //$("#focusTarget").focus();
-  //   //$("#focusTarget").trigger("click")
-  //   //$("#focussTarget").click()
-  //   //let qq = document.getElementById("focussTarget")
-  //   //if (qq !== null) qq.click()
-  //   //$("#focusTarget").on("focus", function() { console.log("FOCUSEDD 123")})
-
-  //   $(document).ready(function() {
-  //     console.log("loaded");
-  //     window.onbeforeunload = confirmExit;
-  //     function confirmExit(){
-  //         console.log("closed");
-  //         return true;
-  //     }
-  // });
-  // },[])
 
   return (
     <div
-      //id={`focusTarget`}
       className={css.background}
       style={{
-        // overflow: 'hidden !important', // TEST
-        // overflowX: 'hidden', // TEST
-        // overflowY: 'hidden', // TEST
         position: location.pathname !== `/` ? 'fixed' : 'relative',
         flexDirection: menuShown ? 'column' : 'row',
-        //width: `calc(100vw - ${scrollWidth}px)`,
         width: hasScroll ? `calc(100vw - ${scrollWidth}px)` : `100vw`,
         minHeight: menuShown ? '200px' : '100px',
         height: menuShown ? '200px' : '100px',
-        //width: hasScroll ? `calc(100vw - ${scrollWidth}px)` : `100vw`
-        //width: `100vw`
       }}
     >
       <div
@@ -135,12 +107,23 @@ const NavBar = () =>  {
         }}
       >
         <div className={css.logoTextContainer}>
-          <Link to="/">
+          <div
+            onClick={() => handleReturn({
+              location, navigate, inDetail,
+              isEditing, recipeCreatedOrEdited
+            })}
+          >
             <img className={css.logo} src={logo} alt=""></img>
-          </Link>
-          <Link className={css.noDeco} to="/">
+          </div>
+          <div // NO Link BECAUSE PERFORM AN ACTION
+            className={css.noDeco}
+            onClick={() => handleReturn({
+              location, navigate,
+              isEditing, recipeCreatedOrEdited
+            })}
+          >
             <div className={css.linkText}>Foodify !</div>
-          </Link>
+          </div>
         </div>
         <Tooltip
           arrow
@@ -165,8 +148,6 @@ const NavBar = () =>  {
       </div>
       <div
         style={{
-          //alignItems: currentWidth <= 800 ? 'center' : 'unset',
-          //marginRight: '132.5px', // 132.5 ===  "8" 64 8 36.5 16
           marginRight: currentWidth <= 800 ? 'unset' : '132.5px', // 132.5 ===  "8" 64 8 36.5 16
           display:
             location.pathname !== `/` ?
@@ -176,7 +157,6 @@ const NavBar = () =>  {
             'flex'
         }}
         className={css.selectsAndButtons}
-        //id={'focussTarget'}
       >
         <div
           style={{
@@ -185,7 +165,6 @@ const NavBar = () =>  {
           }}
           className={css.upper}
         >
-
           <TextField
             type="text"
             autoComplete='off'
@@ -196,8 +175,6 @@ const NavBar = () =>  {
             className={css.input}
             onChange={(e) => {setEntireFilter({...entireFilter, text: e.target.value}); dispatch(setIndexChoosen(0))}}
           />
-
-          
           <Link to="/MyRecipe">
             <Button
               variant="contained"
@@ -214,16 +191,9 @@ const NavBar = () =>  {
           </Link>
         </div>
         <div
-          style={{
-            //width: currentWidth <= 800 ? `95vw` : '50vw',
-            //width: currentWidth <= 800 && hasScroll ? `100%` : '50vw',
-            //width: currentWidth <= 800 && hasScroll ? `calc(100% - 8px)` : '50vw',
-            width: currentWidth <= 800 ? `calc(100% - 8px)` : '50vw',
-            //minWidth: currentWidth <= 800 ? 'unset' : '570px',
-          }}
+          style={{ width: currentWidth <= 800 ? `calc(100% - 8px)` : '50vw' }}
           className={css.lower}
         >
-          
           <Select
             className={css.containerDietsDishesHealthAlpha}
             value={entireFilter.diet}
@@ -246,8 +216,6 @@ const NavBar = () =>  {
                 )})
             }
           </Select>
-          
-          
           <Select
             className={css.containerDietsDishesHealthAlpha}
             value={entireFilter.dish}
@@ -271,7 +239,6 @@ const NavBar = () =>  {
               })
             }
           </Select>
-          
           <FormControl className={css.containerDietsDishesHealthAlpha}>
             <InputLabel
               size="small"

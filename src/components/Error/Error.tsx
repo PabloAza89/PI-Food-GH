@@ -7,7 +7,6 @@ import loadingImage from '../../images/loadingImage.png';
 
 function Error() {
 
-  const english = useSelector((state: {english:boolean}) => state.english)
   const viewPort = useSelector((state: {viewPort: string}) => state.viewPort)
 
   const [loaded, setLoaded] = useState<boolean>(false)
@@ -41,7 +40,6 @@ function Error() {
           />
         </div>
         <div className={`${css.message} ${com.noSelect}`} style={{ fontSize: viewPort === 'smaPort' ? '7vw' : viewPort === 'smaLand' ? '5.5vh' : (viewPort === 'medPort' || viewPort === 'medLand') ? '31px' : '35px' }} >
-          {/* { english ? `This page does not exist.` : `Esta página no existe.` } */}
           This page does not exist.
         </div>
       </div>

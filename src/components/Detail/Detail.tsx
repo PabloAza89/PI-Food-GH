@@ -18,19 +18,20 @@ import {
 } from '../../actions';
 import $ from 'jquery';
 
-export default function Detail({ userData, retrieveLogin, retrieveRecipeNotFound }: any) {
+export default function Detail({ userData, retrieveLogin }: any) {
 
   const dispatch = useDispatch()
   const navigate = useNavigate();
-  const location = useLocation()
   const params = useParams()
 
   const hasScroll = useSelector((state: {hasScroll:boolean}) => state.hasScroll)
   const scrollWidth = useSelector((state: {scrollWidth: number}) => state.scrollWidth)
   const currentWidth = useSelector((state: {currentWidth:number}) => state.currentWidth)
-
-  let arrImages = [noImage1, noImage2, noImage3]
+  const allRecipes = useSelector((state: { allRecipes: recipesI[] }) => state.allRecipes)
+  const recipe = allRecipes.filter((c:any) => params.recipeId! === c.id.toString() && params.recipeId!.toString().length === params.recipeId!.length)[0]
   const [ brokenImage, setBrokenImage ] = useState<boolean>(false)
+  function regexInSummary(text: any) { return text.replaceAll(/(<[/]b>|<b>|<[/]a>|<a\b[^>]*>|[/]a>)/g, '') }
+  let arrImages = [noImage1, noImage2, noImage3]
 
   const reloadRecipes = async () => {
     dispatch(getDietsFromDB())
@@ -44,11 +45,6 @@ export default function Detail({ userData, retrieveLogin, retrieveRecipeNotFound
     }
   }
 
-  const allRecipes = useSelector((state: { allRecipes: recipesI[] }) => state.allRecipes)
-  const recipe = allRecipes.filter((c:any) => params.recipeId! === c.id.toString() && params.recipeId!.toString().length === params.recipeId!.length)[0]
-
-  function regexInSummary(text: any) { return text.replaceAll(/(<[/]b>|<b>|<[/]a>|<a\b[^>]*>|[/]a>)/g, '') }
-
   if (recipe !== undefined && recipe.userRecipe && recipe.image.length > 1) {
     fetch( `https://res.cloudinary.com/dtembdocm/image/upload/` + recipe.image, {
       headers: { 'Cache-Control': 'no-cache' }
@@ -61,23 +57,11 @@ export default function Detail({ userData, retrieveLogin, retrieveRecipeNotFound
   }
 
   useEffect(() => {
-    if (recipe) retrieveRecipeNotFound(false)
-    else retrieveRecipeNotFound(true)
-  },[recipe, retrieveRecipeNotFound])
-
-  useEffect(() => {
     dispatch(setHasScroll(window.innerWidth !== $('body').width() ? true : false))
     dispatch(setMenuShown(false))
   },[dispatch])
 
-  
-
-  //console.log("NN window.innerWidth", window.innerWidth)
-  //console.log("NN $('body').width()", $('body').width())
-  
   $(window).scrollTop(0)
-
-  //let recipee = undefined // DEV
 
   if (recipe !== undefined) {
     return (
@@ -87,7 +71,6 @@ export default function Detail({ userData, retrieveLogin, retrieveRecipeNotFound
           marginRight: hasScroll ? `${16 + scrollWidth}px` : `16px`
         }}
       >
-      
         <div className={css.card}>
           <div
             id={css.editDeleteContainer}
@@ -98,7 +81,6 @@ export default function Detail({ userData, retrieveLogin, retrieveRecipeNotFound
                 `none`,
               flexDirection: currentWidth <= 535 ? 'row-reverse' : 'column'
             }}
-            //style={{ display: `none` }}
           >
             <Button
               variant="contained"
@@ -207,8 +189,6 @@ export default function Detail({ userData, retrieveLogin, retrieveRecipeNotFound
               }
           </div>
         </div>
-        {/* <div className={css.helperBottom}></div> */}
-      
       </div>
     )
   } else return (

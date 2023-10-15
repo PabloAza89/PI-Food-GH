@@ -22,7 +22,6 @@ const CardsMapper = ({ retrieveLogin, userData }: CardsMapperI)  => {
   const toShow = useSelector((state: { toShow: recipesI[] }) => state.toShow)
   const allRecipes = useSelector((state: { allRecipes: recipesI[] }) => state.allRecipes)
   const landingShown = useSelector((state: { landingShown: boolean }) => state.landingShown)
-
   let arraySplitedBy9: any[] = toShow.slice( indexChoosen * 9, (indexChoosen * 9) + 9 )
 
   const FirstFunc = async () => {
@@ -38,18 +37,10 @@ const CardsMapper = ({ retrieveLogin, userData }: CardsMapperI)  => {
     dispatch(setHasScroll(window.innerWidth !== $('body').width() ? true : false))
   })
 
-  //let toShoww = [undefined]
-
-  // console.log("PPP toShow", toShow)
-  // console.log("PPP toShow[0]", toShow[0])
-  // console.log("PPP allRecipes", allRecipes)
-  // console.log("PPP allRecipes[0]", allRecipes[0])
-
   return allRecipes[0] !== undefined && toShow[0] !== undefined ?
     (<div
       className={css.background}
       style={{
-        /* overflow: landingShown ? 'hidden' : 'inherit', */
         width: `calc(100vw - ${scrollWidth}px)`,
         marginRight: `${scrollWidth}px`,
         marginTop:
@@ -78,12 +69,9 @@ const CardsMapper = ({ retrieveLogin, userData }: CardsMapperI)  => {
     </div>) :
     allRecipes[0] !== undefined && toShow[0] === undefined ?
     (<div>
-      <div
-        className={css.notFound}
-        /* style={{ overflow: landingShown ? 'hidden' : 'inherit' }} */
-      >No recipe was found !</div>
+      <div className={css.notFound}>No recipe was found !</div>
     </div>) :
-    (<div /* style={{ overflow: landingShown ? 'hidden' : 'inherit' }} */ >
+    (<div>
       <div className={css.notFound}>Loading..</div>
     </div>)
 }

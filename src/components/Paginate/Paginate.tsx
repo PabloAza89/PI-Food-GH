@@ -34,9 +34,6 @@ const Paginate = () => {
     <div
       className={css.background}
       style={{
-        // overflow: 'hidden !important', // TEST
-        // overflowX: 'hidden', // TEST
-        // overflowY: 'hidden', // TEST
         backdropFilter:
           menuShown && scrollPosition >= 209 ? 'blur(40px)' :
           !menuShown && scrollPosition >= 109 ? 'blur(40px)' :

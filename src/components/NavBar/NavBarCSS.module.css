@@ -59,7 +59,10 @@
   flex-direction: row;
   width: 69px;
   height: 69px;
-  align-self: center
+  align-self: center;
+  cursor: pointer;
+  /* background: yellow; */ /* DEV */
+  border-radius: 50%; /* CLICK ONLY ON CIRCLE ! */
 }
 
 .linkLink {
@@ -90,6 +93,7 @@
   text-align: right;
   color: #FFFFFF;
   text-decoration: none !important;
+  cursor: pointer;
 }
 
 .button {
@@ -127,6 +131,7 @@
   -ms-user-select: none !important;
   user-select: none !important;
   text-decoration: none !important;
+  
 }
 
 /* .input {

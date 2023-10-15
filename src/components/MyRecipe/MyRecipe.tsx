@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import css from "./MyRecipeCSS.module.css";
-//import '../../commons/disableAutoFocusSA2.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import noImage1 from "../../images/noImage1.jpg";
 import noImage2 from "../../images/noImage2.jpg";
@@ -42,9 +41,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
   let stepsStateLS: string | null = localStorage.getItem('stepsState');
  
   const [isEditing, setIsEditing] = useState<boolean>( location.state && location.state.editing ? true : false );
-  const [titlePlaceholder, setTitlePlaceholder] = useState<string>('e.g. Pasta with tomatoes..');
   const [healthScorePlaceholder, setHealthScorePlaceholder] = useState<string>('e.g. 73');
-  const [summaryPlaceholder, setSummaryPlaceholder] = useState<string>('e.g. Healthy pasta recipe');
   const [titleValue, setTitleValue] = useState<string>('');
   const [imageValue, setImageValue] = useState<string>('');
   const [imageValueDoubleCheck, setImageValueDoubleCheck] = useState<string>('');
@@ -53,15 +50,10 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
   const [dishesArray, setDishesArray] = useState<string[]>([]);
   const [dietsArray, setDietsArray] = useState<string[]>([]);
   const [stepsState, setStepsState] = useState<string[]>(['']);
-  /* const [allDisabled, setAllDisabled] = useState<boolean>(false); */
-  //const [allDisabled, setAllDisabled] = useState<boolean>(false);
   const recipeCreated = useRef(false);
-  //const allDisabled = useRef(false);
   const [allDisabled, setAllDisabled] = useState<boolean>(false);
   const [saveButtonDisabled, setSaveButtonDisabled] = useState<boolean>(false);
-  //const saveButtonDisabled = useRef(false);
   const [imageLoaded, setImageLoaded] = useState<boolean>(false);
-  
 
   const handlerDeleteInstructions = ({ index }: handlerDeleteInstructionsI) => {
     let copyState = [...stepsState]
@@ -331,7 +323,6 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
       summary: { character: false, badWord: false, empty: false },
       instructions: [{ character: false, badWord: false, empty: false },]
     });
-    //localStorage.removeItem("miGato");
     localStorage.removeItem('titleValue');
     localStorage.removeItem('imageValue');
     localStorage.removeItem('healthValue');
@@ -339,8 +330,6 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
     localStorage.removeItem('dishesArray');
     localStorage.removeItem('dietsArray');
     localStorage.removeItem('stepsState');
-    //localStorage.setItem('stepsState', JSON.stringify([...copyState]))
-    //localStorage.clear()
     $(`#targetTitle`)
       .html("<div></div>") // clear all highlighted
     $(`#targetSummary`)
@@ -352,13 +341,14 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
   const clearFieldsNotif = () => {
 
     Swal.fire({
-      title: 'Do you want to clear all fields ?',
+      title: 'Do you want to clear all&nbspfields&nbsp?',
       text: 'No undo.',
       icon: 'info',
       showDenyButton: true,
-      showCancelButton: false,
       confirmButtonText: 'CLEAR',
       denyButtonText: `CANCEL`,
+      confirmButtonColor: '#d14141', // NEW ACTION COLOR
+      denyButtonColor: '#3085d6', // NO ACTION COLOR
     }).then((result) => {
       if (result.isConfirmed) {
         clearHandler()
@@ -375,7 +365,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
   const handleCancelEdit = () => {
     Swal.fire({
       title: 'Do you want to cancel editing and go back ?',
-      text: 'Any changes you have made gonna be lost.',
+      text: 'Any changes you made will be lost.',
       icon: 'info',
       showDenyButton: true,
       showCancelButton: false,
@@ -429,8 +419,8 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
 
     else if (emptyInputs.length === 0 && !userData.email) {
       Swal.fire({
-        title: `You must be logged to do that ! `,
-        html: `Please, log-in with Google with the right-upper side button.<br><br>Don't have a Google account ?<br>Please, follow this <a style="color:#0000EE"target="_blank" rel="noopener noreferrer" href="https://accounts.google.com/SignUp">link</a> and create a new one !`,
+        title: `You must be logged to&nbspdo&nbspthat&nbsp!`,
+        html: `Please, log-in with Google with the right‑upper&nbspside&nbspbutton.<br><br>Don't have a Google account ?<br>Please, follow this <a style="color:#0000EE"target="_blank" rel="noopener noreferrer" href="https://accounts.google.com/SignUp">link</a> and create a new one !`,
         icon: 'info',
         showConfirmButton: false,
         showDenyButton: false,
@@ -507,7 +497,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
       .catch((rej) => {
         console.log("rej", rej)
         Swal.fire({
-          title: `It's seems like server its sleeping..`,
+          title: `It looks like server its sleeping..`,
           html: `So you cannot save your recipe.<br>We are sorry. Please try againg later..<br><br>Don't worry about everything you wrote, it will be saved in browser memory :) `,
           icon: 'error',
           showConfirmButton: false,
@@ -634,7 +624,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
       .catch((rej) => {
         console.log("rej", rej)
         Swal.fire({
-          title: `It's seems like server its sleeping..`,
+          title: `It looks like server its sleeping..`,
           html: `So you cannot save your recipe.<br>We are sorry. Please try againg later..<br><br>Don't worry about everything you wrote, it will be saved in browser memory :) `,
           icon: 'error',
           showConfirmButton: false,
@@ -677,52 +667,20 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
       return () => {
         if (recipeCreated.current) clearHandler() // CLEAR FORM: SAVED && FIRES WHEN USER GO TO ANOTHER ROUTE/COMPONENT
       }
-  //},[allDisabled])
   },[])
 
   useEffect(() => {
-    console.log("YYY Ejecutado 2")
     if (saveButtonDisabled && allDisabled) retrieveRecipeCreatedOrEdited(true)
     else retrieveRecipeCreatedOrEdited(false)
-    
-  //},[saveButtonDisabled, allDisabled])
   },[allDisabled])
   
 
   useEffect(() => {
-    console.log("YYY Ejecutado 3")
     dispatch(setHasScroll(window.innerWidth !== $('body').width() ? true : false))
     
-  },[dispatch])
+  },[window.innerWidth])
 
-  console.log("isEditing isEditing", isEditing)
-  console.log("imageLoaded imageLoaded", imageLoaded)
-  console.log("error.instructions error.instructions", error.instructions)
-  console.log("location.state.analyzedInstructions.length", location.state && location.state.analyzedInstructions.length)
-  console.log("hasScroll hasScroll", hasScroll)
-
-  
-
-  // useEffect(() => {
-  //   console.log("YYY Ejecutado 4")
-  //   // $(window).scrollTop(0)
-  //   // $(window).scrollTop(0)
-  //   //console.log("PPP", $("#0instructions").width())
-  //   //if (saveButtonDisabled && allDisabled)
-  //   return () => {
-  //     //if (saveButtonDisabled && allDisabled) clearHandler() // RESET ALL FORM
-  //     console.log("YYY", "EJECUTADO")
-  //     //if (saveButtonDisabled && allDisabled) clearHandler() // RESET ALL FORM
-  //     //console.log("YYY", "se fue")
-  //   }
-  //   //return () => $(window).scrollTop(0)
-  //  })
-
-   dispatch(setMenuShown(false))
-
- 
-  //console.log("OOO", stepsState[0] === '\n')
-
+  dispatch(setMenuShown(false))
 
   window.onbeforeunload = function() { // CLEAR FORM: SAVED && FIRES WHEN WINDOW IS CLOSED OR REFRESH
     if (recipeCreated.current) {
@@ -730,16 +688,10 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
     }
   }
 
-  useEffect(() => {
-    console.log("YYY WWW saveButtonDisabled", saveButtonDisabled)
-    console.log("YYY WWW allDisabled", allDisabled)
-  },[ saveButtonDisabled, allDisabled ])
-
   return (
     <div
       className={css.container}
       style={{ marginRight: hasScroll ? `${16 + scrollWidth}px` : `16px` }}
-      //style={{ marginRight: `16px` }}
     >
     <div
       className={css.form}
@@ -751,7 +703,6 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
           onError={() => setImageLoaded(false)}
           alt=""
         />
-      
         <img
           className={css.imageSearcher}
           src={
@@ -765,8 +716,6 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
           }
           alt=""
         />
-      
-
       <div className={css.title}>
         {
           isEditing ?
@@ -838,6 +787,8 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
           leaveDelay={200}
           enterTouchDelay={0}
           placement="bottom"
+          disableFocusListener={ saveButtonDisabled && allDisabled ? true : false }
+          disableHoverListener={ saveButtonDisabled && allDisabled ? true : false }
           title={
             <div style={{ display: 'flex', flexDirection: 'column', color: '#25252d', background: '#f5f5f9', fontFamily: 'Roboto'}}>
               <div style={{ display: 'flex', flexDirection: 'column', color: '#25252d', fontWeight: '400' }}>
@@ -854,7 +805,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
             disabled={allDisabled}
             className={css.input}
             InputProps={{
-              className: css.inputStyle
+              className: css.inputImage
             }}
             value={imageValue}
             autoComplete='off'
@@ -900,6 +851,9 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
           <TextField
             id="health"
             className={css.input}
+            InputProps={{
+              className: css.inputHealth
+            }}
             disabled={allDisabled}
             value={healthValue}
             autoComplete='off'
@@ -915,8 +869,11 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
         <FormControl className={css.titleAndTextFieldContainer}>
           <InputLabel className={css.label}>Select Dishes</InputLabel>
           <Select
-            className={css.input}
+            className={css.select}
             placeholder={`Select Dishes`}
+            inputProps={{
+              className: css.selectInput
+            }}
             multiple
             value={dishesArray}
             disabled={allDisabled}
@@ -976,6 +933,9 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
             <TextField
               id={"summary"}
               className={css.inputHiddenSummary}
+              InputProps={{
+                className: css.inputSummary
+              }}
               disabled={allDisabled}
               autoComplete='off'
               multiline
@@ -991,11 +951,14 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
         <FormControl className={css.titleAndTextFieldContainer}>
           <InputLabel className={css.label}>Select Diets</InputLabel>
           <Select
-            className={css.input}
+            className={css.select}
             placeholder={`Select Diets`}
             multiple
             value={dietsArray}
             disabled={allDisabled}
+            inputProps={{
+              className: css.selectInput
+            }}
             label="Select Diets"
             onChange={handleChangeDiets}
             renderValue={(selected) => selected.join(', ')}
@@ -1066,6 +1029,9 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
                   <TextField
                     id={`${index}instructions`}
                     className={css.inputHiddenInstructions}
+                    InputProps={{
+                      className: css.inputInstructions
+                    }}
                     disabled={allDisabled}
                     autoComplete='off'
                     multiline
@@ -1090,8 +1056,8 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
                 enterNextDelay={700}
                 leaveDelay={200}
                 enterTouchDelay={0}
-                disableFocusListener={stepsState.length >= 10 ? false : true}
-                disableHoverListener={stepsState.length >= 10 ? false : true}
+                disableFocusListener={ saveButtonDisabled && allDisabled ? true : stepsState.length >= 10 ? false : true }
+                disableHoverListener={ saveButtonDisabled && allDisabled ? true : stepsState.length >= 10 ? false : true }
                 placement="bottom-end"
                 title={
                   <div className={css.newStepTooltip}>
@@ -1100,7 +1066,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
                   </div>
                 }
               >
-                <div 
+                <div
                   className={css.buttonNewHelper}
                   style={{
                     minWidth: currentWidth <= 650 ? '40px' : '60px',
@@ -1129,8 +1095,8 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
                 enterNextDelay={700}
                 leaveDelay={200}
                 enterTouchDelay={0}
-                disableFocusListener={stepsState.length === 1 ? false : true}
-                disableHoverListener={stepsState.length === 1 ? false : true}
+                disableFocusListener={ saveButtonDisabled && allDisabled ? true : stepsState.length === 1 ? false : true }
+                disableHoverListener={ saveButtonDisabled && allDisabled ? true : stepsState.length === 1 ? false : true }
                 placement="bottom-end"
                 title={"You can't delete first step !"}
               >
@@ -1146,7 +1112,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
                     disabled={allDisabled ? true : stepsState.length === 1 ? true : false}
                     id={`${index}`}
                     className={css.buttonDelete}
-                    style={{ 
+                    style={{
                       minWidth: currentWidth <= 650 ? '40px' : '80px',
                       width: currentWidth <= 650 ? '40px' : '80px',
                     }}

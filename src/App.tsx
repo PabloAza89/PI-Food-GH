@@ -29,59 +29,10 @@ import $ from 'jquery';
 
 function App() {
 
-  
-
-  // useEffect(() => {
-
-  //   console.log("ASDASDASD typeof window.name" , window.name)
-
-  // if (window.name === "") {
-  //   console.log("ASDASDASD IS THE FIRST")
-  //   window.name = "myWindow"
-  // } else {
-  //   console.log("ASDASDASD OTHER OPEN")
-  // }
-
-  // },[])
-
-  //if (window.name === "myWindow") console.log("ASD ASD ASD IS THE FIRST")
-
-  //window.name = "myWindow";
-
-  //if (window.name === "myWindow") console.log("ASD ASD ASD OTHER OPEN")
-
-  
-
   const dispatch = useDispatch()
-
-  
-
-  //let landHiddenLS: string | null = localStorage.getItem('landHidden');
-  //if (landHiddenLS && JSON.parse(landHiddenLS)) dispatch(landingShown(true))
-
-  const location = useLocation()
   const showHelpBG = [useMatch("/:route")?.params.route?.toLowerCase()].filter(e => e !== "about")[0]
-
-  let landingHiddenLS: string | null = localStorage.getItem('landingHidden');
-  let newLoginLS: string | null = localStorage.getItem('newLogin');
-
-  //console.log(`LLRR showHelpNavbar`, showHelpBG)
-
-  // useEffect(() => {
-  //   function checkUserData() {
-  //     //const item = localStorage.getItem('userData')
-  //     if (landingHiddenLS && JSON.parse(landingHiddenLS)) dispatch(landingHidden(true))
-  //     // if (item) {
-  //     //   setUserData(item)
-  //     // }
-  //   }
-  
-  //   window.addEventListener('storage', checkUserData)
-  
-  //   return () => {
-  //     window.removeEventListener('storage', checkUserData)
-  //   }
-  // }, [dispatch, landingHiddenLS])
+  const currentWidth = useSelector((state: {currentWidth:number}) => state.currentWidth)
+  const landingHiddenState = useSelector((state: { landingHidden: boolean }) => state.landingHidden)
 
   useEffect(() => {
     $(function() {
@@ -96,9 +47,6 @@ function App() {
     })
   },[dispatch])
 
-  const currentWidth = useSelector((state: {currentWidth:number}) => state.currentWidth)
-  const landingHiddenState = useSelector((state: { landingHidden: boolean }) => state.landingHidden)
-
   const [isLoading, setIsLoading] = useState({
     main: true,
     refresh: false
@@ -109,15 +57,14 @@ function App() {
     fd_tkn: ''
   })
 
-  const retrieveLogin = (props: any) => setUserData({ email: props.email, fd_tkn: props.fd_tkn })
+  const retrieveLogin = (props: any) => setUserData({ 
+    email: props.email,
+    fd_tkn: props.fd_tkn
+  })
 
   const [ recipeCreatedOrEdited, setRecipeCreatedOrEdited ] = useState<boolean>(false)
 
   const retrieveRecipeCreatedOrEdited = (response: boolean) => setRecipeCreatedOrEdited(response)
-
-  const [ recipeNotFound, setRecipeNotFound ] = useState<boolean>(false)
-
-  const retrieveRecipeNotFound = (response: boolean) => setRecipeNotFound(response)
 
   const tabsArrREF: any = useRef()
   const tabIDREF = useRef(0)
@@ -129,10 +76,8 @@ function App() {
     checkPrevLogin({ retrieveLogin, userData })
 
     feedbackBC.onmessage = (e) => {
-      console.log("FEEDBACK DE DEVOLUCION", e.data)
       if (e.data.subscribe.length > tabsArrREF.current.subscribe.length) {
       tabsArrREF.current.subscribe = e.data.subscribe
-      console.log("tabsArrREF ACTUAL", tabsArrREF.current.subscribe)
       }
     }
 
@@ -145,35 +90,18 @@ function App() {
     tabsArrREF.current = { subscribe: [tabID] }
 
     castBC.onmessage = (e) => {
-      console.log(" aver que llega", e.data)
       if (e.data.unsubscribe && e.data.unsubscribe.length !== 0) {
-        console.log("ENTRO ACA UNSUBSCRIBE")
-        let rr = tabsArrREF.current.subscribe
-        let qq = e.data.unsubscribe[0]
-        let ss = rr.filter((e:any) => e !== qq)
-        console.log("RRRRRRRRRRRRR 1", tabsArrREF.current.subscribe)
-        console.log("RRRRRRRRRRRRR 2", e.data.unsubscribe[0])
-        console.log("RRRRRRRRRRRRR 3", ss)
-
-        tabsArrREF.current.subscribe = ss
-
-        return console.log("ACTUAL UNSUBSCRIBE", tabsArrREF.current.subscribe)
+        let current = tabsArrREF.current.subscribe
+        let incomming = e.data.unsubscribe[0]
+        let result = current.filter((e:any) => e !== incomming)
+        tabsArrREF.current.subscribe = result
+        return
       }
-
       if (e.data.subscribe && e.data.subscribe.length !== 0 && !e.data.subscribe.includes(tabIDREF.current)) {
         tabsArrREF.current.subscribe.push(e.data.subscribe[0])
-        console.log("tabsArrREF.current ADENTRO", tabsArrREF.current)
         feedbackBC.postMessage({ subscribe: tabsArrREF.current.subscribe})
       }
-
-      console.log("SARARA 0 ", tabsArrREF.current);
     };
-
-    console.log("PRIMER CURRENT", tabsArrREF.current)
-
-    let tabsLS: string | null = localStorage.getItem('tabsLS');
-
-    console.log("UNA SOLA VEZ EJECUTADO")
 
     sessionStorage.setItem('tabID', JSON.stringify(tabID))
 
@@ -181,13 +109,7 @@ function App() {
     fetch(`http://localhost:3001/user`, {
       method: 'POST',
       credentials: 'include',
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-      },
-      // body: JSON.stringify({
-      //   email: userData.email,
-      //   fd_tkn: userData.fd_tkn
-      // })
+      headers: { 'Content-type': 'application/json; charset=UTF-8' }
     })
     .then((res) => res.json())
     .then((res) => {
@@ -198,9 +120,7 @@ function App() {
 
     // return () => {
     //   //if (recipeCreated.current) clearHandler() // FIRES WHEN USER GO TO ANOTHER ROUTE/COMPONENT
-    //   console.log("CLOSED TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT")
     // }
-
   },[])
 
   useEffect(() => {
@@ -212,7 +132,6 @@ function App() {
       dispatch(setHeight(windowScreenHeight))
       dispatch(setCurrentWidth(windowInnerWidth))
       dispatch(setPercentageResizedHeight(window.innerHeight / windowScreenHeight))
-      dispatch(setHasScroll(windowInnerWidth !== $('body').width() ? true : false))
       if (window.matchMedia("(orientation: portrait)").matches) {
         if (windowScreenWidth < 425) dispatch(viewPort(`smaPort`))
         else if (windowScreenWidth > 825) dispatch(viewPort(`larPort`))
@@ -232,29 +151,25 @@ function App() {
     }
   },[dispatch]);
 
+  useEffect(() => {
+    dispatch(setHasScroll(window.innerWidth !== $('body').width() ? true : false))
+  })
 
-  window.onbeforeunload = function(event) { // FIRES WHEN WINDOW IS CLOSED OR REFRESH
-    //let rr = tabsArrREF.current.subscribe
-    //let ss = rr.filter((e:any) => e !== tabIDREF.current)
-    castBC.postMessage({ unsubscribe: [tabIDREF.current] })
-    console.log("LAST TAB DATA", tabsArrREF.current.subscribe)
-    //if (tabsArrREF.current.subscribe.length === 1) return ""
-    if (tabsArrREF.current.subscribe.length === 1) localStorage.removeItem('landingHidden')
-  }
+  useEffect(() => { // FIRED WHEN WINDOW IS CLOSED OR REFRESH
+    const onBeforeUnload = () => {
+      castBC.postMessage({ unsubscribe: [tabIDREF.current] })
+      if (tabsArrREF.current.subscribe.length === 1) localStorage.removeItem('landingHidden')
+    };
+    window.addEventListener("beforeunload", onBeforeUnload);
+    return () => window.removeEventListener("beforeunload", onBeforeUnload);
+  },[])
 
-  //if (document.hasFocus()) console.log("ASD FOCUSED DOCUMENT")
-
-  window.onfocus = function() { // FIRED WHEN TAB IS FOCUSED, CHECK VALID USER 
-    console.log("FOCUSED APP")
+  window.onfocus = function() { // FIRED WHEN TAB IS FOCUSED, CHECK VALID USER
     checkPrevLogin({ retrieveLogin, userData })
-    //if (landingHiddenLS && JSON.parse(landingHiddenLS)) dispatch(landingHidden(true))
   }
-
-  console.log("TTTTTT", userData)
 
   return (
     <div
-      //id={`focusTarget`}
       className={css.background}
       style={{ overflow: landingHiddenState ? 'inherit' : 'hidden' }}
     >
@@ -262,16 +177,10 @@ function App() {
       <div
         className={css.wallpaperNav}
         style={{
-          display: showHelpBG ? 'flex' : 'none',
-          /* overflow: 'hidden' */
+          display: showHelpBG ? 'flex' : 'none'
         }}
       />
-      <div
-        className={css.wallpaperBody}
-        /* style={{
-          overflow: 'hidden'
-        }} */
-      />
+      <div className={css.wallpaperBody} />
       <Routes>
         <Route path="/" element={<>
           <GoogleAuth retrieveLogin={retrieveLogin} userData={userData} />
@@ -291,11 +200,10 @@ function App() {
           <Detail
             retrieveLogin={retrieveLogin}
             userData={userData}
-            retrieveRecipeNotFound={retrieveRecipeNotFound}
           />
         </>}/>
         <Route path="/MyRecipe/" element={<>
-          <NavBar />
+          <NavBar recipeCreatedOrEdited={recipeCreatedOrEdited} />
           <GoogleAuth retrieveLogin={retrieveLogin} userData={userData} />
           <ServerStatus />
           {/* <GoBack recipeCreatedOrEdited={recipeCreatedOrEdited} /> */}
