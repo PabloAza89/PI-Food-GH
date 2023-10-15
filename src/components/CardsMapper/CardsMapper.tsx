@@ -22,9 +22,6 @@ const CardsMapper = ({ retrieveLogin, userData }: CardsMapperI)  => {
   const menuShown = useSelector((state: {menuShown: boolean}) => state.menuShown)
   const toShow = useSelector((state: { toShow: recipesI[] }) => state.toShow)
   const allRecipes = useSelector((state: { allRecipes: recipesI[] }) => state.allRecipes)
-  const landingShown = useSelector((state: { landingShown: boolean }) => state.landingShown)
-  //let arraySplitedBy9: any[] = toShow.slice( indexChoosen * 9, (indexChoosen * 9) + 9 )
-  
 
   let result: any = []
 
@@ -34,8 +31,6 @@ const CardsMapper = ({ retrieveLogin, userData }: CardsMapperI)  => {
   }
 
   let arraySplitedBy9: any[] = result[0] && result[tabChoosen].slice( indexChoosen * 9, (indexChoosen * 9) + 9 )
-
-  console.log("RESULT MAPPER", result)
 
   const FirstFunc = async () => {
     useEffect(() => {
