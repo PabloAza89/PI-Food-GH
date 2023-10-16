@@ -68,7 +68,7 @@ export default function Detail({ userData, retrieveLogin }: any) {
       <div
         className={css.container}
         style={{
-          marginRight: hasScroll ? `${16 + scrollWidth}px` : `16px`
+          //marginRight: hasScroll ? `${16 + scrollWidth}px` : `16px`
         }}
       >
         <div className={css.card}>

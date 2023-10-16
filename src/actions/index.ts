@@ -161,3 +161,12 @@ export function landingHidden(landingHidden:boolean) {
     payload: landingHidden
   }
 };
+
+// export function multiple({ dispatch, windowScreenWidth,windowScreenHeight,windowInnerWidth }: any) {
+//   return (dispatch:any) => {
+//         dispatch(setWidth(windowScreenWidth))
+//         dispatch(setHeight(windowScreenHeight))
+//         dispatch(setCurrentWidth(windowInnerWidth))
+//         dispatch(setPercentageResizedHeight(window.innerHeight / windowScreenHeight))
+//     }
+// };

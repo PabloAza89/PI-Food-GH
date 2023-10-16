@@ -22,7 +22,7 @@ import {
   fetchRecipesFromAPI, allRecipesLoaded,
   setCurrentWidth, setHeight, setPercentageResizedHeight, setWidth,
   setScrollWidth, setHasScroll, setScrollPosition,
-  getDietsFromDB, viewPort, landingHidden
+  getDietsFromDB, viewPort, landingHidden, multiple
 } from './actions';
 import store from './store/store';
 import $ from 'jquery';
@@ -124,14 +124,27 @@ function App() {
   },[])
 
   useEffect(() => {
+    function scrollHandler() { dispatch(setScrollPosition($(window).scrollTop() as number)) }
     function handleResize() {
       let windowScreenWidth = window.screen.width
       let windowScreenHeight = window.screen.height
       let windowInnerWidth = window.innerWidth
-      dispatch(setWidth(windowScreenWidth))
-      dispatch(setHeight(windowScreenHeight))
-      dispatch(setCurrentWidth(windowInnerWidth))
-      dispatch(setPercentageResizedHeight(window.innerHeight / windowScreenHeight))
+
+      //const mini = document.querySelector('body');
+      //const widthwidth = mini && Math.round(mini.getBoundingClientRect().width);
+      //const heightheight = mini && Math.round(mini.getBoundingClientRect().height);
+
+      //console.log(mnw, mnh)
+
+      //if (widthwidth !== null) dispatch(setWidth(widthwidth))
+      //if (widthwidth !== null) dispatch(setCurrentWidth(widthwidth))
+      //if (widthwidth !== null) dispatch(setCurrentWidth(widthwidth))
+
+      //dispatch(setWidth(windowScreenWidth))
+      // dispatch(setHeight(windowScreenHeight))
+      //dispatch(setCurrentWidth(windowInnerWidth))
+      // dispatch(setPercentageResizedHeight(window.innerHeight / windowScreenHeight))
+      //multiple({ dispatch, windowScreenWidth,windowScreenHeight,windowInnerWidth})
       if (window.matchMedia("(orientation: portrait)").matches) {
         if (windowScreenWidth < 425) dispatch(viewPort(`smaPort`))
         else if (windowScreenWidth > 825) dispatch(viewPort(`larPort`))
@@ -142,12 +155,11 @@ function App() {
         else dispatch(viewPort(`medLand`))
       }
     }
-    function scrollHandler() { dispatch(setScrollPosition($(window).scrollTop() as number)) }
-    window.addEventListener("resize", handleResize);
     window.addEventListener("scroll", scrollHandler);
+    window.addEventListener("resize", handleResize);
     return () => {
-      window.removeEventListener("resize", handleResize);
       window.removeEventListener("scroll", scrollHandler);
+      window.removeEventListener("resize", handleResize);
     }
   },[dispatch]);
 
@@ -188,8 +200,6 @@ function App() {
           <CardsMapper retrieveLogin={retrieveLogin} userData={userData} />
           <GoUp />
         </>}/>
-        
-        
         <Route path="/:recipeId" element={<>
           <NavBar />
           <GoogleAuth retrieveLogin={retrieveLogin} userData={userData} />

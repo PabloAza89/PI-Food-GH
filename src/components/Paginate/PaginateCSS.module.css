@@ -4,6 +4,12 @@
   justify-content: center;
   padding: 8px 0px;
   /* margin-left: 50px; */ /* COMPENSATION OF PAGE COUNTER */
+  /* margin-left: max(50px, 1%); */
+  /* margin-left: max(0%, 50px); */
+  /* margin-left: min(1%, 50px); */
+  /* margin-left: max(1%, 50px); */
+  /* margin-left: max(10px, 1%); */
+  /* margin-left: 3%; */
 }
 
 #eachButton {
@@ -15,13 +21,15 @@
   height: 21px !important;
   border-radius: 0px;
   border: 1px solid black;
-  padding-top: 7px !important;
+  /* padding-top: 7px !important; */
+  /* padding: 0px !important; */
+  padding: 0px !important;
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 }
 
 .counter {
   display: flex;
-  width: 100px; /* COMPENSATED UPPER TO CENTER */
+  /* width: 100px; */ /* COMPENSATED UPPER TO CENTER */
   position: relative;
   color: beige;
   /* background: yellow; */ /* DEV */

@@ -49,8 +49,8 @@ const CardsMapper = ({ retrieveLogin, userData }: CardsMapperI)  => {
     (<div
       className={css.background}
       style={{
-        width: `calc(100vw - ${scrollWidth}px)`,
-        marginRight: `${scrollWidth}px`,
+        //width: `calc(100vw - ${scrollWidth}px)`,
+        //marginRight: `${scrollWidth}px`,
         marginTop:
           menuShown && scrollPosition >= 209 ? '46px' :
           !menuShown && scrollPosition >= 109 ? '46px' :

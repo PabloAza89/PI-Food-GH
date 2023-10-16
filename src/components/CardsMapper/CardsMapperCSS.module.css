@@ -5,6 +5,8 @@
   justify-content: center;
   flex-wrap: wrap;
   align-self: center;
+  /* margin-bottom: 20px !important; */
+  padding-bottom: 9px !important;
 }
 
 .notFound {

@@ -691,7 +691,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
   return (
     <div
       className={css.container}
-      style={{ marginRight: hasScroll ? `${16 + scrollWidth}px` : `16px` }}
+      //style={{ marginRight: hasScroll ? `${16 + scrollWidth}px` : `16px` }}
     >
     <div
       className={css.form}
