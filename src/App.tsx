@@ -22,7 +22,7 @@ import {
   fetchRecipesFromAPI, allRecipesLoaded,
   setCurrentWidth, setHeight, setPercentageResizedHeight, setWidth,
   setScrollWidth, setHasScroll, setScrollPosition,
-  getDietsFromDB, viewPort, landingHidden, multiple
+  getDietsFromDB, viewPort, landingHidden, /* multiple */
 } from './actions';
 import store from './store/store';
 import $ from 'jquery';

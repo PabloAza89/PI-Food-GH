@@ -162,14 +162,14 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
       className={css.background}
       style={{
         position: inHome ? 'absolute' : 'fixed', // inHome
-        marginRight:
-          currentWidth <= 800 && inHome && hasScroll ?
-          `${87 + scrollWidth}px` :
-          currentWidth <= 800 && inHome ?
-          `87px` :
-          inHome && hasScroll ?
-          `${16 + scrollWidth}px` :
-          '16px'
+        // marginRight:
+        //   currentWidth <= 800 && inHome && hasScroll ?
+        //   `${87 + scrollWidth}px` :
+        //   currentWidth <= 800 && inHome ?
+        //   `87px` :
+        //   inHome && hasScroll ?
+        //   `${16 + scrollWidth}px` :
+        //   '16px'
       }}
     >
       <Button variant="contained" id={`buttonWidthHelper`} className={css.buttonWidthHelper} sx={{ display: 'none' }}>

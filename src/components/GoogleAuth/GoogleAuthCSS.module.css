@@ -6,7 +6,8 @@
   /* margin-right: 16px; */
   margin-top: 30.5px;
   flex-direction: row;
-  z-index: 4
+  z-index: 4;
+  margin-right: 16px;
 }
 
 .buttonIn {
@@ -71,4 +72,10 @@
   height: 36.5px !important; */
   /* min-height: 0vh !important;
   height: 25px !important; */
+}
+
+@media screen and (max-width: 800px) { /* LESS THAN 800px */
+  .background {
+    margin-right: 87px;
+  }
 }

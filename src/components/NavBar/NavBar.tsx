@@ -94,17 +94,17 @@ const NavBar = ({ recipeCreatedOrEdited }: NavBarI) =>  {
       className={css.background}
       style={{
         position: location.pathname !== `/` ? 'fixed' : 'relative',
-        flexDirection: menuShown ? 'column' : 'row',
-        width: hasScroll ? `calc(100vw - ${scrollWidth}px)` : `100vw`,
-        minHeight: menuShown ? '200px' : '100px',
+        //flexDirection: menuShown ? 'column' : 'row',
+        //width: hasScroll ? `calc(100vw - ${scrollWidth}px)` : `100vw`,
+        //minHeight: menuShown ? '200px' : '100px',
         height: menuShown ? '200px' : '100px',
       }}
     >
       <div
         className={css.logoAndMenuContainer}
         style={{
-          width: currentWidth <= 800 ? `100%` : '200px',
-          height: '100px'
+          //width: currentWidth <= 800 ? `100%` : '200px',
+          //height: '100px'
         }}
       >
         <div className={css.logoTextContainer}>
@@ -139,8 +139,8 @@ const NavBar = ({ recipeCreatedOrEdited }: NavBarI) =>  {
             onClick={() => dispatch(setMenuShown(!menuShown))}
             className={css.menuButton}
             style={{
-              marginRight: `16px`,
-              display: inHome && currentWidth <= 800 ? 'flex' : 'none'
+              //marginRight: `16px`,
+              //display: inHome && currentWidth <= 800 ? 'flex' : 'none'
             }}
           >
             <MenuIcon style={{ fontSize: 40 }} />
@@ -148,16 +148,11 @@ const NavBar = ({ recipeCreatedOrEdited }: NavBarI) =>  {
         </Tooltip>
       </div>
       <div
-        style={{
-          marginRight: currentWidth <= 800 ? 'unset' : '132.5px', // 132.5 ===  "8" 64 8 36.5 16
-          display:
-            location.pathname !== `/` ?
-            'none' :
-            currentWidth <= 800 && !menuShown ?
-            'none' :
-            'flex'
-        }}
         className={css.selectsAndButtons}
+        style={{
+          visibility: location.pathname !== `/` ? 'hidden' : 'visible',
+          display: menuShown ? 'flex' : 'none'
+        }}
       >
         <div
           style={{

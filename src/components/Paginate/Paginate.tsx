@@ -117,7 +117,7 @@ const Paginate = () => {
         </div>
       </Tooltip>
       {/* <div className={css.counter}>1 - 10 of 13</div> */}
-      <div className={css.counter}> {tabChoosen ? tabChoosen : null}{1} - {tabChoosen ? tabChoosen : null}{result[0] && Math.ceil(result[tabChoosen].length/9) } of {Math.ceil(toShow.length/9)}</div>
+      <div className={css.counter}>  {tabChoosen ? tabChoosen : null}{1} - {tabChoosen ? tabChoosen : null}{result[0] && Math.ceil(result[tabChoosen].length/9) } of {Math.ceil(toShow.length/9)}</div>
     </div>
     
     
