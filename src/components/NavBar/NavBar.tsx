@@ -10,7 +10,8 @@ import {
   InputLabel, MenuItem, Select, SelectChangeEvent
 } from '@mui/material/';
 import {
-  setIndexChoosen, filter, setMenuShown
+  setIndexChoosen, filter,
+  setMenuShown, setTabChoosen
 } from '../../actions';
 import Tooltip from '@mui/joy/Tooltip';
 import serverSDDietsArray from '../../db/diets.json'; // SD = Shut Down
@@ -173,7 +174,11 @@ const NavBar = ({ recipeCreatedOrEdited }: NavBarI) =>  {
             onBlur={() => setPlaceholder(`Find recipe..`)}
             InputProps={{ className: css.inputProps }}
             className={css.input}
-            onChange={(e) => {setEntireFilter({...entireFilter, text: e.target.value}); dispatch(setIndexChoosen(0))}}
+            onChange={(e) => {
+              setEntireFilter({...entireFilter, text: e.target.value});
+              dispatch(setIndexChoosen(0));
+              dispatch(setTabChoosen(0));
+            }}
           />
           <Link to="/MyRecipe">
             <Button

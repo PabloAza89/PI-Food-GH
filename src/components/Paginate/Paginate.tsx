@@ -17,6 +17,7 @@ const Paginate = () => {
   const menuShown = useSelector((state: {menuShown: boolean}) => state.menuShown )
   const toShow = useSelector((state: { toShow: recipesI[] }) => state.toShow )
   const tabChoosen = useSelector((state: { tabChoosen: number }) => state.tabChoosen )
+  const currentWidth = useSelector((state: { currentWidth: number }) => state.currentWidth )
 
   let result: any = []
 
@@ -39,9 +40,11 @@ const Paginate = () => {
   })
 
   return (
+    
     <div
       className={css.background}
       style={{
+        marginLeft: currentWidth < 630 ? 'unset' : '50px',
         visibility: (allRecipes[0] === undefined || toShow[0] === undefined) ? 'hidden' : 'visible',
         backdropFilter:
           menuShown && scrollPosition >= 209 ? 'blur(40px)' :
@@ -63,7 +66,7 @@ const Paginate = () => {
         variant="outlined"
         enterDelay={700}
         enterNextDelay={700}
-        leaveDelay={200}
+        leaveDelay={0}
         enterTouchDelay={0}
         title={ tabChoosen === 0 ? `This is the first.` : `Previous` }
         placement="bottom"
@@ -96,7 +99,7 @@ const Paginate = () => {
         variant="outlined"
         enterDelay={700}
         enterNextDelay={700}
-        leaveDelay={200}
+        leaveDelay={0}
         enterTouchDelay={0}
         title={ result.length - 1 === tabChoosen ? `This is the last.` : `Next` }
         placement="bottom"
@@ -113,7 +116,12 @@ const Paginate = () => {
           ><b>{`>`}</b></Button>
         </div>
       </Tooltip>
+      {/* <div className={css.counter}>1 - 10 of 13</div> */}
+      <div className={css.counter}>{tabChoosen ? tabChoosen : null}{1} - {tabChoosen ? tabChoosen : null}{result[0] && Math.ceil(result[tabChoosen].length/9) } of {Math.ceil(toShow.length/9)}</div>
     </div>
+    
+    
+    
   );
 }
 

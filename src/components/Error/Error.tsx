@@ -12,7 +12,7 @@ function Error() {
   const [loaded, setLoaded] = useState<boolean>(false)
 
   return (
-    <div className={css.background} style={{ minHeight: (viewPort === 'smaPort' || viewPort === 'smaLand') ? 'none' : '530px' }}>
+    <div className={css.background} style={{ minHeight: (viewPort === 'smaPort' || viewPort === 'smaLand') ? 'none' : '550px' }}>
       <div className={css.leftRightHelper} style={{ minWidth: (viewPort === 'smaPort' || viewPort === 'smaLand') ? 'none' : '30px' }} />
       <div className={css.mainContainer} style={{ width: viewPort === 'smaPort' ? '90vw' : viewPort === 'smaLand' ? '40vw' : (viewPort === 'medPort' || viewPort === 'medLand') ? '430px' : '500px' }}>
         <div>
