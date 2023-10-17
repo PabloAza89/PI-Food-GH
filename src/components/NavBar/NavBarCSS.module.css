@@ -193,7 +193,11 @@
   }
 }
 
-.upper {
+.upperLower {
+  /* width: 60%; */
+  /* width: 50%; */
+  /* width: 50%; */
+  /* width: unset; */
   background: red; /* DEV */
   display: flex;
   flex-direction: row;
@@ -205,22 +209,8 @@
   justify-content: space-between;
 }
 
-.lower {
-  width: 100%;
-  min-width: 457px;
-  background: lightslategray; /* DEV */
-  display: flex;
-  flex-direction: row;
-  /* justify-content: space-between; */
-  /* align-content: center; */
-  /* align-items: flex-end; */
-  height: 50px !important;
-  align-items: center;
-  justify-content: space-between;
-}
-
 .menuButton {
-  display: none !important;
+  /* display: none; */
   /* display: flex; */
   position: relative !important;
   /* position: absolute !important; */
@@ -246,11 +236,14 @@
   }
   .selectsAndButtons { 
     display: none;
-    width: 100%;
-    margin-right: unset;
+    /* width: 100% !important; */
+    /* width: 100%; */
+    /* margin-right: unset; */
+    width: calc(100% - 16px)
   }
-  .menuButton { display: flex !important }
+  .menuButton { display: flex }
   .logoAndMenuContainer { width: 100% !important }
+  .upperLower { width: 100% }
 }
 
 @media screen and (min-width: 801px) { /* MORE THAN 800px */
@@ -259,9 +252,13 @@
     flex-direction: row;
     display: flex !important;
   }
-  .selectsAndButtons { 
+  .selectsAndButtons {
     display: flex !important;
+    /* width: 100% !important; */
     width: 100%;
+    /* width: 457px !important; */
     margin-right: 132.5px !important; /* 132.5 ===  "8" 64 8 36.5 16 */
   }
+  .menuButton { display: none !important}
+  .upperLower { width: 60% }
 }

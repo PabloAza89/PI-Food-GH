@@ -94,6 +94,7 @@ const NavBar = ({ recipeCreatedOrEdited }: NavBarI) =>  {
       className={css.background}
       style={{
         position: location.pathname !== `/` ? 'fixed' : 'relative',
+        //position: 'fixed',
         //flexDirection: menuShown ? 'column' : 'row',
         //width: hasScroll ? `calc(100vw - ${scrollWidth}px)` : `100vw`,
         //minHeight: menuShown ? '200px' : '100px',
@@ -139,6 +140,9 @@ const NavBar = ({ recipeCreatedOrEdited }: NavBarI) =>  {
             onClick={() => dispatch(setMenuShown(!menuShown))}
             className={css.menuButton}
             style={{
+              //visibility: location.pathname !== `/` ? 'hidden' : 'visible',
+              display: location.pathname !== `/` ? 'none' : 'flex',
+              //display: "flex",
               //marginRight: `16px`,
               //display: inHome && currentWidth <= 800 ? 'flex' : 'none'
             }}
@@ -156,10 +160,10 @@ const NavBar = ({ recipeCreatedOrEdited }: NavBarI) =>  {
       >
         <div
           style={{
-            width: currentWidth <= 800 ? `calc(100% - 8px)` : '50vw',
+            //width: currentWidth <= 800 ? `calc(100% - 8px)` : '50vw',
             height: '100px'
           }}
-          className={css.upper}
+          className={css.upperLower}
         >
           <TextField
             type="text"
@@ -191,8 +195,8 @@ const NavBar = ({ recipeCreatedOrEdited }: NavBarI) =>  {
           </Link>
         </div>
         <div
-          style={{ width: currentWidth <= 800 ? `calc(100% - 8px)` : '50vw' }}
-          className={css.lower}
+          //style={{ width: currentWidth <= 800 ? `calc(100% - 8px)` : '50vw' }}
+          className={css.upperLower}
         >
           <Select
             className={css.containerDietsDishesHealthAlpha}

@@ -162,7 +162,8 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
       className={css.background}
       style={{
         position: inHome ? 'absolute' : 'fixed', // inHome
-        // marginRight:
+        marginRight: inHome ? '87px' : '16px',
+        // marginRight: 16px;
         //   currentWidth <= 800 && inHome && hasScroll ?
         //   `${87 + scrollWidth}px` :
         //   currentWidth <= 800 && inHome ?

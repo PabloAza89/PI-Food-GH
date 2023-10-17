@@ -30,7 +30,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
 
   const hasScroll = useSelector((state: { hasScroll: boolean }) => state.hasScroll)
   const scrollWidth = useSelector((state: { scrollWidth: number }) => state.scrollWidth)
-  const currentWidth = useSelector((state: {currentWidth:number}) => state.currentWidth)
+  //const currentWidth = useSelector((state: {currentWidth:number}) => state.currentWidth)
 
   let titleValueLS: string | null = localStorage.getItem('titleValue');
   let imageValueLS: string | null = localStorage.getItem('imageValue');
@@ -730,7 +730,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
           className={css.tooltipCenter}
           arrow
           variant="outlined"
-          size="lg"
+          size="md"
           enterDelay={5000}
           enterNextDelay={5000}
           leaveDelay={200}
@@ -782,7 +782,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
           className={css.tooltipLeft}
           arrow
           variant="outlined"
-          size="lg"
+          size="md"
           enterDelay={500}
           leaveDelay={200}
           enterTouchDelay={0}
@@ -831,7 +831,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
           className={css.tooltipLeft}
           arrow
           variant="outlined"
-          size="lg"
+          size="md"
           enterDelay={500}
           leaveDelay={200}
           enterTouchDelay={0}
@@ -900,7 +900,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
           className={css.tooltipCenter}
           arrow
           variant="outlined"
-          size="lg"
+          size="md"
           enterDelay={500}
           leaveDelay={200}
           enterTouchDelay={0}
@@ -989,7 +989,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
                 key={index}
                 arrow
                 variant="outlined"
-                size="lg"
+                size="md"
                 enterDelay={500}
                 leaveDelay={200}
                 enterTouchDelay={0}
@@ -997,7 +997,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
                 placement={ index % 2 === 0 ? `bottom-end` : `bottom-start` }
                 title={
                   <div style={{ display: 'flex', flexDirection: 'column', color: '#25252d', background: '#f5f5f9', fontFamily: 'Roboto'}}>
-                    { error.instructions[index] && error.instructions[index].character ? <div style={{ fontWeight: '400', fontSize: '17px' }}>Special characters not allowed in "Instructions" !</div> : null }
+                    { error.instructions[index] && error.instructions[index].character ? <div style={{ fontWeight: '400' }}>Special characters not allowed in "Instructions" !</div> : null }
                     { error.instructions[index] && error.instructions[index].character ? <div style={{ color: '#42424f' }}>Allowed characters:</div> : null }
                     { error.instructions[index] && error.instructions[index].character ? <div style={{ color: '#42424f', textAlign: 'center' }}><b>, ; . : - ! ¡ ¿ ? ' " ( ) [ ] á Á é É í Í ó Ó ú Ú ü Ü ñ Ñ</b></div> : null }
                     { error.instructions[index] && error.instructions[index].badWord ? <div style={{ fontWeight: '400' }}><em>Please, remove </em><mark>highlighted</mark> <em>bad words on step {index + 1}.</em></div> : null }
@@ -1019,12 +1019,6 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
                     disabled={allDisabled}
                     shrink={false}
                     className={css.inputShownInstructions}
-                    style={{
-                      width:
-                        currentWidth <= 650 ?
-                        `calc(100% - 298px)` : // 100% - 113px - 57px - 10px - 40px - 10px - 40px - 28px
-                        `calc(100% - 358px)`   // 100% - 113px - 57px - 10px - 60px - 10px - 80px - 28px
-                    }}
                   >{ stepsState[index] }</InputLabel>
                   <TextField
                     id={`${index}instructions`}
@@ -1068,23 +1062,15 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
               >
                 <div
                   className={css.buttonNewHelper}
-                  style={{
-                    minWidth: currentWidth <= 650 ? '40px' : '60px',
-                    width: currentWidth <= 650 ? '40px' : '60px',
-                  }}
                 >
                   <Button
                     variant="contained"
                     disabled={allDisabled ? true : stepsState.length >= 10 ? true : false}
                     id={`${index}`}
                     className={css.buttonNew}
-                    style={{
-                      minWidth: currentWidth <= 650 ? '40px' : '60px',
-                      width: currentWidth <= 650 ? '40px' : '60px',
-                    }}
                     sx={{ background: 'green' }}
                     onClick={(e) => { handlerAddInstructions({ index: parseInt((e.target as HTMLInputElement).id, 10 )}) }}
-                  >{ currentWidth <= 650 ? `✔️` : `ADD` }
+                  >
                   </Button>
                 </div>
               </Tooltip>
@@ -1102,23 +1088,15 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
               >
                 <div
                   className={css.buttonDeleteHelper}
-                  style={{
-                    minWidth: currentWidth <= 650 ? '40px' : '80px',
-                    width: currentWidth <= 650 ? '40px' : '80px',
-                  }}
                 >
                   <Button
                     variant="contained"
                     disabled={allDisabled ? true : stepsState.length === 1 ? true : false}
                     id={`${index}`}
                     className={css.buttonDelete}
-                    style={{
-                      minWidth: currentWidth <= 650 ? '40px' : '80px',
-                      width: currentWidth <= 650 ? '40px' : '80px',
-                    }}
                     sx={{ background: 'red' }}
                     onClick={(e) => { handlerDeleteInstructions({ index: parseInt((e.target as HTMLInputElement).id, 10) }) }}
-                  >{ currentWidth <= 650 ? `❌` : `DELETE` }
+                  >
                   </Button>
                 </div>
               </Tooltip>

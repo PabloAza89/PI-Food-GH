@@ -255,7 +255,7 @@
 }
 
 .inputShownInstructions {
-  /* background: lightblue; */ /* DEV */
+  background: lightblue; /* DEV */
   display: flex;
   flex-wrap: wrap !important; /* MULTILINE */
   white-space: pre-wrap !important; /* MULTILINE */
@@ -307,11 +307,10 @@
   width: calc(100% - 113px);
   display: flex;
   flex-direction: column;
-  
 }
 
 .eachStep {
-  /* background: salmon !important; */ /* DEV */
+  background: salmon !important; /* DEV */
   z-index: 1;
   display: flex;
   flex-direction: row;
@@ -351,24 +350,30 @@
 /* NEXT HELPS TOOLTIP WHEN
 BUTTON IS DISABLED */
 
-.buttonNewHelper { 
-  /* min-width: 80px;
-  width: 80px; */
-  height: 36.5px;
-  color: white;
+.buttonNewHelper {
   align-self: center;
-  margin-left: 10px !important;
-  /* margin-right: 10px !important; */
-  /* margin-right: 10px !important; */
 }
 
 .buttonNew {
+  display: flex;
+  position: relative;
   white-space: nowrap;
   height: 36.5px;
+  /* max-width: 36.5px; */
   color: white;
   align-self: center;
+  /* padding: 0px !important; */
+  /* padding: 6px !important; */
   min-width: 0px !important;
+  min-height: 0px !important;
+  margin-left: 10px !important;
+  margin-right: 10px !important;
+  /* width: 40px !important */
 }
+
+/* .buttonNew:after {
+  content: none !important
+} */
 
 .buttonNew:hover {
   background: #047a04 !important
@@ -378,16 +383,7 @@ BUTTON IS DISABLED */
 BUTTON IS DISABLED */
 
 .buttonDeleteHelper {
-  /* min-width: 80px;
-  width: 80px; */
-  height: 36.5px;
-  color: white;
   align-self: center;
-  padding: 0px !important;
-  margin-left: 10px !important;
-  /* margin-right: 1px !important; */
-  /* margin-left: 5px !important; */
-  /* margin-right: 10px !important; */
 }
 
 .buttonDelete {
@@ -395,6 +391,7 @@ BUTTON IS DISABLED */
   height: 36.5px;
   color: white;
   align-self: center;
+  /* padding: 0px !important; */
   min-width: 0px !important;
 }
 
@@ -417,4 +414,48 @@ BUTTON IS DISABLED */
 .buttonClearSave {
   /* margin: 0px 7px; */
   margin: 0px 5px !important;
+}
+
+@media screen and (max-width: 650px) { /* LESS THAN 650px */
+  .buttonNew {
+    max-width: 40px !important;
+    min-width: 40px !important;
+    width: 40px !important;
+  }
+  .buttonNew:after {
+    content: '✔️';
+  }
+  .buttonDelete {
+    max-width: 40px !important;
+    min-width: 40px !important;
+    width: 40px !important;
+  }
+  .buttonDelete:after {
+    content: '❌';
+  }
+  .inputShownInstructions {
+    width: calc(100% - 298px); /* 100% - 113px - 57px - 10px - 40px - 10px - 40px - 28px */
+  }
+}
+
+@media screen and (min-width: 651px) { /* MORE THAN 651px */
+  .buttonNew {
+    max-width: 60px !important;
+    min-width: 60px !important;
+    width: 60px !important;
+  }
+  .buttonNew:after {
+    content: 'ADD';
+  }
+  .buttonDelete {
+    max-width: 80px !important;
+    min-width: 80px !important;
+    width: 80px !important;
+  }
+  .buttonDelete:after {
+    content: 'DELETE';
+  }
+  .inputShownInstructions {
+    width: calc(100% - 358px); /* 100% - 113px - 57px - 10px - 60px - 10px - 80px - 28px */
+  }
 }
