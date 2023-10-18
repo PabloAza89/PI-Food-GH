@@ -28,10 +28,6 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
   const location = useLocation()
   const navigate = useNavigate()
 
-  const hasScroll = useSelector((state: { hasScroll: boolean }) => state.hasScroll)
-  const scrollWidth = useSelector((state: { scrollWidth: number }) => state.scrollWidth)
-  //const currentWidth = useSelector((state: {currentWidth:number}) => state.currentWidth)
-
   let titleValueLS: string | null = localStorage.getItem('titleValue');
   let imageValueLS: string | null = localStorage.getItem('imageValue');
   let healthValueLS: string | null = localStorage.getItem('healthValue');
@@ -866,7 +862,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
       </div>
       <div className={css.eachRow}>
         <div className={css.text}>Dishes:</div>
-        <FormControl className={css.titleAndTextFieldContainer}>
+        <FormControl className={css.selectContainer}>
           <InputLabel className={css.label}>Select Dishes</InputLabel>
           <Select
             className={css.select}
@@ -923,7 +919,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
             </div>
           }
         >
-          <div className={css.titleAndTextFieldContainer}>
+          <div className={css.summaryContainer}>
             <InputLabel
               id={"targetSummary"}
               disabled={allDisabled}
@@ -948,7 +944,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
       </div>
       <div className={css.eachRow}>
         <div className={css.text}>Diets:</div>
-        <FormControl className={css.titleAndTextFieldContainer}>
+        <FormControl className={css.selectContainer}>
           <InputLabel className={css.label}>Select Diets</InputLabel>
           <Select
             className={css.select}

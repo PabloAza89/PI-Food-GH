@@ -25,7 +25,8 @@ const CardsMapper = ({ retrieveLogin, userData }: CardsMapperI)  => {
 
   let result: any = []
 
-  const chunkSize = 90; // 90 === 9 * 10 === 10 TABS OF 9
+  //const chunkSize = 90; // 90 === 9 * 10 === 10 TABS OF 9
+  const chunkSize = 45; // 90 === 9 * 10 === 10 TABS OF 9
   for (let i = 0; i < toShow.length; i += chunkSize) {
     result.push(toShow.slice(i, i + chunkSize))
   }

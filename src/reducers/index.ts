@@ -3,6 +3,7 @@ import { recipesI, serverStatusI } from '../interfaces/interfaces';
 
 interface initialStateI {
   serverStatus: serverStatusI,
+  serverStatusShown: boolean,
   allRecipes: recipesI[],
   toShow: recipesI[],
   allDiets: any[],
@@ -29,6 +30,7 @@ interface initialStateI {
 
 const initialState: initialStateI = {
   serverStatus: { online: true, validKey: true, try: 1 },
+  serverStatusShown: false,
   allRecipes: [],
   toShow: [],
   allDiets: [],
@@ -231,6 +233,11 @@ const reducer = (state = initialState, action: {type: string; payload: any}) => 
       return {
         ...state,
         landingHidden: action.payload
+      };
+    case 'SET_SERVER_STATUS_SHOWN':
+      return {
+        ...state,
+        serverStatusShown: action.payload
       };
     default:
       return state

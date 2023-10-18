@@ -162,11 +162,9 @@ export function landingHidden(landingHidden:boolean) {
   }
 };
 
-// export function multiple({ dispatch, windowScreenWidth,windowScreenHeight,windowInnerWidth }: any) {
-//   return (dispatch:any) => {
-//         dispatch(setWidth(windowScreenWidth))
-//         dispatch(setHeight(windowScreenHeight))
-//         dispatch(setCurrentWidth(windowInnerWidth))
-//         dispatch(setPercentageResizedHeight(window.innerHeight / windowScreenHeight))
-//     }
-// };
+export function setServerStatusShown(payload:boolean) {
+  return {
+    type: 'SET_SERVER_STATUS_SHOWN',
+    payload: payload
+  }
+};

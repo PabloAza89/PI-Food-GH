@@ -124,7 +124,20 @@
   } */
 }
 
-.titleAndTextFieldContainer {
+.summaryContainer {
+  /* width: calc(100% - 113px) !important */
+  background: salmon; /* DEV */
+  display: flex;
+  position: relative;
+  width: 100% !important;
+  /* max-width: calc(100% - 123px) !important; */
+}
+
+.summaryContainer ::placeholder {
+  color: rgba(245, 245, 220, 0.3) !important
+}
+
+.selectContainer {
   /* width: calc(100% - 113px) !important */
   display: flex;
   position: relative;
@@ -132,7 +145,7 @@
   /* max-width: calc(100% - 123px) !important; */
 }
 
-.titleAndTextFieldContainer ::placeholder {
+.selectContainer ::placeholder {
   color: rgba(245, 245, 220, 0.3) !important
 }
 
@@ -219,7 +232,9 @@
 }
 
 .inputShownSummary {
-  display: flex !important;
+  background: lightblue; /* DEV */
+  display: flex;
+  /* display: flex !important; */
   flex-wrap: wrap !important; /* MULTILINE */
   white-space: pre-wrap !important; /* MULTILINE */
   overflow-wrap: break-word; /* MULTILINE */
@@ -228,6 +243,7 @@
   position: absolute !important;
   /* width: calc(100% - 113px - 28px); */
   width: calc(100% - 28px);
+  color: transparent !important; /* NO GRAY COLOR */
   /* color: rgba(245, 245, 220, 0.85) !important; */ /* WHEN WRITING */
 }
 
@@ -263,6 +279,7 @@
   margin-left: 14px !important;
   padding: 16.5px 0px 16.5px 0px !important;
   position: absolute !important;
+  color: transparent !important; /* NO GRAY COLOR */
   /* color: transparent !important; */
 }
 
@@ -352,6 +369,10 @@ BUTTON IS DISABLED */
 
 .buttonNewHelper {
   align-self: center;
+  /* background: gray; */ /* DEV */
+  /* width: 40px; */
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .buttonNew {
@@ -359,16 +380,10 @@ BUTTON IS DISABLED */
   position: relative;
   white-space: nowrap;
   height: 36.5px;
-  /* max-width: 36.5px; */
   color: white;
   align-self: center;
-  /* padding: 0px !important; */
-  /* padding: 6px !important; */
   min-width: 0px !important;
   min-height: 0px !important;
-  margin-left: 10px !important;
-  margin-right: 10px !important;
-  /* width: 40px !important */
 }
 
 /* .buttonNew:after {

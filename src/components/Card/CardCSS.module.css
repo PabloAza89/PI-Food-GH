@@ -2,7 +2,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 450px;
+  /* width: 450px; */
+  /* width: 90%; */
   height: 225px;
   margin: 9px 9px 9px 9px;
   justify-content: center;
@@ -32,6 +33,10 @@
   margin-left: 5px
 }
 
+.onlyEdit {
+  margin-top: 5px !important;
+}
+
 .iconEdit {
   padding: 0vw !important;
   width: 21px !important;
@@ -44,6 +49,14 @@
   height: 23px !important;
 }
 
+.imageOrTitleContainer {
+  /* background: gray; */ /* DEV */
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  text-decoration: none;
+}
+
 .image {
   -webkit-touch-callout: none !important;
   -webkit-user-select: none !important;
@@ -52,7 +65,7 @@
   -ms-user-select: none !important;
   user-select: none !important;
   display: flex;
-  width: 280px;
+  /* width: 280px; */
   height: 115px;
 }
 
@@ -71,7 +84,8 @@
   text-overflow: ellipsis;
   color: antiquewhite;
   font-weight: 700 ;
-  width: 417px;
+  /* width: 417px; */
+  width: 50%;
   height: 25px;
   text-align: center;
   letter-spacing: normal;
@@ -91,7 +105,8 @@
   overflow: hidden;
   text-overflow: ellipsis;
   color: antiquewhite;
-  width: 417px;
+  /* width: 417px; */
+  width: 90%;
   height: 25px;
   text-align: center;
   letter-spacing: normal;

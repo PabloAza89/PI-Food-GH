@@ -1,22 +1,25 @@
 import { useState, useEffect } from "react";
 import css from "./ServerStatusCSS.module.css";
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Button } from '@mui/material/';
 import { easings } from '../../commons/easingsCSS';
 import $ from 'jquery';
 import { serverStatusI } from '../../interfaces/interfaces';
+import { setServerStatusShown } from '../../actions';
 
 const ServerStatus = () =>  {
 
+  const dispatch = useDispatch()
   easings() // Jquery easings..
 
   const serverStatus = useSelector((state: { serverStatus: serverStatusI }) => state.serverStatus)
+  const serverStatusShown = useSelector((state: { serverStatusShown: boolean }) => state.serverStatusShown)
 
-  const [ show, setShow ] = useState<boolean>(false)
+  //const [ show, setShow ] = useState<boolean>(false)
 
   useEffect(() => {
     $(function() {
-      if (show) { // show -> hidden
+      if (serverStatusShown) { // show -> hidden
         $(`.buttonShow`)
           .stop()
           .css("left", "auto")
@@ -36,7 +39,7 @@ const ServerStatus = () =>  {
           .css("left", "auto")
           .css("right", "310px")
       }
-      else if (!show) { // hidden -> show
+      else if (!serverStatusShown) { // hidden -> show
         $(`.buttonShow`)
           .stop()
           .css("left", "auto")
@@ -57,14 +60,14 @@ const ServerStatus = () =>  {
           .css("right", "-60px")
       }
     })
-  },[show])
+  },[serverStatusShown])
 
   return (
     <div className={css.background}>
       <Button
         className={`buttonShow`}
         id={css.button}
-        onClick={() => { setShow(!show) }}
+        onClick={() => { dispatch(setServerStatusShown(!serverStatusShown)) }}
       >
         <div className={css.buttonTypo}>
           { `SERVER STATUS` }

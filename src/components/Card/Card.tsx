@@ -28,6 +28,8 @@ const Card = ({
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const viewPort = useSelector((state: { viewPort: string }) => state.viewPort )
+
   const reloadRecipes = async () => {
     dispatch(getDietsFromDB())
     dispatch(getDishesFromDB())
@@ -64,18 +66,27 @@ const Card = ({
     .catch((err) => { console.error(err) })
   }
 
+  console.log("viewPort", viewPort)
+
   return (
-    <div className={css.background}>
+    <div 
+      className={css.background}
+      style={{
+        width: viewPort === 'smaPort' ? '90%' : '450px'
+      }}
+    >
       <div
         className={css.editDeleteContainer}
         style={{
           overflow: 'hidden',
-          display: userRecipe && userData.email === email ? 'flex' : 'none'
+          display: userRecipe && userData.email === email ? 'flex' : 'none',
+          flexDirection: viewPort === 'smaPort' ? 'column-reverse' : 'row'
         }}
       >
         <Button
           variant="contained"
           id={css.buttonEditDelete}
+          className={css.onlyEdit}
           onClick={() => handleEdit({
             navigate, id, title, image, healthScore,
             diets, email, dishTypes, userRecipe,
@@ -92,9 +103,12 @@ const Card = ({
           <ClearIcon className={css.iconDelete} />
         </Button>
       </div>
-      <Link to={`/${id}`}>
+      <Link className={css.imageOrTitleContainer} to={`/${id}`}>
         <img
           className={css.image}
+          style={{
+            width: viewPort === 'smaPort' ? 'calc(100% - 80px)' : '450px'
+          }}
           src={
             brokenImage ?
             notAvailable :
@@ -105,9 +119,10 @@ const Card = ({
             image
           }
           alt=""
-        />
+        >
+        </img>
       </Link>
-      <Link style={{ textDecoration: 'none' }} to={`/${id}`}>
+      <Link className={css.imageOrTitleContainer} to={`/${id}`}>
         <Tooltip
           arrow
           enterDelay={700}

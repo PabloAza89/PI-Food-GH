@@ -76,10 +76,7 @@ export default function Detail({ userData, retrieveLogin }: any) {
             id={css.editDeleteContainer}
             style={{
               display:
-                recipe.userRecipe && userData.email === recipe.email ?
-                `flex` :
-                `none`,
-              flexDirection: currentWidth <= 535 ? 'row-reverse' : 'column'
+                recipe.userRecipe && userData.email === recipe.email ? `flex` : `none`
             }}
           >
             <Button
@@ -105,7 +102,8 @@ export default function Detail({ userData, retrieveLogin }: any) {
           <img
             className={css.image}
             style={{
-              marginTop: currentWidth <= 535 && userData.email === recipe.email ? '24px' : '0px' // 24 === 40 - 16
+              //marginTop: currentWidth <= 535 && userData.email === recipe.email ? '24px' : '0px' // 24 === 40 - 16
+              marginTop: userData.email === recipe.email ? '24px' : '0px' // 24 === 40 - 16
             }}
             src={
               brokenImage ?

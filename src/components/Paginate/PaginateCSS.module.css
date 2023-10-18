@@ -1,8 +1,13 @@
 .background {
   display: flex;
+  flex-direction: row !important;
   z-index: 1;
   justify-content: center;
   padding: 8px 0px;
+  background: lightcoral; /* DEV */
+  /* width: fit-content; */
+  display: flex;
+  align-self: center;
   /* margin-left: 50px; */ /* COMPENSATION OF PAGE COUNTER */
   /* margin-left: max(50px, 1%); */
   /* margin-left: max(0%, 50px); */
@@ -14,12 +19,14 @@
 
 #eachButton {
   display: flex;
+  flex-direction: row !important;
   padding-top: 8.49px !important;
   color: black;
   min-width: 0px !important;
   min-height: 0px !important;
   width: 30px !important;
   height: 21px !important;
+  line-height: 21px !important;
   border-radius: 0px;
   border: 1px solid black;
   /* padding-top: 7px !important; */
@@ -27,14 +34,40 @@
   padding: 0px !important;
   /* margin: 0px !important; */
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  align-items: baseline;
+  /* descent-override: 15% !important; */
+}
+
+.test {
+  display: flex !important;
+  flex-direction: row !important;
 }
 
 .counter {
+  /* display: flex; */
+  width: 110px; /* COMPENSATED UPPER TO CENTER */
+  /* position: relative; */
+  flex-direction: row !important;
   display: flex;
-  /* width: 100px; */ /* COMPENSATED UPPER TO CENTER */
-  position: relative;
+  position: absolute;
   color: beige;
-  /* background: yellow; */ /* DEV */
+  background: lightslategray; /* DEV */
   justify-content: center;
   font-weight: 500;
+  justify-content: flex-start;
+  right: -110px
+}
+
+@media screen and (max-width: 956px) { /* LESS THAN 956px = TWO CARDS */
+  .background {
+    /* width: 450px; */
+  }
+  .counter {
+    position: relative !important;
+    right: unset !important;
+  }
+}
+
+@media screen and (min-width: 957px) { /* MORE THAN 957px */
+
 }

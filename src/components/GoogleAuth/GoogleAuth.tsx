@@ -65,6 +65,33 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
             })
           }
         })
+        .catch(rej => {
+          $(`#buttonIn`)
+            .stop() // RETURN TO SMALL WIDTH
+            .animate({ width: '30px' }, { queue: false, easing: 'easeOutBounce', duration: 1000 , complete: () => setShown(false) })
+          if (rej.message === `Failed to fetch`) {
+            Swal.fire({
+              title: `It looks like server it's sleeping..`,
+              html: `Please, try again later.<br>We are sorry.`,
+              icon: 'info',
+              showConfirmButton: false,
+              showDenyButton: false,
+              showCancelButton: false,
+              timer: 4000,
+            })
+          } else {
+            console.log(rej)
+            Swal.fire({
+              title: `There was some error.. `,
+              text: `Please try again.`,
+              icon: 'info',
+              showConfirmButton: false,
+              showDenyButton: false,
+              showCancelButton: false,
+              timer: 3000,
+            })
+          }
+        })
       })
       .catch(rej => { console.log(rej) })
     },

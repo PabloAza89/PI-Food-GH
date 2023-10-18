@@ -57,7 +57,7 @@ function App() {
     fd_tkn: ''
   })
 
-  const retrieveLogin = (props: any) => setUserData({ 
+  const retrieveLogin = (props: any) => setUserData({
     email: props.email,
     fd_tkn: props.fd_tkn
   })
@@ -123,28 +123,18 @@ function App() {
     // }
   },[])
 
+  // let windowScreenWidth = window.screen.width
+  // let windowScreenHeight = window.screen.height
+
   useEffect(() => {
+    console.log("target ejecutado")
+    console.log("target ejecutado window.screen.width", window.screen.width)
+    //console.log("target ejecutado window.innerWidth", window.innerWidth)
     function scrollHandler() { dispatch(setScrollPosition($(window).scrollTop() as number)) }
     function handleResize() {
       let windowScreenWidth = window.screen.width
       let windowScreenHeight = window.screen.height
-      let windowInnerWidth = window.innerWidth
-
-      //const mini = document.querySelector('body');
-      //const widthwidth = mini && Math.round(mini.getBoundingClientRect().width);
-      //const heightheight = mini && Math.round(mini.getBoundingClientRect().height);
-
-      //console.log(mnw, mnh)
-
-      //if (widthwidth !== null) dispatch(setWidth(widthwidth))
-      //if (widthwidth !== null) dispatch(setCurrentWidth(widthwidth))
-      //if (widthwidth !== null) dispatch(setCurrentWidth(widthwidth))
-
-      //dispatch(setWidth(windowScreenWidth))
-      // dispatch(setHeight(windowScreenHeight))
-      //dispatch(setCurrentWidth(windowInnerWidth))
-      // dispatch(setPercentageResizedHeight(window.innerHeight / windowScreenHeight))
-      //multiple({ dispatch, windowScreenWidth,windowScreenHeight,windowInnerWidth})
+      //let windowInnerWidth = window.innerWidth
       if (window.matchMedia("(orientation: portrait)").matches) {
         if (windowScreenWidth < 425) dispatch(viewPort(`smaPort`))
         else if (windowScreenWidth > 825) dispatch(viewPort(`larPort`))
@@ -161,7 +151,31 @@ function App() {
       window.removeEventListener("scroll", scrollHandler);
       window.removeEventListener("resize", handleResize);
     }
-  },[dispatch]);
+  //},[dispatch]);
+  },[window.screen.width]);
+
+  // useEffect(() => {
+  //   console.log("target ejecutado window.screen.width", window.screen.width)
+  // })
+  
+
+  useEffect(() => {
+    // console.log("target ejecutado")
+    // console.log("target ejecutado window.screen.width", window.screen.width)
+    
+    let windowScreenWidth = window.screen.width
+    let windowScreenHeight = window.screen.height
+    //let windowInnerWidth = window.innerWidth
+    if (window.matchMedia("(orientation: portrait)").matches) {
+      if (windowScreenWidth < 425) dispatch(viewPort(`smaPort`))
+      else if (windowScreenWidth > 825) dispatch(viewPort(`larPort`))
+      else dispatch(viewPort(`medPort`))
+    } else {
+      if (windowScreenHeight < 425) dispatch(viewPort(`smaLand`))
+      else if (windowScreenHeight > 825) dispatch(viewPort(`larLand`))
+      else dispatch(viewPort(`medLand`))
+    }
+  },[]);
 
   useEffect(() => {
     dispatch(setHasScroll(window.innerWidth !== $('body').width() ? true : false))
