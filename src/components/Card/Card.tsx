@@ -69,10 +69,10 @@ const Card = ({
   console.log("viewPort", viewPort)
 
   return (
-    <div 
+    <div
       className={css.background}
       style={{
-        width: viewPort === 'smaPort' ? '90%' : '450px'
+        //width: viewPort === 'smaPort' ? '90%' : '450px'
       }}
     >
       <div
@@ -80,7 +80,7 @@ const Card = ({
         style={{
           overflow: 'hidden',
           display: userRecipe && userData.email === email ? 'flex' : 'none',
-          flexDirection: viewPort === 'smaPort' ? 'column-reverse' : 'row'
+          /* flexDirection: viewPort === 'smaPort' ? 'column-reverse' : 'row' */
         }}
       >
         <Button
@@ -107,7 +107,7 @@ const Card = ({
         <img
           className={css.image}
           style={{
-            width: viewPort === 'smaPort' ? 'calc(100% - 80px)' : '450px'
+            //width: viewPort === 'smaPort' ? 'calc(100% - 80px)' : '350px'
           }}
           src={
             brokenImage ?

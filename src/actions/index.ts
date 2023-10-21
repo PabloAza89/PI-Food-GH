@@ -85,13 +85,6 @@ export function setTabChoosen(payload: any) {
   }
 };
 
-export function addNew(payload: any) {
-  return {
-    type: 'ADD_NEW',
-    payload: payload
-  }
-};
-
 export function setWidth(setWidth:number) {
   return {
     type: 'SET_WIDTH',
@@ -117,20 +110,6 @@ export function setCurrentWidth(setCurrentWidth:number) {
   return {
     type: 'CURRENT_WIDTH',
     payload: setCurrentWidth
-  }
-};
-
-export function setPercentageResizedHeight(setPercentageResizedHeight:number) {
-  return {
-    type: 'PERCENTAGE_RESIZED_HEIGHT',
-    payload: setPercentageResizedHeight
-  }
-};
-
-export function setScrollWidth(setScrollWidth:number) {
-  return {
-    type: 'SET_SCROLL_WIDTH',
-    payload: setScrollWidth
   }
 };
 

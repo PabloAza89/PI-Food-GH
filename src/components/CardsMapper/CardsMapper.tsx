@@ -15,18 +15,22 @@ const CardsMapper = ({ retrieveLogin, userData }: CardsMapperI)  => {
 
   const dispatch = useDispatch()
 
+  document.addEventListener('scroll', () => {
+    document.documentElement.dataset.scroll = window.scrollY.toString();
+  });
+
   const indexChoosen = useSelector((state: {indexChoosen: number}) => state.indexChoosen)
   const tabChoosen = useSelector((state: { tabChoosen: number }) => state.tabChoosen )
-  const scrollWidth = useSelector((state: {scrollWidth: number}) => state.scrollWidth)
-  const scrollPosition = useSelector((state: {scrollPosition: number}) => state.scrollPosition)
   const menuShown = useSelector((state: {menuShown: boolean}) => state.menuShown)
   const toShow = useSelector((state: { toShow: recipesI[] }) => state.toShow)
   const allRecipes = useSelector((state: { allRecipes: recipesI[] }) => state.allRecipes)
+  const viewPort = useSelector(( state: { viewPort: string } ) => state.viewPort)
 
   let result: any = []
 
   //const chunkSize = 90; // 90 === 9 * 10 === 10 TABS OF 9
-  const chunkSize = 45; // 90 === 9 * 10 === 10 TABS OF 9
+  //const chunkSize = 45; // 90 === 9 * 10 === 10 TABS OF 9
+  const chunkSize = viewPort.slice(0,3) === ('sma') ? 45 : 90;
   for (let i = 0; i < toShow.length; i += chunkSize) {
     result.push(toShow.slice(i, i + chunkSize))
   }
@@ -52,10 +56,10 @@ const CardsMapper = ({ retrieveLogin, userData }: CardsMapperI)  => {
       style={{
         //width: `calc(100vw - ${scrollWidth}px)`,
         //marginRight: `${scrollWidth}px`,
-        marginTop:
-          menuShown && scrollPosition >= 209 ? '46px' :
-          !menuShown && scrollPosition >= 109 ? '46px' :
-          '0px'
+        // marginTop:
+        //   menuShown && scrollPosition >= 209 ? '46px' :
+        //   !menuShown && scrollPosition >= 109 ? '46px' :
+        //   '0px'
       }}
     >
       {arraySplitedBy9.map((e:any) =>
@@ -78,10 +82,10 @@ const CardsMapper = ({ retrieveLogin, userData }: CardsMapperI)  => {
     </div>) :
     allRecipes[0] !== undefined && toShow[0] === undefined ?
     (<div>
-      <div className={css.notFound}>No recipe was found !</div>
+      <div className={css.notFoundOrLoading}>No recipe was found !</div>
     </div>) :
     (<div>
-      <div className={css.notFound}>Loading..</div>
+      <div className={css.notFoundOrLoading}>Loading..</div>
     </div>)
 }
 

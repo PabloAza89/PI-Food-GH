@@ -12,17 +12,18 @@ const Paginate = () => {
 
   const allRecipes = useSelector((state: { allRecipes: recipesI[] }) => state.allRecipes)
   const indexChoosen = useSelector((state: {indexChoosen: number}) => state.indexChoosen )
-  const scrollWidth = useSelector((state: {scrollWidth: number}) => state.scrollWidth )
   const scrollPosition = useSelector((state: {scrollPosition: number}) => state.scrollPosition )
   const menuShown = useSelector((state: {menuShown: boolean}) => state.menuShown )
   const toShow = useSelector((state: { toShow: recipesI[] }) => state.toShow )
   const tabChoosen = useSelector((state: { tabChoosen: number }) => state.tabChoosen )
-  const currentWidth = useSelector((state: { currentWidth: number }) => state.currentWidth )
+  const viewPort = useSelector(( state: { viewPort: string } ) => state.viewPort)
 
   let result: any = []
 
   //const chunkSize = 90; // 90 === 9 * 10 === 10 TABS OF 9
-  const chunkSize = 45; // 90 === 9 * 10 === 10 TABS OF 9
+  //const chunkSize = 45; // 90 === 9 * 10 === 10 TABS OF 9
+  const chunkSize = viewPort.slice(0,3) === ('sma') ? 45 : 90; // 90 === 9 * 10 === 10 TABS OF 9
+  
   for (let i = 0; i < toShow.length; i += chunkSize) {
     result.push(toShow.slice(i, i + chunkSize))
   }
@@ -44,21 +45,10 @@ const Paginate = () => {
     <div
       className={css.background}
       style={{
-        //marginLeft: currentWidth < 630 ? 'unset' : '50px',
-        visibility: (allRecipes[0] === undefined || toShow[0] === undefined) ? 'hidden' : 'visible',
         backdropFilter:
           menuShown && scrollPosition >= 209 ? 'blur(40px)' :
           !menuShown && scrollPosition >= 109 ? 'blur(40px)' :
-          'blur(0px)',
-        position:
-          menuShown && scrollPosition >= 209 ? 'fixed' :
-          !menuShown && scrollPosition >= 109 ? 'fixed' :
-          'relative',
-        marginTop:
-          menuShown && scrollPosition >= 209 ? '0px' :
-          !menuShown && scrollPosition >= 109 ? '0px' :
-          '9px',
-        //width: `calc(100vw - ${scrollWidth}px)`
+          'blur(0px)'
       }}
     >
       <div className={css.test}>
@@ -93,7 +83,19 @@ const Paginate = () => {
               value={i}
               onClick={(e) => dispatch(setIndexChoosen(Number((e.target as HTMLInputElement).value)))}
             //>{tabChoosen ? tabChoosen : null}{++i}</Button>
-            >{ (5 * tabChoosen) + ++i}</Button>
+            //>{ (5 * tabChoosen) + ++i}</Button>
+            >
+              {
+                viewPort.slice(0,3) === ('sma') ?
+                ((5 * tabChoosen) + ++i) :
+                tabChoosen ? tabChoosen : null
+              }
+              {
+                viewPort.slice(0,3) !== ('sma') ?
+                ++i :
+                null
+              }
+            </Button>
           )
         })}
         <Tooltip

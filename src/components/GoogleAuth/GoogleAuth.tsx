@@ -13,13 +13,11 @@ import $ from 'jquery';
 const GoogleAuth = ({ retrieveLogin, userData }: any) => {
 
   const dispatch = useDispatch()
-  easings() // Jquery easings..
+  easings() // Jquery easings..w
 
-  const hasScroll = useSelector((state: {hasScroll:boolean}) => state.hasScroll)
-  const scrollWidth = useSelector((state: {scrollWidth:number}) => state.scrollWidth)
-  const currentWidth = useSelector((state: {currentWidth:number}) => state.currentWidth)
   const [ popUp, setPopUp ] = useState<boolean>(false)
   const inHome = useMatch("/")?.pattern.path === "/" ? true : false;// "/" === Home
+  const menuShown = useSelector((state: {menuShown:boolean}) => state.menuShown)
 
   const login = useGoogleLogin({
     onSuccess: (codeResponse) => {
@@ -145,6 +143,18 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
           .animate({ width: buttonHelperWidth }, { queue: false, easing: 'easeOutBounce', duration: 1000 })
       }
     })
+    .on( "click", function() {
+      if (clicked) {
+        $(this)
+          .stop()
+      }
+      else {
+        setShown(true)
+        $(this) // NECESSARY FOR ANIMATION WORKS PROPERLY
+          .stop() // NECESSARY FOR ANIMATION WORKS PROPERLY
+          .animate({ width: buttonHelperWidth }, { queue: false, easing: 'easeOutBounce', duration: 1000 })
+      }
+    })
     .on("mouseleave", function() {
       if (clicked) {
         $(this)
@@ -188,24 +198,19 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
     <div
       className={css.background}
       style={{
-        position: inHome ? 'absolute' : 'fixed', // inHome
-        marginRight: inHome ? '87px' : '16px',
-        // marginRight: 16px;
-        //   currentWidth <= 800 && inHome && hasScroll ?
-        //   `${87 + scrollWidth}px` :
-        //   currentWidth <= 800 && inHome ?
-        //   `87px` :
-        //   inHome && hasScroll ?
-        //   `${16 + scrollWidth}px` :
-        //   '16px'
+        position: inHome ? 'absolute' : 'fixed',
+        visibility: menuShown ? 'visible' : 'hidden'
       }}
     >
       <Button variant="contained" id={`buttonWidthHelper`} className={css.buttonWidthHelper} sx={{ display: 'none' }}>
         <div className={css.buttonWidthHelperInner}>
           <div><MySvg/></div>
             {
-              userData.email ?
+              /* userData.email ?
               `  Signed in as ${userData.email}` :
+              `  Sign in with Google` */
+              userData.email ?
+              `  ${userData.email}` :
               `  Sign in with Google`
             }
         </div>
@@ -218,17 +223,20 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
       >
         <div className={css.buttonInInner}>
           <div><MySvg/></div>
-          {
-            userData.email && shown ?
-            `  Signed in as ${userData.email}` :
-            userData.email && !shown ?
-            //`  Signed in as ${userData.email}` :
-            ` ✔️` :
-            //`  ` :
-            !userData.email && shown ?
-            `  Sign in with Google` :
-            ` ❌`
-          }
+          <div className={css.test}>
+            {
+              userData.email && shown ?
+              //`  Signed in as ${userData.email}` :
+              ` ${userData.email}` :
+              userData.email && !shown ?
+              //`  Signed in as ${userData.email}` :
+              ` ✔️` :
+              //`  ` :
+              !userData.email && shown ?
+              `  Sign in with Google` :
+              ` ❌`
+            }
+          </div>
         </div>
       </Button>
       {

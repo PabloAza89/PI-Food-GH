@@ -1,18 +1,20 @@
-.container {
+.background {
   background: darkolivegreen; /* DEV */
   display: flex;
   position: relative;
+  /* position: sticky; */
   justify-content: center;
-  margin-top: 100px;
+  /* margin-top: 100px; */
+  /* top: 0px; */
   margin-left: 16px;
   margin-right: 16px;
   z-index: 1;
-
 }
 
 .card {
   /* background: red; */ /* DEV */
-  width: 100% !important;
+  /* width: 100% !important; */
+  width: 90% !important;
   display: flex;
   position: relative;
   flex-direction: column;
@@ -61,17 +63,13 @@
 }
 
 .image {
-  -webkit-touch-callout: none !important;
-  -webkit-user-select: none !important;
-  -khtml-user-select: none !important;
-  -moz-user-select: none !important;
-  -ms-user-select: none !important;
-  user-select: none !important;
   display: flex;
   /* min-width: 280px; */
   /* min-width: 280px; */
   /* width: 400px; */
+  width: 400px;
   height: 260px;
+  /* width: 100%; */
   margin-bottom: 16px;
 }
 
@@ -214,3 +212,19 @@
     margin-top: 0px !important;
   }
 }
+
+/* BREAKPOINTS */
+/* MIN <    MED    > LAR */
+/* 424 < 425 ~ 825 > 826 */
+
+/* MINPORT */
+@media screen and (orientation: portrait) and (max-width: 424px) {
+  .background {
+    /* margin-top: 150px; */
+  }
+  .image {
+    width: 100%;
+  }
+}
+
+/* margin-top: 100px; */

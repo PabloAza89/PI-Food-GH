@@ -24,8 +24,7 @@ export default function Detail({ userData, retrieveLogin }: any) {
   const navigate = useNavigate();
   const params = useParams()
 
-  const hasScroll = useSelector((state: {hasScroll:boolean}) => state.hasScroll)
-  const scrollWidth = useSelector((state: {scrollWidth: number}) => state.scrollWidth)
+  const menuShown = useSelector((state: {menuShown:boolean}) => state.menuShown)
   const currentWidth = useSelector((state: {currentWidth:number}) => state.currentWidth)
   const allRecipes = useSelector((state: { allRecipes: recipesI[] }) => state.allRecipes)
   const recipe = allRecipes.filter((c:any) => params.recipeId! === c.id.toString() && params.recipeId!.toString().length === params.recipeId!.length)[0]
@@ -66,10 +65,14 @@ export default function Detail({ userData, retrieveLogin }: any) {
   if (recipe !== undefined) {
     return (
       <div
-        className={css.container}
+        className={css.background}
         style={{
           //marginRight: hasScroll ? `${16 + scrollWidth}px` : `16px`
+          marginTop: menuShown ? '150px' : '100px'
         }}
+        //style={{
+          //marginRight: hasScroll ? `${16 + scrollWidth}px` : `16px`
+        //}}
       >
         <div className={css.card}>
           <div

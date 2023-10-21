@@ -31,8 +31,6 @@ const NavBar = ({ recipeCreatedOrEdited }: NavBarI) =>  {
   const inDetail = [useMatch("/:route")?.params.route?.toLowerCase()].filter(e => e !== "about")[0]
   const [isEditing, setIsEditing] = useState<boolean>( location.state && location.state.editing ? true : false );
   const allRecipesLoaded = useSelector((state: {allRecipesLoaded: boolean}) => state.allRecipesLoaded)
-  const scrollWidth = useSelector((state: {scrollWidth: number}) => state.scrollWidth)
-  const hasScroll = useSelector((state: {hasScroll:boolean}) => state.hasScroll)
   const [healthLevel, setHealthLevel] = useState<string>('');
   const [healthLabelShown, setHealthLabelShown] = useState<boolean>(false);
   const [sortAlpha, setSortAlpha] = useState<string>('');
@@ -42,6 +40,7 @@ const NavBar = ({ recipeCreatedOrEdited }: NavBarI) =>  {
   const menuShown = useSelector((state: {menuShown:boolean}) => state.menuShown)
   const allDietsOnline = useSelector((state: {allDietsOnline:boolean}) => state.allDietsOnline)
   const allDishesOnline = useSelector((state: {allDishesOnline:boolean}) => state.allDishesOnline)
+  const viewPort = useSelector(( state: { viewPort: string } ) => state.viewPort)
 
   interface allDietsI {
     id?: string,
@@ -94,19 +93,15 @@ const NavBar = ({ recipeCreatedOrEdited }: NavBarI) =>  {
       className={css.background}
       style={{
         position: location.pathname !== `/` ? 'fixed' : 'relative',
-        //position: 'fixed',
-        //flexDirection: menuShown ? 'column' : 'row',
-        //width: hasScroll ? `calc(100vw - ${scrollWidth}px)` : `100vw`,
-        //minHeight: menuShown ? '200px' : '100px',
-        height: menuShown ? '200px' : '100px',
+        height: location.pathname !== `/` && menuShown ? '150px' : 'unset',
       }}
     >
       <div
         className={css.logoAndMenuContainer}
-        style={{
+        //style={{
           //width: currentWidth <= 800 ? `100%` : '200px',
           //height: '100px'
-        }}
+        //}}
       >
         <div className={css.logoTextContainer}>
           <div
@@ -141,7 +136,9 @@ const NavBar = ({ recipeCreatedOrEdited }: NavBarI) =>  {
             className={css.menuButton}
             style={{
               //visibility: location.pathname !== `/` ? 'hidden' : 'visible',
-              display: location.pathname !== `/` ? 'none' : 'flex',
+              /* display: location.pathname !== `/` ? 'none' : 'flex', */
+              display: 'flex',
+              //alignSelf: viewPort === ('smaPort') ? 'flex-start' : 'unset'
               //display: "flex",
               //marginRight: `16px`,
               //display: inHome && currentWidth <= 800 ? 'flex' : 'none'
@@ -154,8 +151,14 @@ const NavBar = ({ recipeCreatedOrEdited }: NavBarI) =>  {
       <div
         className={css.selectsAndButtons}
         style={{
-          visibility: location.pathname !== `/` ? 'hidden' : 'visible',
-          display: menuShown ? 'flex' : 'none'
+          //visibility: location.pathname !== `/` ? 'hidden' : 'visible',
+          //display: menuShown ? 'flex' : 'none'
+          display:
+            location.pathname !== `/` ?
+            'none' :
+            menuShown ?
+            'flex' :
+            'none'
         }}
       >
         <div
@@ -179,20 +182,31 @@ const NavBar = ({ recipeCreatedOrEdited }: NavBarI) =>  {
               dispatch(setTabChoosen(0));
             }}
           />
-          <Link to="/MyRecipe">
-            <Button
-              variant="contained"
-              disableElevation
-              className={css.button}
-            >CREATE RECIPE !</Button>
-          </Link>
-          <Link to="/About">
-            <Button
-              variant="contained"
-              disableElevation
-              className={css.button}
-            >ABOUT !</Button>
-          </Link>
+          
+          <Button
+            variant="contained"
+            disableElevation
+            className={css.button}
+          >
+            <Link
+              className={css.linkStyle}
+              to="/MyRecipe"
+            >{ viewPort.slice(0,3) === ('sma') ? 'CREATE' : 'CREATE RECIPE&nbsp;!' }</Link>
+          </Button>
+          
+          
+          <Button
+            variant="contained"
+            disableElevation
+            className={css.button}
+          >
+            <Link
+              className={css.linkStyle}
+              to="/About"
+            //>ABOUT&nbsp;!</Link>
+            >{ viewPort.slice(0,3) === ('sma') ? 'ABOUT' : 'ABOUT&nbsp;!' }</Link>
+          </Button>
+          
         </div>
         <div
           //style={{ width: currentWidth <= 800 ? `calc(100% - 8px)` : '50vw' }}
@@ -252,6 +266,8 @@ const NavBar = ({ recipeCreatedOrEdited }: NavBarI) =>  {
               }}
             >  Sort by Healthy  </InputLabel>
             <Select
+              //size="small"
+              //size="small"
               className={css.selectWithLabel}
               onFocus={() => setHealthLabelShown(true)}
               value={healthLevel}

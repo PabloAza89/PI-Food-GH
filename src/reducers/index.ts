@@ -13,16 +13,11 @@ interface initialStateI {
   allRecipesLoaded: boolean,
   showMain: boolean,
   indexChoosen: number,
-  allIndexes: number,
   tabChoosen: number,
-  addNew: recipesI[],
   width: number,
   height: number,
   viewPort: string,
   currentWidth: number,
-  percentageResizedHeight: number,
-  scrollWidth: number,
-  hasScroll: boolean,
   scrollPosition: number,
   menuShown: boolean,
   landingHidden: boolean
@@ -40,18 +35,13 @@ const initialState: initialStateI = {
   allRecipesLoaded: false,
   showMain: false,
   indexChoosen: 0,
-  allIndexes: 0,
   tabChoosen: 0,
-  addNew: [],
   width: window.screen.width,
   height: window.screen.height,
   viewPort: `larLand`,
   currentWidth: window.innerWidth,
-  percentageResizedHeight: window.innerHeight / window.screen.height,
-  scrollWidth: 0,
-  hasScroll: false,
   scrollPosition: 0,
-  menuShown: false,
+  menuShown: false, // false
   landingHidden: false
 }
 
@@ -154,16 +144,6 @@ const reducer = (state = initialState, action: {type: string; payload: any}) => 
         ...state,
         showMain: action.payload
       };
-    case 'SET_ALL_INDEXES':
-      return {
-        ...state,
-        allIndexes: action.payload
-      };
-    case 'GET_ALL_INDEXES':
-      return {
-        ...state,
-        response: state.allIndexes
-      };
     case 'SET_INDEX_CHOOSEN':
       return {
         ...state,
@@ -178,11 +158,6 @@ const reducer = (state = initialState, action: {type: string; payload: any}) => 
       return {
         ...state,
         tabChoosen: action.payload
-      };
-    case 'ADD_NEW':
-      return {
-        ...state,
-        addNew: [...state.addNew, action.payload]
       };
     case 'SET_WIDTH':
       return {
@@ -203,21 +178,6 @@ const reducer = (state = initialState, action: {type: string; payload: any}) => 
       return {
         ...state,
         currentWidth: action.payload
-      };
-    case 'PERCENTAGE_RESIZED_HEIGHT':
-      return {
-        ...state,
-        percentageResizedHeight: action.payload
-      };
-    case 'SET_SCROLL_WIDTH':
-      return {
-        ...state,
-        scrollWidth: action.payload
-      };
-    case 'SET_HAS_SCROLL':
-      return {
-        ...state,
-        hasScroll: action.payload
       };
     case 'SET_SCROLL_POSITION':
       return {

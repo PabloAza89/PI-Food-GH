@@ -19,9 +19,8 @@ import About from "./components/About/About";
 import { userDataObjI } from './interfaces/interfaces';
 import { useDispatch } from 'react-redux';
 import {
-  fetchRecipesFromAPI, allRecipesLoaded,
-  setCurrentWidth, setHeight, setPercentageResizedHeight, setWidth,
-  setScrollWidth, setHasScroll, setScrollPosition,
+  fetchRecipesFromAPI, allRecipesLoaded, setCurrentWidth,
+  setHeight, setWidth, setHasScroll, setScrollPosition,
   getDietsFromDB, viewPort, landingHidden, /* multiple */
 } from './actions';
 import store from './store/store';
@@ -33,19 +32,7 @@ function App() {
   const showHelpBG = [useMatch("/:route")?.params.route?.toLowerCase()].filter(e => e !== "about")[0]
   const currentWidth = useSelector((state: {currentWidth:number}) => state.currentWidth)
   const landingHiddenState = useSelector((state: { landingHidden: boolean }) => state.landingHidden)
-
-  useEffect(() => {
-    $(function() {
-      var scrollDiv = document.createElement("div"); // Creates the div
-      scrollDiv.className = "scrollbar-measure";
-      document.body.appendChild(scrollDiv);
-      $(`.scrollbar-measure`)
-        .css("overflowY", "scroll") // Creates a ScrollBar
-        .css("width", "fit-content") // Set width to auto considering the ScrollBar width
-      typeof scrollDiv.offsetWidth === 'number' ? dispatch(setScrollWidth(scrollDiv.offsetWidth)) : dispatch(setScrollWidth(0))
-      document.body.removeChild(scrollDiv); // Delete the div
-    })
-  },[dispatch])
+  const menuShown = useSelector((state: {menuShown:boolean}) => state.menuShown)
 
   const [isLoading, setIsLoading] = useState({
     main: true,
@@ -127,8 +114,8 @@ function App() {
   // let windowScreenHeight = window.screen.height
 
   useEffect(() => {
-    console.log("target ejecutado")
-    console.log("target ejecutado window.screen.width", window.screen.width)
+    //console.log("target ejecutado")
+    //console.log("target ejecutado window.screen.width", window.screen.width)
     //console.log("target ejecutado window.innerWidth", window.innerWidth)
     function scrollHandler() { dispatch(setScrollPosition($(window).scrollTop() as number)) }
     function handleResize() {
@@ -151,8 +138,8 @@ function App() {
       window.removeEventListener("scroll", scrollHandler);
       window.removeEventListener("resize", handleResize);
     }
-  //},[dispatch]);
-  },[window.screen.width]);
+  },[dispatch]);
+  //},[]);
 
   // useEffect(() => {
   //   console.log("target ejecutado window.screen.width", window.screen.width)
@@ -194,17 +181,22 @@ function App() {
     checkPrevLogin({ retrieveLogin, userData })
   }
 
+  // const menuShown = useSelector((state: {menuShown:boolean}) => state.menuShown)
+
   return (
     <div
       className={css.background}
       style={{ overflow: landingHiddenState ? 'inherit' : 'hidden' }}
     >
-      <Landing retrieveLogin={retrieveLogin} userData={userData} />
       <div
         className={css.wallpaperNav}
-        style={{ display: showHelpBG ? 'flex' : 'none' }}
+        style={{
+          display: showHelpBG ? 'flex' : 'none',
+          clipPath: menuShown ? 'polygon(0% 0, 100% 0%, 100% 150px, 0 150px)' : 'polygon(0% 0, 100% 0%, 100% 100px, 0 100px)'
+        }}
       />
       <div className={css.wallpaperBody} />
+      <Landing retrieveLogin={retrieveLogin} userData={userData} />
       <Routes>
         <Route path="/" element={<>
           <GoogleAuth retrieveLogin={retrieveLogin} userData={userData} />
@@ -224,11 +216,10 @@ function App() {
             userData={userData}
           />
         </>}/>
-        <Route path="/MyRecipe/" element={<>
+        <Route path="/MyRecipe" element={<>
           <NavBar recipeCreatedOrEdited={recipeCreatedOrEdited} />
           <GoogleAuth retrieveLogin={retrieveLogin} userData={userData} />
           <ServerStatus />
-          {/* <GoBack recipeCreatedOrEdited={recipeCreatedOrEdited} /> */}
           <MyRecipe
             retrieveLogin={retrieveLogin}
             userData={userData}

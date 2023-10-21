@@ -2,8 +2,9 @@
   background: red !important; /* DEV */
   display: flex;
   position: fixed;
-  right: -310px; /* SLIDER BOX WIDTH */
-  top: 227px;
+  right: -280px; /* SLIDER BOX WIDTH */
+  /* top: 227px; */
+  top: 270px;
   z-index: 3000;
 }
 
@@ -83,14 +84,22 @@
   line-height: 24px
 }
 
-
-
 .sliderBox {
   display: flex;
   position: relative;
   flex-direction: column;
   justify-content: center;
   background: cadetblue;
-  width: 310px;
+  width: 280px; /* SLIDER BOX WIDTH */
   right: -200px;
+}
+
+/* BREAKPOINTS */
+/* MIN <    MED    > LAR */
+/* 424 < 425 ~ 825 > 826 */
+
+@media screen and (orientation: portrait) and (max-width: 424px) { /* LESS THAN 425px */
+  .background {
+    top: 300px !important;
+  }
 }

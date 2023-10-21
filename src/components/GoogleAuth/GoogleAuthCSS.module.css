@@ -1,26 +1,29 @@
 .background {
   display: flex;
   /* position: fixed; */
+  /* position: fixed; */
   /* position: absolute; */
   right: 0px;
   /* margin-right: 16px; */
-  margin-top: 30.5px;
+  /* margin-top: 30.5px; */
   flex-direction: row;
   z-index: 4;
   margin-right: 16px;
+  margin-top: 30.5px;
 }
 
 .buttonIn {
   display: flex;
-  text-transform: none !important;
   padding: 6px 6px !important;
   width: 30px;
+  background: white !important;
+  align-items: flex-start;
+  /* font-size: 10px !important; */
+  text-transform: none !important;
   color: #3c4043 !important;
   letter-spacing: 0.25px;
   font-family: "Google Sans", arial, sans-serif;
   font-weight: 500;
-  background: white !important;
-  align-items: flex-start;
 }
 
 .buttonIn:hover {
@@ -41,6 +44,11 @@
 }
 
 .buttonWidthHelper {
+  /* max-width: 220px; */
+  /* max-width: calc(100vw - 60.5px); */
+  /* max-width: calc(100vw - 77.5px); */
+  /* max-width: calc(100vw - 55px); */
+  /* font-size: 10px !important; */
   /* display: none !important; */
   text-transform: none !important;
   padding: 6px 6px !important;
@@ -85,3 +93,37 @@
     margin-right: 16px !important;
   }
 }
+
+/* BREAKPOINTS */
+/* MIN <    MED    > LAR */
+/* 424 < 425 ~ 825 > 826 */
+
+/* MINPORT */
+@media screen and (orientation: portrait) and (max-width: 424px) {
+  .background {
+    margin-right: 8px;
+    margin-top: 98px;
+  }
+  .buttonIn {
+    max-width: calc(100vw - 60.5px);
+  }
+  .buttonWidthHelper {
+    max-width: calc(100vw - 60.5px);
+  }
+  .test:before {
+    content: ' ';
+  }
+}
+
+@media screen and (orientation: landscape) and (max-height: 424px) { /* MINLAND */
+  .background {
+    /* margin-right: 16px !important; */
+  }
+}
+
+@media screen and (min-width: 425px) { /* MORE THAN 425px */
+  .test:before {
+    /* content: '  Signed in as'; */
+  }
+}
+

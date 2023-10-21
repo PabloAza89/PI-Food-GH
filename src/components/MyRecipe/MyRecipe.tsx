@@ -6,7 +6,7 @@ import noImage2 from "../../images/noImage2.jpg";
 import noImage3 from "../../images/noImage3.jpg";
 import noLoaded from "../../images/noLoaded.jpg";
 import { useLocation, useNavigate } from "react-router-dom";
-import { addNew, setHasScroll, setMenuShown } from '../../actions';
+import { setHasScroll, setMenuShown } from '../../actions';
 import { Box, Button, TextField, ListItemText, Checkbox, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material/';
 import dietsEntireArray from '../../db/diets.json';
 import dishesEntireArray from '../../db/dishes.json';
@@ -36,6 +36,8 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
   let dietsArrayLS: string | null = localStorage.getItem('dietsArray');
   let stepsStateLS: string | null = localStorage.getItem('stepsState');
  
+  const menuShown = useSelector((state: {menuShown:boolean}) => state.menuShown)
+  const viewPort = useSelector(( state: { viewPort: string } ) => state.viewPort)
   const [isEditing, setIsEditing] = useState<boolean>( location.state && location.state.editing ? true : false );
   const [healthScorePlaceholder, setHealthScorePlaceholder] = useState<string>('e.g. 73');
   const [titleValue, setTitleValue] = useState<string>('');
@@ -676,7 +678,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
     
   },[window.innerWidth])
 
-  dispatch(setMenuShown(false))
+  //dispatch(setMenuShown(false))
 
   window.onbeforeunload = function() { // CLEAR FORM: SAVED && FIRES WHEN WINDOW IS CLOSED OR REFRESH
     if (recipeCreated.current) {
@@ -686,33 +688,36 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
 
   return (
     <div
-      className={css.container}
+      className={css.background}
+      style={{
+        marginTop: menuShown ? '150px' : '100px'
+      }}
       //style={{ marginRight: hasScroll ? `${16 + scrollWidth}px` : `16px` }}
     >
     <div
       className={css.form}
     >
-        <img // HIDDEN. ONLY FOR IMAGE VERIFICATION PURPOSES.
-          style={{ width: '0px', height: '0px' }}
-          src={imageValue}
-          onLoad={() => setImageLoaded(true)}
-          onError={() => setImageLoaded(false)}
-          alt=""
-        />
-        <img
-          className={css.imageSearcher}
-          src={
-            isEditing && location.state.image.length === 1 && imageValue.length === 0 ?
-            arrImages[parseInt(location.state.image, 10) - 1] : // DEFAULT IMAGE IS RANDOM // EDITING MODE
-            isEditing && location.state.image.length > 1 && imageValue.length === 0 ?
-            `https://res.cloudinary.com/dtembdocm/image/upload/` + location.state.image : // DEFAULT IMAGE IS UUID // EDITING MODE
-            imageLoaded ?
-            imageValue : // IMAGE IT'S NEW URL // DOUBLE CHECK/LOADING FOR EDITED ENCODED URL IMAGE
-            noLoaded // IMAGE NOT FOUND
-          }
-          alt=""
-        />
-      <div className={css.title}>
+      <img // HIDDEN. ONLY FOR IMAGE VERIFICATION PURPOSES.
+        style={{ width: '0px', height: '0px' }}
+        src={imageValue}
+        onLoad={() => setImageLoaded(true)}
+        onError={() => setImageLoaded(false)}
+        alt=""
+      />
+      <img
+        className={css.imageSearcher}
+        src={
+          isEditing && location.state.image.length === 1 && imageValue.length === 0 ?
+          arrImages[parseInt(location.state.image, 10) - 1] : // DEFAULT IMAGE IS RANDOM // EDITING MODE
+          isEditing && location.state.image.length > 1 && imageValue.length === 0 ?
+          `https://res.cloudinary.com/dtembdocm/image/upload/` + location.state.image : // DEFAULT IMAGE IS UUID // EDITING MODE
+          imageLoaded ?
+          imageValue : // IMAGE IT'S NEW URL // DOUBLE CHECK/LOADING FOR EDITED ENCODED URL IMAGE
+          noLoaded // IMAGE NOT FOUND
+        }
+        alt=""
+      />
+      <div className={css.createYourOwnRecipe}>
         {
           isEditing ?
           `Edit your recipe. Don't forget to save it !` :
@@ -720,7 +725,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
         }
       </div>
 
-      <div className={css.eachRow}>
+      <div className={css.eachRow}> {/* viewPort.slice(0,3) === ('sma') */}
         <div className={css.text}>Title:</div>
         <Tooltip
           className={css.tooltipCenter}
@@ -735,11 +740,11 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
           placement="bottom"
 
           title={
-            <div style={{ display: 'flex', flexDirection: 'column', color: '#25252d', background: '#f5f5f9', fontFamily: 'Roboto'}}>
+            <div className={css.innerTooltip}>
               { error.title.character ? <div style={{ fontWeight: '400', fontSize: '17px' }}>Special characters not allowed in "Title" !</div> : null }
               { error.title.character ? <div style={{ color: '#42424f' }}>Allowed characters:</div> : null }
               { error.title.character ? <div style={{ color: '#42424f', textAlign: 'center' }}><b>, ; . : - ! ¡ ¿ ? ' " ( ) [ ] á Á é É í Í ó Ó ú Ú ü Ü ñ Ñ</b></div> : null }
-              { error.title.badWord ? <div style={{ fontWeight: '400' }}><em>Please, remove </em><mark>highlighted</mark> <em>bad words.</em></div> : null }
+              { error.title.badWord ? <div style={{ fontWeight: '400' }}><em>Please, remove </em><mark style={{ background: 'rgba(0, 255, 0, 0.4)' }}>highlighted</mark> <em>bad words.</em></div> : null }
               { error.title.character ? <div style={{ display: 'flex', flexDirection: 'row', fontWeight: '400', fontStyle: 'italic' }}>Please, 
                 <Tooltip
                   title={`Ä ä % { } @ / \\ # À à ° + ¬ $ & = * etc..`}
@@ -763,10 +768,18 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
               autoComplete='off'
               className={css.inputHiddenTitle}
               InputProps={{
-                className: css.inputStyle
+                className: css.inputStyle,
+                /* title: "xxx" */
               }}
               value={titleValue}
-              placeholder={`e.g. Pasta with tomatoes..`}
+              placeholder={
+                viewPort.slice(0,3) === ('sma') ?
+                `Enter your title` :
+                `e.g. Pasta with tomatoes..`
+              }
+              
+              /* placeholder={css.inputStylee} */
+              /* placeholder={{}} */
               onChange={(e) => { validator({ value: e.target.value, type: e.target.id }) }}
             />
           </div>
@@ -786,13 +799,11 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
           disableFocusListener={ saveButtonDisabled && allDisabled ? true : false }
           disableHoverListener={ saveButtonDisabled && allDisabled ? true : false }
           title={
-            <div style={{ display: 'flex', flexDirection: 'column', color: '#25252d', background: '#f5f5f9', fontFamily: 'Roboto'}}>
-              <div style={{ display: 'flex', flexDirection: 'column', color: '#25252d', fontWeight: '400' }}>
-                { isEditing ? <div>Leave it empty for use the same image !</div> : <div>Please, copy and paste your food recipe image url here !</div> }
-                { isEditing ? <div>Either if you want to use a new image, please, paste your new food recipe image url here !</div> : <div>If it's everything OK, you can preview your image in center upper box</div> }
-                { isEditing ? <div>If your link its not valid, a random image gonna be used in your recipe.</div> : <div>If you dont give a link, or link its not valid, a random image gonna be used in your recipe.</div> }
-                { <div><b>Tip: </b>If you can see the {isEditing ? `new ` : null}image in the upper-top box, the image will be saved safely.</div> }
-              </div>
+            <div className={css.innerTooltip}>
+              { isEditing ? <div>Leave it empty for use the same image !</div> : <div>Please, copy and paste your food recipe image url here !</div> }
+              { isEditing ? <div>Either if you want to use a new image, please, paste your new food recipe image url here !</div> : <div>If it's everything OK, you can preview your image in center upper box</div> }
+              { isEditing ? <div>If your link its not valid, a random image gonna be used in your recipe.</div> : <div>If you dont give a link, or link its not valid, a random image gonna be used in your recipe.</div> }
+              { <div><b>Tip: </b>If you can see the {isEditing ? `new ` : null}image in the upper-top box, the image will be saved safely.</div> }
             </div>
           }
         >
@@ -805,7 +816,11 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
             }}
             value={imageValue}
             autoComplete='off'
-            placeholder={`e.g. https://commons.wikimedia.org/wiki/File:Elaboraci%C3%B3n_del_tomate_frito_(4).jpg`}
+            placeholder={
+              viewPort.slice(0,3) === ('sma') ?
+                `Enter image url` :
+                `e.g. https://commons.wikimedia.org/wiki/File:Elaboraci%C3%B3n_del_tomate_frito_(4).jpg`
+            }
             onChange={(e) => { // DOUBLE CHECK/LOADING FOR EDITED ENCODED URL IMAGE
               let copyImageValue = e.target.value.trim()
               if (!isEditing) localStorage.setItem('imageValue', e.target.value)
@@ -834,7 +849,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
           open={error.health.string || error.health.max}
           placement="bottom-start"
           title={
-            <div style={{ display: 'flex', flexDirection: 'column', color: '#25252d', background: '#f5f5f9', fontFamily: 'Roboto'}}>
+            <div className={css.innerTooltip}>
               <div
                 style={{ color: '#25252d', fontWeight: '400' }}
               >{error.health.string ?
@@ -853,9 +868,16 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
             disabled={allDisabled}
             value={healthValue}
             autoComplete='off'
-            placeholder={healthScorePlaceholder}
-            onFocus={() => setHealthScorePlaceholder("")}
-            onBlur={() => setHealthScorePlaceholder(`e.g. 73`)}
+            placeholder={
+              viewPort.slice(0,3) === ('sma') ?
+              `Enter health level` :
+              `e.g. 73`
+            }
+            // viewPort.slice(0,3) === ('sma') ?
+            //     `Enter your title` :
+            //     `e.g. https://commons.wikimedia.org/wiki/File:Elaboraci%C3%B3n_del_tomate_frito_(4).jpg`
+            /* onFocus={() => setHealthScorePlaceholder("")}
+            onBlur={() => setHealthScorePlaceholder(`e.g. 73`)} */
             onChange={(e) => { validator({ value: e.target.value, type: e.target.id }) }}
           />
         </Tooltip>
@@ -903,11 +925,11 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
           open={error.summary.character || error.summary.badWord}
           placement="bottom"
           title={
-            <div style={{ display: 'flex', flexDirection: 'column', color: '#25252d', background: '#f5f5f9', fontFamily: 'Roboto'}}>
+            <div className={css.innerTooltip}>
               { error.summary.character ? <div style={{ fontWeight: '400', fontSize: '17px' }}>Special characters not allowed in "Summary" !</div> : null }
               { error.summary.character ? <div style={{ color: '#42424f' }}>Allowed characters:</div> : null }
               { error.summary.character ? <div style={{ color: '#42424f', textAlign: 'center' }}><b>, ; . : - ! ¡ ¿ ? ' " ( ) [ ] á Á é É í Í ó Ó ú Ú ü Ü ñ Ñ</b></div> : null }
-              { error.summary.badWord ? <div style={{ fontWeight: '400' }}><em>Please, remove </em><mark>highlighted</mark> <em>bad words.</em></div> : null }
+              { error.summary.badWord ? <div style={{ fontWeight: '400' }}><em>Please, remove </em><mark style={{ background: 'rgba(0, 255, 0, 0.4)' }}>highlighted</mark> <em>bad words.</em></div> : null }
               { error.summary.character ? <div style={{ display: 'flex', flexDirection: 'row', fontWeight: '400', fontStyle: 'italic' }}>Please, 
                 <Tooltip
                   title={`Ä ä % { } @ / \\ # À à ° ¬ $ & = * etc..`}
@@ -992,11 +1014,11 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
                 open={(error.instructions[index] && error.instructions[index].character) || (error.instructions[index] && error.instructions[index].badWord)}
                 placement={ index % 2 === 0 ? `bottom-end` : `bottom-start` }
                 title={
-                  <div style={{ display: 'flex', flexDirection: 'column', color: '#25252d', background: '#f5f5f9', fontFamily: 'Roboto'}}>
+                  <div className={css.innerTooltip}>
                     { error.instructions[index] && error.instructions[index].character ? <div style={{ fontWeight: '400' }}>Special characters not allowed in "Instructions" !</div> : null }
                     { error.instructions[index] && error.instructions[index].character ? <div style={{ color: '#42424f' }}>Allowed characters:</div> : null }
                     { error.instructions[index] && error.instructions[index].character ? <div style={{ color: '#42424f', textAlign: 'center' }}><b>, ; . : - ! ¡ ¿ ? ' " ( ) [ ] á Á é É í Í ó Ó ú Ú ü Ü ñ Ñ</b></div> : null }
-                    { error.instructions[index] && error.instructions[index].badWord ? <div style={{ fontWeight: '400' }}><em>Please, remove </em><mark>highlighted</mark> <em>bad words on step {index + 1}.</em></div> : null }
+                    { error.instructions[index] && error.instructions[index].badWord ? <div style={{ fontWeight: '400' }}><em>Please, remove </em><mark style={{ background: 'rgba(0, 255, 0, 0.4)' }}>highlighted</mark> <em>bad words on step {index + 1}.</em></div> : null }
                     { error.instructions[index] && error.instructions[index].character ?
                       <div style={{ display: 'flex', flexDirection: 'row', fontWeight: '400', fontStyle: 'italic' }}>Please, 
                         <Tooltip
@@ -1137,7 +1159,14 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
             error.instructions.filter(e => e.badWord === true)[0] ?
             true : false
           }
-        >{ isEditing ? `SAVE EDIT` : `SAVE RECIPE` }
+        >
+          {
+            isEditing ?
+            `SAVE EDIT` :
+            viewPort.slice(0,3) === ('sma') ?
+            `SAVE` :
+            `SAVE RECIPE`
+          }
         </Button>
       </div>
     </div>

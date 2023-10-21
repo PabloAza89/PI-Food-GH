@@ -2,8 +2,10 @@
   display: flex;
   position: relative;
   flex-direction : column;
-  width: 100vw;
-  height: 100%;
+  width: 100%;
+  /* height: 100vh; */
+  /* height: 2000; */
+  /* overflow: visible */
 }
 
 .wallpaperBody {
@@ -21,8 +23,8 @@
   display: flex;
   position: fixed;
   z-index: 2 !important;
-  width: 100vw !important;
-  height: 100vh !important;
+  width: 100% !important;
+  height: 100% !important;
   background-image: url('./images/bgImage.webp');
   background-size: cover;
   background-repeat: no-repeat;

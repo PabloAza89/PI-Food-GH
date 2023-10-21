@@ -1,13 +1,48 @@
 .background {
-  display: flex;
+  width: 100%;
+  margin: auto;
+  /* position: sticky; */
+  /* top: 0px; */
+  /* top: 150px !important; */
+  /* height: 10vw; */
+  /* display: flex; */
+  /* position: relative; */
   flex-direction: row !important;
   z-index: 1;
+
+  
+
+  /* position: absolute; */
+  
+  display: flex;
+  position: sticky; /* STICKY NEEDS NO HEIGHT ON PARENT */
+  top: 0px; /* WHERE STICKY SHOULD STOP */
+  width: 100%;
+  /* background-color: red; */
+
+  /* position: sticky; */
+  /* position: -webkit-sticky;  */
+  /* top: 100px; */
+
+  /* display: flex; */
+  /* position: sticky; */
+  /* position: -webkit-sticky;  */
+  /* top: 100px; */
+
+  /* flex-shrink: 0;
+  overflow: visible;
+  position: -webkit-sticky;
+  position: sticky; */
+
+  /* margin: 0;
+  overflow: visible; */
+  /* z-index: 1000000 !important; */
   justify-content: center;
   padding: 8px 0px;
-  background: lightcoral; /* DEV */
+  background: blue; /* DEV */
   /* width: fit-content; */
-  display: flex;
   align-self: center;
+  
   /* margin-left: 50px; */ /* COMPENSATION OF PAGE COUNTER */
   /* margin-left: max(50px, 1%); */
   /* margin-left: max(0%, 50px); */
@@ -59,15 +94,47 @@
 }
 
 @media screen and (max-width: 956px) { /* LESS THAN 956px = TWO CARDS */
-  .background {
-    /* width: 450px; */
-  }
-  .counter {
+  /* .background {
+    width: 450px;
+  } */
+  /* .counter {
     position: relative !important;
     right: unset !important;
-  }
+  } */
 }
 
 @media screen and (min-width: 957px) { /* MORE THAN 957px */
 
 }
+
+/* html:not([data-scroll='0']) header {
+  position: fixed;
+} */
+
+/* .background:not([data-scroll='200']) {
+  position: fixed;
+} */
+
+/* html:is([data-scroll='100']) {
+  .background {
+    position: fixed;
+  }
+}
+ */
+
+/* html:is([data-scroll='100']) {
+  .background {
+    position: fixed
+  }
+} */
+
+/* html:not([data-scroll='0']) .background {
+  padding-top: 3em;
+} */
+
+/* html:is([data-scroll='150']) .background {
+  position: fixed;
+  top: 0;
+  z-index: 1;
+  box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.5);
+} */

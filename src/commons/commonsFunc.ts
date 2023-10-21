@@ -23,7 +23,7 @@ interface handleDeleteI {
 export const handleDelete = async ({ id, fd_tkn, retrieveLogin, handleReload }: handleDeleteI ) => {
 
   Swal.fire({
-    title: 'Are you sure do you want to&nbspdelete&nbspthis&nbsprecipe&nbsp?',
+    title: 'Are you sure do you want to delete&nbspthis recipe&nbsp?',
     text: 'No undo.',
     icon: 'info',
     showDenyButton: true,
