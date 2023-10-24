@@ -121,7 +121,8 @@
 /* MIN <    MED    > LAR */
 /* 424 < 425 ~ 825 > 826 */
 
-@media screen and (orientation: portrait) and (max-width: 424px) { /* MINPORT */
+/* MINPORT */
+@media screen and (orientation: portrait) and (max-width: 424px) {
   .background {
     width: 90%;
   }
@@ -133,7 +134,8 @@
   }
 }
 
-@media screen and (orientation: landscape) and (max-height: 424px) { /* MINLAND */
+/* MINLAND */
+@media screen and (orientation: landscape) and (max-height: 424px) {
   .editDeleteContainer {
     flex-direction: column-reverse;
   }

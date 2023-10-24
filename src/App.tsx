@@ -114,6 +114,8 @@ function App() {
   // let windowScreenHeight = window.screen.height
 
   useEffect(() => {
+    
+    console.log("AAA", window.matchMedia("(orientation: portrait)"))
     //console.log("target ejecutado")
     //console.log("target ejecutado window.screen.width", window.screen.width)
     //console.log("target ejecutado window.innerWidth", window.innerWidth)
@@ -138,7 +140,8 @@ function App() {
       window.removeEventListener("scroll", scrollHandler);
       window.removeEventListener("resize", handleResize);
     }
-  },[dispatch]);
+  //},[dispatch]);
+  });
   //},[]);
 
   // useEffect(() => {

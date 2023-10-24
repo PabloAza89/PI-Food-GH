@@ -13,7 +13,8 @@ const ServerStatus = () =>  {
   easings() // Jquery easings..
 
   const serverStatus = useSelector((state: { serverStatus: serverStatusI }) => state.serverStatus)
-  const serverStatusShown = useSelector((state: { serverStatusShown: boolean }) => state.serverStatusShown)
+  //const serverStatusShown = useSelector((state: { serverStatusShown: boolean }) => state.serverStatusShown)
+  const serverStatusShown = true
 
   //const [ show, setShow ] = useState<boolean>(false)
 

@@ -6,7 +6,7 @@ import { handleReturn } from '../../commons/commonsFunc';
 import { useDispatch, useSelector } from 'react-redux';
 import MenuIcon from '@mui/icons-material/Menu';
 import {
-  Button, TextField, FormControl,
+  Button, TextField, FormControl, Popover,
   InputLabel, MenuItem, Select, SelectChangeEvent
 } from '@mui/material/';
 import {
@@ -38,6 +38,7 @@ const NavBar = ({ recipeCreatedOrEdited }: NavBarI) =>  {
   const [placeholder, setPlaceholder] = useState<string>('Find recipe..');
   const currentWidth = useSelector((state: {currentWidth:number}) => state.currentWidth)
   const menuShown = useSelector((state: {menuShown:boolean}) => state.menuShown)
+  //const menuShown = true
   const allDietsOnline = useSelector((state: {allDietsOnline:boolean}) => state.allDietsOnline)
   const allDishesOnline = useSelector((state: {allDishesOnline:boolean}) => state.allDishesOnline)
   const viewPort = useSelector(( state: { viewPort: string } ) => state.viewPort)
@@ -134,15 +135,6 @@ const NavBar = ({ recipeCreatedOrEdited }: NavBarI) =>  {
             variant="contained"
             onClick={() => dispatch(setMenuShown(!menuShown))}
             className={css.menuButton}
-            style={{
-              //visibility: location.pathname !== `/` ? 'hidden' : 'visible',
-              /* display: location.pathname !== `/` ? 'none' : 'flex', */
-              display: 'flex',
-              //alignSelf: viewPort === ('smaPort') ? 'flex-start' : 'unset'
-              //display: "flex",
-              //marginRight: `16px`,
-              //display: inHome && currentWidth <= 800 ? 'flex' : 'none'
-            }}
           >
             <MenuIcon style={{ fontSize: 40 }} />
           </Button>
@@ -151,7 +143,7 @@ const NavBar = ({ recipeCreatedOrEdited }: NavBarI) =>  {
       <div
         className={css.selectsAndButtons}
         style={{
-          //visibility: location.pathname !== `/` ? 'hidden' : 'visible',
+          visibility: location.pathname !== `/` ? 'hidden' : 'visible',
           //display: menuShown ? 'flex' : 'none'
           display:
             location.pathname !== `/` ?
@@ -189,9 +181,10 @@ const NavBar = ({ recipeCreatedOrEdited }: NavBarI) =>  {
             className={css.button}
           >
             <Link
-              className={css.linkStyle}
+              className={css.linkStyleCreate}
               to="/MyRecipe"
-            >{ viewPort.slice(0,3) === ('sma') ? 'CREATE' : 'CREATE RECIPE&nbsp;!' }</Link>
+            //>{ viewPort.slice(0,3) === ('sma') ? 'CREATE' : `CREATE RECIPE !` }</Link>
+            />
           </Button>
           
           
@@ -201,10 +194,11 @@ const NavBar = ({ recipeCreatedOrEdited }: NavBarI) =>  {
             className={css.button}
           >
             <Link
-              className={css.linkStyle}
+              className={css.linkStyleAbout}
               to="/About"
             //>ABOUT&nbsp;!</Link>
-            >{ viewPort.slice(0,3) === ('sma') ? 'ABOUT' : 'ABOUT&nbsp;!' }</Link>
+            //</div></div>>{ viewPort.slice(0,3) === ('sma') ? 'ABOUT' : 'ABOUT !' }</Link>
+            >{ viewPort.slice(0,3) === ('sma') ? 'ABOUT' : 'ABOUT !' }</Link>
           </Button>
           
         </div>
@@ -213,6 +207,9 @@ const NavBar = ({ recipeCreatedOrEdited }: NavBarI) =>  {
           className={css.upperLower}
         >
           <Select
+            //MenuProps={{ disableScrollLock: true }}
+            
+          
             className={css.containerDietsDishesHealthAlpha}
             value={entireFilter.diet}
             onChange={(e) => { setEntireFilter({...entireFilter, diet:e.target.value}); dispatch(setIndexChoosen(0)) }}

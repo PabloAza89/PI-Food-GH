@@ -728,7 +728,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
       <div className={css.eachRow}> {/* viewPort.slice(0,3) === ('sma') */}
         <div className={css.text}>Title:</div>
         <Tooltip
-          className={css.tooltipCenter}
+          //className={css.tooltipCenter}
           arrow
           variant="outlined"
           size="md"
@@ -738,7 +738,8 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
           enterTouchDelay={0}
           open={error.title.character || error.title.badWord}
           placement="bottom"
-
+          //PopperProps={{style:{zIndex:0}}}
+          style={{ zIndex: '1' }}
           title={
             <div className={css.innerTooltip}>
               { error.title.character ? <div style={{ fontWeight: '400', fontSize: '17px' }}>Special characters not allowed in "Title" !</div> : null }
@@ -788,7 +789,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
       <div className={css.eachRow}>
         <div className={css.text}>Image:</div>
         <Tooltip
-          className={css.tooltipLeft}
+          //className={css.tooltipLeft}
           arrow
           variant="outlined"
           size="md"
@@ -798,6 +799,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
           placement="bottom"
           disableFocusListener={ saveButtonDisabled && allDisabled ? true : false }
           disableHoverListener={ saveButtonDisabled && allDisabled ? true : false }
+          style={{ zIndex: '1' }}
           title={
             <div className={css.innerTooltip}>
               { isEditing ? <div>Leave it empty for use the same image !</div> : <div>Please, copy and paste your food recipe image url here !</div> }
@@ -839,7 +841,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
       <div className={css.eachRow}>
         <div className={css.text}>Health Score:</div>
         <Tooltip
-          className={css.tooltipLeft}
+          //className={css.tooltipLeft}
           arrow
           variant="outlined"
           size="md"
@@ -848,6 +850,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
           enterTouchDelay={0}
           open={error.health.string || error.health.max}
           placement="bottom-start"
+          style={{ zIndex: '1' }}
           title={
             <div className={css.innerTooltip}>
               <div
@@ -915,7 +918,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
       <div className={css.eachRow}>
         <div className={css.text}>Summary:</div>
         <Tooltip
-          className={css.tooltipCenter}
+          //className={css.tooltipCenter}
           arrow
           variant="outlined"
           size="md"
@@ -924,6 +927,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
           enterTouchDelay={0}
           open={error.summary.character || error.summary.badWord}
           placement="bottom"
+          style={{ zIndex: '1' }}
           title={
             <div className={css.innerTooltip}>
               { error.summary.character ? <div style={{ fontWeight: '400', fontSize: '17px' }}>Special characters not allowed in "Summary" !</div> : null }
@@ -1003,7 +1007,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
               <div className={css.stepTitle}>Step {index + 1}:</div>
 
               <Tooltip
-                className={ index % 2 === 0 ? css.tooltipRight : css.tooltipLeft }
+                //className={ index % 2 === 0 ? css.tooltipRight : css.tooltipLeft }
                 key={index}
                 arrow
                 variant="outlined"
@@ -1013,6 +1017,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
                 enterTouchDelay={0}
                 open={(error.instructions[index] && error.instructions[index].character) || (error.instructions[index] && error.instructions[index].badWord)}
                 placement={ index % 2 === 0 ? `bottom-end` : `bottom-start` }
+                style={{ zIndex: '1' }}
                 title={
                   <div className={css.innerTooltip}>
                     { error.instructions[index] && error.instructions[index].character ? <div style={{ fontWeight: '400' }}>Special characters not allowed in "Instructions" !</div> : null }
@@ -1071,6 +1076,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
                 disableFocusListener={ saveButtonDisabled && allDisabled ? true : stepsState.length >= 10 ? false : true }
                 disableHoverListener={ saveButtonDisabled && allDisabled ? true : stepsState.length >= 10 ? false : true }
                 placement="bottom-end"
+                style={{ zIndex: '1' }}
                 title={
                   <div className={css.newStepTooltip}>
                     <div>Max steps {`<`}10{`>`} reached !</div>
@@ -1102,6 +1108,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
                 disableFocusListener={ saveButtonDisabled && allDisabled ? true : stepsState.length === 1 ? false : true }
                 disableHoverListener={ saveButtonDisabled && allDisabled ? true : stepsState.length === 1 ? false : true }
                 placement="bottom-end"
+                style={{ zIndex: '1' }}
                 title={"You can't delete first step !"}
               >
                 <div

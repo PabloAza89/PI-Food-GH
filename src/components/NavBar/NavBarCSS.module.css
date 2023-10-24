@@ -1,4 +1,5 @@
 .background {
+  display: flex;
   /* display: flex; */
   /* height: 600px !important; */
   /* display: none; */
@@ -18,6 +19,8 @@
 
 
   z-index: 3;
+  /* z-index: 100000 !important; */
+  
   width: 100%;
   /* width: 100vw; */
   /* overflow: hidden !important; */
@@ -59,12 +62,13 @@
   /* min-width: 570px; */
   /* min-width: 457px; */
   /* width: 95vw; */
-  /* width: 100%; */
+  /* width: 100% !important; */
   height: 100px;
   align-items: center;
   /* margin-right: 132.5px; */ /*  132.5 ===  "8" 64 8 36.5 16 */
   /* margin-right: unset; */
   align-self: center;
+  /* justify-content: center !important; */
   /* z-index: 40000 !important; */
 }
 
@@ -110,8 +114,14 @@
   cursor: pointer;
 }
 
-.linkStyle {
+.linkStyleCreate {
   text-decoration: none !important;
+  color: rgba(0, 0, 0, 0.87)
+}
+
+.linkStyleAbout {
+  text-decoration: none !important;
+  color: rgba(0, 0, 0, 0.87)
 }
 
 .button { /* CREATE RECIPE - ABOUT */
@@ -230,6 +240,7 @@
 }
 
 .menuButton {
+  display: flex;
   min-width: 0px !important;
   /* display: none; */
   /* display: flex; */
@@ -247,31 +258,54 @@
   font-family: Arial;
   font-weight: 400;
   font-size: 13.33px;
-  margin-right: 16px !important;
+  /* margin-right: 16px !important; */
+  margin-right: 8px !important;
   /* align-self: unset; */
   /* top: 10px; */
 }
 
 .menuButton:hover { background: #e8e8e8 !important }
 
-@media screen and (max-width: 800px) { /* LESS THAN 800px */
-  .background {
-    flex-direction: column;
+/* BREAKPOINTS */
+/* MIN <    MED    > LAR */
+/* 424 < 425 ~ 825 > 826 */
+
+/* MINPORT */
+/* @media screen and (orientation: portrait) and (max-width: 424px) { */
+/* LESS THAN 800px */
+@media screen and (max-width: 800px) {
+
+  .selectsAndButtons {
+    height: 150px;
+    width: calc(100% - 16px);
+    /* margin-left: 8px; */
+    /* padding: 0px 8px 0px 8px; */
+    justify-content: flex-end;
+   }
+  .logoTextContainer {
+    margin-left: 8px !important;
   }
+}
+
+/* LESS THAN 800px */
+@media screen and (max-width: 800px) {
+  .background { flex-direction: column }
   .selectsAndButtons {
     display: none;
     /* width: 100% !important; */
     /* width: 100%; */
     /* margin-right: unset; */
-    width: calc(100% - 16px)
-    /* width: 100% */
+    width: calc(100% - 16px) !important;
+    /* width: 100%; */
+    /* padding: 0px 4px */
   }
   .menuButton { display: flex }
   .logoAndMenuContainer { width: 100% !important }
   .upperLower { width: 100% }
 }
 
-@media screen and (min-width: 801px) { /* MORE THAN 800px */
+/* MORE THAN 800px */
+@media screen and (min-width: 801px) {
   .background {
     height: 100px !important;
     flex-direction: row;
@@ -285,35 +319,41 @@
     margin-right: 132.5px !important; /* 132.5 ===  "8" 64 8 36.5 16 */
   }
   .menuButton { display: none !important}
-  .upperLower { width: 60% }
+  .upperLower {
+    width: 90%;
+    max-width: 750px;
+  }
 }
 
-/* BREAKPOINTS */
-/* MIN <    MED    > LAR */
-/* 424 < 425 ~ 825 > 826 */
+/* CREATE LESS THAN 620px */
+@media screen and (max-width: 620px) {
+  .linkStyleCreate::before {
+    content: "CREATE !"
+  }
+}
 
-/* MINPORT */
-@media screen and (orientation: portrait) and (max-width: 424px) {
-  /* .menuButton {
-    align-self: flex-start;
-  } */
-  .selectsAndButtons { 
-    height: 150px;
-    width: calc(100% - 16px);
-    margin-left: 8px;
-    /* padding: 0px 8px 0px 8px; */
-    justify-content: flex-end;
-   }
-  /* .menuButton {
-    margin-bottom: 50px !important;
-  } */
-  .logoTextContainer {
-    margin-left: 8px !important;
+/* CREATE BETWEEN 620px AND 1000px */
+@media screen
+and (min-width: 620px)
+and (max-width: 1000px) {
+  .linkStyleCreate::before {
+    content: "CREATE RECIPE !" !important
   }
-  .background {
-    /* height: 150px !important */
+}
+
+/* CREATE BETWEEN 800px AND 1000px */
+@media screen
+and (min-width: 801px)
+and (max-width: 1000px) {
+  .linkStyleCreate::before {
+    content: "CREATE !" !important
   }
-  .logoAndMenuContainer {
-    /* background: lightgreen; */
+}
+
+/* CREATE MORE THAN 1000px */
+@media screen
+and (min-width: 1000px) {
+  .linkStyleCreate::before {
+    content: "CREATE RECIPE !" !important
   }
 }

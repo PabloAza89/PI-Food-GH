@@ -115,6 +115,32 @@
   }
 }
 
+/* MINPORT */
+/* @media screen and (orientation: portrait) and (max-width: 424px) { */
+/* LESS THAN 800px */
+@media screen and (max-width: 800px) {
+  .background {
+    margin-right: 8px;
+    margin-top: 98px;
+  }
+  .buttonIn {
+    max-width: calc(100vw - 60.5px);
+  }
+  .buttonWidthHelper {
+    max-width: calc(100vw - 60.5px);
+  }
+  .test:before {
+    content: ' ';
+  }
+}
+
+/* MORE THAN 800px */
+@media screen and (min-width: 801px) {
+  .background {
+    visibility: visible !important
+  }
+}
+
 @media screen and (orientation: landscape) and (max-height: 424px) { /* MINLAND */
   .background {
     /* margin-right: 16px !important; */

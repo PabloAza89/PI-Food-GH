@@ -1,15 +1,15 @@
 .background {
+  /* background: orange; */ /* DEV */
   display: flex;
   background: rgba(148, 179, 138, 0.171); /* GREEN EFFECT */
   justify-content: space-between;
   position: fixed;
   height: 100vh;
   width: 100vw;
-  z-index: -1
-}
-
-.leftRightHelper {
-  display: flex;
+  z-index: -1;
+  /* z-index: 0; */ /* DEV */
+  min-height: 280px !important;
+  justify-content: center;
 }
 
 .mainContainer {
@@ -18,17 +18,24 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  width: 300px !important;
+  /* background: lightpink; */
 }
 
 .errorGif {
   display: flex;
-  position: relative
+  position: relative;
+  width: 200px;
+  height: 200px;
 }
 
 .placeholderAnimation {
   position: relative;
   z-index: 1001;
   animation: error .8s steps(12, end) infinite;
+  margin-top: -200px;
+  width: 200px;
+  height: 200px;
 }
 
 @keyframes error {
@@ -41,4 +48,5 @@
   position: relative;
   color: antiquewhite;
   text-shadow: 0px 0px 10px black;
+  font-size: 20px;
 }
