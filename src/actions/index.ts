@@ -64,13 +64,6 @@ export function filter(payload: filterI) {
   }
 };
 
-export function setShowMain(payload: any) {
-  return {
-    type: 'SET_SHOW_MAIN',
-    payload: payload
-  }
-};
-
 export function setIndexChoosen(payload: any) {
   return {
     type: 'SET_INDEX_CHOOSEN',
@@ -96,27 +89,6 @@ export function setHeight(setHeight:number) {
   return {
     type: 'SET_HEIGHT',
     payload: setHeight
-  }
-};
-
-export function viewPort( viewPort: string ) {
-  return {
-    type: 'VIEW_PORT',
-    payload: viewPort
-  }
-};
-
-export function setCurrentWidth(setCurrentWidth:number) {
-  return {
-    type: 'CURRENT_WIDTH',
-    payload: setCurrentWidth
-  }
-};
-
-export function setHasScroll(setHasScroll:boolean) {
-  return {
-    type: 'SET_HAS_SCROLL',
-    payload: setHasScroll
   }
 };
 

@@ -1,32 +1,9 @@
 .background {
   display: flex;
-  /* display: flex; */
-  /* height: 600px !important; */
-  /* display: none; */
-  /* width: 100vw !important; */
-  /* position: relative; */
-  /* position: fixed; */
   background-color: rgba(0, 255, 255, .264);
-  /* background-image: url('../../images/bgImage.webp');
-  background-size: 100vw; */
-  /* z-index: 2000; */
-
-  /* display: flex; */
-  /* position: sticky; */ /* STICKY NEEDS NO HEIGHT ON PARENT */
-  /* top: 0px; */ /* WHERE STICKY SHOULD STOP */
-
-  
-
-
   z-index: 3;
-  /* z-index: 100000 !important; */
-  
   width: 100%;
-  /* width: 100vw; */
-  /* overflow: hidden !important; */
-  /* border: 10px solid red; */
   flex-direction: row;
-  /* height: 150px; */
 }
 
 .logoAndMenuContainer {
@@ -35,8 +12,6 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  /* width: 200px !important; */
-  /* height: 100px; */
   height: 100px !important;
 }
 
@@ -45,9 +20,6 @@
   background: red; /* DEV */
   margin: 16px 0px 0px 16px;
   flex-direction: row;
-  /* min-width: 200px;
-  width: 200px; */
-  /* min-height: 69px; */
   height: 69px;
   justify-content: flex-end;
   align-items: center;
@@ -57,19 +29,10 @@
 .selectsAndButtons {
   background: gray; /* DEV */
   display: flex;
-  /* display: none !important; */
   flex-direction: column;
-  /* min-width: 570px; */
-  /* min-width: 457px; */
-  /* width: 95vw; */
-  /* width: 100% !important; */
   height: 100px;
   align-items: center;
-  /* margin-right: 132.5px; */ /*  132.5 ===  "8" 64 8 36.5 16 */
-  /* margin-right: unset; */
   align-self: center;
-  /* justify-content: center !important; */
-  /* z-index: 40000 !important; */
 }
 
 .logo {
@@ -116,21 +79,21 @@
 
 .linkStyleCreate {
   text-decoration: none !important;
-  color: rgba(0, 0, 0, 0.87)
+  width: 25% !important;
+  height: 35px;
 }
 
 .linkStyleAbout {
   text-decoration: none !important;
-  color: rgba(0, 0, 0, 0.87)
+  width: 25% !important;
+  height: 35px;
 }
 
-.button { /* CREATE RECIPE - ABOUT */
-  color: black !important;
+.buttonCreate { /* CREATE RECIPE - ABOUT */
+  color: rgba(0, 0, 0, 0.87) !important;
   background: #F0F0F0 !important;
   height: 35px;
   font-weight: 400 !important;
-  /* font-size: 13.33px; */
-  /* font-size: 12px !important; */
   padding-left: 11px;
   padding-right: 11px;
   padding-top: 0px;
@@ -140,10 +103,29 @@
   line-height: normal !important;
   font-family: Roboto;
   min-width: 0px !important;
-  width: 25% !important;
+  width: 100%;
 }
 
-.button:hover { background: #e8e8e8 !important }
+.buttonCreate:hover { background: #e8e8e8 !important }
+
+.buttonAbout { /* CREATE RECIPE - ABOUT */
+  color: rgba(0, 0, 0, 0.87) !important;
+  background: #F0F0F0 !important;
+  height: 35px;
+  font-weight: 400 !important;
+  padding-left: 11px;
+  padding-right: 11px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  border: 2px solid rgb(190, 190, 174);
+  align-items: center;
+  line-height: normal !important;
+  font-family: Roboto;
+  min-width: 0px !important;
+  width: 100%;
+}
+
+.buttonAbout:hover { background: #e8e8e8 !important }
 
 .input {
   height: 35px;
@@ -151,9 +133,6 @@
   width: 44.68%; /* 100 - 25 - 25 - 2.66 - 2.66 */
   background: yellow;
   border-radius: 4px !important;
- /*  :fieldset {
-    border: '2px solid rgb(190, 190, 174)',
-  } */
 }
 
 .noDeco {
@@ -164,15 +143,7 @@
   -ms-user-select: none !important;
   user-select: none !important;
   text-decoration: none !important;
-  
 }
-
-/* .input {
-  fieldset: {
-    border: 2px solid rgb(190; 190; 174);
-  }
-} */
-
 
 .inputProps {
   height: 35px;
@@ -182,11 +153,9 @@
 .labelHealthOrAlpha {
   background: #FFFFFF !important;
   border-radius: 4px 4px 0px 0px ;
-  /* margin: 0px !important; */
   margin-left: -8px;
   margin-top: -3px;
   max-width: calc(133% - 20px) !important;
-  /* border-radius: 4px !important; */
 }
 
 .labelAlpha {
@@ -197,13 +166,11 @@
   max-width: calc(133% - 20px) !important;
 }
 
-
 .containerDietsDishesHealthAlpha {
   border-radius: 4px;
   width: 23% !important;
   height: 35px;
   background: #FFFFFF;
-  /* background: red !important; */
   :fieldset {
     border: 2px solid red !important;
     background: red !important;
@@ -215,7 +182,6 @@
   width: 100% !important;
   height: 35px;
   background: #FFFFFF;
-  /* background: red !important; */
   :fieldset {
     border: 2px solid red !important;
     background: red !important;
@@ -224,17 +190,10 @@
 }
 
 .upperLower {
-  /* width: 60%; */
-  /* width: 50%; */
-  /* width: 50%; */
-  /* width: unset; */
   background: red; /* DEV */
   display: flex;
   flex-direction: row;
-  /* min-width: 457px; */
-  /* justify-content: space-between; */
-  /* align-items: center; */
-  height: 50px !important;
+  height: 100px !important;
   align-items: center;
   justify-content: space-between;
 }
@@ -242,26 +201,15 @@
 .menuButton {
   display: flex;
   min-width: 0px !important;
-  /* display: none; */
-  /* display: flex; */
   position: relative !important;
-  /* position: absolute !important; */
-  /* :hover: { background: #e8e8e8 }; */
-  /* margin-right: 18px !important; */
   color: black !important;
-  /* background: '#F0F0F0', */
   background: #F0F0F0 !important;
   height: 45px;
-  /* height: 40px; */
   width: 55px !important;
-  /* width: 50px !important; */
   font-family: Arial;
   font-weight: 400;
   font-size: 13.33px;
-  /* margin-right: 16px !important; */
   margin-right: 8px !important;
-  /* align-self: unset; */
-  /* top: 10px; */
 }
 
 .menuButton:hover { background: #e8e8e8 !important }
@@ -270,18 +218,13 @@
 /* MIN <    MED    > LAR */
 /* 424 < 425 ~ 825 > 826 */
 
-/* MINPORT */
-/* @media screen and (orientation: portrait) and (max-width: 424px) { */
 /* LESS THAN 800px */
 @media screen and (max-width: 800px) {
-
   .selectsAndButtons {
     height: 150px;
     width: calc(100% - 16px);
-    /* margin-left: 8px; */
-    /* padding: 0px 8px 0px 8px; */
     justify-content: flex-end;
-   }
+  }
   .logoTextContainer {
     margin-left: 8px !important;
   }
@@ -292,16 +235,14 @@
   .background { flex-direction: column }
   .selectsAndButtons {
     display: none;
-    /* width: 100% !important; */
-    /* width: 100%; */
-    /* margin-right: unset; */
     width: calc(100% - 16px) !important;
-    /* width: 100%; */
-    /* padding: 0px 4px */
   }
   .menuButton { display: flex }
   .logoAndMenuContainer { width: 100% !important }
-  .upperLower { width: 100% }
+  .upperLower {
+    width: 100%;
+    height: 50px !important;
+  }
 }
 
 /* MORE THAN 800px */
@@ -313,9 +254,8 @@
   }
   .selectsAndButtons {
     display: flex !important;
-    /* width: 100% !important; */
+    height: 100px !important;
     width: 100%;
-    /* width: 457px !important; */
     margin-right: 132.5px !important; /* 132.5 ===  "8" 64 8 36.5 16 */
   }
   .menuButton { display: none !important}
@@ -327,7 +267,7 @@
 
 /* CREATE LESS THAN 620px */
 @media screen and (max-width: 620px) {
-  .linkStyleCreate::before {
+  .buttonCreate::before {
     content: "CREATE !"
   }
 }
@@ -336,7 +276,7 @@
 @media screen
 and (min-width: 620px)
 and (max-width: 1000px) {
-  .linkStyleCreate::before {
+  .buttonCreate::before {
     content: "CREATE RECIPE !" !important
   }
 }
@@ -345,7 +285,7 @@ and (max-width: 1000px) {
 @media screen
 and (min-width: 801px)
 and (max-width: 1000px) {
-  .linkStyleCreate::before {
+  .buttonCreate::before {
     content: "CREATE !" !important
   }
 }
@@ -353,7 +293,7 @@ and (max-width: 1000px) {
 /* CREATE MORE THAN 1000px */
 @media screen
 and (min-width: 1000px) {
-  .linkStyleCreate::before {
+  .buttonCreate::before {
     content: "CREATE RECIPE !" !important
   }
 }

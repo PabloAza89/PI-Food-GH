@@ -7,25 +7,24 @@ import noImage2 from "../../images/noImage2.jpg";
 import noImage3 from "../../images/noImage3.jpg";
 import notAvailable from "../../images/notAvailable.jpg";
 import { handleDelete, handleEdit } from '../../commons/commonsFunc';
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Button } from '@mui/material/';
 import { recipesI } from '../../interfaces/interfaces';
 import EditIcon from '@mui/icons-material/Edit';
 import ClearIcon from '@mui/icons-material/Clear';
 import {
   fetchRecipesFromAPI, allRecipesLoaded, getDietsFromDB,
-  getDishesFromDB, setHasScroll, setMenuShown
+  getDishesFromDB, setMenuShown
 } from '../../actions';
 import $ from 'jquery';
 
-export default function Detail({ userData, retrieveLogin }: any) {
+export default function Detail({ userData, setUserData }: any) {
 
   const dispatch = useDispatch()
   const navigate = useNavigate();
   const params = useParams()
 
   const menuShown = useSelector((state: {menuShown:boolean}) => state.menuShown)
-  const currentWidth = useSelector((state: {currentWidth:number}) => state.currentWidth)
   const allRecipes = useSelector((state: { allRecipes: recipesI[] }) => state.allRecipes)
   const recipe = allRecipes.filter((c:any) => params.recipeId! === c.id.toString() && params.recipeId!.toString().length === params.recipeId!.length)[0]
   const [ brokenImage, setBrokenImage ] = useState<boolean>(false)
@@ -44,19 +43,20 @@ export default function Detail({ userData, retrieveLogin }: any) {
     }
   }
 
-  if (recipe !== undefined && recipe.userRecipe && recipe.image.length > 1) {
-    fetch( `https://res.cloudinary.com/dtembdocm/image/upload/` + recipe.image, {
-      headers: { 'Cache-Control': 'no-cache' }
-    })
-    .then((res) => {
-      if (res.ok) setBrokenImage(false)
-      else setBrokenImage(true)
-    })
-    .catch((err) => console.error(err))
-  }
+  useEffect(() => {
+    if (recipe !== undefined && recipe.userRecipe && recipe.image.length > 1) {
+      fetch( `https://res.cloudinary.com/dtembdocm/image/upload/` + recipe.image, {
+        headers: { 'Cache-Control': 'no-cache' }
+      })
+      .then((res) => {
+        if (res.ok) setBrokenImage(false)
+        else setBrokenImage(true)
+      })
+      .catch((err) => console.error(err))
+    }
+  },[])
 
   useEffect(() => {
-    dispatch(setHasScroll(window.innerWidth !== $('body').width() ? true : false))
     dispatch(setMenuShown(false))
   },[dispatch])
 
@@ -66,13 +66,7 @@ export default function Detail({ userData, retrieveLogin }: any) {
     return (
       <div
         className={css.background}
-        style={{
-          //marginRight: hasScroll ? `${16 + scrollWidth}px` : `16px`
-          marginTop: menuShown ? '150px' : '100px'
-        }}
-        //style={{
-          //marginRight: hasScroll ? `${16 + scrollWidth}px` : `16px`
-        //}}
+        style={{ marginTop: menuShown ? '150px' : '100px' }}
       >
         <div className={css.card}>
           <div
@@ -85,7 +79,7 @@ export default function Detail({ userData, retrieveLogin }: any) {
             <Button
               variant="contained"
               id={css.buttonEditDelete}
-              onClick={() => handleDelete({ id: recipe.id, fd_tkn: userData.fd_tkn, retrieveLogin, handleReload })}
+              onClick={() => handleDelete({ id: recipe.id, fd_tkn: userData.fd_tkn, setUserData, handleReload })}
             >
               <ClearIcon className={css.iconDelete} />
             </Button>
@@ -104,10 +98,7 @@ export default function Detail({ userData, retrieveLogin }: any) {
           </div>
           <img
             className={css.image}
-            style={{
-              //marginTop: currentWidth <= 535 && userData.email === recipe.email ? '24px' : '0px' // 24 === 40 - 16
-              marginTop: userData.email === recipe.email ? '24px' : '0px' // 24 === 40 - 16
-            }}
+            style={{ marginTop: userData.email === recipe.email ? '24px' : '0px' }} // 24 === 40 - 16
             src={
               brokenImage ?
               notAvailable :

@@ -81,3 +81,19 @@
 .button:hover {
   background: rgba(139, 0, 139, 0.424) !important;
 }
+
+/* LESS THAN 500px */
+@media screen and (max-width: 499px) {
+  .buttonsAndText {
+    flex-direction: column;
+  }
+  .divider {
+    width: calc(100vw - 32px);
+    height: 4px !important;
+    background: white;
+    min-height: unset !important;
+    border-bottom: 0px solid white;
+    margin: 35px 0px 15px 0px;
+  }
+
+}

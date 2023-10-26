@@ -9,7 +9,7 @@ import { ReactComponent as MySvg } from '../../images/googleLogo.svg';
 import Swal from 'sweetalert2';
 import { useGoogleLogin } from '@react-oauth/google';
 
-const LandingPage = ({ retrieveLogin, userData }: any) => {
+const LandingPage = ({ setUserData, userData }: any) => {
 
   const dispatch = useDispatch()
   const navigate = useNavigate();
@@ -30,12 +30,8 @@ const LandingPage = ({ retrieveLogin, userData }: any) => {
   }, [])
 
   window.onfocus = function() { // FIRED WHEN TAB IS FOCUSED, CHECK VALID USER
-    console.log("FOCUSED LANDING")
-    checkPrevLogin({ retrieveLogin, userData })
-    if (landingHiddenLS && JSON.parse(landingHiddenLS)) {
-      dispatch(landingHidden(true))
-      console.log("DISPATCHED")
-    }
+    checkPrevLogin({ setUserData, userData })
+    if (landingHiddenLS && JSON.parse(landingHiddenLS)) dispatch(landingHidden(true))
   }
 
   const login = useGoogleLogin({
@@ -59,17 +55,17 @@ const LandingPage = ({ retrieveLogin, userData }: any) => {
         .then((res) => res.json())
         .then((res) => {
           if (res.status === 200) {
-            retrieveLogin({ email: res.email, fd_tkn: res.fd_tkn })
+            setUserData({ email: res.email, fd_tkn: res.fd_tkn })
             dispatch(landingHidden(true))
             localStorage.setItem('landingHidden', 'true')
             navigate("/")
           }
 
           if (res.status === 400 && res.message === `User not logged`) {
-            retrieveLogin({ email: "", fd_tkn: "" })
+            setUserData({ email: "", fd_tkn: "" })
           }
           if (res.status === 400 && res.message === `Invalid Credentials`) {
-            retrieveLogin({ email: "", fd_tkn: "" })
+            setUserData({ email: "", fd_tkn: "" })
             Swal.fire({
               title: `There was an error when cheking your loggin.. `,
               text: `Please, log in again.`,
@@ -124,7 +120,7 @@ const LandingPage = ({ retrieveLogin, userData }: any) => {
     >
       <div className={css.bgImage}></div>
       <div className={css.buttonsAndText}>
-        <h1 className={css.text}>Welcome to Foodify !</h1>
+        <h1 className={css.text}>Welcome to Foodify !</h1>
         <div className={css.divider} />
         <div className={css.buttons}>
           <Button

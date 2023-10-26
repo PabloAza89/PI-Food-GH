@@ -3,30 +3,22 @@ import css from './PaginateCSS.module.css';
 import { setIndexChoosen, setTabChoosen } from '../../actions';
 import { Button } from '@mui/material/';
 import $ from 'jquery';
-import { recipesI } from '../../interfaces/interfaces';
+import { recipesI, paginateAmountI } from '../../interfaces/interfaces';
 import Tooltip from '@mui/joy/Tooltip';
 
-const Paginate = () => {
+const Paginate = ({ paginateAmount }: paginateAmountI) => {
 
   const dispatch = useDispatch()
 
-  const allRecipes = useSelector((state: { allRecipes: recipesI[] }) => state.allRecipes)
   const indexChoosen = useSelector((state: {indexChoosen: number}) => state.indexChoosen )
   const scrollPosition = useSelector((state: {scrollPosition: number}) => state.scrollPosition )
   const menuShown = useSelector((state: {menuShown: boolean}) => state.menuShown )
   const toShow = useSelector((state: { toShow: recipesI[] }) => state.toShow )
   const tabChoosen = useSelector((state: { tabChoosen: number }) => state.tabChoosen )
-  const viewPort = useSelector(( state: { viewPort: string } ) => state.viewPort)
 
   let result: any = []
 
-  //const chunkSize = 90; // 90 === 9 * 10 === 10 TABS OF 9
-  //const chunkSize = 45; // 90 === 9 * 10 === 10 TABS OF 9
-  const chunkSize = viewPort.slice(0,3) === ('sma') ? 45 : 90; // 90 === 9 * 10 === 10 TABS OF 9
-  
-  for (let i = 0; i < toShow.length; i += chunkSize) {
-    result.push(toShow.slice(i, i + chunkSize))
-  }
+  for (let i = 0; i < toShow.length; i += paginateAmount) result.push(toShow.slice(i, i + paginateAmount))
 
   $(function() {
     result[0] && [...Array(Math.ceil(result[tabChoosen].length/9))].forEach((e, i) => {
@@ -82,16 +74,14 @@ const Paginate = () => {
               key={i}
               value={i}
               onClick={(e) => dispatch(setIndexChoosen(Number((e.target as HTMLInputElement).value)))}
-            //>{tabChoosen ? tabChoosen : null}{++i}</Button>
-            //>{ (5 * tabChoosen) + ++i}</Button>
             >
               {
-                viewPort.slice(0,3) === ('sma') ?
+                paginateAmount === 45 ?
                 ((5 * tabChoosen) + ++i) :
                 tabChoosen ? tabChoosen : null
               }
               {
-                viewPort.slice(0,3) !== ('sma') ?
+                paginateAmount === 90 ?
                 ++i :
                 null
               }
@@ -120,8 +110,12 @@ const Paginate = () => {
             ><b>{`>`}</b></Button>
           </div>
         </Tooltip>
-        </div>
-      {/* <div className={css.counter}>  {tabChoosen ? tabChoosen : null}{1} - {tabChoosen ? tabChoosen : null}{result[0] && Math.ceil(result[tabChoosen].length/9) } of {Math.ceil(toShow.length/9)}</div> */}
+      </div>
+      
+      <div className={css.counter}>  {tabChoosen ? tabChoosen : null}{1} - {tabChoosen ? tabChoosen : null}{result[0] && Math.ceil(result[tabChoosen].length/9) } of {Math.ceil(toShow.length/9)}
+          <div className={css.abc}></div>
+      </div>
+      
     </div>
   );
 }

@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation, useMatch, useNavigate } from "react-router-dom";
+import {
+  Link, useLocation, useMatch, useNavigate
+} from "react-router-dom";
 import logo from "../../images/logo.png";
 import css from './NavBarCSS.module.css';
 import { handleReturn } from '../../commons/commonsFunc';
 import { useDispatch, useSelector } from 'react-redux';
 import MenuIcon from '@mui/icons-material/Menu';
 import {
-  Button, TextField, FormControl, Popover,
+  Button, TextField, FormControl,
   InputLabel, MenuItem, Select, SelectChangeEvent
 } from '@mui/material/';
 import {
@@ -18,30 +20,26 @@ import serverSDDietsArray from '../../db/diets.json'; // SD = Shut Down
 import serverSDDishesArray from '../../db/dishes.json'; // SD = Shut Down
 
 interface NavBarI {
-  recipeCreatedOrEdited?: boolean
+  recipeCreatedOrEdited?: boolean,
+  paginateAmount?: number
 }
 
-const NavBar = ({ recipeCreatedOrEdited }: NavBarI) =>  {
+const NavBar = ({ recipeCreatedOrEdited, paginateAmount }: NavBarI) =>  {
 
   const dispatch = useDispatch()
   const location = useLocation()
   const navigate = useNavigate()
 
-  const inHome = useMatch("/")?.pattern.path === "/" ? true : false; // "/" === Home
   const inDetail = [useMatch("/:route")?.params.route?.toLowerCase()].filter(e => e !== "about")[0]
-  const [isEditing, setIsEditing] = useState<boolean>( location.state && location.state.editing ? true : false );
-  const allRecipesLoaded = useSelector((state: {allRecipesLoaded: boolean}) => state.allRecipesLoaded)
   const [healthLevel, setHealthLevel] = useState<string>('');
   const [healthLabelShown, setHealthLabelShown] = useState<boolean>(false);
   const [sortAlpha, setSortAlpha] = useState<string>('');
   const [alphaLabelShown, setAlphaLabelShown] = useState<boolean>(false);
   const [placeholder, setPlaceholder] = useState<string>('Find recipe..');
-  const currentWidth = useSelector((state: {currentWidth:number}) => state.currentWidth)
   const menuShown = useSelector((state: {menuShown:boolean}) => state.menuShown)
   //const menuShown = true
   const allDietsOnline = useSelector((state: {allDietsOnline:boolean}) => state.allDietsOnline)
   const allDishesOnline = useSelector((state: {allDishesOnline:boolean}) => state.allDishesOnline)
-  const viewPort = useSelector(( state: { viewPort: string } ) => state.viewPort)
 
   interface allDietsI {
     id?: string,
@@ -86,8 +84,17 @@ const NavBar = ({ recipeCreatedOrEdited }: NavBarI) =>  {
 
   useEffect(() => {
     dispatch(filter(entireFilter))
-    if (currentWidth > 800) dispatch(setMenuShown(false))
-  },[ dispatch, entireFilter, currentWidth ])
+  },[ dispatch, entireFilter ])
+
+  useEffect(() => {
+    function handleResize() {
+      if (window.innerWidth > 800) dispatch(setMenuShown(false))
+    }
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    }
+  })
 
   return (
     <div
@@ -97,18 +104,11 @@ const NavBar = ({ recipeCreatedOrEdited }: NavBarI) =>  {
         height: location.pathname !== `/` && menuShown ? '150px' : 'unset',
       }}
     >
-      <div
-        className={css.logoAndMenuContainer}
-        //style={{
-          //width: currentWidth <= 800 ? `100%` : '200px',
-          //height: '100px'
-        //}}
-      >
+      <div className={css.logoAndMenuContainer}>
         <div className={css.logoTextContainer}>
           <div
             onClick={() => handleReturn({
-              location, navigate, inDetail,
-              isEditing, recipeCreatedOrEdited
+              location, navigate, inDetail, recipeCreatedOrEdited
             })}
           >
             <img className={css.logo} src={logo} alt=""></img>
@@ -116,8 +116,7 @@ const NavBar = ({ recipeCreatedOrEdited }: NavBarI) =>  {
           <div // NO Link BECAUSE PERFORM AN ACTION
             className={css.noDeco}
             onClick={() => handleReturn({
-              location, navigate,
-              isEditing, recipeCreatedOrEdited
+              location, navigate, recipeCreatedOrEdited
             })}
           >
             <div className={css.linkText}>Foodify !</div>
@@ -144,7 +143,6 @@ const NavBar = ({ recipeCreatedOrEdited }: NavBarI) =>  {
         className={css.selectsAndButtons}
         style={{
           visibility: location.pathname !== `/` ? 'hidden' : 'visible',
-          //display: menuShown ? 'flex' : 'none'
           display:
             location.pathname !== `/` ?
             'none' :
@@ -153,13 +151,7 @@ const NavBar = ({ recipeCreatedOrEdited }: NavBarI) =>  {
             'none'
         }}
       >
-        <div
-          style={{
-            //width: currentWidth <= 800 ? `calc(100% - 8px)` : '50vw',
-            height: '100px'
-          }}
-          className={css.upperLower}
-        >
+        <div className={css.upperLower}>
           <TextField
             type="text"
             autoComplete='off'
@@ -174,42 +166,31 @@ const NavBar = ({ recipeCreatedOrEdited }: NavBarI) =>  {
               dispatch(setTabChoosen(0));
             }}
           />
-          
-          <Button
-            variant="contained"
-            disableElevation
-            className={css.button}
+          <Link
+            className={css.linkStyleCreate}
+            to="/MyRecipe"
           >
-            <Link
-              className={css.linkStyleCreate}
-              to="/MyRecipe"
-            //>{ viewPort.slice(0,3) === ('sma') ? 'CREATE' : `CREATE RECIPE !` }</Link>
+            <Button
+              variant="contained"
+              disableElevation
+              className={css.buttonCreate}
             />
-          </Button>
-          
-          
-          <Button
-            variant="contained"
-            disableElevation
-            className={css.button}
+          </Link>
+          <Link
+            className={css.linkStyleAbout}
+            to="/About"
           >
-            <Link
-              className={css.linkStyleAbout}
-              to="/About"
-            //>ABOUT&nbsp;!</Link>
-            //</div></div>>{ viewPort.slice(0,3) === ('sma') ? 'ABOUT' : 'ABOUT !' }</Link>
-            >{ viewPort.slice(0,3) === ('sma') ? 'ABOUT' : 'ABOUT !' }</Link>
-          </Button>
-          
+            <Button
+              variant="contained"
+              disableElevation
+              className={css.buttonAbout}
+            >
+              { paginateAmount === 45 ? 'ABOUT' : 'ABOUT !' }
+            </Button>
+          </Link>
         </div>
-        <div
-          //style={{ width: currentWidth <= 800 ? `calc(100% - 8px)` : '50vw' }}
-          className={css.upperLower}
-        >
+        <div className={css.upperLower}>
           <Select
-            //MenuProps={{ disableScrollLock: true }}
-            
-          
             className={css.containerDietsDishesHealthAlpha}
             value={entireFilter.diet}
             onChange={(e) => { setEntireFilter({...entireFilter, diet:e.target.value}); dispatch(setIndexChoosen(0)) }}

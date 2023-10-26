@@ -16,11 +16,11 @@ import store from '../store/store'
 interface handleDeleteI {
   id: string | number,
   fd_tkn: string,
-  retrieveLogin: any
+  setUserData: any
   handleReload: any
 }
 
-export const handleDelete = async ({ id, fd_tkn, retrieveLogin, handleReload }: handleDeleteI ) => {
+export const handleDelete = async ({ id, fd_tkn, setUserData, handleReload }: handleDeleteI ) => {
 
   Swal.fire({
     title: 'Are you sure do you want to delete&nbspthis recipe&nbsp?',
@@ -50,7 +50,7 @@ export const handleDelete = async ({ id, fd_tkn, retrieveLogin, handleReload }: 
         console.log("RES RES", res)
         if (res.status === 400 && res.message === 'Invalid Credentials') {
           console.log("PASS BY THIS WAY")
-          retrieveLogin({ email: '', fd_tkn: '' })
+          setUserData({ email: '', fd_tkn: '' })
           Swal.fire({
             title: `There was an error when cheking your loggin.. `,
             text: `Please, log in again.`,
@@ -145,10 +145,8 @@ export const handleEdit = ({
 }
 
 export const handleReturn = ({
-  location, navigate, isEditing, recipeCreatedOrEdited, inDetail
+  location, navigate, recipeCreatedOrEdited, inDetail
 }: any) => {
-  //if (location.pathname.toLowerCase() === `/myrecipe` && isEditing && !recipeCreatedOrEdited) {
-  console.log("A VERGA", isEditing)
   if (location.pathname.toLowerCase() === `/myrecipe` && (location.state && location.state.editing) && !recipeCreatedOrEdited) {
     Swal.fire({
       title: 'Do you want to cancel editing and go back ?',
@@ -185,7 +183,7 @@ export const handleReturn = ({
 }
 
 export function checkPrevLogin ({
-  retrieveLogin, userData, navigate
+  setUserData, userData, navigate
 }: any) {
 
 //export function checkPrevLogin (props: any) {
@@ -211,7 +209,7 @@ export function checkPrevLogin ({
         if (res.status === 200) {
           //navigate("/")
           console.log("entro aca ?!?")
-          retrieveLogin({ email: res.email, fd_tkn: res.fd_tkn })
+          setUserData({ email: res.email, fd_tkn: res.fd_tkn })
           store.dispatch(landingHidden(true))
           //store.dispatch(setMenuShown(true))
           //dispatch()
@@ -224,11 +222,11 @@ export function checkPrevLogin ({
         }
 
         if (res.status === 400 && res.message === `User not logged`) {
-          retrieveLogin({ email: "", fd_tkn: "" })
+          setUserData({ email: "", fd_tkn: "" })
         }
 
         if (res.status === 400 && res.message === `Invalid Credentials`) {
-          retrieveLogin({ email: "", fd_tkn: "" })
+          setUserData({ email: "", fd_tkn: "" })
         }
       })
       .catch(rej => console.log(rej))

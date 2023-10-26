@@ -1,12 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Dispatch, SetStateAction } from "react";
 import css from "./CardCSS.module.css";
 import { Link, useNavigate } from "react-router-dom";
-import { useSelector , useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import noImage1 from "../../images/noImage1.jpg";
 import noImage2 from "../../images/noImage2.jpg";
 import noImage3 from "../../images/noImage3.jpg";
 import notAvailable from "../../images/notAvailable.jpg";
-import { Button, Divider } from '@mui/material';
+import { Button } from '@mui/material';
 import Tooltip from '@mui/joy/Tooltip';
 import { handleDelete, handleEdit } from '../../commons/commonsFunc';
 import $ from 'jquery';
@@ -15,20 +15,23 @@ import ClearIcon from '@mui/icons-material/Clear';
 import {
   fetchRecipesFromAPI, allRecipesLoaded, getDietsFromDB, getDishesFromDB
 } from '../../actions';
-import { recipesI, userDataI, retrieveLoginI } from '../../interfaces/interfaces';
+import { recipesI, userDataI } from '../../interfaces/interfaces';
 
-interface CardI extends recipesI, userDataI, retrieveLoginI {}
+interface CardI {
+  setUserData: Dispatch<SetStateAction<userDataI>>
+  userData: userDataI
+}
+
+interface CardI extends recipesI {}
 
 const Card = ({
   id, image, title, healthScore , diets, email,
-  dishTypes, userRecipe, retrieveLogin, userData,
+  dishTypes, userRecipe, setUserData, userData,
   summary, analyzedInstructions
 }: CardI) => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const viewPort = useSelector((state: { viewPort: string }) => state.viewPort )
 
   const reloadRecipes = async () => {
     dispatch(getDietsFromDB())
@@ -55,32 +58,27 @@ const Card = ({
     $(`.dishCard${id}`).prop(`scrollWidth`) > $(`.dishCard${id}`).innerWidth()! ? setFitDish(false) : setFitDish(true)
   })
 
-  if (userRecipe && image.length > 1) {
-    fetch( `https://res.cloudinary.com/dtembdocm/image/upload/` + image, {
-      headers: { 'Cache-Control': 'no-cache' }
-    })
-    .then((res) => {
-      if (res.ok) setBrokenImage(false)
-      else setBrokenImage(true)
-    })
-    .catch((err) => { console.error(err) })
-  }
-
-  console.log("viewPort", viewPort)
+  useEffect(() => {
+    if (userRecipe && image.length > 1) {
+      fetch( `https://res.cloudinary.com/dtembdocm/image/upload/` + image, {
+        headers: { 'Cache-Control': 'no-cache' }
+      })
+      .then((res) => {
+        if (res.ok) setBrokenImage(false)
+        else setBrokenImage(true)
+      })
+      .catch((err) => { console.error(err) })
+    }
+  },[])
+    
 
   return (
-    <div
-      className={css.background}
-      style={{
-        //width: viewPort === 'smaPort' ? '90%' : '450px'
-      }}
-    >
+    <div className={css.background}>
       <div
         className={css.editDeleteContainer}
         style={{
           overflow: 'hidden',
           display: userRecipe && userData.email === email ? 'flex' : 'none',
-          /* flexDirection: viewPort === 'smaPort' ? 'column-reverse' : 'row' */
         }}
       >
         <Button
@@ -98,7 +96,7 @@ const Card = ({
         <Button
           variant="contained"
           id={css.buttonEditDelete}
-          onClick={() => handleDelete({ id: id, fd_tkn: userData.fd_tkn, retrieveLogin, handleReload })}
+          onClick={() => handleDelete({ id: id, fd_tkn: userData.fd_tkn, setUserData, handleReload })}
         >
           <ClearIcon className={css.iconDelete} />
         </Button>
@@ -106,9 +104,6 @@ const Card = ({
       <Link className={css.imageOrTitleContainer} to={`/${id}`}>
         <img
           className={css.image}
-          style={{
-            //width: viewPort === 'smaPort' ? 'calc(100% - 80px)' : '350px'
-          }}
           src={
             brokenImage ?
             notAvailable :

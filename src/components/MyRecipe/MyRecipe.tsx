@@ -6,8 +6,10 @@ import noImage2 from "../../images/noImage2.jpg";
 import noImage3 from "../../images/noImage3.jpg";
 import noLoaded from "../../images/noLoaded.jpg";
 import { useLocation, useNavigate } from "react-router-dom";
-import { setHasScroll, setMenuShown } from '../../actions';
-import { Box, Button, TextField, ListItemText, Checkbox, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material/';
+import {
+  Button, TextField, ListItemText, Checkbox, FormControl,
+  InputLabel, MenuItem, Select, SelectChangeEvent
+} from '@mui/material/';
 import dietsEntireArray from '../../db/diets.json';
 import dishesEntireArray from '../../db/dishes.json';
 import Tooltip from '@mui/joy/Tooltip';
@@ -20,7 +22,10 @@ import {
   validateStringI, highlighterI, handlerDeleteInstructionsI
 } from '../../interfaces/interfaces';
 
-const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: any) => {
+const MyRecipe = ({
+  setUserData, userData,
+  retrieveRecipeCreatedOrEdited, paginateAmount
+}: any) => {
 
   const arrImages = [noImage1, noImage2, noImage3];
 
@@ -37,9 +42,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
   let stepsStateLS: string | null = localStorage.getItem('stepsState');
  
   const menuShown = useSelector((state: {menuShown:boolean}) => state.menuShown)
-  const viewPort = useSelector(( state: { viewPort: string } ) => state.viewPort)
   const [isEditing, setIsEditing] = useState<boolean>( location.state && location.state.editing ? true : false );
-  const [healthScorePlaceholder, setHealthScorePlaceholder] = useState<string>('e.g. 73');
   const [titleValue, setTitleValue] = useState<string>('');
   const [imageValue, setImageValue] = useState<string>('');
   const [imageValueDoubleCheck, setImageValueDoubleCheck] = useState<string>('');
@@ -464,7 +467,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
         }
         if (res.status === 400 && res.message === 'Invalid Credentials') {
           console.log("YYY", "OJO QUE ENTRO ACA")
-          retrieveLogin({ email: '', fd_tkn: '' })
+          setUserData({ email: '', fd_tkn: '' })
           Swal.fire({
             title: `There was an error when cheking your loggin.. `,
             text: `Please, log in again.`,
@@ -605,7 +608,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
 
         if (res.status === 400 && res.message === 'Invalid Credentials') {
           console.log("YYY", "OJO QUE ENTRO ACA")
-          retrieveLogin({ email: '', fd_tkn: '' })
+          setUserData({ email: '', fd_tkn: '' })
           Swal.fire({
             title: `There was an error when cheking your loggin.. `,
             text: `Please, log in again.`,
@@ -672,27 +675,16 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
     else retrieveRecipeCreatedOrEdited(false)
   },[allDisabled])
   
-
-  useEffect(() => {
-    dispatch(setHasScroll(window.innerWidth !== $('body').width() ? true : false))
-    
-  },[window.innerWidth])
-
-  //dispatch(setMenuShown(false))
-
   window.onbeforeunload = function() { // CLEAR FORM: SAVED && FIRES WHEN WINDOW IS CLOSED OR REFRESH
-    if (recipeCreated.current) {
-      clearHandler() // RESET ALL FORM
-    }
+    if (recipeCreated.current) clearHandler() // RESET ALL FORM
   }
+
+  console.log("RESULT TEST", imageLoaded)
 
   return (
     <div
       className={css.background}
-      style={{
-        marginTop: menuShown ? '150px' : '100px'
-      }}
-      //style={{ marginRight: hasScroll ? `${16 + scrollWidth}px` : `16px` }}
+      style={{ marginTop: menuShown ? '150px' : '100px' }}
     >
     <div
       className={css.form}
@@ -725,10 +717,9 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
         }
       </div>
 
-      <div className={css.eachRow}> {/* viewPort.slice(0,3) === ('sma') */}
+      <div className={css.eachRow}>
         <div className={css.text}>Title:</div>
         <Tooltip
-          //className={css.tooltipCenter}
           arrow
           variant="outlined"
           size="md"
@@ -738,7 +729,6 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
           enterTouchDelay={0}
           open={error.title.character || error.title.badWord}
           placement="bottom"
-          //PopperProps={{style:{zIndex:0}}}
           style={{ zIndex: '1' }}
           title={
             <div className={css.innerTooltip}>
@@ -774,13 +764,10 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
               }}
               value={titleValue}
               placeholder={
-                viewPort.slice(0,3) === ('sma') ?
+                paginateAmount === 45 ?
                 `Enter your title` :
                 `e.g. Pasta with tomatoes..`
               }
-              
-              /* placeholder={css.inputStylee} */
-              /* placeholder={{}} */
               onChange={(e) => { validator({ value: e.target.value, type: e.target.id }) }}
             />
           </div>
@@ -789,7 +776,6 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
       <div className={css.eachRow}>
         <div className={css.text}>Image:</div>
         <Tooltip
-          //className={css.tooltipLeft}
           arrow
           variant="outlined"
           size="md"
@@ -819,11 +805,12 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
             value={imageValue}
             autoComplete='off'
             placeholder={
-              viewPort.slice(0,3) === ('sma') ?
-                `Enter image url` :
-                `e.g. https://commons.wikimedia.org/wiki/File:Elaboraci%C3%B3n_del_tomate_frito_(4).jpg`
+              paginateAmount === 45 ?
+              `Enter image url` :
+              `e.g. https://commons.wikimedia.org/wiki/File:Elaboraci%C3%B3n_del_tomate_frito_(4).jpg`
             }
             onChange={(e) => { // DOUBLE CHECK/LOADING FOR EDITED ENCODED URL IMAGE
+
               let copyImageValue = e.target.value.trim()
               if (!isEditing) localStorage.setItem('imageValue', e.target.value)
               setImageValue(e.target.value.trim())
@@ -834,6 +821,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
               setTimeout(() => {
                 setImageValueDoubleCheck(copyImageValue)
               }, 200)
+
             }}
           />
         </Tooltip>
@@ -841,7 +829,6 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
       <div className={css.eachRow}>
         <div className={css.text}>Health Score:</div>
         <Tooltip
-          //className={css.tooltipLeft}
           arrow
           variant="outlined"
           size="md"
@@ -872,15 +859,10 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
             value={healthValue}
             autoComplete='off'
             placeholder={
-              viewPort.slice(0,3) === ('sma') ?
+              paginateAmount === 45 ?
               `Enter health level` :
               `e.g. 73`
             }
-            // viewPort.slice(0,3) === ('sma') ?
-            //     `Enter your title` :
-            //     `e.g. https://commons.wikimedia.org/wiki/File:Elaboraci%C3%B3n_del_tomate_frito_(4).jpg`
-            /* onFocus={() => setHealthScorePlaceholder("")}
-            onBlur={() => setHealthScorePlaceholder(`e.g. 73`)} */
             onChange={(e) => { validator({ value: e.target.value, type: e.target.id }) }}
           />
         </Tooltip>
@@ -918,7 +900,6 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
       <div className={css.eachRow}>
         <div className={css.text}>Summary:</div>
         <Tooltip
-          //className={css.tooltipCenter}
           arrow
           variant="outlined"
           size="md"
@@ -1007,7 +988,6 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
               <div className={css.stepTitle}>Step {index + 1}:</div>
 
               <Tooltip
-                //className={ index % 2 === 0 ? css.tooltipRight : css.tooltipLeft }
                 key={index}
                 arrow
                 variant="outlined"
@@ -1170,7 +1150,7 @@ const MyRecipe = ({ retrieveLogin, userData, retrieveRecipeCreatedOrEdited }: an
           {
             isEditing ?
             `SAVE EDIT` :
-            viewPort.slice(0,3) === ('sma') ?
+            paginateAmount === 45 ?
             `SAVE` :
             `SAVE RECIPE`
           }

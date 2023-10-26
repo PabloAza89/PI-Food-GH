@@ -1,5 +1,3 @@
-import { Dispatch, SetStateAction } from "react";
-
 interface analyzedInstructionsI {
   0?: number
   name?: string,
@@ -25,20 +23,10 @@ export interface serverStatusI {
   try: number,
 }
 
-export interface userDataObjI {
+export interface userDataI {
   email: string,
   fd_tkn: string
 }
-
-export interface userDataI {
-  userData: userDataObjI
-}
-
-export interface retrieveLoginI {
-  retrieveLogin: any
-}
-
-// MyRecipe.tsx
 
 interface titleI {
   character: boolean,
@@ -94,4 +82,8 @@ export interface highlighterI {
 
 export interface handlerDeleteInstructionsI {
   index: number
+}
+
+export interface paginateAmountI {
+  paginateAmount: number
 }

@@ -3,7 +3,7 @@ import css from './App.module.css';
 import './commons/globalSweetAlert2.css';
 import { checkPrevLogin } from './commons/commonsFunc';
 import { useSelector } from 'react-redux';
-import { Route, Routes, useLocation, useMatch } from "react-router-dom";
+import { Route, Routes, useMatch } from "react-router-dom";
 import Landing from "./components/Landing/Landing";
 import CardsMapper from "./components/CardsMapper/CardsMapper";
 import GoogleAuth from './components/GoogleAuth/GoogleAuth';
@@ -16,37 +16,21 @@ import ServerStatus from "./components/ServerStatus/ServerStatus";
 import Error from './components/Error/Error';
 import MyRecipe from "./components/MyRecipe/MyRecipe";
 import About from "./components/About/About";
-import { userDataObjI } from './interfaces/interfaces';
+import { userDataI } from './interfaces/interfaces';
 import { useDispatch } from 'react-redux';
-import {
-  fetchRecipesFromAPI, allRecipesLoaded, setCurrentWidth,
-  setHeight, setWidth, setHasScroll, setScrollPosition,
-  getDietsFromDB, viewPort, landingHidden, /* multiple */
-} from './actions';
-import store from './store/store';
+import { setScrollPosition } from './actions';
 import $ from 'jquery';
 
 function App() {
 
   const dispatch = useDispatch()
   const showHelpBG = [useMatch("/:route")?.params.route?.toLowerCase()].filter(e => e !== "about")[0]
-  const currentWidth = useSelector((state: {currentWidth:number}) => state.currentWidth)
   const landingHiddenState = useSelector((state: { landingHidden: boolean }) => state.landingHidden)
   const menuShown = useSelector((state: {menuShown:boolean}) => state.menuShown)
 
-  const [isLoading, setIsLoading] = useState({
-    main: true,
-    refresh: false
-  });
-
-  const [ userData, setUserData ] = useState<userDataObjI>({
+  const [ userData, setUserData ] = useState<userDataI>({
     email: '',
     fd_tkn: ''
-  })
-
-  const retrieveLogin = (props: any) => setUserData({
-    email: props.email,
-    fd_tkn: props.fd_tkn
   })
 
   const [ recipeCreatedOrEdited, setRecipeCreatedOrEdited ] = useState<boolean>(false)
@@ -60,7 +44,7 @@ function App() {
 
   useEffect(() => { // FIRST ONLY-ONE-TIME AUTO-CHECK USER (CHECK USER TOKEN)
 
-    checkPrevLogin({ retrieveLogin, userData })
+    checkPrevLogin({ setUserData, userData })
 
     feedbackBC.onmessage = (e) => {
       if (e.data.subscribe.length > tabsArrREF.current.subscribe.length) {
@@ -69,11 +53,8 @@ function App() {
     }
 
     const tabID = Math.floor(100000 + Math.random() * 900000)
-
     tabIDREF.current = tabID
-
     castBC.postMessage({ subscribe: [tabID] });
-
     tabsArrREF.current = { subscribe: [tabID] }
 
     castBC.onmessage = (e) => {
@@ -104,72 +85,7 @@ function App() {
       setUserData({ email: res.email, fd_tkn: res.fd_tkn })
     })
     .catch(rej => console.log(rej))
-
-    // return () => {
-    //   //if (recipeCreated.current) clearHandler() // FIRES WHEN USER GO TO ANOTHER ROUTE/COMPONENT
-    // }
   },[])
-
-  // let windowScreenWidth = window.screen.width
-  // let windowScreenHeight = window.screen.height
-
-  useEffect(() => {
-    
-    console.log("AAA", window.matchMedia("(orientation: portrait)"))
-    //console.log("target ejecutado")
-    //console.log("target ejecutado window.screen.width", window.screen.width)
-    //console.log("target ejecutado window.innerWidth", window.innerWidth)
-    function scrollHandler() { dispatch(setScrollPosition($(window).scrollTop() as number)) }
-    function handleResize() {
-      let windowScreenWidth = window.screen.width
-      let windowScreenHeight = window.screen.height
-      //let windowInnerWidth = window.innerWidth
-      if (window.matchMedia("(orientation: portrait)").matches) {
-        if (windowScreenWidth < 425) dispatch(viewPort(`smaPort`))
-        else if (windowScreenWidth > 825) dispatch(viewPort(`larPort`))
-        else dispatch(viewPort(`medPort`))
-      } else {
-        if (windowScreenHeight < 425) dispatch(viewPort(`smaLand`))
-        else if (windowScreenHeight > 825) dispatch(viewPort(`larLand`))
-        else dispatch(viewPort(`medLand`))
-      }
-    }
-    window.addEventListener("scroll", scrollHandler);
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("scroll", scrollHandler);
-      window.removeEventListener("resize", handleResize);
-    }
-  //},[dispatch]);
-  });
-  //},[]);
-
-  // useEffect(() => {
-  //   console.log("target ejecutado window.screen.width", window.screen.width)
-  // })
-  
-
-  useEffect(() => {
-    // console.log("target ejecutado")
-    // console.log("target ejecutado window.screen.width", window.screen.width)
-    
-    let windowScreenWidth = window.screen.width
-    let windowScreenHeight = window.screen.height
-    //let windowInnerWidth = window.innerWidth
-    if (window.matchMedia("(orientation: portrait)").matches) {
-      if (windowScreenWidth < 425) dispatch(viewPort(`smaPort`))
-      else if (windowScreenWidth > 825) dispatch(viewPort(`larPort`))
-      else dispatch(viewPort(`medPort`))
-    } else {
-      if (windowScreenHeight < 425) dispatch(viewPort(`smaLand`))
-      else if (windowScreenHeight > 825) dispatch(viewPort(`larLand`))
-      else dispatch(viewPort(`medLand`))
-    }
-  },[]);
-
-  useEffect(() => {
-    dispatch(setHasScroll(window.innerWidth !== $('body').width() ? true : false))
-  })
 
   useEffect(() => { // FIRED WHEN WINDOW IS CLOSED OR REFRESH
     const onBeforeUnload = () => {
@@ -181,16 +97,37 @@ function App() {
   },[])
 
   window.onfocus = function() { // FIRED WHEN TAB IS FOCUSED, CHECK VALID USER
-    checkPrevLogin({ retrieveLogin, userData })
+    checkPrevLogin({ setUserData, userData })
   }
 
-  // const menuShown = useSelector((state: {menuShown:boolean}) => state.menuShown)
+  let { width, height } = window.screen
+  let orientation = window.matchMedia("(orientation: portrait)").matches
+  const [ paginateAmount, setPaginateAmount ] = useState<number>(((width < 425 && orientation) || (height < 425 && !orientation)) ? 45 : 90)
+
+  useEffect(() => {
+    function handleResize() {
+      let { width, height } = window.screen
+      let orientation = window.matchMedia("(orientation: portrait)").matches
+      if ((width < 425 && orientation) || (height < 425 && !orientation)) setPaginateAmount(45)
+      else setPaginateAmount(90)
+    }
+    function scrollHandler() { dispatch(setScrollPosition($(window).scrollTop() as number)) }
+    window.addEventListener("resize", handleResize);
+    window.addEventListener("scroll", scrollHandler);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("scroll", scrollHandler);
+    }
+  })
+
+  let root = document.getElementById('root')
+  root && (
+  landingHiddenState ? // HIDES LANDING OVERFLOW
+  root.style.overflowY = "unset" :
+  root.style.overflowY = "hidden" )
 
   return (
-    <div
-      className={css.background}
-      style={{ overflow: landingHiddenState ? 'inherit' : 'hidden' }}
-    >
+    <div className={css.background}>
       <div
         className={css.wallpaperNav}
         style={{
@@ -199,32 +136,39 @@ function App() {
         }}
       />
       <div className={css.wallpaperBody} />
-      <Landing retrieveLogin={retrieveLogin} userData={userData} />
+      <Landing setUserData={setUserData} userData={userData} />
       <Routes>
         <Route path="/" element={<>
-          <GoogleAuth retrieveLogin={retrieveLogin} userData={userData} />
+          <GoogleAuth setUserData={setUserData} userData={userData} />
           <ServerStatus />
           <NavBar />
-          <Paginate />
-          <CardsMapper retrieveLogin={retrieveLogin} userData={userData} />
+          <Paginate paginateAmount={paginateAmount} />
+          <CardsMapper
+            paginateAmount={paginateAmount}
+            setUserData={setUserData}
+            userData={userData}
+          />
           <GoUp />
         </>}/>
         <Route path="/:recipeId" element={<>
           <NavBar />
-          <GoogleAuth retrieveLogin={retrieveLogin} userData={userData} />
+          <GoogleAuth setUserData={setUserData} userData={userData} />
           <ServerStatus />
-          {/* <GoBack recipeNotFound={recipeNotFound} /> */}
           <Detail
-            retrieveLogin={retrieveLogin}
+            setUserData={setUserData}
             userData={userData}
           />
         </>}/>
         <Route path="/MyRecipe" element={<>
-          <NavBar recipeCreatedOrEdited={recipeCreatedOrEdited} />
-          <GoogleAuth retrieveLogin={retrieveLogin} userData={userData} />
+          <NavBar
+            paginateAmount={paginateAmount}
+            recipeCreatedOrEdited={recipeCreatedOrEdited}
+          />
+          <GoogleAuth setUserData={setUserData} userData={userData} />
           <ServerStatus />
           <MyRecipe
-            retrieveLogin={retrieveLogin}
+            paginateAmount={paginateAmount}
+            setUserData={setUserData}
             userData={userData}
             retrieveRecipeCreatedOrEdited={retrieveRecipeCreatedOrEdited}
             recipeCreatedOrEdited={recipeCreatedOrEdited}

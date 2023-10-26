@@ -1,17 +1,21 @@
-import { useState, useEffect } from "react";
+import { useEffect, Dispatch, SetStateAction } from "react";
 import css from './CardsMapperCSS.module.css';
 import Card from '../Card/Card';
 import { useSelector, useDispatch } from 'react-redux';
-import { recipesI, userDataI, retrieveLoginI  } from '../../interfaces/interfaces';
+import { recipesI, userDataI, paginateAmountI  } from '../../interfaces/interfaces';
 import {
-  fetchRecipesFromAPI, allRecipesLoaded, getDietsFromDB,
-  getDishesFromDB, setHasScroll
+  fetchRecipesFromAPI, allRecipesLoaded,
+  getDietsFromDB, getDishesFromDB
 } from '../../actions';
-import $ from 'jquery';
 
-interface CardsMapperI extends userDataI, retrieveLoginI {}
+interface CardsMapperI {
+  setUserData: Dispatch<SetStateAction<userDataI>>
+  userData: userDataI,
+}
 
-const CardsMapper = ({ retrieveLogin, userData }: CardsMapperI)  => {
+interface CardsMapperI extends paginateAmountI {}
+
+const CardsMapper = ({ setUserData, paginateAmount, userData }: CardsMapperI)  => {
 
   const dispatch = useDispatch()
 
@@ -21,18 +25,13 @@ const CardsMapper = ({ retrieveLogin, userData }: CardsMapperI)  => {
 
   const indexChoosen = useSelector((state: {indexChoosen: number}) => state.indexChoosen)
   const tabChoosen = useSelector((state: { tabChoosen: number }) => state.tabChoosen )
-  const menuShown = useSelector((state: {menuShown: boolean}) => state.menuShown)
   const toShow = useSelector((state: { toShow: recipesI[] }) => state.toShow)
   const allRecipes = useSelector((state: { allRecipes: recipesI[] }) => state.allRecipes)
-  const viewPort = useSelector(( state: { viewPort: string } ) => state.viewPort)
 
   let result: any = []
 
-  //const chunkSize = 90; // 90 === 9 * 10 === 10 TABS OF 9
-  //const chunkSize = 45; // 90 === 9 * 10 === 10 TABS OF 9
-  const chunkSize = viewPort.slice(0,3) === ('sma') ? 45 : 90;
-  for (let i = 0; i < toShow.length; i += chunkSize) {
-    result.push(toShow.slice(i, i + chunkSize))
+  for (let i = 0; i < toShow.length; i += paginateAmount) {
+    result.push(toShow.slice(i, i + paginateAmount))
   }
 
   let arraySplitedBy9: any[] = result[0] && result[tabChoosen].slice( indexChoosen * 9, (indexChoosen * 9) + 9 )
@@ -45,23 +44,10 @@ const CardsMapper = ({ retrieveLogin, userData }: CardsMapperI)  => {
     },[])
   }
 
-  FirstFunc().then(() => {
-    dispatch(allRecipesLoaded(true))
-    dispatch(setHasScroll(window.innerWidth !== $('body').width() ? true : false))
-  })
+  FirstFunc().then(() => dispatch(allRecipesLoaded(true)))
 
   return allRecipes[0] !== undefined && toShow[0] !== undefined ?
-    (<div
-      className={css.background}
-      style={{
-        //width: `calc(100vw - ${scrollWidth}px)`,
-        //marginRight: `${scrollWidth}px`,
-        // marginTop:
-        //   menuShown && scrollPosition >= 209 ? '46px' :
-        //   !menuShown && scrollPosition >= 109 ? '46px' :
-        //   '0px'
-      }}
-    >
+    (<div className={css.background}>
       {arraySplitedBy9.map((e:any) =>
         <Card
           key={e.id}
@@ -74,7 +60,7 @@ const CardsMapper = ({ retrieveLogin, userData }: CardsMapperI)  => {
           userRecipe={e.userRecipe}
           email={e.email}
           userData={userData}
-          retrieveLogin={retrieveLogin}
+          setUserData={setUserData}
           summary={e.summary}
           analyzedInstructions={e.analyzedInstructions}
         />

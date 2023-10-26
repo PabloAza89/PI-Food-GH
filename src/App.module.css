@@ -8,6 +8,19 @@
   /* overflow: visible */
 }
 
+/* .ara {
+  overflow: inherit !important
+}
+
+.arara {
+  overflow: hidden !important
+} */
+
+/* #root {
+  overflow-y: hidden !important;
+}
+ */
+ 
 .wallpaperBody {
   display: flex;
   position: fixed;

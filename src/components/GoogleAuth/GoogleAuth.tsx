@@ -10,10 +10,10 @@ import { landingHidden } from '../../actions';
 import Swal from 'sweetalert2';
 import $ from 'jquery';
 
-const GoogleAuth = ({ retrieveLogin, userData }: any) => {
+const GoogleAuth = ({ setUserData, userData }: any) => {
 
   const dispatch = useDispatch()
-  easings() // Jquery easings..w
+  easings() // Jquery easings..
 
   const [ popUp, setPopUp ] = useState<boolean>(false)
   const inHome = useMatch("/")?.pattern.path === "/" ? true : false;// "/" === Home
@@ -42,16 +42,16 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
         .then((res) => {
           if (res.status === 200) {
             console.log("res res res", res)
-            retrieveLogin({ email: res.email, fd_tkn: res.fd_tkn })
+            setUserData({ email: res.email, fd_tkn: res.fd_tkn })
             dispatch(landingHidden(true))
             localStorage.setItem('landingHidden', 'true')
           }
 
           if (res.status === 400 && res.message === `User not logged`) {
-            retrieveLogin({ email: "", fd_tkn: "" })
+            setUserData({ email: "", fd_tkn: "" })
           }
           if (res.status === 400 && res.message === `Invalid Credentials`) {
-            retrieveLogin({ email: "", fd_tkn: "" })
+            setUserData({ email: "", fd_tkn: "" })
             Swal.fire({
               title: `There was an error when cheking your loggin.. `,
               text: `Please, log in again.`,
@@ -107,7 +107,7 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
     .then((res) => res.json())
     .then((res) => {
       if (res.error !== undefined) { // USER HAS ALREADY LOGOUT..
-        retrieveLogin({email: "", fd_tkn: ""})
+        setUserData({email: "", fd_tkn: ""})
         fetch(`http://localhost:3001/user`, {
           method: 'POST',
           credentials: 'include',
@@ -115,7 +115,7 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
         })
       }
       if (res.error === undefined) { // USER LOGOUT SUCCESSFULLY
-        retrieveLogin({email: "", fd_tkn: ""})
+        setUserData({email: "", fd_tkn: ""})
         fetch(`http://localhost:3001/user`, {
           method: 'POST',
           credentials: 'include',
@@ -182,10 +182,6 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
           .css("animation", "none")
           .css("transition", "none")
       }
-      //else {
-        //setClicked(false)
-        //setButtonHelperWidth($(`#buttonWidthHelper`).outerWidth())
-      //}
     },[userData.email])
 
   if (!popUp) {
@@ -206,9 +202,6 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
         <div className={css.buttonWidthHelperInner}>
           <div><MySvg/></div>
             {
-              /* userData.email ?
-              `  Signed in as ${userData.email}` :
-              `  Sign in with Google` */
               userData.email ?
               `  ${userData.email}` :
               `  Sign in with Google`
@@ -226,12 +219,9 @@ const GoogleAuth = ({ retrieveLogin, userData }: any) => {
           <div className={css.test}>
             {
               userData.email && shown ?
-              //`  Signed in as ${userData.email}` :
               ` ${userData.email}` :
               userData.email && !shown ?
-              //`  Signed in as ${userData.email}` :
               ` ✔️` :
-              //`  ` :
               !userData.email && shown ?
               `  Sign in with Google` :
               ` ❌`

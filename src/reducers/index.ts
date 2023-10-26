@@ -11,13 +11,10 @@ interface initialStateI {
   allDietsOnline: boolean,
   allDishesOnline: boolean,
   allRecipesLoaded: boolean,
-  showMain: boolean,
   indexChoosen: number,
   tabChoosen: number,
   width: number,
   height: number,
-  viewPort: string,
-  currentWidth: number,
   scrollPosition: number,
   menuShown: boolean,
   landingHidden: boolean
@@ -33,13 +30,10 @@ const initialState: initialStateI = {
   allDietsOnline: true,
   allDishesOnline: true,
   allRecipesLoaded: false,
-  showMain: false,
   indexChoosen: 0,
   tabChoosen: 0,
   width: window.screen.width,
   height: window.screen.height,
-  viewPort: `larLand`,
-  currentWidth: window.innerWidth,
   scrollPosition: 0,
   menuShown: false, // false
   landingHidden: false
@@ -139,11 +133,6 @@ const reducer = (state = initialState, action: {type: string; payload: any}) => 
         ...state,
         toShow: arrayToShow
       };
-    case 'SET_SHOW_MAIN':
-      return {
-        ...state,
-        showMain: action.payload
-      };
     case 'SET_INDEX_CHOOSEN':
       return {
         ...state,
@@ -168,16 +157,6 @@ const reducer = (state = initialState, action: {type: string; payload: any}) => 
       return {
         ...state,
         height: action.payload
-      };
-    case 'VIEW_PORT':
-      return {
-        ...state,
-        viewPort: action.payload
-      };
-    case 'CURRENT_WIDTH':
-      return {
-        ...state,
-        currentWidth: action.payload
       };
     case 'SET_SCROLL_POSITION':
       return {
