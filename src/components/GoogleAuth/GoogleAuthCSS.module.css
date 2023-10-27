@@ -1,11 +1,6 @@
 .background {
   display: flex;
-  /* position: fixed; */
-  /* position: fixed; */
-  /* position: absolute; */
   right: 0px;
-  /* margin-right: 16px; */
-  /* margin-top: 30.5px; */
   flex-direction: row;
   z-index: 4;
   margin-right: 16px;
@@ -18,12 +13,12 @@
   width: 30px;
   background: white !important;
   align-items: flex-start;
-  /* font-size: 10px !important; */
   text-transform: none !important;
   color: #3c4043 !important;
   letter-spacing: 0.25px;
   font-family: "Google Sans", arial, sans-serif;
   font-weight: 500;
+  max-width: calc(100vw - 60.5px) !important;
 }
 
 .buttonIn:hover {
@@ -34,22 +29,13 @@
   display: flex;
   min-height: 0vh !important;
   height: 25px !important;
-  background: inherit; /* dev */
-  /* text-wrap: nowrap; */
   white-space: nowrap;
   overflow: hidden;
   justify-content: flex-start;
-  /* padding: 0px 6px !important; */
   padding: 2px 6px 0px 3px!important;
 }
 
 .buttonWidthHelper {
-  /* max-width: 220px; */
-  /* max-width: calc(100vw - 60.5px); */
-  /* max-width: calc(100vw - 77.5px); */
-  /* max-width: calc(100vw - 55px); */
-  /* font-size: 10px !important; */
-  /* display: none !important; */
   text-transform: none !important;
   padding: 6px 6px !important;
   width: fit-content;
@@ -57,6 +43,7 @@
   font-family: "Google Sans", arial, sans-serif;
   font-weight: 500;
   align-items: flex-start;
+  /* max-width: calc(100vw - 60.5px) !important; */
 }
 
 .buttonWidthHelperInner {
@@ -65,7 +52,6 @@
   min-height: 0vh !important;
   height: 25px !important;
   background: yellow;
-  /* text-wrap: nowrap; */
   white-space: nowrap;
   justify-content: flex-start;
   padding: 0px 6px !important;
@@ -76,22 +62,14 @@
   padding: 0vw !important;
   min-width: 0vh !important;
   width: 36.5px !important;
-  /* min-height: 0vh !important;
-  height: 36.5px !important; */
-  /* min-height: 0vh !important;
-  height: 25px !important; */
 }
 
 @media screen and (max-width: 800px) { /* LESS THAN 800px */
-  .background {
-    margin-right: 87px;
-  }
+  .background { margin-right: 87px }
 }
 
 @media screen and (min-width: 801px) { /* MORE THAN 800px */
-  .background {
-    margin-right: 16px !important;
-  }
+  .background { margin-right: 16px !important }
 }
 
 /* BREAKPOINTS */
@@ -104,15 +82,18 @@
     margin-right: 8px;
     margin-top: 98px;
   }
-  .buttonIn {
+  /* .buttonIn {
     max-width: calc(100vw - 60.5px);
   }
   .buttonWidthHelper {
     max-width: calc(100vw - 60.5px);
+  } */
+ /*  .buttonWidthHelperInner:before {
+    content: ' ';
   }
   .test:before {
     content: ' ';
-  }
+  } */
 }
 
 /* MINPORT */
@@ -123,15 +104,15 @@
     margin-right: 8px;
     margin-top: 98px;
   }
-  .buttonIn {
+  /* .buttonIn {
     max-width: calc(100vw - 60.5px);
   }
   .buttonWidthHelper {
     max-width: calc(100vw - 60.5px);
-  }
-  .test:before {
+  } */
+  /* .test:before {
     content: ' ';
-  }
+  } */
 }
 
 /* MORE THAN 800px */
@@ -148,8 +129,17 @@
 }
 
 @media screen and (min-width: 425px) { /* MORE THAN 425px */
-  .test:before {
-    /* content: '  Signed in as'; */
+  /* .buttonWidthHelperInner:before {
+    content: '  Signed in as' !important;
   }
+  .test:before {
+    content: '  Signed in as' !important;
+  } */
+ /*  .buttonWidthHelperInner:before {
+    content: var(--buttonGLContent) !important;
+  }
+  .test:before {
+    content: var(--buttonGLContent) !important;
+  } */
 }
 

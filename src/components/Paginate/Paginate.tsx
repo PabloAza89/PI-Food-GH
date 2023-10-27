@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useSelector , useDispatch } from 'react-redux';
 import css from './PaginateCSS.module.css';
 import { setIndexChoosen, setTabChoosen } from '../../actions';
@@ -33,6 +34,11 @@ const Paginate = ({ paginateAmount }: paginateAmountI) => {
     })
   })
 
+  useEffect(() => {
+    let counter = document.getElementById('counter')
+    counter && document.documentElement.style.setProperty('--paginateMargin', `${counter.getBoundingClientRect().width}px`);
+  })
+
   return (
     <div
       className={css.background}
@@ -43,7 +49,7 @@ const Paginate = ({ paginateAmount }: paginateAmountI) => {
           'blur(0px)'
       }}
     >
-      <div className={css.test}>
+      <div className={css.buttonsAndHintContainer}>
         <Tooltip
           arrow
           variant="outlined"
@@ -111,11 +117,9 @@ const Paginate = ({ paginateAmount }: paginateAmountI) => {
           </div>
         </Tooltip>
       </div>
-      
-      <div className={css.counter}>  {tabChoosen ? tabChoosen : null}{1} - {tabChoosen ? tabChoosen : null}{result[0] && Math.ceil(result[tabChoosen].length/9) } of {Math.ceil(toShow.length/9)}
-          <div className={css.abc}></div>
+      <div id={`counter`} className={css.counter}>
+          {tabChoosen ? tabChoosen : null}{1} - {tabChoosen ? tabChoosen : null}{result[0] && Math.ceil(result[tabChoosen].length/9) } of {Math.ceil(toShow.length/9)}
       </div>
-      
     </div>
   );
 }

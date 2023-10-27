@@ -1,6 +1,6 @@
 .background {
   background: lightblue; /* DEV */
-  /* width: 100%; */
+  width: 100%;
   margin: auto;
   flex-direction: row !important;
   z-index: 1;
@@ -10,7 +10,6 @@
   justify-content: center;
   padding: 8px 0px;
   align-self: center;
-  /* --testWidth: 100px; */
 }
 
 #eachButton {
@@ -20,7 +19,8 @@
   color: black;
   min-width: 0px !important;
   min-height: 0px !important;
-  width: 30px !important;
+  /* width: 30px !important; */
+  width: 28px !important;
   height: 21px !important;
   line-height: 21px !important;
   border-radius: 0px;
@@ -30,64 +30,34 @@
   align-items: baseline;
 }
 
-.test {
+.buttonsAndHintContainer {
   display: flex !important;
   flex-direction: row !important;
-  background: lightcoral !important;
-  
-}
-
-.testTest {
-  background: yellow;
-  height: 20px !important;
-  /* width: 10px */
-  /* width: var(--width) */
-}
-
-.abc {
-  display: flex;
-  position: absolute;
-  --width: 100%;
-  
-  /* --testWidth: calc(100% - 1px); */
-  /* --testWidth: 100%; */
-  /* --testWidth: var(--width); */
+  background: lightcoral !important; /* DEV */
 }
 
 .counter {
   background: lightslategray; /* DEV */
-  /* width: 110px; */ /* COMPENSATED UPPER TO CENTER */
-  /* --testWidth: 100% !important; */
-  /* --testWidth: calc(100%); */
-  /* --width: fit-content; */
-  /* --width: 100%; */
-  /* --width: 100%; */
-  /* width: fit-content; */
-  /* width: max-content; */
   flex-direction: row !important;
   display: flex;
-  position: absolute;
-  /* position: relative; */
   color: beige !important;
   justify-content: center;
   font-weight: 500;
+  font-size: 16px;
+  max-height: 21px !important;
   justify-content: flex-start;
-  /* right: -110px; */
-  /* right: 110px; */
-  /* right: var(--testWidth) !important */
-  /* --testWidth: 100px; */
-  right: calc(var(--testWidth) * -1)
-  /* right: var(--testWidth) */
 }
 
-/* 956 - 957 */
-
-/* LESS THAN 956px */
-@media screen and (max-width: 956px) {
-  .test {
-    /* margin-left: -110px */
-    /* --testWidth: 100px; */
-    margin-left: calc(var(--testWidth) * -1)
-    
+/* LESS THAN 300px */
+@media screen and (max-width: 300px) {
+  .counter {
+    font-weight: 500;
+    font-size: 14px;
   }
+  #eachButton { width: 26px !important }
+}
+
+/* MORE THAN 956px (TWO CARDS) */
+@media screen and (min-width: 957px) {
+  .buttonsAndHintContainer { padding-left: var(--paginateMargin) }
 }

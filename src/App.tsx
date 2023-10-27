@@ -98,6 +98,21 @@ function App() {
 
   window.onfocus = function() { // FIRED WHEN TAB IS FOCUSED, CHECK VALID USER
     checkPrevLogin({ setUserData, userData })
+    //$(`#buttonIn`)
+    //  .animate({ width: '30px' }, { queue: false, easing: 'easeOutBounce', duration: 1000 , complete: () => setShown(false) })
+    //$(`#buttonIn`)
+    //  .stop()
+     // .css("animation", "none")
+          //.animate({ width: '30px' }, { queue: false, easing: 'easeOutBounce', duration: 1000 })
+    //setShown(false)
+    // $(`#buttonIn`) // PREVENT ANIMATION WHEN NEW TAB IS FOCUSED
+    //   .stop(false, false)
+    //   .css("animation", "none")
+    //   .css("transition", "none")
+    // $(`#buttonIn`)
+    //   .click()
+      //.css("width", "30px")
+    //.animate({ width: '30px' }, { queue: false, easing: 'easeOutBounce', duration: 0 })
   }
 
   let { width, height } = window.screen
@@ -139,7 +154,11 @@ function App() {
       <Landing setUserData={setUserData} userData={userData} />
       <Routes>
         <Route path="/" element={<>
-          <GoogleAuth setUserData={setUserData} userData={userData} />
+          <GoogleAuth
+            paginateAmount={paginateAmount}
+            setUserData={setUserData}
+            userData={userData}
+          />
           <ServerStatus />
           <NavBar />
           <Paginate paginateAmount={paginateAmount} />
@@ -152,7 +171,11 @@ function App() {
         </>}/>
         <Route path="/:recipeId" element={<>
           <NavBar />
-          <GoogleAuth setUserData={setUserData} userData={userData} />
+          <GoogleAuth
+            paginateAmount={paginateAmount}
+            setUserData={setUserData}
+            userData={userData}
+          />
           <ServerStatus />
           <Detail
             setUserData={setUserData}
@@ -164,7 +187,11 @@ function App() {
             paginateAmount={paginateAmount}
             recipeCreatedOrEdited={recipeCreatedOrEdited}
           />
-          <GoogleAuth setUserData={setUserData} userData={userData} />
+          <GoogleAuth
+            paginateAmount={paginateAmount}
+            setUserData={setUserData}
+            userData={userData}
+          />
           <ServerStatus />
           <MyRecipe
             paginateAmount={paginateAmount}
