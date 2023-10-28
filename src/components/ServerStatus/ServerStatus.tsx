@@ -10,7 +10,7 @@ import { setServerStatusShown } from '../../actions';
 const ServerStatus = () =>  {
 
   const dispatch = useDispatch()
-  easings() // Jquery easings..
+  easings() // JQuery easings..
 
   const serverStatus = useSelector((state: { serverStatus: serverStatusI }) => state.serverStatus)
   const serverStatusShown = useSelector((state: { serverStatusShown: boolean }) => state.serverStatusShown)

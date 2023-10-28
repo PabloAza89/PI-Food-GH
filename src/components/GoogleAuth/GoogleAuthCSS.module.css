@@ -10,7 +10,7 @@
 .buttonIn {
   display: flex;
   padding: 6px 6px !important;
-  width: 30px;
+  /* width: 30px; */
   background: white !important;
   align-items: flex-start;
   text-transform: none !important;
@@ -19,6 +19,7 @@
   font-family: "Google Sans", arial, sans-serif;
   font-weight: 500;
   max-width: calc(100vw - 60.5px) !important;
+  /* min-width: 64px !important; */
 }
 
 .buttonIn:hover {
@@ -43,7 +44,6 @@
   font-family: "Google Sans", arial, sans-serif;
   font-weight: 500;
   align-items: flex-start;
-  /* max-width: calc(100vw - 60.5px) !important; */
 }
 
 .buttonWidthHelperInner {
@@ -60,16 +60,8 @@
 .bgOut {
   margin-left: 8px !important;
   padding: 0vw !important;
-  min-width: 0vh !important;
+  min-width: 0px !important;
   width: 36.5px !important;
-}
-
-@media screen and (max-width: 800px) { /* LESS THAN 800px */
-  .background { margin-right: 87px }
-}
-
-@media screen and (min-width: 801px) { /* MORE THAN 800px */
-  .background { margin-right: 16px !important }
 }
 
 /* BREAKPOINTS */
@@ -82,64 +74,20 @@
     margin-right: 8px;
     margin-top: 98px;
   }
-  /* .buttonIn {
-    max-width: calc(100vw - 60.5px);
-  }
-  .buttonWidthHelper {
-    max-width: calc(100vw - 60.5px);
-  } */
- /*  .buttonWidthHelperInner:before {
-    content: ' ';
-  }
-  .test:before {
-    content: ' ';
-  } */
 }
 
-/* MINPORT */
-/* @media screen and (orientation: portrait) and (max-width: 424px) { */
 /* LESS THAN 800px */
 @media screen and (max-width: 800px) {
   .background {
     margin-right: 8px;
     margin-top: 98px;
   }
-  /* .buttonIn {
-    max-width: calc(100vw - 60.5px);
-  }
-  .buttonWidthHelper {
-    max-width: calc(100vw - 60.5px);
-  } */
-  /* .test:before {
-    content: ' ';
-  } */
 }
 
 /* MORE THAN 800px */
 @media screen and (min-width: 801px) {
   .background {
+    margin-right: 16px !important;
     visibility: visible !important
   }
 }
-
-@media screen and (orientation: landscape) and (max-height: 424px) { /* MINLAND */
-  .background {
-    /* margin-right: 16px !important; */
-  }
-}
-
-@media screen and (min-width: 425px) { /* MORE THAN 425px */
-  /* .buttonWidthHelperInner:before {
-    content: '  Signed in as' !important;
-  }
-  .test:before {
-    content: '  Signed in as' !important;
-  } */
- /*  .buttonWidthHelperInner:before {
-    content: var(--buttonGLContent) !important;
-  }
-  .test:before {
-    content: var(--buttonGLContent) !important;
-  } */
-}
-

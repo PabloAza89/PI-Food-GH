@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Button } from '@mui/material/';
 import { easings } from '../../commons/easingsCSS';
 import { ReactComponent as MySvg } from '../../images/googleLogo.svg';
+import { checkPrevLogin } from '../../commons/commonsFunc';
 import { landingHidden } from '../../actions';
 import Swal from 'sweetalert2';
 import $ from 'jquery';
@@ -13,10 +14,9 @@ import $ from 'jquery';
 const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
 
   const dispatch = useDispatch()
-  easings() // Jquery easings..
+  easings() // JQuery easings..
 
-  const [ popUp, setPopUp ] = useState<boolean>(false)
-  const inHome = useMatch("/")?.pattern.path === "/" ? true : false;// "/" === Home
+  const inHome = useMatch("/")?.pattern.path === "/" ? true : false; // "/" === Home
   const menuShown = useSelector((state: {menuShown:boolean}) => state.menuShown)
 
   const login = useGoogleLogin({
@@ -46,21 +46,57 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
             dispatch(landingHidden(true))
             localStorage.setItem('landingHidden', 'true')
 
-            // $(`#buttonIn`) // WHEN POP-UP IS CLOSED, WIDTH GO SMALL
+            // //$(`#buttonGL`)
+            //   //.html(`  Signed in as ${res.email}`)
+            //   //.html(`  Signed in as ${userData.email}`)
+            //  $(`#buttonIn`)
+            //    .off()
+            //   //.unbind('mouseenter mouseleave')
+
+            // setButtonHelperWidth($(`#buttonWidthHelper`).outerWidth())
+            // $(`#buttonIn`) // WHEN NEW USER IS LOGGED (OVERWRITE), WIDTH GO SMALL
             //   .stop()
-            //   .animate({ width: '30px' }, { queue: false, easing: 'easeOutBounce', duration: 1000  })
-            setButtonHelperWidth($(`#buttonWidthHelper`).outerWidth())
-            $(`#buttonIn`)
-              .animate({ width: $(`#buttonWidthHelper`).outerWidth() }, { queue: false, easing: 'easeOutBounce', duration: 1000 })
+            //   .animate({ width: $(`#buttonWidthHelper`).outerWidth() }, { queue: false, easing: 'easeOutBounce', duration: 1000 })
+            //   //.animate({ width: buttonHelperWidth }, { queue: false, easing: 'easeOutBounce', duration: 1000 })
+            //   setTimeout(() => {
+            //     $(`#buttonIn`)
+            //     .stop()
+            //     .animate({ width: '64px' }, { queue: false, easing: 'easeOutBounce', duration: 1000 })
+            //     setClicked(false)
+            //   }, 2000)
+            //   setTimeout(() => {
+            //     setShown(false)
+            //   }, 3000)
+
+             $(`#buttonIn`)
+               .off() // DISABLES HOVER
+
+            $(`#buttonGL`)
+            //.html(`  Signed in as ${userData.email}`)
+            .html(`  Signed in as ${res.email}`)
+            // .html(
+            //   userData.email ?
+            //   `  Signed in as ${userData.email}` :
+            //   `  Sign in with Google`
+            // )
+
+          $(`#buttonIn`) // NECESSARY FOR ANIMATION WORKS PROPERLY
+            //.stop() // NECESSARY FOR ANIMATION WORKS PROPERLY // OJO
+            .animate({ width: $(`#buttonWidthHelper`).outerWidth() }, { queue: false, easing: 'easeOutBounce', duration: 1000 })
+            //.animate({ width: 300 }, { queue: false, easing: 'easeOutBounce', duration: 1000 })
+            // UP HERE GOOD
+
               setTimeout(() => {
                 $(`#buttonIn`)
-                .animate({ width: '30px' }, { queue: false, easing: 'easeOutBounce', duration: 1000 /* , complete: () => setShown(false) */ })
-                setShown(false)
+                .stop()
+                .animate({ width: '64px' }, { queue: false, easing: 'easeOutBounce', duration: 1000 })
                 setClicked(false)
               }, 2000)
-              // $(`#buttonIn`)
-              // .css("animation", "none")
-              // .css("transition", "none")
+             /*  setTimeout(() => {
+                setShown(false)
+              }, 3000) */
+
+
           }
 
           if (res.status === 400 && res.message === `User not logged`) {
@@ -82,12 +118,7 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
         .catch(rej => {
           $(`#buttonIn`)
             .stop() // RETURN TO SMALL WIDTH
-            .animate({ width: '30px' }, { queue: false, easing: 'easeOutBounce', duration: 1000 , complete: () => {
-              // if ($(`#buttonIn`).innerWidth() === 64) {
-              //   setShown(false)
-              // }
-              
-            } })
+            .animate({ width: '64px' }, { queue: false, easing: 'easeOutBounce', duration: 1000 })
           if (rej.message === `Failed to fetch`) {
             Swal.fire({
               title: `It looks like server it's sleeping..`,
@@ -116,10 +147,9 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
     },
     onError: (error) => { console.log(error) },
     onNonOAuthError: () => {
-      $(`#buttonIn`) // WHEN POP-UP IS CLOSED, WIDTH GO SMALL
+      $(`#buttonIn`) // WHEN POP-UP IS CLOSED RETURN TO SMALL WIDTH
         .stop()
-        .animate({ width: '30px' }, { queue: false, easing: 'easeOutBounce', duration: 1000  })
-      setPopUp(false)
+        .animate({ width: '64px' }, { queue: false, easing: 'easeOutBounce', duration: 1000 })
       setClicked(false)
     }
   })
@@ -154,46 +184,66 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
   const [ buttonHelperWidth, setButtonHelperWidth ] = useState<number | undefined>(undefined)
   const [ clicked, setClicked ] = useState<boolean>(false)
 
-   useEffect(() => { // FIRST AUTO WIDTH CHECKER
-     setButtonHelperWidth($(`#buttonWidthHelper`).outerWidth())
-   })
+   useEffect(() => { // FIRST AUTO WIDTH CHECKER //
+      console.log("SE EJECUTO SE EJECUTO")
+      //console.log("SE EJECUTO SE EJECUTO", $(`#buttonIn`).innerWidth())
 
-  //  const funcc = () => {
-  //   setButtonHelperWidth($(`#buttonWidthHelper`).outerWidth())
-  //  }
-   
-  //  funcc()
-  
-  //setButtonHelperWidth($(`#buttonWidthHelper`).outerWidth())
+      $(`#buttonIn`)
+        .css("width", "64px")
+      
+      setButtonHelperWidth($(`#buttonWidthHelper`).outerWidth())
+
+    //  if ($(`#buttonIn`).innerWidth() === 64) {
+    //     userData.email ?
+    //     $(`#buttonGL`).html(` ✔️`) :
+    //     $(`#buttonGL`).html(` ❌`)
+    //   }
+        
+
+     //setButtonHelperWidth(310)
+   },[userData.email]) // HELPS WITH NEW WIDTH WHEN USER CHANGES
+
+   window.onfocus = function() { // FIRED WHEN TAB IS FOCUSED, CHECK VALID USER
+    //checkPrevLogin({ setUserData, userData })
+    console.log("FOCUSED FOCUSED APP")
+    console.log("FOCUSED FOCUSED USER DATA", userData.email)
+    //console.log("FOCUSED FOCUSED APP", $(`#buttonIn`).outerWidth())
+    //console.log("FOCUSED FOCUSED APP", $(`#buttonIn`).width())
+    console.log("FOCUSED FOCUSED APP", $(`#buttonIn`).innerWidth())
+
+    checkPrevLogin({ setUserData, userData })
+
+    if ($(`#buttonIn`).innerWidth() === 64) {
+      userData.email ?
+      $(`#buttonGL`).html(` ✔️`) :
+      $(`#buttonGL`).html(` ❌`)
+    }
+  }
 
   $(`#buttonIn`)
     .on( "mouseenter", function() {
-      
-      if (clicked) {
-        $(this)
-          .stop()
-      }
+      if (clicked) $(this).stop()
       else {
-        setButtonHelperWidth($(`#buttonWidthHelper`).outerWidth())
-        setShown(true)
+        //setButtonHelperWidth($(`#buttonWidthHelper`).outerWidth())
+        //setButtonHelperWidth(400)
+        //setShown(true) // setShown CAUSING TROUBLES
         $(this) // NECESSARY FOR ANIMATION WORKS PROPERLY
-          //.stop() // NECESSARY FOR ANIMATION WORKS PROPERLY
+          //.stop() // NECESSARY FOR ANIMATION WORKS PROPERLY // OJO
           .animate({ width: buttonHelperWidth }, { queue: false, easing: 'easeOutBounce', duration: 1000 })
-          
+          //.animate({ width: 300 }, { queue: false, easing: 'easeOutBounce', duration: 1000 })
+        $(`#buttonGL`)
+          .html(
+            userData.email ?
+            `  Signed in as ${userData.email}` :
+            `  Sign in with Google`
+          )
       }
     })
     .on( "click", function() {
-      // if (clicked) {
-      //   $(this)
-      //     .stop()
-      // }
-      // else {
-        
-        $(this) // NECESSARY FOR ANIMATION WORKS PROPERLY
-          .stop() // NECESSARY FOR ANIMATION WORKS PROPERLY
-          .animate({ width: buttonHelperWidth }, { queue: false, easing: 'easeOutBounce', duration: 1000 })
-        setShown(true)
-      //}
+      $(this) // NECESSARY FOR ANIMATION WORKS PROPERLY
+        .stop() // NECESSARY FOR ANIMATION WORKS PROPERLY
+        .animate({ width: buttonHelperWidth }, { queue: false, easing: 'easeOutBounce', duration: 1000 })
+      setShown(true)
     })
     .on("mouseleave", function() {
       if (clicked) {
@@ -202,195 +252,34 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
           .animate({ width: buttonHelperWidth }, { queue: false, easing: 'easeOutCubic', duration: 1000 })
       }
       else {
-        
         $(this) // NECESSARY FOR ANIMATION WORKS PROPERLY
-          
           .stop() // NECESSARY FOR ANIMATION WORKS PROPERLY
-          .animate({ width: '30px' }, { queue: false, easing: 'easeOutBounce', duration: 1000  })
-          //setShown(false)
-        // if ($(`#buttonIn`).innerWidth() === 64) {
-        //   //setShown(false)
-         }
+          .animate({ width: '64px' }, { queue: false, easing: 'easeOutBounce', duration: 1000 })
+        setTimeout(() => {
+          //if ($(`#buttonIn`).innerWidth() === 64) $(`#buttonGL`).html(` ❌`)
+        }, 1000)
         
-
-
-
-     // }
+      }
     })
 
-   // useEffect(() => {
-
-    function outputsize() {
-      //width.value = textbox.offsetWidth
-      //height.value = textbox.offsetHeight
-      console.log("123123 RESIZED")
-        if ($(`#buttonIn`).innerWidth() === 64) {
-          setShown(false)
-        }
-    }
-    //outputsize()
-
-    let buttonIn = document.getElementById('buttonIn')
-
-    buttonIn && new ResizeObserver(outputsize).observe(buttonIn)
-    
-
-
-  //  new ResizeSensor(jQuery('#buttonIn'), function(){ 
-  //     //console.log('content dimension changed');
-  //     console.log("123123 RESIZED")
-  //   });
-      
-
-    //   $('#buttonIn').on(
-    //     "resize", function() {
-    //       console.log("123123 RESIZED")
-    //     //clearTimeout(id);
-    //     //id = setTimeout(doneResizing, 500);
-    
-    // });
-
-    // $('#buttonIn').resize(function() {
-    //   console.log("123123 RESIZED")
-  
-    // });
-
-   // })
-
-  // useEffect(() => { // THIS RESIZES WIDTH WHEN NEW USER IS LOGGED
-  //  // if (userData.email !== '' || userData.email !== undefined) {
-  //  if (userData.email) {
-  //     setClicked(false)
-  //     setButtonHelperWidth($(`#buttonWidthHelper`).outerWidth())
-  //     $(`#buttonIn`)
-  //       .animate({ width: $(`#buttonWidthHelper`).outerWidth() }, { queue: false, easing: 'easeOutBounce', duration: 1000 })
-  //       setTimeout(() => {
-  //         $(`#buttonIn`)
-  //         .animate({ width: '30px' }, { queue: false, easing: 'easeOutBounce', duration: 1000 , complete: () => setShown(false) })
-  //       }, 2000)
-  //       $(`#buttonIn`)
-  //       .css("animation", "none")
-  //       .css("transition", "none")
+  // function outputsize() { 
+  //   if ($(`#buttonIn`).innerWidth() === 64) {
+  //     setShown(false)
   //   }
-  // },[userData.email])
-  // //})
-
-  // window.onfocus = function() { // FIRED WHEN TAB IS FOCUSED, CHECK VALID USER
-    
-       
-  //     $(`#buttonIn`)
-  //     .animate({ width: '30px' }, { queue: false, easing: 'easeOutBounce', duration: 1000 , complete: () => setShown(false) })
-        
   // }
+  // let buttonIn = document.getElementById('buttonIn')
+  // buttonIn && new ResizeObserver(outputsize).observe(buttonIn)
 
-  // window.onfocus = function() { // FIRED WHEN TAB IS FOCUSED, CHECK VALID USER
-  //   $(`#buttonIn`)
-  //     .css("animation", "none")
-  //     .css("transition", "none")
-  // }
-
-
-  // if (!popUp) { // WHEN POP-UP IS CLOSED, THIS ANIMATION IS FIRED
-  //   $(`#buttonIn`)
-  //     .stop() // NECESSARY FOR ANIMATION WORKS PROPERLY
-  //     .animate({ width: '30px' }, { queue: false, easing: 'easeOutBounce', duration: 1000 , complete: () => setShown(false) })
-  // }
-
-  // useEffect(() => {
-  //   let buttonGL = document.getElementById('buttonGL')
-  //   //buttonGL && document.documentElement.style.setProperty('--buttonGLContent', userData.email ? `Tigned in as` : `Tign in with Google`);
-  //   buttonGL && document.documentElement.style.setProperty('--buttonGLContent', 'Tign in with Google');
-  // })
-
-   useEffect(() => {
-    //console.log("TEST 123", document.getElementById('root'))
-    let root = document.getElementById('root')
-    //console.log("TEST 123", root && root.getBoundingClientRect().width)
-    //console.log("TEST 123", root && root)
-    //console.log("TEST 123", window)
-    //counter && document.documentElement.style.setProperty('--paginateMargin', `${counter.getBoundingClientRect().width}px`);
-  })
-
-    //$(`#buttonGL`).html('TTT')
-
-    const smallDevicesHandler = () => {
-      // userData.email && shown && window.innerWidth > 425 ?
-      // $(`#buttonGL`).html(`  Signed in as ${userData.email}`) :
-      // userData.email && shown && window.innerWidth <= 425 ?
-      // $(`#buttonGL`).html(`  ${userData.email}`) :
-      // userData.email && !shown ?
-      // $(`#buttonGL`).html(` ✔️`) :
-      // !userData.email && shown ?
-      // $(`#buttonGL`).html(`  Sign in with Google`)  :
-      // $(`#buttonGL`).html(` ❌`)
-
-      // userData.email && shown && window.innerWidth > 425 ?
-      // $(`#buttonGLHelper`).html(`  Signed in as ${userData.email}`) :
-      // userData.email && shown && window.innerWidth <= 425 ?
-      // $(`#buttonGLHelper`).html(`  ${userData.email}`) :
-      // userData.email && !shown ?
-      // $(`#buttonGLHelper`).html(` ✔️`) :
-      // !userData.email && shown ?
-      // $(`#buttonGLHelper`).html(`  Sign in with Google`)  :
-      // $(`#buttonGLHelper`).html(` ❌`)
-  
+  function outputsize() { 
+    if ($(`#buttonIn`).innerWidth() === 64) {
+      //setShown(false)
+      userData.email ?
+      $(`#buttonGL`).html(` ✔️`) :
+      $(`#buttonGL`).html(` ❌`)
     }
-
-    //textButtonHandler()
-    
-
-  useEffect(() => {
-    function handleResize() {
-
-      //textButtonHandler()
-
-      console.log("TEST 123", window.innerWidth)
-
-      let buttonGL = document.getElementById('buttonGL')
-      let currentText = buttonGL && buttonGL.innerHTML
-
-     /*  currentText && (
-        window.innerWidth > 425 ?
-        $(`#buttonGL`).html('TTT') :
-        $(`#buttonGL`).html('TTT')
-      ) */
-      
-      
-
-      
-      console.log("TEST 123", )
-
-      //$(`#buttonGL`).html(e)
-
-
-      
-
-      //console.log("123123", $(`#buttonIn`).innerWidth())
-
-    }
-    window.addEventListener("resize", handleResize);
-    //handleResize()
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    }
-  },[])
-
-  $(window).on("blur", function() {
-    console.log("123123 BLURED")
-    // $(`#buttonIn`) // PREVENT ANIMATION WHEN NEW TAB IS FOCUSED
-    //   .stop(false, false)
-    //   .css("animation", "none")
-    //   .css("transition", "none")
-
-      //$(`#buttonIn`)
-      //.animate({ width: '30px' }, { queue: false, easing: 'easeOutBounce', duration: 1000 , complete: () => setShown(false) })
-
-    // $(`#buttonIn`) // PREVENT ANIMATION WHEN NEW TAB IS FOCUSED
-    //   .stop(false, false)
-    //   .css("animation", "none")
-    //   .css("transition", "none")
-
-  })
+  }
+  let buttonIn = document.getElementById('buttonIn')
+  buttonIn && new ResizeObserver(outputsize).observe(buttonIn)
 
   return (
     <div
@@ -403,7 +292,6 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
       <Button variant="contained" id={`buttonWidthHelper`} className={css.buttonWidthHelper} sx={{ display: 'none' }}>
         <div className={css.buttonWidthHelperInner}>
           <div><MySvg/></div>
-          
             {
               userData.email && paginateAmount === 45 ?
               `  ${userData.email}` :
@@ -411,37 +299,27 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
               `  Signed in as ${userData.email}` :
               `  Sign in with Google`
             }
-          
         </div>
       </Button>
       <Button
         variant="contained"
         id={`buttonIn`}
         className={css.buttonIn}
-        onClick={() => { login(); setClicked(true); setPopUp(true) }}
+        onClick={() => { login(); setClicked(true) }}
       >
         <div className={css.buttonInInner}>
           <div><MySvg/></div>
           <div id={`buttonGL`} className={css.test}>
-            { // paginateAmount === 45 ?
-                /* userData.email && shown ?
-                `  Signed in as ${userData.email}` :
-                userData.email && !shown ?
-                ` ✔️` :
-                !userData.email && shown ?
-                `  Sign in with Google` :
-                ` ❌` */
-
-                userData.email && shown && paginateAmount === 45 ?
-                `  ${userData.email}` :
-                userData.email && shown && paginateAmount === 90 ?
-                `  Signed in as ${userData.email}` :
-                userData.email && !shown ?
-                ` ✔️` :
-                !userData.email && shown ?
-                `  Sign in with Google` :
-                ` ❌`
-
+            {
+              // userData.email && shown && paginateAmount === 45 ?
+              // `  ${userData.email}` :
+              // userData.email && shown && paginateAmount === 90 ?
+              // `  Signed in as ${userData.email}` :
+              // userData.email && !shown ?
+              // ` ✔️` :
+              // !userData.email && shown ?
+              // `  Sign in with Google` :
+              // ` ❌`
             }
           </div>
         </div>
