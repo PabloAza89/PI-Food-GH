@@ -40,6 +40,7 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
         })
         .then((res) => res.json())
         .then((res) => {
+          
           if (res.status === 200) {
             console.log("res res res", res)
             setUserData({ email: res.email, fd_tkn: res.fd_tkn })
@@ -68,8 +69,19 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
             //     setShown(false)
             //   }, 3000)
 
-             $(`#buttonIn`)
-               .off() // DISABLES HOVER
+          $(`#onlyForTest`) // DISABLE CLICK/HOVER EVENT (UNDESIRABLE NAME CHANGE)
+            .css("cursor", "pointer")
+          $(`#buttonIn`)
+            .css("pointer-events", "none")
+
+             
+               //.off() // DISABLES HOVER EVENT (INSESIRABLE NAME CHANGE)
+               //.off('click')
+              // $(`#buttonIn`)
+              //  .unbind('mouseenter mouseleave')
+              //  .css("pointer-events", "none")
+              //  .css("pointer", "cursor")
+               //.css("pointer-events", "auto")
 
             $(`#buttonGL`)
             //.html(`  Signed in as ${userData.email}`)
@@ -91,6 +103,11 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
                 .stop()
                 .animate({ width: '64px' }, { queue: false, easing: 'easeOutBounce', duration: 1000 })
                 setClicked(false)
+
+                $(`#buttonIn`) // ENABLES CLICK/HOVER EVENT
+                  .css("pointer-events", "auto")
+
+
               }, 2000)
              /*  setTimeout(() => {
                 setShown(false)
@@ -147,6 +164,8 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
     },
     onError: (error) => { console.log(error) },
     onNonOAuthError: () => {
+      $(`#buttonIn`) // ENABLES CLICK/HOVER EVENT
+        .css("pointer-events", "auto")
       $(`#buttonIn`) // WHEN POP-UP IS CLOSED RETURN TO SMALL WIDTH
         .stop()
         .animate({ width: '64px' }, { queue: false, easing: 'easeOutBounce', duration: 1000 })
@@ -301,11 +320,23 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
             }
         </div>
       </Button>
+      <div id={`onlyForTest`}>
       <Button
         variant="contained"
         id={`buttonIn`}
         className={css.buttonIn}
-        onClick={() => { login(); setClicked(true) }}
+        onClick={() => { if (!clicked) {
+          login(); setClicked(true);
+          
+          $(`#onlyForTest`)
+            .css("cursor", "pointer")
+          $(`#buttonIn`)
+            .css("pointer-events", "none")
+            //.css("pointer-events", "auto")
+            
+            
+            
+        } }}
       >
         <div className={css.buttonInInner}>
           <div><MySvg/></div>
@@ -324,6 +355,7 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
           </div>
         </div>
       </Button>
+      </div>
       {
         userData.email ?
         <Button variant="contained" className={css.bgOut} onClick={() => logout()}>
