@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import css from './GoogleAuthCSS.module.css';
 import { useMatch } from "react-router-dom";
-import { useGoogleLogin } from '@react-oauth/google';
+import { useGoogleLogin, googleLogout } from '@react-oauth/google';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button } from '@mui/material/';
 import { easings } from '../../commons/easingsCSS';
@@ -45,75 +45,24 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
             console.log("res res res", res)
             setUserData({ email: res.email, fd_tkn: res.fd_tkn })
             dispatch(landingHidden(true))
-            localStorage.setItem('landingHidden', 'true')
+            localStorage.setItem('landingHidden', 'true')      
 
-            // //$(`#buttonGL`)
-            //   //.html(`  Signed in as ${res.email}`)
-            //   //.html(`  Signed in as ${userData.email}`)
-            //  $(`#buttonIn`)
-            //    .off()
-            //   //.unbind('mouseenter mouseleave')
-
-            // setButtonHelperWidth($(`#buttonWidthHelper`).outerWidth())
-            // $(`#buttonIn`) // WHEN NEW USER IS LOGGED (OVERWRITE), WIDTH GO SMALL
-            //   .stop()
-            //   .animate({ width: $(`#buttonWidthHelper`).outerWidth() }, { queue: false, easing: 'easeOutBounce', duration: 1000 })
-            //   //.animate({ width: buttonHelperWidth }, { queue: false, easing: 'easeOutBounce', duration: 1000 })
-            //   setTimeout(() => {
-            //     $(`#buttonIn`)
-            //     .stop()
-            //     .animate({ width: '64px' }, { queue: false, easing: 'easeOutBounce', duration: 1000 })
-            //     setClicked(false)
-            //   }, 2000)
-            //   setTimeout(() => {
-            //     setShown(false)
-            //   }, 3000)
-
-          $(`#onlyForTest`) // DISABLE CLICK/HOVER EVENT (UNDESIRABLE NAME CHANGE)
-            .css("cursor", "pointer")
-          $(`#buttonIn`)
-            .css("pointer-events", "none")
-
-             
-               //.off() // DISABLES HOVER EVENT (INSESIRABLE NAME CHANGE)
-               //.off('click')
-              // $(`#buttonIn`)
-              //  .unbind('mouseenter mouseleave')
-              //  .css("pointer-events", "none")
-              //  .css("pointer", "cursor")
-               //.css("pointer-events", "auto")
-
+            $(`#onlyForTest`) // DISABLE CLICK/HOVER EVENT (UNDESIRABLE NAME CHANGE)
+              .css("cursor", "pointer")
+            $(`#buttonIn`)
+              .css("pointer-events", "none")
             $(`#buttonGL`)
-            //.html(`  Signed in as ${userData.email}`)
-            .html(`  Signed in as ${res.email}`)
-            // .html(
-            //   userData.email ?
-            //   `  Signed in as ${userData.email}` :
-            //   `  Sign in with Google`
-            // )
-
-          $(`#buttonIn`) // NECESSARY FOR ANIMATION WORKS PROPERLY
-            //.stop() // NECESSARY FOR ANIMATION WORKS PROPERLY // OJO
-            .animate({ width: $(`#buttonWidthHelper`).outerWidth() }, { queue: false, easing: 'easeOutBounce', duration: 1000 })
-            //.animate({ width: 300 }, { queue: false, easing: 'easeOutBounce', duration: 1000 })
-            // UP HERE GOOD
-
-              setTimeout(() => {
-                $(`#buttonIn`)
-                .stop()
-                .animate({ width: '64px' }, { queue: false, easing: 'easeOutBounce', duration: 1000 })
-                setClicked(false)
-
-                $(`#buttonIn`) // ENABLES CLICK/HOVER EVENT
-                  .css("pointer-events", "auto")
-
-
-              }, 2000)
-             /*  setTimeout(() => {
-                setShown(false)
-              }, 3000) */
-
-
+              .html(`  Signed in as ${res.email}`)
+            $(`#buttonIn`)
+              .animate({ width: $(`#buttonWidthHelper`).outerWidth() }, { queue: false, easing: 'easeOutBounce', duration: 1000 })
+            setTimeout(() => {
+              $(`#buttonIn`)
+              .stop()
+              .animate({ width: '64px' }, { queue: false, easing: 'easeOutBounce', duration: 1000 })
+              setClicked(false)
+              $(`#buttonIn`) // ENABLES CLICK/HOVER EVENT
+                .css("pointer-events", "auto")
+            }, 2000)
           }
 
           if (res.status === 400 && res.message === `User not logged`) {
@@ -174,6 +123,7 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
   })
 
   const logout = () => {
+    googleLogout()
     fetch(`https://oauth2.googleapis.com/revoke?token=${userData.fd_tkn}`, {
       method: 'POST'
     })
@@ -199,37 +149,16 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
     .catch(rej => console.log(rej))
   }
 
-  const [ shown, setShown ] = useState<boolean>(false)
   const [ buttonHelperWidth, setButtonHelperWidth ] = useState<number | undefined>(undefined)
   const [ clicked, setClicked ] = useState<boolean>(false)
 
    useEffect(() => { // FIRST AUTO WIDTH CHECKER //
-      console.log("SE EJECUTO SE EJECUTO")
-      //console.log("SE EJECUTO SE EJECUTO", $(`#buttonIn`).innerWidth())
-
       $(`#buttonIn`)
         .css("width", "64px")
-      
       setButtonHelperWidth($(`#buttonWidthHelper`).outerWidth())
-
-    //  if ($(`#buttonIn`).innerWidth() === 64) {
-    //     userData.email ?
-    //     $(`#buttonGL`).html(` ✔️`) :
-    //     $(`#buttonGL`).html(` ❌`)
-    //   }
-        
-
-     //setButtonHelperWidth(310)
    },[userData.email]) // HELPS WITH NEW WIDTH WHEN USER CHANGES
 
    window.onfocus = function() { // FIRED WHEN TAB IS FOCUSED, CHECK VALID USER
-    //checkPrevLogin({ setUserData, userData })
-    console.log("FOCUSED FOCUSED APP")
-    console.log("FOCUSED FOCUSED USER DATA", userData.email)
-    //console.log("FOCUSED FOCUSED APP", $(`#buttonIn`).outerWidth())
-    //console.log("FOCUSED FOCUSED APP", $(`#buttonIn`).width())
-    console.log("FOCUSED FOCUSED APP", $(`#buttonIn`).innerWidth())
-
     checkPrevLogin({ setUserData, userData })
 
     if ($(`#buttonIn`).innerWidth() === 64) {
@@ -243,26 +172,19 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
     .on( "mouseenter", function() {
       if (clicked) $(this).stop()
       else {
-        //setButtonHelperWidth($(`#buttonWidthHelper`).outerWidth())
-        //setButtonHelperWidth(400)
-        //setShown(true) // setShown CAUSING TROUBLES
-        $(this) // NECESSARY FOR ANIMATION WORKS PROPERLY
-          //.stop() // NECESSARY FOR ANIMATION WORKS PROPERLY // OJO
+        $(this)
           .animate({ width: buttonHelperWidth }, { queue: false, easing: 'easeOutBounce', duration: 1000 })
-          //.animate({ width: 300 }, { queue: false, easing: 'easeOutBounce', duration: 1000 })
         $(`#buttonGL`)
           .html(
             userData.email ?
             `  Signed in as ${userData.email}` :
-            `  Sign in with Google`
-          )
+            `  Sign in with Google` )
       }
     })
     .on( "click", function() {
-      $(this) // NECESSARY FOR ANIMATION WORKS PROPERLY
-        .stop() // NECESSARY FOR ANIMATION WORKS PROPERLY
+      $(this)
+        .stop()
         .animate({ width: buttonHelperWidth }, { queue: false, easing: 'easeOutBounce', duration: 1000 })
-      setShown(true)
     })
     .on("mouseleave", function() {
       if (clicked) {
@@ -271,27 +193,14 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
           .animate({ width: buttonHelperWidth }, { queue: false, easing: 'easeOutCubic', duration: 1000 })
       }
       else {
-        $(this) // NECESSARY FOR ANIMATION WORKS PROPERLY
-          .stop() // NECESSARY FOR ANIMATION WORKS PROPERLY
+        $(this)
+          .stop()
           .animate({ width: '64px' }, { queue: false, easing: 'easeOutBounce', duration: 1000 })
-        setTimeout(() => {
-          //if ($(`#buttonIn`).innerWidth() === 64) $(`#buttonGL`).html(` ❌`)
-        }, 1000)
-        
       }
     })
 
-  // function outputsize() { 
-  //   if ($(`#buttonIn`).innerWidth() === 64) {
-  //     setShown(false)
-  //   }
-  // }
-  // let buttonIn = document.getElementById('buttonIn')
-  // buttonIn && new ResizeObserver(outputsize).observe(buttonIn)
-
-  function outputsize() { 
+  function outputsize() {
     if ($(`#buttonIn`).innerWidth() === 64) {
-      //setShown(false)
       userData.email ?
       $(`#buttonGL`).html(` ✔️`) :
       $(`#buttonGL`).html(` ❌`)
@@ -327,31 +236,15 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
         className={css.buttonIn}
         onClick={() => { if (!clicked) {
           login(); setClicked(true);
-          
-          $(`#onlyForTest`)
+          $(`#onlyForTest`) // NEXT TWO DISABLE MOUSE EVENTS
             .css("cursor", "pointer")
           $(`#buttonIn`)
             .css("pointer-events", "none")
-            //.css("pointer-events", "auto")
-            
-            
-            
         } }}
       >
         <div className={css.buttonInInner}>
           <div><MySvg/></div>
           <div id={`buttonGL`} className={css.test}>
-            {
-              // userData.email && shown && paginateAmount === 45 ?
-              // `  ${userData.email}` :
-              // userData.email && shown && paginateAmount === 90 ?
-              // `  Signed in as ${userData.email}` :
-              // userData.email && !shown ?
-              // ` ✔️` :
-              // !userData.email && shown ?
-              // `  Sign in with Google` :
-              // ` ❌`
-            }
           </div>
         </div>
       </Button>
@@ -368,5 +261,3 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
 }
 
 export default GoogleAuth;
-
-

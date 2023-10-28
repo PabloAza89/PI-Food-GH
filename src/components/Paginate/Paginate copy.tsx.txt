@@ -14,16 +14,8 @@ const Paginate = ({ paginateAmount }: paginateAmountI) => {
   const scrollPosition = useSelector((state: {scrollPosition: number}) => state.scrollPosition )
   const menuShown = useSelector((state: {menuShown: boolean}) => state.menuShown )
   const toShow = useSelector((state: { toShow: recipesI[] }) => state.toShow )
-  const indexChoosen = useSelector((state: {indexChoosen: number}) => state.indexChoosen )
   const tabChoosen = useSelector((state: { tabChoosen: number }) => state.tabChoosen )
-
-  console.log("123123 paginateAmount", paginateAmount)
-
-
-
-
-
-
+  const indexChoosen = useSelector((state: {indexChoosen: number}) => state.indexChoosen )
   let totalTabs = Math.ceil(toShow.length/9)
   let firstPartPortionTabs = paginateAmount === 45 ? (tabChoosen * 5) + 1 : (tabChoosen * 10) + 1
   let maxPortionTabs = paginateAmount === 45 ? (tabChoosen + 1) * 5 : (tabChoosen + 1) * 10
@@ -33,38 +25,15 @@ const Paginate = ({ paginateAmount }: paginateAmountI) => {
   for (let i = 0; i < toShow.length; i += paginateAmount) result.push(toShow.slice(i, i + paginateAmount))
 
   $(function() {
-    result[0] && [...Array(Math.ceil(result[paginateAmount === 45 ? tabChoosen : tabChoosen % 2 !== 0 ? tabChoosen -1 : tabChoosen].length/9))].forEach((e, i) => {
+    result[0] && [...Array(Math.ceil(result[tabChoosen].length/9))].forEach((e, i) => {
       let qq = $(`.Page${i}`).attr("value")
-      if (paginateAmount === 45) {
-        if (indexChoosen === Number(qq)) {
-          $(`.Page${indexChoosen}`)
-            .css("background", "rgba(46, 230, 163, 0.377)")
-        } else {
-          $(`.Page${i}`)
-            .css("background", "rgba(230, 46, 175, 0.363)")
-        }
+      if (indexChoosen === Number(qq)) {
+        $(`.Page${indexChoosen}`)
+          .css("background", "rgba(46, 230, 163, 0.377)")
       } else {
-        if (tabChoosen % 2 !== 0) {
-          // if (indexChoosen + 5 === Number(qq)) {
-          //   $(`.Page${indexChoosen + 5}`)
-          //     .css("background", "rgba(46, 230, 163, 0.377)")
-          // } else {
-          //   $(`.Page${i}`)
-          //     .css("background", "rgba(230, 46, 175, 0.363)")
-          // }
-          $(`.Page${indexChoosen + 5}`)
-            .css("background", "rgba(46, 230, 163, 0.377)")
-        } if (indexChoosen === Number(qq)) {
-          $(`.Page${indexChoosen}`)
-            .css("background", "rgba(46, 230, 163, 0.377)")
-        } else {
-          $(`.Page${i}`)
-            .css("background", "rgba(230, 46, 175, 0.363)")
-        }
-          
+        $(`.Page${i}`)
+          .css("background", "rgba(230, 46, 175, 0.363)")
       }
-        
-
     })
   })
 
@@ -97,25 +66,8 @@ const Paginate = ({ paginateAmount }: paginateAmountI) => {
           <div> {/* HELPER FOR BUTTON-DISABLED-TOOLTIP */}
             <Button
               id={css.eachButton}
-              disabled={
-                paginateAmount === 45 ?
-                (tabChoosen === 0 ?
-                true :
-                false) :
-                ((tabChoosen === 0 || tabChoosen === 1) ?
-                  true :
-                  false)
-              }
-              style={{ background:
-                paginateAmount === 45 ?
-                (tabChoosen === 0 ?
-                'rgb(135, 135, 135)' :
-                'rgb(61, 61, 245)') :
-                ((tabChoosen === 0 || tabChoosen === 1) ?
-                  'rgb(135, 135, 135)' :
-                  'rgb(61, 61, 245)')
-
-              }}
+              disabled={ tabChoosen === 0 ? true : false }
+              style={{ background: tabChoosen === 0 ? 'rgb(135, 135, 135)' : 'rgb(61, 61, 245)' }}
               onClick={(e) => {
                 dispatch(setTabChoosen( tabChoosen - 1 ));
                 dispatch(setIndexChoosen(0));
@@ -123,34 +75,18 @@ const Paginate = ({ paginateAmount }: paginateAmountI) => {
             ><b>{`<`}</b></Button>
           </div>
         </Tooltip>
-        {/* {result[0] && [...Array(Math.ceil(result[tabChoosen].length/9))].map((e, i) => { */}
-        {result[0] && [...Array(Math.ceil(result[0].length/9))].map((e, i) => {
+        {result[0] && [...Array(Math.ceil(result[tabChoosen].length/9))].map((e, i) => {
           return (
             <Button
               id={css.eachButton}
               className={`Page${i}`}
               key={i}
               value={i}
-              onClick={(e) => {
-                dispatch(setIndexChoosen(
-                  Number((e.target as HTMLInputElement).value) >= 5 ?
-                  Number((e.target as HTMLInputElement).value) - 5 :
-                  Number((e.target as HTMLInputElement).value)
-                ));
-                dispatch(setTabChoosen(
-                  tabChoosen % 2 === 0 && Number((e.target as HTMLInputElement).value) >= 5 ?
-                  tabChoosen + 1 :
-                  Number((e.target as HTMLInputElement).value) < 5 && tabChoosen !== 0?
-                  tabChoosen - 1 :
-                  tabChoosen
-                ));
-              }}
+              onClick={(e) => dispatch(setIndexChoosen(Number((e.target as HTMLInputElement).value)))}
             >
               {
                 paginateAmount === 45 ?
                 (tabChoosen * 5) + ++i :
-                tabChoosen % 2 !== 0 ?
-                ((tabChoosen -1)* 10) + ++i :
                 (tabChoosen * 10) + ++i
               }
             </Button>
