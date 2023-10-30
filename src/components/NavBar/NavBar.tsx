@@ -193,7 +193,11 @@ const NavBar = ({ recipeCreatedOrEdited, paginateAmount }: NavBarI) =>  {
           <Select
             className={css.containerDietsDishesHealthAlpha}
             value={entireFilter.diet}
-            onChange={(e) => { setEntireFilter({...entireFilter, diet:e.target.value}); dispatch(setIndexChoosen(0)) }}
+            onChange={(e) => {
+              setEntireFilter({...entireFilter, diet:e.target.value});
+              dispatch(setIndexChoosen(0));
+              dispatch(setTabChoosen(0));
+            }}
           >
             { allDietsOnline ?
               allDietsArray.map(e => {
@@ -215,7 +219,11 @@ const NavBar = ({ recipeCreatedOrEdited, paginateAmount }: NavBarI) =>  {
           <Select
             className={css.containerDietsDishesHealthAlpha}
             value={entireFilter.dish}
-            onChange={(e) => { setEntireFilter({...entireFilter, dish:e.target.value}); dispatch(setIndexChoosen(0)) }}
+            onChange={(e) => {
+              setEntireFilter({...entireFilter, dish:e.target.value});
+              dispatch(setIndexChoosen(0));
+              dispatch(setTabChoosen(0));
+            }}
           >
             { allDishesOnline ?
               allDishesArray.map(e => {

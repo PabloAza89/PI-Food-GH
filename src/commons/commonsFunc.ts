@@ -3,7 +3,7 @@
 import Swal from 'sweetalert2';
 import { useDispatch, useSelector } from 'react-redux';
 import { useGoogleLogin } from '@react-oauth/google';
-import { landingHidden, setMenuShown } from '../actions';
+import { landingHidden, setMenuShown, setIndexChoosen, setTabChoosen } from '../actions';
 import { recipesI } from '../interfaces/interfaces';
 //import { Link, useNavigate } from "react-router-dom";
 import { Link, Navigate } from "react-router-dom";
@@ -81,6 +81,16 @@ export const handleDelete = async ({ id, fd_tkn, setUserData, handleReload }: ha
             showCancelButton: false,
             timer: 3000,
           })
+
+          // NEXT CHECKS IF RECIPE WAS THE LAST IN THE TAB, THEN GO ONE LEVEL LOWER
+
+          let copyToShow: any[] = store.getState().toShow
+          let actualIndexChoosen = store.getState().indexChoosen
+          if (copyToShow[copyToShow.length - 1].id === id && (copyToShow.length - 1) % 9 === 0) {
+            store.dispatch(setIndexChoosen( actualIndexChoosen === 0 ? 4 : actualIndexChoosen - 1))
+            if (actualIndexChoosen === 0) store.dispatch(setTabChoosen( store.getState().tabChoosen - 1 ))
+          }
+
           handleReload({ statusResponse: 200, messageResponse: `1 item deleted` })
         }
       })
@@ -217,7 +227,7 @@ export function checkPrevLogin ({
           //Navigate({ to:"/" })
           //navigate.navigate("/")
           //useNavigate("/")
-          
+
           //navigate
         }
 

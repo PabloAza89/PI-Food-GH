@@ -73,7 +73,7 @@ function App() {
 
     sessionStorage.setItem('tabID', JSON.stringify(tabID))
 
-    console.log("AUTO-CHECK")
+    //console.log("AUTO-CHECK")
     fetch(`http://localhost:3001/user`, {
       method: 'POST',
       credentials: 'include',
@@ -81,7 +81,7 @@ function App() {
     })
     .then((res) => res.json())
     .then((res) => {
-      console.log("RES APP", res)
+      //console.log("RES APP", res)
       setUserData({ email: res.email, fd_tkn: res.fd_tkn })
     })
     .catch(rej => console.log(rej))

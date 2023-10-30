@@ -101,7 +101,7 @@ const Card = ({
           <ClearIcon className={css.iconDelete} />
         </Button>
       </div>
-      <Link className={css.imageOrTitleContainer} to={`/${id}`}>
+      <Link className={css.imageOrTitleContainer} to={`/${id}`} state={{ webFlow: true }}>
         <img
           className={css.image}
           src={
@@ -117,7 +117,7 @@ const Card = ({
         >
         </img>
       </Link>
-      <Link className={css.imageOrTitleContainer} to={`/${id}`}>
+      <Link className={css.imageOrTitleContainer} to={`/${id}`} state={{ testTest: true }}>
         <Tooltip
           arrow
           enterDelay={700}

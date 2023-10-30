@@ -1134,18 +1134,18 @@ const MyRecipe = ({
           className={css.buttonClearSave}
           variant="contained"
           onClick={(e) => isEditing ? handleSaveEdit(e) : handleSubmit(e) }
-          disabled={
-            saveButtonDisabled ||
-            error.title.character ||
-            error.title.badWord ||
-            error.health.string ||
-            error.health.max ||
-            error.summary.character ||
-            error.summary.badWord ||
-            error.instructions.filter(e => e.character === true)[0] ||
-            error.instructions.filter(e => e.badWord === true)[0] ?
-            true : false
-          }
+          // disabled={
+          //   saveButtonDisabled ||
+          //   error.title.character ||
+          //   error.title.badWord ||
+          //   error.health.string ||
+          //   error.health.max ||
+          //   error.summary.character ||
+          //   error.summary.badWord ||
+          //   error.instructions.filter(e => e.character === true)[0] ||
+          //   error.instructions.filter(e => e.badWord === true)[0] ?
+          //   true : false
+          // }
         >
           {
             isEditing ?

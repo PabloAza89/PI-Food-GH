@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
 import { useSelector , useDispatch } from 'react-redux';
 import css from "./DetailCSS.module.css";
 import noImage1 from "../../images/noImage1.jpg";
@@ -7,7 +7,6 @@ import noImage2 from "../../images/noImage2.jpg";
 import noImage3 from "../../images/noImage3.jpg";
 import notAvailable from "../../images/notAvailable.jpg";
 import { handleDelete, handleEdit } from '../../commons/commonsFunc';
-import { Link } from "react-router-dom";
 import { Button } from '@mui/material/';
 import { recipesI } from '../../interfaces/interfaces';
 import EditIcon from '@mui/icons-material/Edit';
@@ -21,15 +20,9 @@ import $ from 'jquery';
 export default function Detail({ userData, setUserData }: any) {
 
   const dispatch = useDispatch()
-  const navigate = useNavigate();
+  const navigate = useNavigate()
+  const location = useLocation()
   const params = useParams()
-
-  const menuShown = useSelector((state: {menuShown:boolean}) => state.menuShown)
-  const allRecipes = useSelector((state: { allRecipes: recipesI[] }) => state.allRecipes)
-  const recipe = allRecipes.filter((c:any) => params.recipeId! === c.id.toString() && params.recipeId!.toString().length === params.recipeId!.length)[0]
-  const [ brokenImage, setBrokenImage ] = useState<boolean>(false)
-  function regexInSummary(text: any) { return text.replaceAll(/(<[/]b>|<b>|<[/]a>|<a\b[^>]*>|[/]a>)/g, '') }
-  let arrImages = [noImage1, noImage2, noImage3]
 
   const reloadRecipes = async () => {
     dispatch(getDietsFromDB())
@@ -42,6 +35,42 @@ export default function Detail({ userData, setUserData }: any) {
       reloadRecipes().then(() => dispatch(allRecipesLoaded(true)))
     }
   }
+
+  //const [ recipe, setRecipe ] = useState<any>([])
+
+  const allRecipes = useSelector((state: { allRecipes: recipesI[] }) => state.allRecipes)
+  const toShow = useSelector((state: { toShow: recipesI[] }) => state.toShow)
+
+  const [ goOn, setGoOn ] = useState<boolean>(false)
+  const [ loading, setLoading ] = useState<boolean>(true)
+
+
+  //setRecipe(allRecipes.filter((c:any) => params.recipeId! === c.id.toString() && params.recipeId!.toString().length === params.recipeId!.length)[0])
+  let recipe = allRecipes.filter((c:any) => params.recipeId! === c.id.toString() && params.recipeId!.toString().length === params.recipeId!.length)[0]
+
+  useEffect(() => {
+    if (location.state && location.state.webFlow) {
+      
+      setGoOn(true)
+    } else {
+      reloadRecipes()
+      .then(() => dispatch(allRecipesLoaded(true)))
+      // .then(() => {
+      //   setRecipe(allRecipes.filter((c:any) => params.recipeId! === c.id.toString() && params.recipeId!.toString().length === params.recipeId!.length)[0])
+      //   setGoOn(true)
+      //   setLoading(false)
+      // })
+      //.then(() => setRecipe(allRecipes.filter((c:any) => params.recipeId! === c.id.toString() && params.recipeId!.toString().length === params.recipeId!.length)[0]))
+      //setRecipe(allRecipes.filter((c:any) => params.recipeId! === c.id.toString() && params.recipeId!.toString().length === params.recipeId!.length)[0])
+      .then(() => setGoOn(true))
+      .then(() =>setLoading(false))
+    }
+  },[])
+
+  const menuShown = useSelector((state: {menuShown:boolean}) => state.menuShown)
+  const [ brokenImage, setBrokenImage ] = useState<boolean>(false)
+  function regexInSummary(text: any) { return text.replaceAll(/(<[/]b>|<b>|<[/]a>|<a\b[^>]*>|[/]a>)/g, '') }
+  let arrImages = [noImage1, noImage2, noImage3]
 
   useEffect(() => {
     if (recipe !== undefined && recipe.userRecipe && recipe.image.length > 1) {
@@ -62,7 +91,15 @@ export default function Detail({ userData, setUserData }: any) {
 
   $(window).scrollTop(0)
 
-  if (recipe !== undefined) {
+  window.onbeforeunload = function() { // FIRED WHEN WINDOW IS REFRESH (OR CLOSED), TO REFRESH REACT-ROUTER V6 STATE..
+    window.history.replaceState({ usr: { webFlow: null }}, "");
+  }
+
+  console.log("123123 goOn", goOn)
+  console.log("123123 toShow[0]", toShow[0])
+  console.log("123123 recipe", recipe)
+
+  if (goOn && toShow[0] !== undefined && recipe !== undefined) {
     return (
       <div
         className={css.background}
@@ -183,7 +220,7 @@ export default function Detail({ userData, setUserData }: any) {
         </div>
       </div>
     )
-  } else return (
+  } else if (goOn && toShow[0] !== undefined && recipe === undefined) {return (
     <div className={css.backgroundError}>
       <div className={css.errorCard}>
         <b>THERE ARE NO MATCHING RECIPES WITH THAT ID !</b>
@@ -195,6 +232,11 @@ export default function Detail({ userData, setUserData }: any) {
           </Button>
         </Link>
       </div>
+    </div>
+  )}
+  else return (
+    <div style={{ marginTop: menuShown ? '150px' : '100px' }}>
+      <div className={css.loading}>Loading..</div>
     </div>
   )
 }

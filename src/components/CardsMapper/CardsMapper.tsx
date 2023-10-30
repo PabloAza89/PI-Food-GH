@@ -34,7 +34,25 @@ const CardsMapper = ({ setUserData, paginateAmount, userData }: CardsMapperI)  =
     result.push(toShow.slice(i, i + paginateAmount))
   }
 
-  let arraySplitedBy9: any[] = result[0] && result[tabChoosen].slice( indexChoosen * 9, (indexChoosen * 9) + 9 )
+  let arraySplitedBy9: any[] = result[0] && result[
+    //tabChoosen
+    paginateAmount === 45 ?
+    tabChoosen :
+    Math.floor(tabChoosen / 2)
+  //].slice( indexChoosen * 9, (indexChoosen * 9) + 9 )
+  ].slice(
+    paginateAmount === 45 ?
+    indexChoosen * 9 :
+    tabChoosen % 2 !== 0 ?
+    (indexChoosen + 5) * 9 :
+    indexChoosen * 9,
+    //(indexChoosen * 9) + 9
+    paginateAmount === 45 ?
+    (indexChoosen * 9) + 9 :
+    tabChoosen % 2 !== 0 ?
+    ((indexChoosen + 5) * 9) + 9 :
+    (indexChoosen * 9) + 9,
+  )
 
   const FirstFunc = async () => {
     useEffect(() => {
