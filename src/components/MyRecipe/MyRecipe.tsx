@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import css from "./MyRecipeCSS.module.css";
+import com from "../../commons/commonsCSS.module.css";
 import { useDispatch, useSelector } from 'react-redux';
 import noImage1 from "../../images/noImage1.jpg";
 import noImage2 from "../../images/noImage2.jpg";
@@ -431,7 +432,7 @@ const MyRecipe = ({
     }
 
     else {
-      fetch(`http://localhost:3001/recipe`, {
+      fetch(`${process.env.REACT_APP_SV}/recipe`, {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -556,7 +557,7 @@ const MyRecipe = ({
     }
 
     else {
-      fetch(`http://localhost:3001/recipe`, {
+      fetch(`${process.env.REACT_APP_SV}/recipe`, {
         method: 'PUT',
         credentials: 'include',
         headers: {
@@ -687,7 +688,7 @@ const MyRecipe = ({
       style={{ marginTop: menuShown ? '150px' : '100px' }}
     >
     <div
-      className={css.form}
+      className={`${css.form} ${com.noSelect}`}
     >
       <img // HIDDEN. ONLY FOR IMAGE VERIFICATION PURPOSES.
         style={{ width: '0px', height: '0px' }}
@@ -709,7 +710,7 @@ const MyRecipe = ({
         }
         alt=""
       />
-      <div className={css.createYourOwnRecipe}>
+      <div className={`${css.createYourOwnRecipe} ${com.noSelect}`}>
         {
           isEditing ?
           `Edit your recipe. Don't forget to save it !` :

@@ -1,11 +1,12 @@
 import css from "./AboutCSS.module.css";
+import com from "../../commons/commonsCSS.module.css";
 import { Link } from "react-router-dom";
 import { Button } from '@mui/material/';
 
 function About() {
 
     return (
-      <div className={css.background}>
+      <div className={`${css.background} ${com.noSelect}`}>
         <div className={css.text}>
           {
             `Hi i'm Pablo ! And this is my Food App for my Individual Proyect at Henry ! `

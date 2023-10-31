@@ -41,7 +41,7 @@ const LandingPage = ({ setUserData, userData }: any) => {
       })
       .then((res) => res.json())
       .then((res) => {
-        fetch(`http://localhost:3001/user`, {
+        fetch(`${process.env.REACT_APP_SV}/user`, {
           method: 'POST',
           credentials: 'include',
           headers: {

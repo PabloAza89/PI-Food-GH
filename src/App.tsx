@@ -74,7 +74,7 @@ function App() {
     sessionStorage.setItem('tabID', JSON.stringify(tabID))
 
     //console.log("AUTO-CHECK")
-    fetch(`http://localhost:3001/user`, {
+    fetch(`${process.env.REACT_APP_SV}/user`, {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-type': 'application/json; charset=UTF-8' }

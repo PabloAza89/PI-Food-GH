@@ -34,7 +34,7 @@ export const handleDelete = async ({ id, fd_tkn, setUserData, handleReload }: ha
   })
   .then((result) => {
     if (result.isConfirmed) {
-      fetch(`http://localhost:3001/delete`, {
+      fetch(`${process.env.REACT_APP_SV}/delete`, {
         method: 'DELETE',
         credentials: 'include',
         headers: {
@@ -201,7 +201,7 @@ export function checkPrevLogin ({
       //const navigate = () => useNavigate
       //const navigate = useNavigate()
 
-      fetch(`http://localhost:3001/user`, {
+      fetch(`${process.env.REACT_APP_SV}/user`, {
         method: 'POST',
         credentials: 'include',
         headers: {

@@ -7,7 +7,7 @@
 export function fetchRecipesFromAPI() {
   return async function(dispatch: any) {
     return (
-      fetch("http://localhost:3001/recipes")
+      fetch(`${process.env.REACT_APP_SV}/recipes`)
       .then(resp => resp.json())
       .then(data => dispatch({type: 'FETCH_RECIPES', payload: data}))
       .catch(error => {
@@ -24,7 +24,7 @@ export function fetchRecipesFromAPI() {
 export function getDietsFromDB() {
   return async function(dispatch: any) {
     return (
-      fetch("http://localhost:3001/diets")
+      fetch(`${process.env.REACT_APP_SV}/diets`)
       .then(resp => resp.json())
       .then(data => dispatch({type: 'GET_DIETS', payload: data}))
       .catch(error => dispatch({type: 'GET_DIETS', payload: "error"}))
@@ -35,7 +35,7 @@ export function getDietsFromDB() {
 export function getDishesFromDB() {
   return async function(dispatch: any) {
     return (
-      fetch("http://localhost:3001/dishes")
+      fetch(`${process.env.REACT_APP_SV}/dishes`)
       .then(resp => resp.json())
       .then(data => dispatch({type: 'GET_DISHES', payload: data}))
       .catch(error => dispatch({type: 'GET_DISHES', payload: "error"}))

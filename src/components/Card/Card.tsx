@@ -1,5 +1,6 @@
 import { useState, useEffect, Dispatch, SetStateAction } from "react";
 import css from "./CardCSS.module.css";
+import com from "../../commons/commonsCSS.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from 'react-redux';
 import noImage1 from "../../images/noImage1.jpg";
@@ -101,7 +102,7 @@ const Card = ({
           <ClearIcon className={css.iconDelete} />
         </Button>
       </div>
-      <Link className={css.imageOrTitleContainer} to={`/${id}`} state={{ webFlow: true }}>
+      <Link className={`${css.imageOrTitleContainer} ${com.noSelect}`} to={`/${id}`} state={{ webFlow: true }}>
         <img
           className={css.image}
           src={
@@ -117,7 +118,7 @@ const Card = ({
         >
         </img>
       </Link>
-      <Link className={css.imageOrTitleContainer} to={`/${id}`} state={{ testTest: true }}>
+      <Link className={`${css.imageOrTitleContainer} ${com.noSelect}`} to={`/${id}`} state={{ testTest: true }}>
         <Tooltip
           arrow
           enterDelay={700}
@@ -157,7 +158,7 @@ const Card = ({
         }
       >
         <div
-          className={`dietCard${id}`}
+          className={`dietCard${id} ${com.noSelect}`}
           id={css.text}
         >
           <b>Diets: </b>
@@ -171,7 +172,7 @@ const Card = ({
           }
         </div>
       </Tooltip>
-      <div id={css.text}>
+      <div className={com.noSelect} id={css.text}>
         <b>Healt Score: </b>{healthScore}
       </div>
       <Tooltip
@@ -194,7 +195,7 @@ const Card = ({
         }
       >
         <div
-          className={`dishCard${id}`}
+          className={`dishCard${id} ${com.noSelect}`}
           id={css.text}
         >
           <b>Dish Types: </b>

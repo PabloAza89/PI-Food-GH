@@ -27,7 +27,7 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
       .then((res) => res.json())
       .then((res) => {
         console.log("HHH", res)
-        fetch(`http://localhost:3001/user`, {
+        fetch(`${process.env.REACT_APP_SV}/user`, {
           method: 'POST',
           credentials: 'include',
           headers: {
@@ -131,7 +131,7 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
     .then((res) => {
       if (res.error !== undefined) { // USER HAS ALREADY LOGOUT..
         setUserData({email: "", fd_tkn: ""})
-        fetch(`http://localhost:3001/user`, {
+        fetch(`${process.env.REACT_APP_SV}/user`, {
           method: 'POST',
           credentials: 'include',
           headers: { 'Content-type': 'application/json; charset=UTF-8' }
@@ -139,7 +139,7 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
       }
       if (res.error === undefined) { // USER LOGOUT SUCCESSFULLY
         setUserData({email: "", fd_tkn: ""})
-        fetch(`http://localhost:3001/user`, {
+        fetch(`${process.env.REACT_APP_SV}/user`, {
           method: 'POST',
           credentials: 'include',
           headers: { 'Content-type': 'application/json; charset=UTF-8' }

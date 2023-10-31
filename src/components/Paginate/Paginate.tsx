@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useSelector , useDispatch } from 'react-redux';
 import css from './PaginateCSS.module.css';
+import com from "../../commons/commonsCSS.module.css";
 import { setIndexChoosen, setTabChoosen } from '../../actions';
 import { Button } from '@mui/material/';
 import $ from 'jquery';
@@ -17,13 +18,6 @@ const Paginate = ({ paginateAmount }: paginateAmountI) => {
   const toShow = useSelector((state: { toShow: recipesI[] }) => state.toShow )
   const indexChoosen = useSelector((state: {indexChoosen: number}) => state.indexChoosen )
   const tabChoosen = useSelector((state: { tabChoosen: number }) => state.tabChoosen )
-
-  console.log("123123 paginateAmount", paginateAmount)
-
-
-
-
-
 
   let totalTabs = Math.ceil(toShow.length/9)
   let firstPartPortionTabs = paginateAmount === 45 ? (tabChoosen * 5) + 1 : (Math.floor(tabChoosen / 2) * 10) + 1
@@ -46,17 +40,6 @@ const Paginate = ({ paginateAmount }: paginateAmountI) => {
         }
       } else {
         if (tabChoosen % 2 !== 0) {
-          // if (indexChoosen + 5 === Number(qq)) {
-          //   $(`.Page${indexChoosen + 5}`)
-          //     .css("background", "rgba(46, 230, 163, 0.377)")
-          // } else {
-          //   $(`.Page${i}`)
-          //     .css("background", "rgba(230, 46, 175, 0.363)")
-          // }
-
-          // $(`.Page${indexChoosen + 5}`)
-          //   .css("background", "rgba(46, 230, 163, 0.377)")
-
           if (indexChoosen + 5 === Number(qq)) {
             $(`.Page${indexChoosen + 5}`)
               .css("background", "rgba(46, 230, 163, 0.377)")
@@ -64,8 +47,6 @@ const Paginate = ({ paginateAmount }: paginateAmountI) => {
             $(`.Page${i}`)
               .css("background", "rgba(230, 46, 175, 0.363)")
           }
-
-
         }  else {
           if (indexChoosen === Number(qq)) {
             $(`.Page${indexChoosen}`)
@@ -74,19 +55,8 @@ const Paginate = ({ paginateAmount }: paginateAmountI) => {
             $(`.Page${i}`)
               .css("background", "rgba(230, 46, 175, 0.363)")
           }
-
         }
-        // if (indexChoosen === Number(qq)) {
-        //   $(`.Page${indexChoosen}`)
-        //     .css("background", "rgba(46, 230, 163, 0.377)")
-        // } else {
-        //   $(`.Page${i}`)
-        //     .css("background", "rgba(230, 46, 175, 0.363)")
-        // }
-          
       }
-        
-
     })
   })
 
@@ -94,8 +64,6 @@ const Paginate = ({ paginateAmount }: paginateAmountI) => {
     let counter = document.getElementById('counter')
     counter && document.documentElement.style.setProperty('--paginateMargin', `${counter.getBoundingClientRect().width}px`);
   })
-
-  console.log("123123 result", result)
 
   return (
     <div
@@ -156,12 +124,10 @@ const Paginate = ({ paginateAmount }: paginateAmountI) => {
             ><b>{`<`}</b></Button>
           </div>
         </Tooltip>
-        {/* {result[0] && [...Array(Math.ceil(result[tabChoosen].length/9))].map((e, i) => { */}
         {result[0] && [...Array(Math.ceil(result[
           paginateAmount === 45 ?
           tabChoosen :
           Math.floor(tabChoosen / 2)
-          /* tabChoosen */
         ].length/9))].map((e, i) => {
           return (
             <Button
@@ -175,7 +141,6 @@ const Paginate = ({ paginateAmount }: paginateAmountI) => {
                   Number((e.target as HTMLInputElement).value) - 5 :
                   Number((e.target as HTMLInputElement).value)
                 ));
-                
                 dispatch(setTabChoosen(
                   paginateAmount === 45 ?
                   tabChoosen :
@@ -249,7 +214,7 @@ const Paginate = ({ paginateAmount }: paginateAmountI) => {
       <div
         style={{ visibility: allRecipes[0] === undefined || toShow[0] === undefined ? 'hidden' : 'visible' }}
         id={`counter`}
-        className={css.counter}
+        className={`${css.counter} ${com.noSelect}`}
       >
           { firstPartPortionTabs } - {/* FIRST PART */}
         { maxPortionTabs < totalTabs ? maxPortionTabs : totalTabs } of {/* MIDDLE PART */}

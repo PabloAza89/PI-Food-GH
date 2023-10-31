@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import css from "./ServerStatusCSS.module.css";
+import com from "../../commons/commonsCSS.module.css";
 import { useSelector, useDispatch } from 'react-redux';
 import { Button } from '@mui/material/';
 import { easings } from '../../commons/easingsCSS';
@@ -73,7 +74,7 @@ const ServerStatus = () =>  {
         </div>
       </Button>
       <div
-        className={css.sliderBox}
+        className={`${css.sliderBox} ${com.noSelect}`}
         id={`sliderBox`}
       >
         <div className={css.eachRow}>

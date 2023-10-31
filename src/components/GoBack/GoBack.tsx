@@ -1,4 +1,5 @@
 import css from "./GoBackCSS.module.css";
+import com from "../../commons/commonsCSS.module.css";
 import { Link } from "react-router-dom";
 import logo from "../../images/logo.png";
 
@@ -10,7 +11,7 @@ interface GoBackI {
 const GoBack = ({ recipeCreatedOrEdited, recipeNotFound }: GoBackI) =>  {
 
   return (
-    <div className={css.logoTextContainer}>
+    <div className={`${css.logoTextContainer} ${com.noSelect}`}>
       <Link to="/">
         <img className={css.logo} src={logo} alt=""></img>
       </Link>

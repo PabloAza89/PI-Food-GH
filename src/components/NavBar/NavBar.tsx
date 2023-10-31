@@ -4,6 +4,7 @@ import {
 } from "react-router-dom";
 import logo from "../../images/logo.png";
 import css from './NavBarCSS.module.css';
+import com from "../../commons/commonsCSS.module.css";
 import { handleReturn } from '../../commons/commonsFunc';
 import { useDispatch, useSelector } from 'react-redux';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -105,7 +106,7 @@ const NavBar = ({ recipeCreatedOrEdited, paginateAmount }: NavBarI) =>  {
       }}
     >
       <div className={css.logoAndMenuContainer}>
-        <div className={css.logoTextContainer}>
+        <div className={`${css.logoTextContainer} ${com.noSelect}`}>
           <div
             onClick={() => handleReturn({
               location, navigate, inDetail, recipeCreatedOrEdited
@@ -159,7 +160,7 @@ const NavBar = ({ recipeCreatedOrEdited, paginateAmount }: NavBarI) =>  {
             onFocus={() => setPlaceholder("")}
             onBlur={() => setPlaceholder(`Find recipe..`)}
             InputProps={{ className: css.inputProps }}
-            className={css.input}
+            className={`${css.input} ${com.noSelect}`}
             onChange={(e) => {
               setEntireFilter({...entireFilter, text: e.target.value});
               dispatch(setIndexChoosen(0));
@@ -243,7 +244,7 @@ const NavBar = ({ recipeCreatedOrEdited, paginateAmount }: NavBarI) =>  {
               })
             }
           </Select>
-          <FormControl className={css.containerDietsDishesHealthAlpha}>
+          <FormControl className={`${css.containerDietsDishesHealthAlpha} ${com.noSelect}`}>
             <InputLabel
               size="small"
               className={css.labelHealthOrAlpha}
@@ -263,7 +264,7 @@ const NavBar = ({ recipeCreatedOrEdited, paginateAmount }: NavBarI) =>  {
               <MenuItem value={"Less Healthy"}>Less Healthy</MenuItem>
             </Select>
           </FormControl>
-          <FormControl className={css.containerDietsDishesHealthAlpha}>
+          <FormControl className={`${css.containerDietsDishesHealthAlpha} ${com.noSelect}`}>
             <InputLabel
               size="small"
               className={css.labelHealthOrAlpha}

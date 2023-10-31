@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
 import { useSelector , useDispatch } from 'react-redux';
 import css from "./DetailCSS.module.css";
+import com from "../../commons/commonsCSS.module.css";
 import noImage1 from "../../images/noImage1.jpg";
 import noImage2 from "../../images/noImage2.jpg";
 import noImage3 from "../../images/noImage3.jpg";
@@ -36,34 +37,18 @@ export default function Detail({ userData, setUserData }: any) {
     }
   }
 
-  //const [ recipe, setRecipe ] = useState<any>([])
-
   const allRecipes = useSelector((state: { allRecipes: recipesI[] }) => state.allRecipes)
   const toShow = useSelector((state: { toShow: recipesI[] }) => state.toShow)
-
   const [ goOn, setGoOn ] = useState<boolean>(false)
-  const [ loading, setLoading ] = useState<boolean>(true)
-
-
-  //setRecipe(allRecipes.filter((c:any) => params.recipeId! === c.id.toString() && params.recipeId!.toString().length === params.recipeId!.length)[0])
   let recipe = allRecipes.filter((c:any) => params.recipeId! === c.id.toString() && params.recipeId!.toString().length === params.recipeId!.length)[0]
 
   useEffect(() => {
     if (location.state && location.state.webFlow) {
-      
       setGoOn(true)
     } else {
       reloadRecipes()
       .then(() => dispatch(allRecipesLoaded(true)))
-      // .then(() => {
-      //   setRecipe(allRecipes.filter((c:any) => params.recipeId! === c.id.toString() && params.recipeId!.toString().length === params.recipeId!.length)[0])
-      //   setGoOn(true)
-      //   setLoading(false)
-      // })
-      //.then(() => setRecipe(allRecipes.filter((c:any) => params.recipeId! === c.id.toString() && params.recipeId!.toString().length === params.recipeId!.length)[0]))
-      //setRecipe(allRecipes.filter((c:any) => params.recipeId! === c.id.toString() && params.recipeId!.toString().length === params.recipeId!.length)[0])
       .then(() => setGoOn(true))
-      .then(() =>setLoading(false))
     }
   },[])
 
@@ -83,7 +68,7 @@ export default function Detail({ userData, setUserData }: any) {
       })
       .catch((err) => console.error(err))
     }
-  },[])
+  })
 
   useEffect(() => {
     dispatch(setMenuShown(false))
@@ -94,10 +79,6 @@ export default function Detail({ userData, setUserData }: any) {
   window.onbeforeunload = function() { // FIRED WHEN WINDOW IS REFRESH (OR CLOSED), TO REFRESH REACT-ROUTER V6 STATE..
     window.history.replaceState({ usr: { webFlow: null }}, "");
   }
-
-  console.log("123123 goOn", goOn)
-  console.log("123123 toShow[0]", toShow[0])
-  console.log("123123 recipe", recipe)
 
   if (goOn && toShow[0] !== undefined && recipe !== undefined) {
     return (
@@ -134,7 +115,7 @@ export default function Detail({ userData, setUserData }: any) {
             </Button>
           </div>
           <img
-            className={css.image}
+            className={`${css.image} ${com.noSelect}`}
             style={{ marginTop: userData.email === recipe.email ? '24px' : '0px' }} // 24 === 40 - 16
             src={
               brokenImage ?
@@ -147,8 +128,8 @@ export default function Detail({ userData, setUserData }: any) {
             }
             alt=""
           />
-          <div className={css.text}><b>Title: </b>{recipe.title}</div>
-          <div className={css.text}>
+          <div className={`${css.text} ${com.noSelect}`}><b>Title: </b>{recipe.title}</div>
+          <div className={`${css.text} ${com.noSelect}`}>
             <b>Diets: </b>
             {
               recipe.diets[0] !== undefined ?
@@ -159,10 +140,10 @@ export default function Detail({ userData, setUserData }: any) {
               `Not specified`
             }
           </div>
-          <div className={css.text}>
+          <div className={`${css.text} ${com.noSelect}`}>
             <b>Healt Score: </b>{recipe.healthScore}
           </div>
-          <div className={css.text}>
+          <div className={`${css.text} ${com.noSelect}`}>
             <b>Dish Types: </b>
             {
               recipe.dishTypes[0] !== undefined ?
@@ -174,13 +155,13 @@ export default function Detail({ userData, setUserData }: any) {
             }
           </div>
           <hr className={css.divider}/>
-          <div className={css.text}>
+          <div className={`${css.text} ${com.noSelect}`}>
             <b>Summary: </b>
             {regexInSummary(recipe.summary)}
           </div>
           <hr className={css.divider} style={{ display: recipe.analyzedInstructions[0] !== undefined ? `flex` : `none` }}/>
           <div className={css.instructions}>
-            <div className={css.text}>
+            <div className={`${css.text} ${com.noSelect}`}>
               {
                 recipe.analyzedInstructions[0] !== undefined ?
                 <b>Instructions: </b> :
@@ -191,7 +172,7 @@ export default function Detail({ userData, setUserData }: any) {
                 recipe.analyzedInstructions[0] !== undefined && Object.prototype.toString.call( recipe.analyzedInstructions[0] ) === '[object Object]' ?
                 recipe.analyzedInstructions[0].steps!.map((e: any, index: any) => {
                   return (
-                    <div key={index} className={css.eachStep}>
+                    <div key={index} className={`${css.eachStep} ${com.noSelect}`}>
                       <div className={css.eachStepTitle}>
                         <b>Step {++index}: </b>
                       </div>
@@ -204,7 +185,7 @@ export default function Detail({ userData, setUserData }: any) {
                 recipe.analyzedInstructions[0] !== undefined && Object.prototype.toString.call( recipe.analyzedInstructions[0] ) !== '[object Object]' ?
                 recipe.analyzedInstructions.map((e: any, index: any) => {
                   return (
-                    <div key={index} className={css.eachStep}>
+                    <div key={index} className={`${css.eachStep} ${com.noSelect}`}>
                       <div className={css.eachStepTitle}>
                         <b>Step {++index}: </b>
                       </div>
