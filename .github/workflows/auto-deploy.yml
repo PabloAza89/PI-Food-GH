@@ -23,5 +23,5 @@ jobs:
     - run: npm run build --if-present
     - run: git config --global user.email "juanpabloazambuyo@gmail.com"
     - run: git config --global user.name "Juan Pablo Azambuyo"
-    - run: git remote set-url origin https://${{secrets.USER_GITHUB_TOKEN}}@github.com/PabloAza89/weather-app.git
+    - run: git remote set-url origin https://${{secrets.USER_GITHUB_TOKEN}}@github.com/PabloAza89/PI-Food-GH.git
     - run: npm run deploy --if-present
