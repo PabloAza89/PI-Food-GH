@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import css from './GoogleAuthCSS.module.css';
 import { useMatch } from "react-router-dom";
 import { useGoogleLogin, googleLogout } from '@react-oauth/google';
