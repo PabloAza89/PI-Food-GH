@@ -42,7 +42,7 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
         .then((res) => {
           
           if (res.status === 200) {
-            console.log("res res res", res)
+            console.log("User OK res", res)
             setUserData({ email: res.email, fd_tkn: res.fd_tkn })
             dispatch(landingHidden(true))
             localStorage.setItem('landingHidden', 'true')      
@@ -159,8 +159,7 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
    },[userData.email]) // HELPS WITH NEW WIDTH WHEN USER CHANGES
 
    window.onfocus = function() { // FIRED WHEN TAB IS FOCUSED, CHECK VALID USER
-    checkPrevLogin({ setUserData, userData })
-
+    checkPrevLogin({ setUserData, userData }) 
     if ($(`#buttonIn`).innerWidth() === 64) {
       userData.email ?
       $(`#buttonGL`).html(` ✔️`) :

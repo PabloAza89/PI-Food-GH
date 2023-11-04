@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import css from "./ServerStatusCSS.module.css";
 import com from "../../commons/commonsCSS.module.css";
 import { useSelector, useDispatch } from 'react-redux';
@@ -15,7 +15,7 @@ const ServerStatus = () =>  {
 
   const serverStatus = useSelector((state: { serverStatus: serverStatusI }) => state.serverStatus)
   const serverStatusShown = useSelector((state: { serverStatusShown: boolean }) => state.serverStatusShown)
-  //const serverStatusShown = true
+  //const serverStatusShown = true // DEV
 
   useEffect(() => {
     $(function() {

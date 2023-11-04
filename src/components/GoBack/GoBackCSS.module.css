@@ -3,9 +3,6 @@
   /* background: red; */ /* DEV */
   margin: 16px 0px 0px 16px;
   flex-direction: row;
-  /* min-width: 200px;
-  width: 200px; */
-  /* min-height: 69px; */
   height: 69px;
   justify-content: flex-end;
   align-items: center;

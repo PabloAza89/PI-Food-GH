@@ -4,8 +4,7 @@ import Card from '../Card/Card';
 import { useSelector, useDispatch } from 'react-redux';
 import { recipesI, userDataI, paginateAmountI  } from '../../interfaces/interfaces';
 import {
-  fetchRecipesFromAPI, allRecipesLoaded,
-  getDietsFromDB, getDishesFromDB
+  fetchRecipesFromAPI, getDietsFromDB, getDishesFromDB
 } from '../../actions';
 
 interface CardsMapperI {
@@ -35,18 +34,15 @@ const CardsMapper = ({ setUserData, paginateAmount, userData }: CardsMapperI)  =
   }
 
   let arraySplitedBy9: any[] = result[0] && result[
-    //tabChoosen
     paginateAmount === 45 ?
     tabChoosen :
     Math.floor(tabChoosen / 2)
-  //].slice( indexChoosen * 9, (indexChoosen * 9) + 9 )
   ].slice(
     paginateAmount === 45 ?
     indexChoosen * 9 :
     tabChoosen % 2 !== 0 ?
     (indexChoosen + 5) * 9 :
     indexChoosen * 9,
-    //(indexChoosen * 9) + 9
     paginateAmount === 45 ?
     (indexChoosen * 9) + 9 :
     tabChoosen % 2 !== 0 ?
@@ -54,15 +50,14 @@ const CardsMapper = ({ setUserData, paginateAmount, userData }: CardsMapperI)  =
     (indexChoosen * 9) + 9,
   )
 
-  const FirstFunc = async () => {
-    useEffect(() => {
-      dispatch(getDietsFromDB())
-      dispatch(getDishesFromDB())
+  useEffect(() => { // fetch all recipes
+    Promise.all([
+      dispatch(getDietsFromDB()),
+      dispatch(getDishesFromDB()),
       dispatch(fetchRecipesFromAPI())
-    },[])
-  }
+    ])
 
-  FirstFunc().then(() => dispatch(allRecipesLoaded(true)))
+  },[dispatch])
 
   return allRecipes[0] !== undefined && toShow[0] !== undefined ?
     (<div className={css.background}>

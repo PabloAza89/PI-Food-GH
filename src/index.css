@@ -1,13 +1,11 @@
 html {
   height: 100%;
   width: 100%;
-  background: gray /* COLOR SHOWN WHEN RESIZED */
+  background: #eeeeee /* DEFAULT BACKGROUND COLOR */
 }
 
 body {
   display: flex;
-  /* display: flex;
-  position: fixed; */
   margin: 0;
   height: 100%;
   width: 100%;
@@ -15,11 +13,9 @@ body {
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   overflow-x: hidden;
-  /* overflow-y: hidden; */
 }
 
 #root {
   height: 100%;
   width: 100%;
-  /* overflow-y: hidden !important; */
 }

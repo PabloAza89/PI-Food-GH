@@ -6,7 +6,7 @@
   padding-bottom: 16px;
 }
 
-.form { /* ...noSelect; */
+.form {
   /* background: darkmagenta !important; */ /* DEV */
   display: flex;
   position: relative;
@@ -26,7 +26,6 @@
 }
 
 .imageSearcher {
-  /* ...noSelect; */
   display: flex;
   position : relative;
   background: antiquewhite; /* dev */
@@ -57,7 +56,6 @@
 }
 
 .eachRow {
-  /* ...noSelect; */
   /* background: gray; */ /* DEV */
   margin: 6px 0px;
   display: flex;
@@ -107,7 +105,7 @@
   color: rgba(245, 245, 220, 0.3) !important
 }
 
-.select { /* ...noSelect; */
+.select {
   display: flex;
   position: relative;
   background: rgba(128, 128, 128, 0.2);
@@ -149,7 +147,7 @@
   width: calc(100% - 113px - 28px);
 }
 
-.inputHiddenTitle { /* ...noSelect; */
+.inputHiddenTitle {
   display: flex !important;
   position: relative !important;
   background: rgba(128, 128, 128, 0.2); /* INPUT BACKGROUND */
@@ -184,8 +182,7 @@
   margin-left: 14px !important;
   padding: 16.5px 0px 16.5px 0px !important;
   position: absolute !important;
-  /* width: calc(100% - 113px - 28px); */
-  width: calc(100% - 28px);
+  width: calc(100% - 28px);  /* width: calc(100% - 113px - 28px); */
   color: transparent !important; /* NO GRAY COLOR */
 }
 

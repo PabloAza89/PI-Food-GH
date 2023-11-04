@@ -1,22 +1,10 @@
-// export function fetchRecipesFromAPI() {
-//   return {
-//     type: 'FETCH_RECIPES_FROM_API',
-//   }
-// };
-
 export function fetchRecipesFromAPI() {
   return async function(dispatch: any) {
     return (
       fetch(`${process.env.REACT_APP_SV}/recipes`)
       .then(resp => resp.json())
       .then(data => dispatch({type: 'FETCH_RECIPES', payload: data}))
-      .catch(error => {
-        console.log("FRONT", error);
-        //if (error.message === 'Expired key') dispatch({type: 'FETCH_RECIPES', payload: error})
-        //if (error.message === 'Expired key') dispatch({type: 'FETCH_RECIPES', payload: error})
-        dispatch({type: 'FETCH_RECIPES', payload: error})
-        //else dispatch({type: 'FETCH_RECIPES', payload: error})
-      })
+      .catch(error => dispatch({type: 'FETCH_RECIPES', payload: error}))
     )
   }
 };
@@ -40,13 +28,6 @@ export function getDishesFromDB() {
       .then(data => dispatch({type: 'GET_DISHES', payload: data}))
       .catch(error => dispatch({type: 'GET_DISHES', payload: "error"}))
     )
-  }
-};
-
-export function allRecipesLoaded(payload: any) {
-  return {
-    type: 'ALL_RECIPES_LOADED',
-    payload: payload
   }
 };
 

@@ -10,7 +10,6 @@
   align-items: center;
   justify-content: center;
   color: rgba(240, 248, 255, 0.726);
-  /* font-size: 4vh; */
   text-decoration: none;
 }
 
@@ -23,7 +22,6 @@
   font-weight: 400;
   text-align: center;
   padding: 0px 40px;
-  /* margin-bottom: 30px; */
 }
 
 .link {
@@ -36,18 +34,15 @@
   text-underline-position: under;
   text-align: center;
   margin: 15px 0px 25px 0px;
-  /* margin: 15px 0px; */
 }
 
 .button {
   background: #859e7d !important;
   color: antiquewhite !important;
-  /* margin-top: 40px; */
   min-width: 122px;
   width: 122px;
   height: 36.5px;
   align-self: center;
-  /* font-size: 15px !important; */
 }
 
 .button:hover { background: #7b9174 !important }

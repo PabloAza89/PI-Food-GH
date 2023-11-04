@@ -38,7 +38,7 @@ const NavBar = ({ recipeCreatedOrEdited, paginateAmount }: NavBarI) =>  {
   const [alphaLabelShown, setAlphaLabelShown] = useState<boolean>(false);
   const [placeholder, setPlaceholder] = useState<string>('Find recipe..');
   const menuShown = useSelector((state: {menuShown:boolean}) => state.menuShown)
-  //const menuShown = true
+  //const menuShown = true // DEV
   const allDietsOnline = useSelector((state: {allDietsOnline:boolean}) => state.allDietsOnline)
   const allDishesOnline = useSelector((state: {allDishesOnline:boolean}) => state.allDishesOnline)
 
@@ -253,8 +253,7 @@ const NavBar = ({ recipeCreatedOrEdited, paginateAmount }: NavBarI) =>  {
               }}
             >  Sort by Healthy  </InputLabel>
             <Select
-              //size="small"
-              //size="small"
+              size="small"
               className={css.selectWithLabel}
               onFocus={() => setHealthLabelShown(true)}
               value={healthLevel}

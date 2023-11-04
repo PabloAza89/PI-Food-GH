@@ -18,7 +18,9 @@ import MyRecipe from "./components/MyRecipe/MyRecipe";
 import About from "./components/About/About";
 import { userDataI } from './interfaces/interfaces';
 import { useDispatch } from 'react-redux';
-import { setScrollPosition } from './actions';
+import { setScrollPosition,
+  fetchRecipesFromAPI, getDietsFromDB, getDishesFromDB
+ } from './actions';
 import $ from 'jquery';
 
 function App() {
@@ -44,7 +46,7 @@ function App() {
 
   useEffect(() => { // FIRST ONLY-ONE-TIME AUTO-CHECK USER (CHECK USER TOKEN)
 
-    checkPrevLogin({ setUserData, userData })
+    checkPrevLogin({ setUserData, userData }) // test
 
     feedbackBC.onmessage = (e) => {
       if (e.data.subscribe.length > tabsArrREF.current.subscribe.length) {
@@ -73,18 +75,15 @@ function App() {
 
     sessionStorage.setItem('tabID', JSON.stringify(tabID))
 
-    //console.log("AUTO-CHECK")
     fetch(`${process.env.REACT_APP_SV}/user`, {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-type': 'application/json; charset=UTF-8' }
     })
     .then((res) => res.json())
-    .then((res) => {
-      //console.log("RES APP", res)
-      setUserData({ email: res.email, fd_tkn: res.fd_tkn })
-    })
+    .then((res) => setUserData({ email: res.email, fd_tkn: res.fd_tkn }))
     .catch(rej => console.log(rej))
+    // eslint-disable-next-line
   },[])
 
   useEffect(() => { // FIRED WHEN WINDOW IS CLOSED OR REFRESH
@@ -94,6 +93,7 @@ function App() {
     };
     window.addEventListener("beforeunload", onBeforeUnload);
     return () => window.removeEventListener("beforeunload", onBeforeUnload);
+    // eslint-disable-next-line
   },[])
 
   window.onfocus = function() { // FIRED WHEN TAB IS FOCUSED, CHECK VALID USER
@@ -127,6 +127,15 @@ function App() {
   root.style.overflowY = "unset" :
   root.style.overflowY = "hidden" )
 
+  useEffect(() => { // fetch all recipes
+    Promise.all([
+      dispatch(getDietsFromDB()),
+      dispatch(getDishesFromDB()),
+      dispatch(fetchRecipesFromAPI())
+    ])
+
+  },[dispatch])
+
   return (
     <div className={css.background}>
       <div
@@ -137,63 +146,95 @@ function App() {
         }}
       />
       <div className={css.wallpaperBody} />
-      <Landing setUserData={setUserData} userData={userData} />
       <Routes>
-        <Route path="/" element={<>
-          <GoogleAuth
-            paginateAmount={paginateAmount}
-            setUserData={setUserData}
-            userData={userData}
-          />
-          <ServerStatus />
-          <NavBar />
-          <Paginate paginateAmount={paginateAmount} />
-          <CardsMapper
-            paginateAmount={paginateAmount}
-            setUserData={setUserData}
-            userData={userData}
-          />
-          <GoUp />
-        </>}/>
-        <Route path="/:recipeId" element={<>
-          <NavBar />
-          <GoogleAuth
-            paginateAmount={paginateAmount}
-            setUserData={setUserData}
-            userData={userData}
-          />
-          <ServerStatus />
-          <Detail
-            setUserData={setUserData}
-            userData={userData}
-          />
-        </>}/>
-        <Route path="/MyRecipe" element={<>
-          <NavBar
-            paginateAmount={paginateAmount}
-            recipeCreatedOrEdited={recipeCreatedOrEdited}
-          />
-          <GoogleAuth
-            paginateAmount={paginateAmount}
-            setUserData={setUserData}
-            userData={userData}
-          />
-          <ServerStatus />
-          <MyRecipe
-            paginateAmount={paginateAmount}
-            setUserData={setUserData}
-            userData={userData}
-            retrieveRecipeCreatedOrEdited={retrieveRecipeCreatedOrEdited}
-            recipeCreatedOrEdited={recipeCreatedOrEdited}
-          />
-        </>}/>
-        <Route path="/About" element={<>
-          <About />
-        </>}/>
-        <Route path="/*" element={<>
-          <GoBack />
-          <Error />
-        </>}/>
+        <Route
+          path="/"
+          element={
+            landingHiddenState ?
+            <>
+              <GoogleAuth
+                paginateAmount={paginateAmount}
+                setUserData={setUserData}
+                userData={userData}
+              />
+              <ServerStatus />
+              <NavBar />
+              <Paginate paginateAmount={paginateAmount} />
+              <CardsMapper
+                paginateAmount={paginateAmount}
+                setUserData={setUserData}
+                userData={userData}
+              />
+              <GoUp />
+            </> :
+            <Landing setUserData={setUserData} userData={userData} />
+          }
+        />
+        <Route
+          path="/:recipeId"
+          element={
+            landingHiddenState ?
+            <>
+              <NavBar />
+              <GoogleAuth
+                paginateAmount={paginateAmount}
+                setUserData={setUserData}
+                userData={userData}
+              />
+              <ServerStatus />
+              <Detail
+                setUserData={setUserData}
+                userData={userData}
+              />
+            </> :
+            <Landing setUserData={setUserData} userData={userData} />
+          }
+        />
+        <Route
+          path="/MyRecipe"
+          element={
+            landingHiddenState ?
+            <>
+              <NavBar
+                paginateAmount={paginateAmount}
+                recipeCreatedOrEdited={recipeCreatedOrEdited}
+              />
+              <GoogleAuth
+                paginateAmount={paginateAmount}
+                setUserData={setUserData}
+                userData={userData}
+              />
+              <ServerStatus />
+              <MyRecipe
+                paginateAmount={paginateAmount}
+                setUserData={setUserData}
+                userData={userData}
+                retrieveRecipeCreatedOrEdited={retrieveRecipeCreatedOrEdited}
+                recipeCreatedOrEdited={recipeCreatedOrEdited}
+              />
+            </> :
+            <Landing setUserData={setUserData} userData={userData} />
+          }
+        />
+        <Route
+          path="/About"
+          element={
+            landingHiddenState ?
+            <About /> :
+            <Landing setUserData={setUserData} userData={userData} />
+          }
+        />
+        <Route
+          path="/*"
+          element={
+            landingHiddenState ?
+            <>
+              <GoBack />
+              <Error />
+            </> :
+            <Landing setUserData={setUserData} userData={userData} />
+          }
+        />
       </Routes>
     </div>
   )

@@ -14,7 +14,7 @@ import $ from 'jquery';
 import EditIcon from '@mui/icons-material/Edit';
 import ClearIcon from '@mui/icons-material/Clear';
 import {
-  fetchRecipesFromAPI, allRecipesLoaded, getDietsFromDB, getDishesFromDB
+  fetchRecipesFromAPI, getDietsFromDB, getDishesFromDB
 } from '../../actions';
 import { recipesI, userDataI } from '../../interfaces/interfaces';
 
@@ -41,9 +41,7 @@ const Card = ({
   }
 
   const handleReload = (props: any) => {
-    if (props.statusResponse === 200 && props.messageResponse === `1 item deleted`) {
-      reloadRecipes().then(() => dispatch(allRecipesLoaded(true)))
-    }
+    if (props.statusResponse === 200 && props.messageResponse === `1 item deleted`) reloadRecipes()
   }
 
   let arrImages = [noImage1, noImage2, noImage3]
@@ -70,6 +68,7 @@ const Card = ({
       })
       .catch((err) => { console.error(err) })
     }
+    // eslint-disable-next-line
   },[])
     
 

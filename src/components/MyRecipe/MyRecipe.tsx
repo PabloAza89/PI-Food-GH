@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import css from "./MyRecipeCSS.module.css";
 import com from "../../commons/commonsCSS.module.css";
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import noImage1 from "../../images/noImage1.jpg";
 import noImage2 from "../../images/noImage2.jpg";
 import noImage3 from "../../images/noImage3.jpg";
@@ -30,7 +30,6 @@ const MyRecipe = ({
 
   const arrImages = [noImage1, noImage2, noImage3];
 
-  const dispatch = useDispatch()
   const location = useLocation()
   const navigate = useNavigate()
 
@@ -43,9 +42,11 @@ const MyRecipe = ({
   let stepsStateLS: string | null = localStorage.getItem('stepsState');
  
   const menuShown = useSelector((state: {menuShown:boolean}) => state.menuShown)
+  // eslint-disable-next-line
   const [isEditing, setIsEditing] = useState<boolean>( location.state && location.state.editing ? true : false );
   const [titleValue, setTitleValue] = useState<string>('');
   const [imageValue, setImageValue] = useState<string>('');
+  // eslint-disable-next-line
   const [imageValueDoubleCheck, setImageValueDoubleCheck] = useState<string>('');
   const [healthValue, setHealthValue] = useState<string>('');
   const [summaryValue, setSummaryValue] = useState<string>('');
@@ -435,9 +436,7 @@ const MyRecipe = ({
       fetch(`${process.env.REACT_APP_SV}/recipe`, {
         method: 'POST',
         credentials: 'include',
-        headers: {
-          'Content-type': 'application/json; charset=UTF-8',
-        },
+        headers: { 'Content-type': 'application/json; charset=UTF-8' },
         body: JSON.stringify({
           title: titleValue,
           image: imageValue,
@@ -453,7 +452,6 @@ const MyRecipe = ({
       .then((res) => res.json())
       .then((res) => {
         if (res.status === 200) {
-          console.log("YYY YYY YYY ENTRO ACA")
           Swal.fire({
             title: 'Recipe saved successfully !',
             icon: 'info',
@@ -467,7 +465,6 @@ const MyRecipe = ({
           recipeCreated.current = true
         }
         if (res.status === 400 && res.message === 'Invalid Credentials') {
-          console.log("YYY", "OJO QUE ENTRO ACA")
           setUserData({ email: '', fd_tkn: '' })
           Swal.fire({
             title: `There was an error when cheking your loggin.. `,
@@ -482,7 +479,6 @@ const MyRecipe = ({
           setAllDisabled(false)
         }
         if (res.status === 400 && res.message !== 'Invalid Credentials') {
-          console.log("YYY", "OJO QUE ENTRO ACA")
           Swal.fire({
             title: `There was an error when saving your recipe.. `,
             text: `Please try again.`,
@@ -497,7 +493,6 @@ const MyRecipe = ({
         }
       })
       .catch((rej) => {
-        console.log("rej", rej)
         Swal.fire({
           title: `It looks like server its sleeping..`,
           html: `So you cannot save your recipe.<br>We are sorry. Please try againg later..<br><br>Don't worry about everything you wrote, it will be saved in browser memory :) `,
@@ -669,11 +664,13 @@ const MyRecipe = ({
       return () => {
         if (recipeCreated.current) clearHandler() // CLEAR FORM: SAVED && FIRES WHEN USER GO TO ANOTHER ROUTE/COMPONENT
       }
+    // eslint-disable-next-line
   },[])
 
   useEffect(() => {
     if (saveButtonDisabled && allDisabled) retrieveRecipeCreatedOrEdited(true)
     else retrieveRecipeCreatedOrEdited(false)
+    // eslint-disable-next-line
   },[allDisabled])
   
   window.onbeforeunload = function() { // CLEAR FORM: SAVED && FIRES WHEN WINDOW IS CLOSED OR REFRESH
@@ -759,10 +756,7 @@ const MyRecipe = ({
               disabled={allDisabled}
               autoComplete='off'
               className={css.inputHiddenTitle}
-              InputProps={{
-                className: css.inputStyle,
-                /* title: "xxx" */
-              }}
+              InputProps={{ className: css.inputStyle }}
               value={titleValue}
               placeholder={
                 paginateAmount === 45 ?
@@ -1135,18 +1129,18 @@ const MyRecipe = ({
           className={css.buttonClearSave}
           variant="contained"
           onClick={(e) => isEditing ? handleSaveEdit(e) : handleSubmit(e) }
-          // disabled={
-          //   saveButtonDisabled ||
-          //   error.title.character ||
-          //   error.title.badWord ||
-          //   error.health.string ||
-          //   error.health.max ||
-          //   error.summary.character ||
-          //   error.summary.badWord ||
-          //   error.instructions.filter(e => e.character === true)[0] ||
-          //   error.instructions.filter(e => e.badWord === true)[0] ?
-          //   true : false
-          // }
+          disabled={
+            saveButtonDisabled ||
+            error.title.character ||
+            error.title.badWord ||
+            error.health.string ||
+            error.health.max ||
+            error.summary.character ||
+            error.summary.badWord ||
+            error.instructions.filter(e => e.character === true)[0] ||
+            error.instructions.filter(e => e.badWord === true)[0] ?
+            true : false
+          }
         >
           {
             isEditing ?

@@ -2,10 +2,7 @@
   background: darkolivegreen; /* DEV */
   display: flex;
   position: relative;
-  /* position: sticky; */
   justify-content: center;
-  /* margin-top: 100px; */
-  /* top: 0px; */
   margin-left: 16px;
   margin-right: 16px;
   z-index: 1;
@@ -13,7 +10,6 @@
 
 .card {
   /* background: red; */ /* DEV */
-  /* width: 100% !important; */
   width: 90% !important;
   display: flex;
   position: relative;
@@ -64,12 +60,8 @@
 
 .image {
   display: flex;
-  /* min-width: 280px; */
-  /* min-width: 280px; */
-  /* width: 400px; */
   width: 400px;
   height: 260px;
-  /* width: 100%; */
   margin-bottom: 16px;
 }
 
@@ -121,7 +113,6 @@
   font-size: 18px;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   text-decoration: none;
-  /* width: calc(55vw - 75px); */
   color: antiquewhite;
   letter-spacing: normal;
   white-space: wrap;
@@ -130,7 +121,6 @@
 .helperBottom {
   display: flex;
   height: 16px;
-  /* width: 50vw; */
 }
 
 .button {
@@ -153,7 +143,6 @@
   position: absolute;
   justify-content: center;
   align-items: center;
-  /* min-height: 310px; */
   min-height: 210px;
 }
 
@@ -180,22 +169,16 @@
 .loading {
   background: rgba(138, 179, 179, 0.171);
   display: flex;
-  /* position: absolute; */
   position: relative;
   flex-direction: column;
-  /* min-width: 925px; */
   width: 100%;
   height: 260px;
-  /* height: 4060px; */
   align-items: center;
   justify-content: center;
   color: rgba(240, 248, 255, 0.726);
-  /* font-size: 87px; */
   font-size: calc(32px + 3vw);
   white-space:nowrap;
   margin-top: 7px;
-  /* overflow-y: hidden !important;
-  overflow-x: hidden !important; */
 }
 
 @media screen and (max-width: 535px) { /* LESS THAN 535px */
@@ -222,12 +205,5 @@
 
 /* MINPORT */
 @media screen and (orientation: portrait) and (max-width: 424px) {
-  .background {
-    /* margin-top: 150px; */
-  }
-  .image {
-    width: 100%;
-  }
+  .image { width: 100% }
 }
-
-/* margin-top: 100px; */

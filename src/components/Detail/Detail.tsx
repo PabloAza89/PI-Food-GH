@@ -13,7 +13,7 @@ import { recipesI } from '../../interfaces/interfaces';
 import EditIcon from '@mui/icons-material/Edit';
 import ClearIcon from '@mui/icons-material/Clear';
 import {
-  fetchRecipesFromAPI, allRecipesLoaded, getDietsFromDB,
+  fetchRecipesFromAPI, getDietsFromDB,
   getDishesFromDB, setMenuShown
 } from '../../actions';
 import $ from 'jquery';
@@ -32,9 +32,7 @@ export default function Detail({ userData, setUserData }: any) {
   }
 
   const handleReload = (props: any) => {
-    if (props.statusResponse === 200 && props.messageResponse === `1 item deleted`) {
-      reloadRecipes().then(() => dispatch(allRecipesLoaded(true)))
-    }
+    if (props.statusResponse === 200 && props.messageResponse === `1 item deleted`) reloadRecipes()
   }
 
   const allRecipes = useSelector((state: { allRecipes: recipesI[] }) => state.allRecipes)
@@ -47,9 +45,9 @@ export default function Detail({ userData, setUserData }: any) {
       setGoOn(true)
     } else {
       reloadRecipes()
-      .then(() => dispatch(allRecipesLoaded(true)))
       .then(() => setGoOn(true))
     }
+    // eslint-disable-next-line
   },[])
 
   const menuShown = useSelector((state: {menuShown:boolean}) => state.menuShown)

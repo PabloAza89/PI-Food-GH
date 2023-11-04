@@ -10,7 +10,6 @@ interface initialStateI {
   allDishes: any[],
   allDietsOnline: boolean,
   allDishesOnline: boolean,
-  allRecipesLoaded: boolean,
   indexChoosen: number,
   tabChoosen: number,
   width: number,
@@ -29,13 +28,12 @@ const initialState: initialStateI = {
   allDishes: [],
   allDietsOnline: true,
   allDishesOnline: true,
-  allRecipesLoaded: false,
   indexChoosen: 0,
   tabChoosen: 0,
   width: window.screen.width,
   height: window.screen.height,
   scrollPosition: 0,
-  menuShown: false, // false
+  menuShown: false, // false // DEV
   landingHidden: false
 }
 
@@ -49,7 +47,7 @@ const reducer = (state = initialState, action: {type: string; payload: any}) => 
       copyServerStatus.try = action.payload.ok || action.payload.ok === false ? action.payload.try : 1
       let targetArray:any = []
 
-      if (action.payload.ok === true) targetArray = action.payload.message//.slice(0,5)
+      if (action.payload.ok === true) targetArray = action.payload.message
       else if (action.payload.ok === false) targetArray = action.payload.message.concat(toAvoidKey)
       else targetArray = toAvoidKey
 
@@ -79,11 +77,6 @@ const reducer = (state = initialState, action: {type: string; payload: any}) => 
         allRecipes: parsedArr,
         toShow: parsedArr,
         serverStatus: copyServerStatus
-      };
-    case 'ALL_RECIPES_LOADED':
-      return {
-        ...state,
-        allRecipesLoaded: action.payload
       };
     case 'GET_DIETS':
       if (action.payload === "error") {

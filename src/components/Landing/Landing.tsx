@@ -1,4 +1,5 @@
 import css from './LandingCSS.module.css';
+import com from "../../commons/commonsCSS.module.css";
 import { useEffect } from 'react';
 import { checkPrevLogin } from '../../commons/commonsFunc';
 import { useNavigate } from "react-router-dom";
@@ -14,7 +15,7 @@ const LandingPage = ({ setUserData, userData }: any) => {
   const dispatch = useDispatch()
   const navigate = useNavigate();
 
-  let landingHiddenLS: string | null = localStorage.getItem('landingHidden'); // EN USO
+  let landingHiddenLS: string | null = localStorage.getItem('landingHidden');
   const landingHiddenState = useSelector((state: { landingHidden: boolean }) => state.landingHidden)
   if (landingHiddenLS && JSON.parse(landingHiddenLS)) dispatch(landingHidden(true))
 
@@ -27,7 +28,7 @@ const LandingPage = ({ setUserData, userData }: any) => {
     return () => {
       window.removeEventListener('storage', landingHiddenChecker)
     }
-  }, [])
+  }, [dispatch])
 
   window.onfocus = function() { // FIRED WHEN TAB IS FOCUSED, CHECK VALID USER
     checkPrevLogin({ setUserData, userData })
@@ -107,7 +108,6 @@ const LandingPage = ({ setUserData, userData }: any) => {
     onNonOAuthError: () => {
       //setPopUp(false)
       //setClicked(false)
-      /* localStorage.removeItem('newLogin') */
     }
   })
 
@@ -120,7 +120,7 @@ const LandingPage = ({ setUserData, userData }: any) => {
     >
       <div className={css.bgImage}></div>
       <div className={css.buttonsAndText}>
-        <h1 className={css.text}>Welcome to Foodify !</h1>
+        <h1 className={`${css.text} ${com.noSelect}`}>Welcome to Foodify !</h1>
         <div className={css.divider} />
         <div className={css.buttons}>
           <Button
