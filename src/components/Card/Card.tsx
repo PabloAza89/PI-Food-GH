@@ -114,6 +114,7 @@ const Card = ({
             image
           }
           alt=""
+          loading="lazy"
         >
         </img>
       </Link>
@@ -147,7 +148,7 @@ const Card = ({
         disableHoverListener={fitDiet}
         placement="bottom"
         title={
-          <div>
+          <div className={css.innerTooltip}>
             <b>Diets: </b>
             {diets[0] && diets.map((e:any) => {
               if ((diets.indexOf(e) !== diets.length - 1)) return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ") + " + "

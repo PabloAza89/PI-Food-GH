@@ -51,7 +51,7 @@
 .divider {
   width: 6px;
   height: calc(100vh - 32px);
-  background: white;
+  background: lightgray;
   min-height: 118px !important;
   border-bottom: 10px solid white;
 }
@@ -90,7 +90,6 @@
   .divider {
     width: calc(100vw - 32px);
     height: 4px !important;
-    background: white;
     min-height: unset !important;
     border-bottom: 0px solid white;
     margin: 35px 0px 15px 0px;

@@ -61,6 +61,13 @@
   width: 350px
 }
 
+.innerTooltip {
+  /* background: orange !important; */ /* DEV */
+  max-width: 70vw;
+  color: antiquewhite;
+  font-family: Roboto;
+}
+
 #title {
   font-size: 19px;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
