@@ -9,7 +9,7 @@ function About() {
       <div className={`${css.background} ${com.noSelect}`}>
         <div className={css.text}>
           {
-            `Hi i'm Pablo ! And this is my Food App for my Individual Proyect at Henry ! `
+            `Hi i'm Pablo ! And this is my Food App for my Individual Proyect at Henry ! `
           }&#x1F680;
         </div>
         <a

@@ -70,7 +70,7 @@
   text-overflow: ellipsis;
   color: antiquewhite;
   font-weight: 700 ;
-  background: gray; /* DEV */
+  /* background: gray; */ /* DEV */
   width: 90%;
   height: 25px;
   text-align: center;
@@ -97,20 +97,12 @@
 
 /* MINPORT */
 @media screen and (orientation: portrait) and (max-width: 424px) {
-  .background {
-    width: 90%;
-  }
-  .image {
-    width: calc(100% - 80px)
-  }
-  .editDeleteContainer {
-    flex-direction: column-reverse;
-  }
+  .background { width: 90% }
+  .image { width: calc(100% - 80px) }
+  .editDeleteContainer { flex-direction: column-reverse }
 }
 
 /* MINLAND */
 @media screen and (orientation: landscape) and (max-height: 424px) {
-  .editDeleteContainer {
-    flex-direction: column-reverse;
-  }
+  .editDeleteContainer { flex-direction: column-reverse }
 }

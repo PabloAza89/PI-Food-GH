@@ -1,5 +1,5 @@
 .background {
-  background: lightblue; /* DEV */
+  /* background: lightblue; */ /* DEV */
   width: 100%;
   margin: auto;
   flex-direction: row !important;
@@ -32,11 +32,11 @@
 .buttonsAndHintContainer {
   display: flex !important;
   flex-direction: row !important;
-  background: lightcoral !important; /* DEV */
+  /* background: lightcoral !important; */ /* DEV */
 }
 
 .counter {
-  background: lightslategray; /* DEV */
+  /* background: lightslategray; */ /* DEV */
   flex-direction: row !important;
   display: flex;
   color: beige !important;

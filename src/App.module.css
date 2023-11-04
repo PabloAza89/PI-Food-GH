@@ -27,3 +27,20 @@
   background-repeat: no-repeat;
   clip-path: polygon(0% 0, 100% 0%, 100% 100px, 0 100px); /* CROP THE BAVBAR IMAGE */
 }
+
+/* ONLY SMAPORT AND SMALAND */
+@media screen
+and (orientation: portrait)
+and (max-device-width: 424px),
+screen
+and (orientation: landscape)
+and (max-device-height: 424px) {
+  .wallpaperBody {
+    width: 100vw;
+    height: 100vh
+  }
+  .wallpaperNav {
+    width: 100vw !important;
+    height: 100vh !important
+  }
+}

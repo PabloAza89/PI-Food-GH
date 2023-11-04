@@ -17,7 +17,7 @@
 
 .logoTextContainer {
   display: flex;
-  background: red; /* DEV */
+  /* background: red; */ /* DEV */
   margin: 16px 0px 0px 16px;
   flex-direction: row;
   height: 69px;
@@ -27,7 +27,7 @@
 }
 
 .selectsAndButtons {
-  background: gray; /* DEV */
+  /* background: gray; */ /* DEV */
   display: flex;
   flex-direction: column;
   height: 100px;
@@ -125,7 +125,7 @@
   height: 35px;
   /* width: 20%; */ /* 23 23 23 23 + 8 */ /* EACH SPACE 2.66 */
   width: 44.68%; /* 100 - 25 - 25 - 2.66 - 2.66 */
-  background: yellow;
+  /* background: yellow; */ /* DEV */
   border-radius: 4px !important;
 }
 
@@ -161,7 +161,7 @@
   background: #FFFFFF;
   :fieldset {
     border: 2px solid red !important;
-    background: red !important;
+    /* background: red !important; */ /* DEV */
     color: red !important
   }
 }
@@ -172,13 +172,13 @@
   background: #FFFFFF;
   :fieldset {
     border: 2px solid red !important;
-    background: red !important;
+    /* background: red !important; */ /* DEV */
     color: red !important
   }
 }
 
 .upperLower {
-  background: red; /* DEV */
+  /* background: red; */ /* DEV */
   display: flex;
   flex-direction: row;
   height: 100px !important;

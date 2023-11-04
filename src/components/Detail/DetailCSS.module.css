@@ -1,5 +1,5 @@
 .background {
-  background: darkolivegreen; /* DEV */
+  /* background: darkolivegreen; */ /* DEV */
   display: flex;
   position: relative;
   justify-content: center;
@@ -9,7 +9,6 @@
 }
 
 .card {
-  /* background: red; */ /* DEV */
   width: 90% !important;
   display: flex;
   position: relative;
@@ -20,7 +19,7 @@
   max-width: 750px;
   margin-top: 16px;
   margin-bottom: 16px;
-
+  /* background: red; */ /* DEV */
   background: linear-gradient(135deg, rgba(64, 117, 117, 0.1), rgba(64, 117, 117, 0));
   -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
@@ -147,7 +146,6 @@
 }
 
 .errorCard {
-  /* background: darkgreen; */ /* DEV */
   display: flex;
   position: relative;
   flex-direction: column;
@@ -158,12 +156,12 @@
   align-items: center;
   justify-content: space-evenly;
   text-align: center;
-
-  /* background: linear-gradient(135deg, rgba(64, 117, 117, 0.1), rgba(64, 117, 117, 0));
+  /* background: darkgreen; */ /* DEV */
+  background: linear-gradient(135deg, rgba(64, 117, 117, 0.1), rgba(64, 117, 117, 0));
   -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-  border: 1px solid rgb(255, 255, 255, 0.18); */
+  border: 1px solid rgb(255, 255, 255, 0.18);
 }
 
 .loading {
