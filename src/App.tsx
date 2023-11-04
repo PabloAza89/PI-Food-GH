@@ -106,6 +106,11 @@ function App() {
 
   useEffect(() => {
     function handleResize() {
+
+      // if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+      //   console.log("MOBILE")
+      // } else console.log("NO MOBILE")
+
       let { width, height } = window.screen
       let orientation = window.matchMedia("(orientation: portrait)").matches
       if ((width < 425 && orientation) || (height < 425 && !orientation)) setPaginateAmount(45)

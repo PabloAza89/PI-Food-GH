@@ -182,11 +182,6 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
       $(this)
         .stop()
         .animate({ width: buttonHelperWidth }, { queue: false, easing: 'easeOutBounce', duration: 1000 })
-      $(`#buttonGL`)
-        .html(
-          userData.email ?
-          `  Signed in as ${userData.email}` :
-          `  Sign in with Google` )
     })
     .on("mouseleave", function() {
       if (clicked) {
@@ -237,12 +232,7 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
         id={`buttonIn`}
         className={css.buttonIn}
         onClick={() => { if (!clicked) {
-          setClicked(true);
-          paginateAmount === 45 ?
-          setTimeout(() => {
-            login()
-          },1000) :
-          login()
+          login(); setClicked(true);
           $(`#onlyForTest`) // NEXT TWO DISABLE MOUSE EVENTS
             .css("cursor", "pointer")
           $(`#buttonIn`)
