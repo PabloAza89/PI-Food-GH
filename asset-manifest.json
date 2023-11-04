@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/PI-Food-GH/static/css/main.39f18e38.chunk.css",
-    "main.js": "/PI-Food-GH/static/js/main.be81084e.chunk.js",
-    "main.js.map": "/PI-Food-GH/static/js/main.be81084e.chunk.js.map",
+    "main.css": "/PI-Food-GH/static/css/main.dc933314.chunk.css",
+    "main.js": "/PI-Food-GH/static/js/main.3d9d08e7.chunk.js",
+    "main.js.map": "/PI-Food-GH/static/js/main.3d9d08e7.chunk.js.map",
     "runtime-main.js": "/PI-Food-GH/static/js/runtime-main.d4ea50b7.js",
     "runtime-main.js.map": "/PI-Food-GH/static/js/runtime-main.d4ea50b7.js.map",
     "static/js/2.5ab4ba93.chunk.js": "/PI-Food-GH/static/js/2.5ab4ba93.chunk.js",
     "static/js/2.5ab4ba93.chunk.js.map": "/PI-Food-GH/static/js/2.5ab4ba93.chunk.js.map",
     "index.html": "/PI-Food-GH/index.html",
-    "static/css/main.39f18e38.chunk.css.map": "/PI-Food-GH/static/css/main.39f18e38.chunk.css.map",
+    "static/css/main.dc933314.chunk.css.map": "/PI-Food-GH/static/css/main.dc933314.chunk.css.map",
     "static/js/2.5ab4ba93.chunk.js.LICENSE.txt": "/PI-Food-GH/static/js/2.5ab4ba93.chunk.js.LICENSE.txt",
     "static/media/App.module.css": "/PI-Food-GH/static/media/bgImage.190c3144.webp",
     "static/media/error.efa3377b.gif": "/PI-Food-GH/static/media/error.efa3377b.gif",
@@ -25,7 +25,7 @@
   "entrypoints": [
     "static/js/runtime-main.d4ea50b7.js",
     "static/js/2.5ab4ba93.chunk.js",
-    "static/css/main.39f18e38.chunk.css",
-    "static/js/main.be81084e.chunk.js"
+    "static/css/main.dc933314.chunk.css",
+    "static/js/main.3d9d08e7.chunk.js"
   ]
 }
