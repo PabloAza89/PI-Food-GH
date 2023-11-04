@@ -69,7 +69,7 @@
 }
 
 .title {
-  background: gray; /* DEV */
+  /* background: gray; */ /* DEV */
   font-family: Roboto;
   letter-spacing: 0.15008px;
   line-height: 20px;
@@ -105,7 +105,7 @@ and (max-device-height: 424px) {
   .background { bottom: 0px !important }
   .sliderBox {
     bottom: 0px !important;
-    background: red !important;
+    /* background: red !important; */ /* DEV */
   }
   #button {
     display: flex;
@@ -120,7 +120,7 @@ and (orientation: portrait)
 and (min-device-width: 425px)
 and (max-device-width: 825px) {
   .background { top: 300px !important }
-  .sliderBox { background: orange !important }
+  /* .sliderBox { background: orange !important } */ /* DEV */
 }
 
 /* ONLY MEDLAND */
@@ -129,7 +129,7 @@ and (orientation: landscape)
 and (min-device-height: 425px)
 and (max-device-height: 825px) {
   .background { bottom: 50px !important }
-  .sliderBox { background: orange !important }
+  /* .sliderBox { background: orange !important } */ /* DEV */
 }
 
 /* ONLY LARPORT AND LARLAND */
@@ -140,5 +140,5 @@ screen
 and (orientation: landscape)
 and (min-device-height: 825px) {
   .background { top: 300px !important }
-  .sliderBox { background: orange !important }
+  /* .sliderBox { background: orange !important } */ /* DEV */
 }

@@ -78,6 +78,7 @@ const LandingPage = ({ setUserData, userData }: any) => {
             })
           }
         }).catch(rej => {
+          console.log(rej)
           if (rej.message === `Failed to fetch`) {
             Swal.fire({
               title: `It looks like server it's sleeping..`,
@@ -89,7 +90,6 @@ const LandingPage = ({ setUserData, userData }: any) => {
               timer: 10000,
             })
           } else {
-            console.log(rej)
             Swal.fire({
               title: `There was some error.. `,
               text: `Please try again.`,

@@ -39,9 +39,7 @@ export const handleDelete = async ({ id, fd_tkn, setUserData, handleReload }: ha
       })
       .then((res) => res.json())
       .then((res) => {
-        console.log("RES RES", res)
         if (res.status === 400 && res.message === 'Invalid Credentials') {
-          console.log("PASS BY THIS WAY")
           setUserData({ email: '', fd_tkn: '' })
           Swal.fire({
             title: `There was an error when cheking your loggin.. `,
@@ -89,7 +87,7 @@ export const handleDelete = async ({ id, fd_tkn, setUserData, handleReload }: ha
     }
   })
   .catch((rej) => {
-    console.log("rej", rej)
+    console.log(rej)
     Swal.fire({
       title: `It looks like server its sleeping..`,
       html: `So you cannot save your recipe.<br>We are sorry. Please try againg later..<br><br>Don't worry about everything you wrote, it will be saved in browser memory :) `,
@@ -133,7 +131,7 @@ export const handleEdit = ({
     }
   })
   .catch((rej) => {
-    console.log("rej", rej)
+    console.log(rej)
     Swal.fire({
       title: `It looks like server its sleeping..`,
       html: `So you cannot save your recipe.<br>We are sorry. Please try againg later..<br><br>Don't worry about everything you wrote, it will be saved in browser memory :) `,
@@ -195,9 +193,7 @@ export function checkPrevLogin ({
   })
   .then((res) => res.json())
   .then((res) => {
-    console.log("AVerr", res)
     if (res.status === 200) {
-      console.log("entro aca ?!?")
       setUserData({ email: res.email, fd_tkn: res.fd_tkn })
       store.dispatch(landingHidden(true))
       localStorage.setItem('landingHidden', 'true')

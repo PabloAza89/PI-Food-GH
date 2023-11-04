@@ -574,7 +574,6 @@ const MyRecipe = ({
       .then((res) => res.json())
       .then((res) => {
         if (res.status === 400 && res.message.name === 'SequelizeDatabaseError') {
-          console.log("YYY", "OJO QUE ENTRO ACA")
           Swal.fire({
             title: `There was an error when updating your recipe.. `,
             text: `Please, try save again.`,
@@ -589,7 +588,6 @@ const MyRecipe = ({
         }
 
         if (res.status === 200 && res.message === `1 item updated`) {
-          console.log("YYY", "OJO QUE ENTRO ACA")
           Swal.fire({
             title: 'Recipe updated successfully !',
             icon: 'success',
@@ -603,7 +601,6 @@ const MyRecipe = ({
         }
 
         if (res.status === 400 && res.message === 'Invalid Credentials') {
-          console.log("YYY", "OJO QUE ENTRO ACA")
           setUserData({ email: '', fd_tkn: '' })
           Swal.fire({
             title: `There was an error when cheking your loggin.. `,
@@ -619,7 +616,7 @@ const MyRecipe = ({
         }
       })
       .catch((rej) => {
-        console.log("rej", rej)
+        console.log(rej)
         Swal.fire({
           title: `It looks like server its sleeping..`,
           html: `So you cannot save your recipe.<br>We are sorry. Please try againg later..<br><br>Don't worry about everything you wrote, it will be saved in browser memory :) `,
@@ -634,7 +631,6 @@ const MyRecipe = ({
   }
 
   useEffect(() => { // RETRIEVES INFO FROM LS
-    console.log("YYY Ejecutado 1")
     if (isEditing) {
         setTitleValue(location.state.title) // validator not necessary since no badWords are stored.
         setHealthValue(location.state.healthScore)
@@ -676,8 +672,6 @@ const MyRecipe = ({
   window.onbeforeunload = function() { // CLEAR FORM: SAVED && FIRES WHEN WINDOW IS CLOSED OR REFRESH
     if (recipeCreated.current) clearHandler() // RESET ALL FORM
   }
-
-  console.log("RESULT TEST", imageLoaded)
 
   return (
     <div

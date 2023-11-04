@@ -26,7 +26,6 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
       })
       .then((res) => res.json())
       .then((res) => {
-        console.log("HHH", res)
         fetch(`${process.env.REACT_APP_SV}/user`, {
           method: 'POST',
           credentials: 'include',
@@ -42,7 +41,6 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
         .then((res) => {
           
           if (res.status === 200) {
-            console.log("User OK res", res)
             setUserData({ email: res.email, fd_tkn: res.fd_tkn })
             dispatch(landingHidden(true))
             localStorage.setItem('landingHidden', 'true')      

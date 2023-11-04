@@ -40,7 +40,6 @@ const initialState: initialStateI = {
 const reducer = (state = initialState, action: {type: string; payload: any}) => {
   switch (action.type) {
     case 'FETCH_RECIPES':
-      console.log("action.payload", action.payload)
       const copyServerStatus = {...state.serverStatus}
       copyServerStatus.online = action.payload.ok || action.payload.ok === false ? true : false
       copyServerStatus.validKey = action.payload.ok ? true : false

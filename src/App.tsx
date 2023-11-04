@@ -98,7 +98,6 @@ function App() {
 
   window.onfocus = function() { // FIRED WHEN TAB IS FOCUSED, CHECK VALID USER
     checkPrevLogin({ setUserData, userData })
-    console.log("FOCUSED FOCUSED APP APP APP")
   }
 
   let { width, height } = window.screen
