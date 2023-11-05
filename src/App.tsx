@@ -14,6 +14,8 @@ import NavBar from "./components/NavBar/NavBar";
 import GoUp from "./components/GoUp/GoUp";
 import ServerStatus from "./components/ServerStatus/ServerStatus";
 import Error from './components/Error/Error';
+import Settings from './components/Settings/Settings';
+import SettingsButton from './components/SettingsButton/SettingsButton';
 import MyRecipe from "./components/MyRecipe/MyRecipe";
 import About from "./components/About/About";
 import { userDataI } from './interfaces/interfaces';
@@ -163,6 +165,7 @@ function App() {
               />
               <ServerStatus />
               <NavBar />
+              <SettingsButton />
               <Paginate paginateAmount={paginateAmount} />
               <CardsMapper
                 paginateAmount={paginateAmount}
@@ -216,6 +219,17 @@ function App() {
                 retrieveRecipeCreatedOrEdited={retrieveRecipeCreatedOrEdited}
                 recipeCreatedOrEdited={recipeCreatedOrEdited}
               />
+            </> :
+            <Landing setUserData={setUserData} userData={userData} />
+          }
+        />
+        <Route
+          path="/Settings"
+          element={
+            landingHiddenState ?
+            <>
+              <NavBar />
+              <Settings />
             </> :
             <Landing setUserData={setUserData} userData={userData} />
           }
