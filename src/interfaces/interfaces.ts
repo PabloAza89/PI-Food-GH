@@ -87,3 +87,11 @@ export interface handlerDeleteInstructionsI {
 export interface paginateAmountI {
   paginateAmount: number
 }
+
+export interface navBarFiltersI {
+  text: string,
+  diet: string,
+  dish: string,
+  sortHealth: string,
+  sortAlpha: string
+}

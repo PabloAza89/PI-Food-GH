@@ -1,5 +1,7 @@
 import toAvoidKey from '../db/toAvoidKey.json';
-import { recipesI, serverStatusI } from '../interfaces/interfaces';
+import {
+  recipesI, serverStatusI, navBarFiltersI
+} from '../interfaces/interfaces';
 
 interface initialStateI {
   serverStatus: serverStatusI,
@@ -16,7 +18,12 @@ interface initialStateI {
   height: number,
   scrollPosition: number,
   menuShown: boolean,
-  landingHidden: boolean
+  landingHidden: boolean,
+  showStatus: boolean,
+  showUserRecipes: boolean,
+  showOnlineRecipes: boolean,
+  showOfflineRecipes: boolean,
+  navBarFilters: navBarFiltersI
 }
 
 const initialState: initialStateI = {
@@ -33,8 +40,17 @@ const initialState: initialStateI = {
   width: window.screen.width,
   height: window.screen.height,
   scrollPosition: 0,
-  menuShown: false, // false // DEV
-  landingHidden: false
+  menuShown: false,
+  landingHidden: false,
+  showStatus: localStorage.getItem('showStatus') !== null ? JSON.parse(localStorage.getItem('showStatus')!) : true,
+  showUserRecipes: localStorage.getItem('showUserRecipes') !== null ? JSON.parse(localStorage.getItem('showUserRecipes')!) : true,
+  showOnlineRecipes: localStorage.getItem('showOnlineRecipes') !== null ? JSON.parse(localStorage.getItem('showOnlineRecipes')!) : true,
+  showOfflineRecipes: localStorage.getItem('showOfflineRecipes') !== null ? JSON.parse(localStorage.getItem('showOfflineRecipes')!) : true,
+  navBarFilters: {
+    text: '',
+    diet: 'All Diets', dish: 'All Dishes',
+    sortHealth: '', sortAlpha: ''
+  }
 }
 
 const reducer = (state = initialState, action: {type: string; payload: any}) => {
@@ -97,34 +113,34 @@ const reducer = (state = initialState, action: {type: string; payload: any}) => 
         ...state,
         allDishes: action.payload
       };
-    case 'FILTER':
-      const copyArrayDiet = [...state.allRecipes]
-      let arrayToShow: recipesI[] = []
-      if (action.payload.diet === "All Diets") arrayToShow = copyArrayDiet // ALL DIETS INCLUDED
-      if (action.payload.diet !== "All Diets") arrayToShow = copyArrayDiet.filter((e:any) => e.diets.includes(action.payload.diet)) // FILTER TARGET DIET
-      if (action.payload.dish === "All Dishes") arrayToShow = arrayToShow.filter((e:any) => e.title.toLowerCase().includes(action.payload.text.toLowerCase())) // ALL DIETS INCLUDED THEN TEXT FILTER
-      if (action.payload.dish !== "All Dishes") {
-        arrayToShow = arrayToShow.filter((e:any) => e.dishTypes.includes(action.payload.dish.toLowerCase())) // FILTER TARGET DISH
-        arrayToShow = arrayToShow.filter((e:any) => e.title.toLowerCase().includes(action.payload.text.toLowerCase())) // THEN TEXT FILTER
-      }
-      switch (action.payload.alphaOrHealthy) {
-        case 'More Healthy':
-          arrayToShow = arrayToShow.sort((a,b) => b.healthScore - a.healthScore);
-          break;
-        case 'Less Healthy':
-          arrayToShow = arrayToShow.sort((a,b) => a.healthScore - b.healthScore);
-          break;
-        case 'A-Z':
-          arrayToShow = arrayToShow.sort((a, b) => a.title.localeCompare(b.title))
-          break;
-        case 'Z-A':
-          arrayToShow = arrayToShow.sort((a, b) => b.title.localeCompare(a.title))
-          break;
-      }
-      return {
-        ...state,
-        toShow: arrayToShow
-      };
+    // case 'FILTER':
+    //   const copyArrayDiet = [...state.allRecipes]
+    //   let arrayToShow: recipesI[] = []
+    //   if (action.payload.diet === "All Diets") arrayToShow = copyArrayDiet // ALL DIETS INCLUDED
+    //   if (action.payload.diet !== "All Diets") arrayToShow = copyArrayDiet.filter((e:any) => e.diets.includes(action.payload.diet)) // FILTER TARGET DIET
+    //   if (action.payload.dish === "All Dishes") arrayToShow = arrayToShow.filter((e:any) => e.title.toLowerCase().includes(action.payload.text.toLowerCase())) // ALL DIETS INCLUDED THEN TEXT FILTER
+    //   if (action.payload.dish !== "All Dishes") {
+    //     arrayToShow = arrayToShow.filter((e:any) => e.dishTypes.includes(action.payload.dish.toLowerCase())) // FILTER TARGET DISH
+    //     arrayToShow = arrayToShow.filter((e:any) => e.title.toLowerCase().includes(action.payload.text.toLowerCase())) // THEN TEXT FILTER
+    //   }
+    //   switch (action.payload.alphaOrHealthy) {
+    //     case 'More Healthy':
+    //       arrayToShow = arrayToShow.sort((a,b) => b.healthScore - a.healthScore);
+    //       break;
+    //     case 'Less Healthy':
+    //       arrayToShow = arrayToShow.sort((a,b) => a.healthScore - b.healthScore);
+    //       break;
+    //     case 'A-Z':
+    //       arrayToShow = arrayToShow.sort((a, b) => a.title.localeCompare(b.title))
+    //       break;
+    //     case 'Z-A':
+    //       arrayToShow = arrayToShow.sort((a, b) => b.title.localeCompare(a.title))
+    //       break;
+    //   }
+    //   return {
+    //     ...state,
+    //     toShow: arrayToShow
+    //   };
     case 'SET_INDEX_CHOOSEN':
       return {
         ...state,
@@ -169,6 +185,108 @@ const reducer = (state = initialState, action: {type: string; payload: any}) => 
       return {
         ...state,
         serverStatusShown: action.payload
+      };
+    case 'SET_SHOW_STATUS':
+      return {
+        ...state,
+        showStatus: action.payload
+      };
+    case 'SET_SHOW_USER_RECIPES':
+      const copyToShow = [...state.allRecipes]
+      let arrayToShowUserRecipes: recipesI[] = []
+      arrayToShowUserRecipes = copyToShow.filter(e => e.userRecipe !== !action.payload)
+      return {
+        ...state,
+        toShow: arrayToShowUserRecipes,
+        showUserRecipes: action.payload
+      };
+    case 'SET_SHOW_ONLINE_RECIPES':
+      return {
+        ...state,
+        showOnlineRecipes: action.payload
+      };
+    case 'SET_SHOW_OFFLINE_RECIPES':
+      return {
+        ...state,
+        showOfflineRecipes: action.payload
+      };
+    case 'APPLY_FILTERS':
+
+      const copyNavBarFiltersApply: navBarFiltersI = {...state.navBarFilters}
+      const copyAllRecipesApply: recipesI[] = [...state.allRecipes]
+      let arrayToShowApply: recipesI[] = []
+
+      if (copyNavBarFiltersApply.diet === "All Diets") arrayToShowApply = copyAllRecipesApply // ALL DIETS INCLUDED
+      if (copyNavBarFiltersApply.diet !== "All Diets") arrayToShowApply = copyAllRecipesApply.filter((e:any) => e.diets.includes(copyNavBarFiltersApply.diet)) // FILTER TARGET DIET
+      if (copyNavBarFiltersApply.dish === "All Dishes") arrayToShowApply = arrayToShowApply.filter((e:any) => e.title.toLowerCase().includes(copyNavBarFiltersApply.text.toLowerCase())) // ALL DIETS INCLUDED THEN TEXT FILTER
+      if (copyNavBarFiltersApply.dish !== "All Dishes")
+        arrayToShowApply = arrayToShowApply.filter((e:any) => e.dishTypes.includes(copyNavBarFiltersApply.dish.toLowerCase())) // FILTER TARGET DISH
+        arrayToShowApply = arrayToShowApply.filter((e:any) => e.title.toLowerCase().includes(copyNavBarFiltersApply.text.toLowerCase())) // THEN TEXT FILTER
+
+      if (copyNavBarFiltersApply.sortHealth === 'More Healthy')
+        arrayToShowApply = arrayToShowApply.sort((a,b) => b.healthScore - a.healthScore);
+      if (copyNavBarFiltersApply.sortHealth === 'Less Healthy')
+        arrayToShowApply = arrayToShowApply.sort((a,b) => a.healthScore - b.healthScore);
+      if (copyNavBarFiltersApply.sortAlpha === 'A-Z')
+        arrayToShowApply = arrayToShowApply.sort((a, b) => a.title.localeCompare(b.title))
+      if (copyNavBarFiltersApply.sortAlpha === 'Z-A')
+        arrayToShowApply = arrayToShowApply.sort((a, b) => b.title.localeCompare(a.title))
+
+
+      //copyNavBarFilters[`${action.payload.type}`] = action.payload.value
+      return {
+        ...state,
+        //navBarFilters: copyNavBarFiltersApply,
+        toShow: arrayToShowApply
+      };
+
+    case 'SET_NAVBAR_FILTERS':
+      const copyNavBarFilters: navBarFiltersI = {...state.navBarFilters}
+      //const copyAllRecipes: recipesI[] = [...state.allRecipes]
+      //let arrayToShow: recipesI[] = []
+      if (action.payload.type === 'text') {
+        copyNavBarFilters.text = action.payload.value
+        //arrayToShowww = copyArrayDiettt
+      }
+      if (action.payload.type === 'diet') {
+        copyNavBarFilters.diet = action.payload.value
+        //arrayToShowww = copyArrayDiettt
+      }
+      if (action.payload.type === 'dish') {
+        copyNavBarFilters.dish = action.payload.value
+
+      }
+      if (action.payload.type === 'sortHealth') {
+        copyNavBarFilters.sortHealth = action.payload.value
+        copyNavBarFilters.sortAlpha = ''
+      }
+      if (action.payload.type === 'sortAlpha') {
+        copyNavBarFilters.sortAlpha = action.payload.value
+        copyNavBarFilters.sortHealth = ''
+      }
+
+      // if (copyNavBarFilters.diet === "All Diets") arrayToShow = copyAllRecipes // ALL DIETS INCLUDED
+      // if (copyNavBarFilters.diet !== "All Diets") arrayToShow = copyAllRecipes.filter((e:any) => e.diets.includes(copyNavBarFilters.diet)) // FILTER TARGET DIET
+      // if (copyNavBarFilters.dish === "All Dishes") arrayToShow = arrayToShow.filter((e:any) => e.title.toLowerCase().includes(copyNavBarFilters.text.toLowerCase())) // ALL DIETS INCLUDED THEN TEXT FILTER
+      // if (copyNavBarFilters.dish !== "All Dishes")
+      //   arrayToShow = arrayToShow.filter((e:any) => e.dishTypes.includes(copyNavBarFilters.dish.toLowerCase())) // FILTER TARGET DISH
+      //   arrayToShow = arrayToShow.filter((e:any) => e.title.toLowerCase().includes(copyNavBarFilters.text.toLowerCase())) // THEN TEXT FILTER
+
+      // if (copyNavBarFilters.sortHealth === 'More Healthy')
+      //   arrayToShow = arrayToShow.sort((a,b) => b.healthScore - a.healthScore);
+      // if (copyNavBarFilters.sortHealth === 'Less Healthy')
+      //   arrayToShow = arrayToShow.sort((a,b) => a.healthScore - b.healthScore);
+      // if (copyNavBarFilters.sortAlpha === 'A-Z')
+      //   arrayToShow = arrayToShow.sort((a, b) => a.title.localeCompare(b.title))
+      // if (copyNavBarFilters.sortAlpha === 'Z-A')
+      //   arrayToShow = arrayToShow.sort((a, b) => b.title.localeCompare(a.title))
+
+
+      //copyNavBarFilters[`${action.payload.type}`] = action.payload.value
+      return {
+        ...state,
+        navBarFilters: copyNavBarFilters,
+        //toShow: arrayToShow
       };
     default:
       return state

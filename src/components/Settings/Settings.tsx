@@ -7,39 +7,55 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import { easings } from '../../commons/easingsCSS';
 import $ from 'jquery';
 import { serverStatusI } from '../../interfaces/interfaces';
-import { setServerStatusShown } from '../../actions';
+import {
+  setShowStatus, setShowUserRecipes,
+  setShowOnlineRecipes, setShowOfflineRecipes
+} from '../../actions';
 
 const Settings = () =>  {
 
   const dispatch = useDispatch()
   easings() // JQuery easings..
 
-  const serverStatus = useSelector((state: { serverStatus: serverStatusI }) => state.serverStatus)
-  const serverStatusShown = useSelector((state: { serverStatusShown: boolean }) => state.serverStatusShown)
+  const showStatus = useSelector((state: { showStatus:boolean }) => state.showStatus)
+  const showUserRecipes = useSelector((state: { showUserRecipes:boolean }) => state.showUserRecipes)
+  const showOnlineRecipes = useSelector((state: { showOnlineRecipes:boolean }) => state.showOnlineRecipes)
+  const showOfflineRecipes = useSelector((state: { showOfflineRecipes:boolean }) => state.showOfflineRecipes)
   //const serverStatusShown = true // DEV
 
-  let showStatusLS: string | null = localStorage.getItem('showStatus');
-  let showUserRecipesLS: string | null = localStorage.getItem('showUserRecipes');
-  let showOnlineRecipesLS: string | null = localStorage.getItem('showOnlineRecipes');
-  let showOfflineRecipesLS: string | null = localStorage.getItem('showOfflineRecipes');
+  // let showStatusLS: string | null = localStorage.getItem('showStatus');
+  // let showUserRecipesLS: string | null = localStorage.getItem('showUserRecipes');
+  // let showOnlineRecipesLS: string | null = localStorage.getItem('showOnlineRecipes');
+  // let showOfflineRecipesLS: string | null = localStorage.getItem('showOfflineRecipes');
 
-  const [ showStatus, setShowStatus ] = useState(true)
-  const [ showUserRecipes, setShowUserRecipes ] = useState(true)
-  const [ showOnlineRecipes, setShowOnlineRecipes ] = useState(true)
-  const [ showOfflineRecipes, setShowOfflineRecipes ] = useState(true)
+  // const [ showStatus, setShowStatus ] = useState(true)
+  // const [ showUserRecipes, setShowUserRecipes ] = useState(true)
+  // const [ showOnlineRecipes, setShowOnlineRecipes ] = useState(true)
+  // const [ showOfflineRecipes, setShowOfflineRecipes ] = useState(true)
 
-  useEffect(() => { // CHECK LS VALUES
-    if (showStatusLS !== null) setShowStatus(JSON.parse(showStatusLS))
-    if (showUserRecipesLS !== null) setShowUserRecipes(JSON.parse(showUserRecipesLS))
-    if (showOnlineRecipesLS !== null) setShowOnlineRecipes(JSON.parse(showOnlineRecipesLS))
-    if (showOfflineRecipesLS !== null) setShowOfflineRecipes(JSON.parse(showOfflineRecipesLS))
-  },[])
+  // useEffect(() => { // CHECK LS VALUES
+  //   if (showStatusLS !== null) setShowStatus(JSON.parse(showStatusLS))
+  //   if (showUserRecipesLS !== null) setShowUserRecipes(JSON.parse(showUserRecipesLS))
+  //   if (showOnlineRecipesLS !== null) setShowOnlineRecipes(JSON.parse(showOnlineRecipesLS))
+  //   if (showOfflineRecipesLS !== null) setShowOfflineRecipes(JSON.parse(showOfflineRecipesLS))
+  // },[])
+
+  //document.getElementById('showStatusEl').style.display = "none"
+
+
+  // let showStatusEl = document.getElementById('showStatusEl')
+  // showStatusEl && (
+  // showStatus ?
+  // showStatusEl.style.display = "none" :
+  // showStatusEl.style.display = "none" )
+
+  // console.log("RR showStatusEl", showStatusEl)
 
   return (
     <div className={css.background}>
       <div className={css.eachRow}>
         <Switch
-          onClick={() => { setShowStatus(!showStatus); localStorage.setItem('showStatus', JSON.stringify(!showStatus)) }}
+          onClick={() => { dispatch(setShowStatus(!showStatus)); localStorage.setItem('showStatus', JSON.stringify(!showStatus)) }}
           checked={ showStatus ? true : false }
           className={css.switch}
           classes={{
@@ -54,7 +70,7 @@ const Settings = () =>  {
       </div>
       <div className={css.eachRow}>
         <Switch
-          onClick={() => { setShowUserRecipes(!showUserRecipes); localStorage.setItem('showUserRecipes', JSON.stringify(!showUserRecipes)) }}
+          onClick={() => { dispatch(setShowUserRecipes(!showUserRecipes)); localStorage.setItem('showUserRecipes', JSON.stringify(!showUserRecipes)) }}
           checked={ showUserRecipes ? true : false }
           className={css.switch}
           classes={{
@@ -69,7 +85,7 @@ const Settings = () =>  {
       </div>
       <div className={css.eachRow}>
         <Switch
-          onClick={() => { setShowOnlineRecipes(!showOnlineRecipes); localStorage.setItem('showOnlineRecipes', JSON.stringify(!showOnlineRecipes)) }}
+          onClick={() => { dispatch(setShowOnlineRecipes(!showOnlineRecipes)); localStorage.setItem('showOnlineRecipes', JSON.stringify(!showOnlineRecipes)) }}
           checked={ showOnlineRecipes ? true : false }
           className={css.switch}
           classes={{
@@ -84,7 +100,7 @@ const Settings = () =>  {
       </div>
       <div className={css.eachRow}>
         <Switch
-          onClick={() => { setShowOfflineRecipes(!showOfflineRecipes); localStorage.setItem('showOfflineRecipes', JSON.stringify(!showOfflineRecipes)) }}
+          onClick={() => { dispatch(setShowOfflineRecipes(!showOfflineRecipes)); localStorage.setItem('showOfflineRecipes', JSON.stringify(!showOfflineRecipes)) }}
           checked={ showOfflineRecipes ? true : false }
           className={css.switch}
           classes={{

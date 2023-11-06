@@ -31,19 +31,19 @@ export function getDishesFromDB() {
   }
 };
 
-interface filterI {
-  diet: string,
-  dish: string,
-  text: string,
-  alphaOrHealthy: string,
-}
+// interface filterI {
+//   diet: string,
+//   dish: string,
+//   text: string,
+//   alphaOrHealthy: string,
+// }
 
-export function filter(payload: filterI) {
-  return {
-    type: 'FILTER',
-    payload: payload
-  }
-};
+// export function filter(payload: filterI) {
+//   return {
+//     type: 'FILTER',
+//     payload: payload
+//   }
+// };
 
 export function setIndexChoosen(payload: any) {
   return {
@@ -98,5 +98,46 @@ export function setServerStatusShown(payload:boolean) {
   return {
     type: 'SET_SERVER_STATUS_SHOWN',
     payload: payload
+  }
+};
+
+export function setShowStatus(payload:boolean) {
+  return {
+    type: 'SET_SHOW_STATUS',
+    payload: payload
+  }
+};
+
+export function setShowUserRecipes(payload:boolean) {
+  return {
+    type: 'SET_SHOW_USER_RECIPES',
+    payload: payload
+  }
+};
+
+export function setShowOnlineRecipes(payload:boolean) {
+  return {
+    type: 'SET_SHOW_ONLINE_RECIPES',
+    payload: payload
+  }
+};
+
+export function setShowOfflineRecipes(payload:boolean) {
+  return {
+    type: 'SET_SHOW_OFFLINE_RECIPES',
+    payload: payload
+  }
+};
+
+export function setNavBarFilters(payload:any) {
+  return {
+    type: 'SET_NAVBAR_FILTERS',
+    payload: payload
+  }
+};
+
+export function applyFilters() {
+  return {
+    type: 'APPLY_FILTERS'
   }
 };

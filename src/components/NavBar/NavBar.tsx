@@ -13,8 +13,8 @@ import {
   InputLabel, MenuItem, Select, SelectChangeEvent
 } from '@mui/material/';
 import {
-  setIndexChoosen, filter,
-  setMenuShown, setTabChoosen
+  setIndexChoosen, applyFilters,
+  setMenuShown, setTabChoosen, setNavBarFilters
 } from '../../actions';
 import Tooltip from '@mui/joy/Tooltip';
 import serverSDDietsArray from '../../db/diets.json'; // SD = Shut Down
@@ -30,6 +30,10 @@ const NavBar = ({ recipeCreatedOrEdited, paginateAmount }: NavBarI) =>  {
   const dispatch = useDispatch()
   const location = useLocation()
   const navigate = useNavigate()
+
+
+  const navBarFilters = useSelector((state: {navBarFilters: any}) => state.navBarFilters)
+  console.log("AAA", navBarFilters)
 
   const inDetail = [useMatch("/:route")?.params.route?.toLowerCase()].filter(e => e !== "about")[0]
   const [healthLevel, setHealthLevel] = useState<string>('');
@@ -55,21 +59,21 @@ const NavBar = ({ recipeCreatedOrEdited, paginateAmount }: NavBarI) =>  {
   const allDietsArray = useSelector((state: {allDiets: allDietsI[]}) => state.allDiets)
   const allDishesArray = useSelector((state: {allDishes: allDishesI[]}) => state.allDishes)
 
-  interface entireFilterI {
-    diet: string,
-    dish: string,
-    text: string,
-    alphaOrHealthy: string,
-  }
+  // interface entireFilterI {
+  //   diet: string,
+  //   dish: string,
+  //   text: string,
+  //   alphaOrHealthy: string,
+  // }
 
-  const [entireFilter, setEntireFilter] = useState<entireFilterI>(
-    {
-      diet: 'All Diets',
-      dish: 'All Dishes',
-      text: '',
-      alphaOrHealthy: ''
-    }
-  )
+  // const [entireFilter, setEntireFilter] = useState<entireFilterI>(
+  //   {
+  //     diet: 'All Diets',
+  //     dish: 'All Dishes',
+  //     text: '',
+  //     alphaOrHealthy: ''
+  //   }
+  // )
 
   const healthLevelHandler = (e: SelectChangeEvent) => {
     setSortAlpha('' as string);
@@ -83,9 +87,9 @@ const NavBar = ({ recipeCreatedOrEdited, paginateAmount }: NavBarI) =>  {
     setHealthLabelShown(false)
   };
 
-  useEffect(() => {
-    dispatch(filter(entireFilter))
-  },[ dispatch, entireFilter ])
+  // useEffect(() => {
+  //   dispatch(filter(entireFilter))
+  // },[ dispatch, entireFilter ])
 
   useEffect(() => {
     function handleResize() {
@@ -96,6 +100,55 @@ const NavBar = ({ recipeCreatedOrEdited, paginateAmount }: NavBarI) =>  {
       window.removeEventListener("resize", handleResize);
     }
   })
+
+  const navBarValuesHandler = ({ type, value }: any) => {
+
+    if (type === ('text' || 'diet' || 'dish')) {
+      dispatch(setIndexChoosen(0));
+      dispatch(setTabChoosen(0));
+    }
+      
+    
+      
+    // switch (type) {
+    //   case 'text':
+    //     dispatch(setIndexChoosen(0));
+    //     dispatch(setTabChoosen(0));
+    //     Promise.all([dispatch(setNavBarFilters({ type: 'text', value: value }))])
+    //     .then(() => dispatch(applyFilters()))
+    //   break;
+    //   case 'diet':
+    //     dispatch(setIndexChoosen(0));
+    //     dispatch(setTabChoosen(0));
+    //     Promise.all([dispatch(setNavBarFilters({ type: 'diet', value: value }))])
+    //     .then(() => dispatch(applyFilters()))
+    //   break;
+    //   case 'dish':
+    //     dispatch(setIndexChoosen(0));
+    //     dispatch(setTabChoosen(0));
+    //     Promise.all([dispatch(setNavBarFilters({ type: 'dish', value: value }))])
+    //     .then(() => dispatch(applyFilters()))
+    //   break;
+    //   case 'sortHealth':
+    //     //dispatch(setIndexChoosen(0));
+    //     //dispatch(setTabChoosen(0));
+    //     Promise.all([dispatch(setNavBarFilters({ type: 'sortHealth', value: value }))])
+    //     .then(() => dispatch(applyFilters()))
+    //   break;
+    //   case 'sortAlpha':
+    //     //dispatch(setIndexChoosen(0));
+    //     //dispatch(setTabChoosen(0));
+    //     Promise.all([dispatch(setNavBarFilters({ type: 'sortAlpha', value: value }))])
+    //     .then(() => dispatch(applyFilters()))
+    //   break;
+
+      
+
+
+    //}
+    Promise.all([dispatch(setNavBarFilters({ type: type, value: value }))])
+    .then(() => dispatch(applyFilters()))
+  }
 
   return (
     <div
@@ -157,14 +210,19 @@ const NavBar = ({ recipeCreatedOrEdited, paginateAmount }: NavBarI) =>  {
             type="text"
             autoComplete='off'
             placeholder={placeholder}
+            value={navBarFilters.text}
             onFocus={() => setPlaceholder("")}
             onBlur={() => setPlaceholder(`Find recipe..`)}
             InputProps={{ className: css.inputProps }}
             className={`${css.input} ${com.noSelect}`}
             onChange={(e) => {
-              setEntireFilter({...entireFilter, text: e.target.value});
-              dispatch(setIndexChoosen(0));
-              dispatch(setTabChoosen(0));
+              
+              //setEntireFilter({...entireFilter, text: e.target.value});
+              // dispatch(setIndexChoosen(0));
+              // dispatch(setTabChoosen(0));
+              // Promise.all([dispatch(setNavBarFilters({ type: 'text', value: e.target.value }))])
+              // .then(() => dispatch(applyFilters()))
+              navBarValuesHandler({ type: 'text', value: e.target.value })
             }}
           />
           <Link
@@ -193,11 +251,20 @@ const NavBar = ({ recipeCreatedOrEdited, paginateAmount }: NavBarI) =>  {
         <div className={css.upperLower}>
           <Select
             className={css.containerDietsDishesHealthAlpha}
-            value={entireFilter.diet}
+            //value={entireFilter.diet}
+            value={navBarFilters.diet}
             onChange={(e) => {
-              setEntireFilter({...entireFilter, diet:e.target.value});
-              dispatch(setIndexChoosen(0));
-              dispatch(setTabChoosen(0));
+              
+              //setEntireFilter({...entireFilter, diet:e.target.value});
+              // dispatch(setIndexChoosen(0));
+              // dispatch(setTabChoosen(0));
+
+              // Promise.all([dispatch(setNavBarFilters({ type: 'diet', value: e.target.value }))])
+              // .then(() => dispatch(applyFilters()))
+
+              navBarValuesHandler({ type: 'diet', value: e.target.value })
+
+
             }}
           >
             { allDietsOnline ?
@@ -219,11 +286,19 @@ const NavBar = ({ recipeCreatedOrEdited, paginateAmount }: NavBarI) =>  {
           </Select>
           <Select
             className={css.containerDietsDishesHealthAlpha}
-            value={entireFilter.dish}
+            //value={entireFilter.dish}
+            value={navBarFilters.dish}
             onChange={(e) => {
-              setEntireFilter({...entireFilter, dish:e.target.value});
-              dispatch(setIndexChoosen(0));
-              dispatch(setTabChoosen(0));
+              
+              //setEntireFilter({...entireFilter, dish:e.target.value});
+              // dispatch(setIndexChoosen(0));
+              // dispatch(setTabChoosen(0));
+
+              // Promise.all([dispatch(setNavBarFilters({ type: 'dish', value: e.target.value }))])
+              // .then(() => dispatch(applyFilters()))
+
+              navBarValuesHandler({ type: 'dish', value: e.target.value })
+
             }}
           >
             { allDishesOnline ?
@@ -256,8 +331,18 @@ const NavBar = ({ recipeCreatedOrEdited, paginateAmount }: NavBarI) =>  {
               size="small"
               className={css.selectWithLabel}
               onFocus={() => setHealthLabelShown(true)}
-              value={healthLevel}
-              onChange={(e) => {setEntireFilter({...entireFilter, alphaOrHealthy: e.target.value}); healthLevelHandler(e)}}
+              //value={healthLevel}
+              value={navBarFilters.sortHealth}
+              onChange={(e) => {
+                
+                //setEntireFilter({...entireFilter, alphaOrHealthy: e.target.value});
+                healthLevelHandler(e)
+
+                // Promise.all([dispatch(setNavBarFilters({ type: 'sortHealth', value: e.target.value }))])
+                // .then(() => dispatch(applyFilters()))
+
+                navBarValuesHandler({ type: 'sortHealth', value: e.target.value })
+              }}
             >
               <MenuItem value={"More Healthy"}>More Healthy</MenuItem>
               <MenuItem value={"Less Healthy"}>Less Healthy</MenuItem>
@@ -275,8 +360,18 @@ const NavBar = ({ recipeCreatedOrEdited, paginateAmount }: NavBarI) =>  {
               onFocus={() => setAlphaLabelShown(true)}
               className={css.selectWithLabel}
               label="Sort alphabetically"
-              value={sortAlpha}
-              onChange={(e) => {setEntireFilter({...entireFilter, alphaOrHealthy: e.target.value}); sortAlphaHandler(e)}}
+              //value={sortAlpha}
+              value={navBarFilters.sortAlpha}
+              onChange={(e) => {
+                
+                //setEntireFilter({...entireFilter, alphaOrHealthy: e.target.value});
+                sortAlphaHandler(e)
+
+                //Promise.all([dispatch(setNavBarFilters({ type: 'sortAlpha', value: e.target.value }))])
+                //.then(() => dispatch(applyFilters()))
+
+                navBarValuesHandler({ type: 'sortAlpha', value: e.target.value })
+              }}
             >
               <MenuItem value={"A-Z"}>A-Z</MenuItem>
               <MenuItem value={"Z-A"}>Z-A</MenuItem>

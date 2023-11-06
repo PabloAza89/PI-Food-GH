@@ -4,7 +4,8 @@ import Card from '../Card/Card';
 import { useSelector, useDispatch } from 'react-redux';
 import { recipesI, userDataI, paginateAmountI  } from '../../interfaces/interfaces';
 import {
-  fetchRecipesFromAPI, getDietsFromDB, getDishesFromDB
+  fetchRecipesFromAPI, getDietsFromDB,
+  getDishesFromDB, applyFilters
 } from '../../actions';
 
 interface CardsMapperI {
@@ -55,7 +56,7 @@ const CardsMapper = ({ setUserData, paginateAmount, userData }: CardsMapperI)  =
       dispatch(getDietsFromDB()),
       dispatch(getDishesFromDB()),
       dispatch(fetchRecipesFromAPI())
-    ])
+    ]).then(() => dispatch(applyFilters()))
 
   },[dispatch])
 

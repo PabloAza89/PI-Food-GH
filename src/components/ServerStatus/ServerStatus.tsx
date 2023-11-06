@@ -15,6 +15,21 @@ const ServerStatus = () =>  {
 
   const serverStatus = useSelector((state: { serverStatus: serverStatusI }) => state.serverStatus)
   const serverStatusShown = useSelector((state: { serverStatusShown: boolean }) => state.serverStatusShown)
+
+  const showStatus = useSelector((state: { showStatus:boolean }) => state.showStatus)
+
+  // let showStatusEl = document.getElementById('showStatusEl')
+  // showStatusEl && (
+  // showStatus ?
+  // showStatusEl.style.display = "none" :
+  // showStatusEl.style.display = "none" )
+
+  useEffect(() => {
+    showStatus ?
+    $(`#showStatusEl`).css(`display`, `flex`) :
+    $(`#showStatusEl`).css(`display`, `none`)
+  },[showStatus])
+  
   //const serverStatusShown = true // DEV
 
   useEffect(() => {
@@ -63,7 +78,10 @@ const ServerStatus = () =>  {
   },[serverStatusShown])
 
   return (
-    <div className={css.background}>
+    <div
+      id={`showStatusEl`}
+      className={css.background}
+    >
       <Button
         className={`buttonShow`}
         id={css.button}
