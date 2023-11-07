@@ -1,7 +1,7 @@
 .logoTextContainer {
   display: flex;
   /* background: red; */ /* DEV */
-  margin: 16px 0px 0px 16px;
+  margin: 16px 0px 0px 8px;
   flex-direction: row;
   height: 69px;
   justify-content: flex-end;

@@ -13,8 +13,9 @@ import { recipesI } from '../../interfaces/interfaces';
 import EditIcon from '@mui/icons-material/Edit';
 import ClearIcon from '@mui/icons-material/Clear';
 import {
-  fetchRecipesFromAPI, getDietsFromDB,
-  getDishesFromDB, setMenuShown
+  getRecipesFromDB, getDietsFromDB,
+  getDishesFromDB, setMenuShown,
+  applyFilters
 } from '../../actions';
 import $ from 'jquery';
 
@@ -26,9 +27,11 @@ export default function Detail({ userData, setUserData }: any) {
   const params = useParams()
 
   const reloadRecipes = async () => {
-    dispatch(getDietsFromDB())
-    dispatch(getDishesFromDB())
-    dispatch(fetchRecipesFromAPI())
+    Promise.all([
+      dispatch(getDietsFromDB()),
+      dispatch(getDishesFromDB()),
+      dispatch(getRecipesFromDB())
+    ]).then(() => dispatch(applyFilters()))
   }
 
   const handleReload = (props: any) => {

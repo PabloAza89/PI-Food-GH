@@ -2,14 +2,18 @@ import { useEffect, useState } from "react";
 import css from "./SettingsCSS.module.css";
 import com from "../../commons/commonsCSS.module.css";
 import { useSelector, useDispatch } from 'react-redux';
-import { Button, FormControlLabel, Switch } from '@mui/material/';
-import SettingsIcon from '@mui/icons-material/Settings';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import { Button, FormControlLabel, Switch, Typography } from '@mui/material/';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { easings } from '../../commons/easingsCSS';
 import $ from 'jquery';
-import { serverStatusI } from '../../interfaces/interfaces';
+import { serverStatusI, settingsFiltersI } from '../../interfaces/interfaces';
 import {
   setShowStatus, setShowUserRecipes,
-  setShowOnlineRecipes, setShowOfflineRecipes
+  setShowOnlineRecipes, setShowOfflineRecipes,
+  setSettingsFilters, applyFilters
 } from '../../actions';
 
 const Settings = () =>  {
@@ -17,101 +21,186 @@ const Settings = () =>  {
   const dispatch = useDispatch()
   easings() // JQuery easings..
 
-  const showStatus = useSelector((state: { showStatus:boolean }) => state.showStatus)
-  const showUserRecipes = useSelector((state: { showUserRecipes:boolean }) => state.showUserRecipes)
-  const showOnlineRecipes = useSelector((state: { showOnlineRecipes:boolean }) => state.showOnlineRecipes)
-  const showOfflineRecipes = useSelector((state: { showOfflineRecipes:boolean }) => state.showOfflineRecipes)
-  //const serverStatusShown = true // DEV
+  const settingsFilters = useSelector((state: { settingsFilters:settingsFiltersI }) => state.settingsFilters)
 
-  // let showStatusLS: string | null = localStorage.getItem('showStatus');
-  // let showUserRecipesLS: string | null = localStorage.getItem('showUserRecipes');
-  // let showOnlineRecipesLS: string | null = localStorage.getItem('showOnlineRecipes');
-  // let showOfflineRecipesLS: string | null = localStorage.getItem('showOfflineRecipes');
+  const [ expandStatus, setExpandStatus ] = useState(false)
+  const [ expandUser, setExpandUser ] = useState(false)
+  const [ expandOnline, setExpandOnline ] = useState(false)
+  const [ expandOffline, setExpandOffline ] = useState(false)
 
-  // const [ showStatus, setShowStatus ] = useState(true)
-  // const [ showUserRecipes, setShowUserRecipes ] = useState(true)
-  // const [ showOnlineRecipes, setShowOnlineRecipes ] = useState(true)
-  // const [ showOfflineRecipes, setShowOfflineRecipes ] = useState(true)
-
-  // useEffect(() => { // CHECK LS VALUES
-  //   if (showStatusLS !== null) setShowStatus(JSON.parse(showStatusLS))
-  //   if (showUserRecipesLS !== null) setShowUserRecipes(JSON.parse(showUserRecipesLS))
-  //   if (showOnlineRecipesLS !== null) setShowOnlineRecipes(JSON.parse(showOnlineRecipesLS))
-  //   if (showOfflineRecipesLS !== null) setShowOfflineRecipes(JSON.parse(showOfflineRecipesLS))
-  // },[])
-
-  //document.getElementById('showStatusEl').style.display = "none"
-
-
-  // let showStatusEl = document.getElementById('showStatusEl')
-  // showStatusEl && (
-  // showStatus ?
-  // showStatusEl.style.display = "none" :
-  // showStatusEl.style.display = "none" )
-
-  // console.log("RR showStatusEl", showStatusEl)
+  const settingsFiltersHandler = ({ type }: any) => {
+    switch (type) {
+      case 'showStatus':
+        dispatch(setSettingsFilters({ type: type, value: !settingsFilters.showStatus }))
+        localStorage.setItem('showStatus', JSON.stringify(!settingsFilters.showStatus))
+      break;
+      case 'showUserRecipes':
+        dispatch(setSettingsFilters({ type: type, value: !settingsFilters.showUserRecipes }))
+        localStorage.setItem('showUserRecipes', JSON.stringify(!settingsFilters.showUserRecipes))
+        dispatch(applyFilters())
+      break;
+      case 'showOnlineRecipes':
+        dispatch(setSettingsFilters({ type: type, value: !settingsFilters.showOnlineRecipes }))
+        localStorage.setItem('showOnlineRecipes', JSON.stringify(!settingsFilters.showOnlineRecipes))
+        dispatch(applyFilters())
+      break;
+      case 'showOfflineRecipes':
+        dispatch(setSettingsFilters({ type: type, value: !settingsFilters.showOfflineRecipes }))
+        localStorage.setItem('showOfflineRecipes', JSON.stringify(!settingsFilters.showOfflineRecipes))
+        dispatch(applyFilters())
+      break;
+    }
+  }
 
   return (
     <div className={css.background}>
-      <div className={css.eachRow}>
-        <Switch
-          onClick={() => { dispatch(setShowStatus(!showStatus)); localStorage.setItem('showStatus', JSON.stringify(!showStatus)) }}
-          checked={ showStatus ? true : false }
-          className={css.switch}
-          classes={{
-            track: showStatus ? `${css.track} ${css.trackEnabled}` : `${css.track} ${css.trackDisabled}`,
-            thumb: css.thumb,
-            switchBase:  css.switchBase,
-            checked: css.checked,
-            colorPrimary: css.colorPrimary
-          }}
-        />
-        <div className={css.text}>Show SERVER STATUS info</div>
+      <div className={css.accordionContainer}>
+        <Accordion
+          expanded={expandStatus}
+          className={css.accordion}
+        >
+          <AccordionSummary
+            className={css.defaultCursor}
+            expandIcon={
+              <ErrorOutlineIcon
+                className={css.iconInfo}
+                onClick={(() => setExpandStatus(!expandStatus))}
+              />
+            }
+          >
+            <Switch
+              onClick={() => settingsFiltersHandler({ type: 'showStatus' })}
+              checked={ settingsFilters.showStatus ? true : false }
+              className={css.switch}
+              classes={{
+                track: settingsFilters.showStatus ? `${css.track} ${css.trackEnabled}` : `${css.track} ${css.trackDisabled}`,
+                thumb: css.thumb,
+                switchBase:  css.switchBase,
+                checked: css.checked,
+                colorPrimary: css.colorPrimary
+              }}
+            />
+            <div className={css.text}>Show SERVER STATUS</div>
+          </AccordionSummary>
+          <AccordionDetails
+            className={com.noSelect}
+          >
+            <div className={css.text}>
+              Show/Hide right-side button SERVER STATUS. The component displays the current server detailed status.
+            </div>
+          </AccordionDetails>
+        </Accordion>
       </div>
-      <div className={css.eachRow}>
-        <Switch
-          onClick={() => { dispatch(setShowUserRecipes(!showUserRecipes)); localStorage.setItem('showUserRecipes', JSON.stringify(!showUserRecipes)) }}
-          checked={ showUserRecipes ? true : false }
-          className={css.switch}
-          classes={{
-            track: showUserRecipes ? `${css.track} ${css.trackEnabled}` : `${css.track} ${css.trackDisabled}`,
-            thumb: css.thumb,
-            switchBase:  css.switchBase,
-            checked: css.checked,
-            colorPrimary: css.colorPrimary
-          }}
-        />
-        <div className={css.text}>Show User Recipes</div>
+      <div className={css.accordionContainer}>
+        <Accordion
+          expanded={expandUser}
+          className={css.accordion}
+        >
+          <AccordionSummary
+            className={css.defaultCursor}
+            expandIcon={
+              <ErrorOutlineIcon
+                className={css.iconInfo}
+                onClick={(() => setExpandUser(!expandUser))}
+              />
+            }
+          >
+            <Switch
+              onClick={() => settingsFiltersHandler({ type: 'showUserRecipes' })}
+              checked={ settingsFilters.showUserRecipes ? true : false }
+              className={css.switch}
+              classes={{
+                track: settingsFilters.showUserRecipes ? `${css.track} ${css.trackEnabled}` : `${css.track} ${css.trackDisabled}`,
+                thumb: css.thumb,
+                switchBase:  css.switchBase,
+                checked: css.checked,
+                colorPrimary: css.colorPrimary
+              }}
+            />
+            <div className={css.text}>Show User Recipes</div>
+          </AccordionSummary>
+          <AccordionDetails
+            className={com.noSelect}
+          >
+            <div className={css.text}>
+              Show/Hide recipes made by users, as long as the Server is Online.
+            </div>
+          </AccordionDetails>
+        </Accordion>
       </div>
-      <div className={css.eachRow}>
-        <Switch
-          onClick={() => { dispatch(setShowOnlineRecipes(!showOnlineRecipes)); localStorage.setItem('showOnlineRecipes', JSON.stringify(!showOnlineRecipes)) }}
-          checked={ showOnlineRecipes ? true : false }
-          className={css.switch}
-          classes={{
-            track: showOnlineRecipes ? `${css.track} ${css.trackEnabled}` : `${css.track} ${css.trackDisabled}`,
-            thumb: css.thumb,
-            switchBase:  css.switchBase,
-            checked: css.checked,
-            colorPrimary: css.colorPrimary
-          }}
-        />
-        <div className={css.text}>Show Online Database Recipes</div>
+      <div className={css.accordionContainer}>
+        <Accordion
+          expanded={expandOnline}
+          className={css.accordion}
+        >
+          <AccordionSummary
+            className={css.defaultCursor}
+            expandIcon={
+              <ErrorOutlineIcon
+                className={css.iconInfo}
+                onClick={(() => setExpandOnline(!expandOnline))}
+              />
+            }
+          >
+            <Switch
+              onClick={() => settingsFiltersHandler({ type: 'showOnlineRecipes' })}
+              checked={ settingsFilters.showOnlineRecipes ? true : false }
+              className={css.switch}
+              classes={{
+                track: settingsFilters.showOnlineRecipes ? `${css.track} ${css.trackEnabled}` : `${css.track} ${css.trackDisabled}`,
+                thumb: css.thumb,
+                switchBase:  css.switchBase,
+                checked: css.checked,
+                colorPrimary: css.colorPrimary
+              }}
+            />
+            <div className={css.text}>Show Online Database Recipes</div>
+          </AccordionSummary>
+          <AccordionDetails
+            className={com.noSelect}
+          >
+            <div className={css.text}>
+              Show/Hide third-part recipes when server is Online.
+            </div>
+          </AccordionDetails>
+        </Accordion>
       </div>
-      <div className={css.eachRow}>
-        <Switch
-          onClick={() => { dispatch(setShowOfflineRecipes(!showOfflineRecipes)); localStorage.setItem('showOfflineRecipes', JSON.stringify(!showOfflineRecipes)) }}
-          checked={ showOfflineRecipes ? true : false }
-          className={css.switch}
-          classes={{
-            track: showOfflineRecipes ? `${css.track} ${css.trackEnabled}` : `${css.track} ${css.trackDisabled}`,
-            thumb: css.thumb,
-            switchBase:  css.switchBase,
-            checked: css.checked,
-            colorPrimary: css.colorPrimary
-          }}
-        />
-        <div className={css.text}>Show Offline Database Recipes</div>
+      <div className={css.accordionContainer}>
+        <Accordion
+          expanded={expandOffline}
+          className={css.accordion}
+        >
+          <AccordionSummary
+            className={css.defaultCursor}
+            expandIcon={
+              <ErrorOutlineIcon
+                className={css.iconInfo}
+                onClick={(() => setExpandOffline(!expandOffline))}
+              />
+            }
+          >
+            <Switch
+              onClick={() => settingsFiltersHandler({ type: 'showOfflineRecipes' })}
+              checked={ settingsFilters.showOfflineRecipes ? true : false }
+              className={css.switch}
+              classes={{
+                track: settingsFilters.showOfflineRecipes ? `${css.track} ${css.trackEnabled}` : `${css.track} ${css.trackDisabled}`,
+                thumb: css.thumb,
+                switchBase:  css.switchBase,
+                checked: css.checked,
+                colorPrimary: css.colorPrimary
+              }}
+            />
+            <div className={css.text}>Show Offline Database Recipes</div>
+          </AccordionSummary>
+          <AccordionDetails
+            className={com.noSelect}
+          >
+            <div className={css.text}>
+            Show/Hide third-part recipes when server is Offline.
+            </div>
+          </AccordionDetails>
+        </Accordion>
       </div>
     </div>
   );

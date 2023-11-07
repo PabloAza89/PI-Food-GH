@@ -14,7 +14,8 @@ import $ from 'jquery';
 import EditIcon from '@mui/icons-material/Edit';
 import ClearIcon from '@mui/icons-material/Clear';
 import {
-  fetchRecipesFromAPI, getDietsFromDB, getDishesFromDB
+  getRecipesFromDB, getDietsFromDB, getDishesFromDB,
+  applyFilters
 } from '../../actions';
 import { recipesI, userDataI } from '../../interfaces/interfaces';
 
@@ -35,9 +36,11 @@ const Card = ({
   const navigate = useNavigate();
 
   const reloadRecipes = async () => {
-    dispatch(getDietsFromDB())
-    dispatch(getDishesFromDB())
-    dispatch(fetchRecipesFromAPI())
+    Promise.all([
+      dispatch(getDietsFromDB()),
+      dispatch(getDishesFromDB()),
+      dispatch(getRecipesFromDB())
+    ]).then(() => dispatch(applyFilters()))
   }
 
   const handleReload = (props: any) => {

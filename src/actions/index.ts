@@ -1,4 +1,4 @@
-export function fetchRecipesFromAPI() {
+export function getRecipesFromDB() {
   return async function(dispatch: any) {
     return (
       fetch(`${process.env.REACT_APP_SV}/recipes`)
@@ -132,6 +132,13 @@ export function setShowOfflineRecipes(payload:boolean) {
 export function setNavBarFilters(payload:any) {
   return {
     type: 'SET_NAVBAR_FILTERS',
+    payload: payload
+  }
+};
+
+export function setSettingsFilters(payload:any) {
+  return {
+    type: 'SET_SETTINGS_FILTERS',
     payload: payload
   }
 };

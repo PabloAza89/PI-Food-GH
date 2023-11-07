@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Button } from '@mui/material/';
 import { easings } from '../../commons/easingsCSS';
 import $ from 'jquery';
-import { serverStatusI } from '../../interfaces/interfaces';
+import { serverStatusI, settingsFiltersI } from '../../interfaces/interfaces';
 import { setServerStatusShown } from '../../actions';
 
 const ServerStatus = () =>  {
@@ -16,7 +16,8 @@ const ServerStatus = () =>  {
   const serverStatus = useSelector((state: { serverStatus: serverStatusI }) => state.serverStatus)
   const serverStatusShown = useSelector((state: { serverStatusShown: boolean }) => state.serverStatusShown)
 
-  const showStatus = useSelector((state: { showStatus:boolean }) => state.showStatus)
+  //const showStatus = useSelector((state: { showStatus:boolean }) => state.showStatus)
+  const settingsFilters = useSelector((state: { settingsFilters:settingsFiltersI }) => state.settingsFilters)
 
   // let showStatusEl = document.getElementById('showStatusEl')
   // showStatusEl && (
@@ -25,10 +26,10 @@ const ServerStatus = () =>  {
   // showStatusEl.style.display = "none" )
 
   useEffect(() => {
-    showStatus ?
+    settingsFilters.showStatus ?
     $(`#showStatusEl`).css(`display`, `flex`) :
     $(`#showStatusEl`).css(`display`, `none`)
-  },[showStatus])
+  },[settingsFilters.showStatus])
   
   //const serverStatusShown = true // DEV
 

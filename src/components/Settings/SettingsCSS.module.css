@@ -1,28 +1,27 @@
 .background {
-  background: gray !important; /* DEV */
+  /* background: gray !important; */ /* DEV */
   display: flex;
-  /* display: none; */
   position: relative;
   flex-direction: column;
-  /* top: 0px; */
-  top: 100px;
+  /* top: 100px; */
   width: 100%;
-  height: calc(100vh - 100px);
-  /* right: -280px; */ /* SLIDER BOX WIDTH */
-  /* z-index: 300000; */
+  /* height: calc(100vh - 100px); */
+  /* margin-top: 5px; */
+  margin-top: 100px;
+  margin-bottom: 10px;
 }
 
-.eachRow {
-  display: flex;
-  flex-direction: row;
-  background: beige;
-  width: 800px;
-  height: 50px;
-  margin: 10px 0px;
-  border: 2px solid gray;
-  border-radius: 8px;
-  align-items: center;
-  margin-left: 8px;
+.accordionContainer {
+  /* width: 800px !important; */
+  margin: 10px 10px 5px 10px;
+}
+
+.accordion {
+  background: beige !important;
+  /* width: 800px !important; */
+  max-width: 800px !important;
+  border-radius: 8px !important;
+  border: 2px solid gray !important;
 }
 
 .switch {
@@ -46,7 +45,6 @@
 }
 
 .trackDisabled { /* DISABLED BACKGROUND COLOR */
-  /* background-color: #E9E9EA !important; */
   background-color: lightgray !important;
 }
 
@@ -80,6 +78,17 @@
   /* background: red; */ /* DEV */
   margin-left: 8px;
   margin-bottom: 2px;
+}
+
+.iconInfo {
+  transform: rotate(180deg);
+  cursor: pointer !important;
+}
+
+.defaultCursor {
+  cursor: default !important;
+  left: -10px !important;
+  margin-right: -10px !important;
 }
 
 /* BREAKPOINTS */

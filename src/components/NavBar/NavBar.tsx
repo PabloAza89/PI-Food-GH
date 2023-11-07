@@ -19,6 +19,7 @@ import {
 import Tooltip from '@mui/joy/Tooltip';
 import serverSDDietsArray from '../../db/diets.json'; // SD = Shut Down
 import serverSDDishesArray from '../../db/dishes.json'; // SD = Shut Down
+import $ from 'jquery';
 
 interface NavBarI {
   recipeCreatedOrEdited?: boolean,
@@ -33,7 +34,7 @@ const NavBar = ({ recipeCreatedOrEdited, paginateAmount }: NavBarI) =>  {
 
 
   const navBarFilters = useSelector((state: {navBarFilters: any}) => state.navBarFilters)
-  console.log("AAA", navBarFilters)
+  //console.log("AAA", navBarFilters)
 
   const inDetail = [useMatch("/:route")?.params.route?.toLowerCase()].filter(e => e !== "about")[0]
   const [healthLevel, setHealthLevel] = useState<string>('');
@@ -150,12 +151,84 @@ const NavBar = ({ recipeCreatedOrEdited, paginateAmount }: NavBarI) =>  {
     .then(() => dispatch(applyFilters()))
   }
 
+  // useEffect(() => {
+  //   var lastWidth = $(`#testNavBarTest`).width();
+
+  //   $(`#testNavBarTest`).on("resize", function(){
+  //     if($(`#testNavBarTest`).width()!== lastWidth){
+  //       console.log("SE REEMPLAZOAA")
+  //         lastWidth = $(`#testNavBarTest`).width();
+  //     }
+  //   })
+
+  // })
+
+  // useEffect(() => {
+  //   // $(`#testNavBarTest`).resize(function() {
+  //   //   //$('body').prepend('<div>' + $(window).width() + '</div>');
+  //   //   console.log("SE REEMPLAZOAA")
+  //   // });
+  //       //var lastWidth = $(window).width();
+
+  //   // $(window).on("resize", function(){
+  //   //   if($(window).width()!== lastWidth){
+  //   //     console.log("SE REEMPLAZOAA")
+  //   //       lastWidth = $(window).width();
+  //   //   }
+  //   // })
+
+  //   var lastWidth = $(`body`).width();
+
+  //   console.log("SE REEMPLAZOAA", $(`body`).width())
+
+  //   $(`body`).on("resize", function(){
+  //     if($(`body`).width()!== lastWidth){
+  //       console.log("SE REEMPLAZOAA")
+  //         lastWidth = $(`body`).width();
+  //     }
+  //   })
+
+  // })
+
+  useEffect(() => {
+    function handleResize() {
+      console.log("SE REEMPLAZOAA", $(`#testNavBarTest`).outerWidth()!)
+    }
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    }
+  })
+
+  useEffect(() => {
+    var lastWidth = $(`#testNavBarTest`).outerWidth()!
+
+    //console.log("SE REEMPLAZOAA", $(`body`).width())
+    console.log("SE REEMPLAZOAA", $(`#testNavBarTest`).outerWidth()!)
+
+    console.log("SE asdasdasd", $('body')[0].scrollWidth)
+
+    
+    
+    
+
+    $(`#testNavBarTest`).on("resize", function(){
+      if($(`#testNavBarTest`).outerWidth()! !== lastWidth){
+        console.log("SE REEMPLAZOAA")
+          lastWidth = $(`#testNavBarTest`).outerWidth()!
+      }
+    })
+
+  })
+
+
   return (
     <div
       className={css.background}
+      id={`testNavBarTest`}
       style={{
         position: location.pathname !== `/` ? 'fixed' : 'relative',
-        height: location.pathname !== `/` && menuShown ? '150px' : 'unset',
+        height: location.pathname.toLowerCase() === `/settings` ? '100px' : location.pathname !== `/` && menuShown ? '150px' : 'unset',
       }}
     >
       <div className={css.logoAndMenuContainer}>
@@ -188,6 +261,7 @@ const NavBar = ({ recipeCreatedOrEdited, paginateAmount }: NavBarI) =>  {
             variant="contained"
             onClick={() => dispatch(setMenuShown(!menuShown))}
             className={css.menuButton}
+            style={{ display: location.pathname.toLowerCase() === `/settings` ? 'none' : 'flex' }}
           >
             <MenuIcon style={{ fontSize: 40 }} />
           </Button>

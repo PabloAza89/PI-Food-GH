@@ -1,10 +1,11 @@
 import { useEffect, Dispatch, SetStateAction } from "react";
 import css from './CardsMapperCSS.module.css';
+import com from "../../commons/commonsCSS.module.css";
 import Card from '../Card/Card';
 import { useSelector, useDispatch } from 'react-redux';
 import { recipesI, userDataI, paginateAmountI  } from '../../interfaces/interfaces';
 import {
-  fetchRecipesFromAPI, getDietsFromDB,
+  getRecipesFromDB, getDietsFromDB,
   getDishesFromDB, applyFilters
 } from '../../actions';
 
@@ -55,7 +56,7 @@ const CardsMapper = ({ setUserData, paginateAmount, userData }: CardsMapperI)  =
     Promise.all([
       dispatch(getDietsFromDB()),
       dispatch(getDishesFromDB()),
-      dispatch(fetchRecipesFromAPI())
+      dispatch(getRecipesFromDB())
     ]).then(() => dispatch(applyFilters()))
 
   },[dispatch])
@@ -82,10 +83,10 @@ const CardsMapper = ({ setUserData, paginateAmount, userData }: CardsMapperI)  =
     </div>) :
     allRecipes[0] !== undefined && toShow[0] === undefined ?
     (<div>
-      <div className={css.notFoundOrLoading}>No recipe was found !</div>
+      <div className={`${css.notFoundOrLoading} ${com.noSelect}`}>No recipe was found !</div>
     </div>) :
     (<div>
-      <div className={css.notFoundOrLoading}>Loading..</div>
+      <div className={`${css.notFoundOrLoading} ${com.noSelect}`}>Loading..</div>
     </div>)
 }
 

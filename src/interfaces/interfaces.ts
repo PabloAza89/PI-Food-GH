@@ -88,6 +88,13 @@ export interface paginateAmountI {
   paginateAmount: number
 }
 
+export interface settingsFiltersI {
+  showStatus: boolean,
+  showUserRecipes: boolean,
+  showOnlineRecipes: boolean,
+  showOfflineRecipes: boolean,
+}
+
 export interface navBarFiltersI {
   text: string,
   diet: string,

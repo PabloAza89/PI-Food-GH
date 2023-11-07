@@ -1,6 +1,6 @@
 import toAvoidKey from '../db/toAvoidKey.json';
 import {
-  recipesI, serverStatusI, navBarFiltersI
+  recipesI, serverStatusI, navBarFiltersI, settingsFiltersI
 } from '../interfaces/interfaces';
 
 interface initialStateI {
@@ -23,6 +23,7 @@ interface initialStateI {
   showUserRecipes: boolean,
   showOnlineRecipes: boolean,
   showOfflineRecipes: boolean,
+  settingsFilters: settingsFiltersI,
   navBarFilters: navBarFiltersI
 }
 
@@ -46,6 +47,12 @@ const initialState: initialStateI = {
   showUserRecipes: localStorage.getItem('showUserRecipes') !== null ? JSON.parse(localStorage.getItem('showUserRecipes')!) : true,
   showOnlineRecipes: localStorage.getItem('showOnlineRecipes') !== null ? JSON.parse(localStorage.getItem('showOnlineRecipes')!) : true,
   showOfflineRecipes: localStorage.getItem('showOfflineRecipes') !== null ? JSON.parse(localStorage.getItem('showOfflineRecipes')!) : true,
+  settingsFilters: {
+    showStatus: localStorage.getItem('showStatus') !== null ? JSON.parse(localStorage.getItem('showStatus')!) : true,
+    showUserRecipes: localStorage.getItem('showUserRecipes') !== null ? JSON.parse(localStorage.getItem('showUserRecipes')!) : true,
+    showOnlineRecipes: localStorage.getItem('showOnlineRecipes') !== null ? JSON.parse(localStorage.getItem('showOnlineRecipes')!) : true,
+    showOfflineRecipes: localStorage.getItem('showOfflineRecipes') !== null ? JSON.parse(localStorage.getItem('showOfflineRecipes')!) : true,
+  },
   navBarFilters: {
     text: '',
     diet: 'All Diets', dish: 'All Dishes',
@@ -192,12 +199,12 @@ const reducer = (state = initialState, action: {type: string; payload: any}) => 
         showStatus: action.payload
       };
     case 'SET_SHOW_USER_RECIPES':
-      const copyToShow = [...state.allRecipes]
-      let arrayToShowUserRecipes: recipesI[] = []
-      arrayToShowUserRecipes = copyToShow.filter(e => e.userRecipe !== !action.payload)
+      //const copyToShow = [...state.allRecipes]
+      //let arrayToShowUserRecipes: recipesI[] = []
+      //arrayToShowUserRecipes = copyToShow.filter(e => e.userRecipe !== !action.payload)
       return {
         ...state,
-        toShow: arrayToShowUserRecipes,
+        //toShow: arrayToShowUserRecipes,
         showUserRecipes: action.payload
       };
     case 'SET_SHOW_ONLINE_RECIPES':
@@ -212,12 +219,34 @@ const reducer = (state = initialState, action: {type: string; payload: any}) => 
       };
     case 'APPLY_FILTERS':
 
+    
+      const copyserverStatusApply: serverStatusI = {...state.serverStatus}
       const copyNavBarFiltersApply: navBarFiltersI = {...state.navBarFilters}
+      const copysettingsFiltersApply: settingsFiltersI = {...state.settingsFilters}
       const copyAllRecipesApply: recipesI[] = [...state.allRecipes]
       let arrayToShowApply: recipesI[] = []
 
-      if (copyNavBarFiltersApply.diet === "All Diets") arrayToShowApply = copyAllRecipesApply // ALL DIETS INCLUDED
-      if (copyNavBarFiltersApply.diet !== "All Diets") arrayToShowApply = copyAllRecipesApply.filter((e:any) => e.diets.includes(copyNavBarFiltersApply.diet)) // FILTER TARGET DIET
+      //arrayToShowUserRecipes = copyToShow.filter(e => e.userRecipe !== copyNavBarFiltersApply.showUserRecipes)
+
+      if (copysettingsFiltersApply.showUserRecipes) arrayToShowApply = copyAllRecipesApply
+      if (!copysettingsFiltersApply.showUserRecipes) arrayToShowApply = copyAllRecipesApply.filter(e => e.userRecipe !== true)
+
+      //if (copysettingsFiltersApply.showOnlineRecipes) arrayToShowApply = arrayToShowApply.filter(e => e.userRecipe === true)
+      if (copyserverStatusApply.validKey && !copysettingsFiltersApply.showOnlineRecipes) arrayToShowApply = arrayToShowApply.filter(e => e.userRecipe === true)
+
+      if (!copyserverStatusApply.validKey && !copysettingsFiltersApply.showOfflineRecipes) arrayToShowApply = arrayToShowApply.filter(e => e.userRecipe === true)
+
+      
+
+
+      //if (copyNavBarFiltersApply.diet === "All Diets") arrayToShowApply = copyAllRecipesApply // ALL DIETS INCLUDED
+      //if (copyNavBarFiltersApply.diet !== "All Diets") arrayToShowApply = copyAllRecipesApply.filter((e:any) => e.diets.includes(copyNavBarFiltersApply.diet)) // FILTER TARGET DIET
+
+      //if (copyNavBarFiltersApply.diet === "All Diets") arrayToShowApply = arrayToShowApply // ALL DIETS INCLUDED
+      if (copyNavBarFiltersApply.diet !== "All Diets") arrayToShowApply = arrayToShowApply.filter((e:any) => e.diets.includes(copyNavBarFiltersApply.diet)) // FILTER TARGET DIET
+
+
+
       if (copyNavBarFiltersApply.dish === "All Dishes") arrayToShowApply = arrayToShowApply.filter((e:any) => e.title.toLowerCase().includes(copyNavBarFiltersApply.text.toLowerCase())) // ALL DIETS INCLUDED THEN TEXT FILTER
       if (copyNavBarFiltersApply.dish !== "All Dishes")
         arrayToShowApply = arrayToShowApply.filter((e:any) => e.dishTypes.includes(copyNavBarFiltersApply.dish.toLowerCase())) // FILTER TARGET DISH
@@ -287,6 +316,13 @@ const reducer = (state = initialState, action: {type: string; payload: any}) => 
         ...state,
         navBarFilters: copyNavBarFilters,
         //toShow: arrayToShow
+      };
+    case 'SET_SETTINGS_FILTERS':
+      const copySettingsFilters: settingsFiltersI = {...state.settingsFilters}
+      copySettingsFilters[action.payload.type as keyof settingsFiltersI] = action.payload.value
+      return {
+        ...state,
+        settingsFilters: copySettingsFilters
       };
     default:
       return state

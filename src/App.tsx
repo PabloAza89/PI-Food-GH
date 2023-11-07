@@ -3,7 +3,7 @@ import css from './App.module.css';
 import './commons/globalSweetAlert2.css';
 import { checkPrevLogin } from './commons/commonsFunc';
 import { useSelector } from 'react-redux';
-import { Route, Routes, useMatch } from "react-router-dom";
+import { Route, Routes, useMatch, useLocation } from "react-router-dom";
 import Landing from "./components/Landing/Landing";
 import CardsMapper from "./components/CardsMapper/CardsMapper";
 import GoogleAuth from './components/GoogleAuth/GoogleAuth';
@@ -20,13 +20,15 @@ import MyRecipe from "./components/MyRecipe/MyRecipe";
 import About from "./components/About/About";
 import { userDataI } from './interfaces/interfaces';
 import { useDispatch } from 'react-redux';
-import { setScrollPosition,
-  fetchRecipesFromAPI, getDietsFromDB, getDishesFromDB
- } from './actions';
+import {
+  setScrollPosition, getRecipesFromDB, getDietsFromDB,
+  getDishesFromDB, applyFilters
+} from './actions';
 import $ from 'jquery';
 
 function App() {
 
+  const location = useLocation()
   const dispatch = useDispatch()
   const showHelpBG = [useMatch("/:route")?.params.route?.toLowerCase()].filter(e => e !== "about")[0]
   const landingHiddenState = useSelector((state: { landingHidden: boolean }) => state.landingHidden)
@@ -52,7 +54,7 @@ function App() {
 
     feedbackBC.onmessage = (e) => {
       if (e.data.subscribe.length > tabsArrREF.current.subscribe.length) {
-      tabsArrREF.current.subscribe = e.data.subscribe
+        tabsArrREF.current.subscribe = e.data.subscribe
       }
     }
 
@@ -137,8 +139,8 @@ function App() {
     Promise.all([
       dispatch(getDietsFromDB()),
       dispatch(getDishesFromDB()),
-      dispatch(fetchRecipesFromAPI())
-    ])
+      dispatch(getRecipesFromDB())
+    ]).then(() => dispatch(applyFilters()))
 
   },[dispatch])
 
@@ -148,7 +150,12 @@ function App() {
         className={css.wallpaperNav}
         style={{
           display: showHelpBG ? 'flex' : 'none',
-          clipPath: menuShown ? 'polygon(0% 0, 100% 0%, 100% 150px, 0 150px)' : 'polygon(0% 0, 100% 0%, 100% 100px, 0 100px)'
+          clipPath:
+            location.pathname.toLowerCase() === `/settings` ?
+            'polygon(0% 0, 100% 0%, 100% 100px, 0 100px)' :
+            menuShown ?
+            'polygon(0% 0, 100% 0%, 100% 150px, 0 150px)' :
+            'polygon(0% 0, 100% 0%, 100% 100px, 0 100px)'
         }}
       />
       <div className={css.wallpaperBody} />
@@ -183,6 +190,7 @@ function App() {
             landingHiddenState ?
             <>
               <NavBar />
+              <SettingsButton />
               <GoogleAuth
                 paginateAmount={paginateAmount}
                 setUserData={setUserData}
@@ -206,6 +214,7 @@ function App() {
                 paginateAmount={paginateAmount}
                 recipeCreatedOrEdited={recipeCreatedOrEdited}
               />
+              <SettingsButton />
               <GoogleAuth
                 paginateAmount={paginateAmount}
                 setUserData={setUserData}

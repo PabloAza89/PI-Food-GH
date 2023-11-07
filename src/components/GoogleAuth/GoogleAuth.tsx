@@ -19,6 +19,14 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
   const inHome = useMatch("/")?.pattern.path === "/" ? true : false; // "/" === Home
   const menuShown = useSelector((state: {menuShown:boolean}) => state.menuShown)
 
+  const getCurrentWidth = () => {
+    return $(`#test123`).outerWidth()! - 108 > $(`#buttonWidthHelper`).outerWidth()! ?
+    $(`#buttonWidthHelper`).outerWidth()! :
+    $(`#test123`).outerWidth()! - 108
+  }
+
+ 
+
   const login = useGoogleLogin({
     onSuccess: (codeResponse) => {
       fetch(`https://www.googleapis.com/oauth2/v3/userinfo?access_token=${codeResponse.access_token}`, {
@@ -29,9 +37,7 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
         fetch(`${process.env.REACT_APP_SV}/user`, {
           method: 'POST',
           credentials: 'include',
-          headers: {
-            'Content-type': 'application/json; charset=UTF-8',
-          },
+          headers: { 'Content-type': 'application/json; charset=UTF-8' },
           body: JSON.stringify({
             fd_tkn: codeResponse.access_token,
             overwrite: true
@@ -39,20 +45,24 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
         })
         .then((res) => res.json())
         .then((res) => {
-          
           if (res.status === 200) {
             setUserData({ email: res.email, fd_tkn: res.fd_tkn })
             dispatch(landingHidden(true))
-            localStorage.setItem('landingHidden', 'true')      
+            localStorage.setItem('landingHidden', 'true')
 
             $(`#onlyForTest`) // DISABLE CLICK/HOVER EVENT (UNDESIRABLE NAME CHANGE)
               .css("cursor", "pointer")
             $(`#buttonIn`)
               .css("pointer-events", "none")
             $(`#buttonGL`)
-              .html(`  Signed in as ${res.email}`)
+              .html(
+                paginateAmount === 45 ?
+                `  ${res.email}` :
+                `  Signed in as ${res.email}`
+              )
+
             $(`#buttonIn`)
-              .animate({ width: $(`#buttonWidthHelper`).outerWidth() }, { queue: false, easing: 'easeOutBounce', duration: 1000 })
+              .animate({ width: getCurrentWidth() }, { queue: false, easing: 'easeOutBounce', duration: 1000 })
             setTimeout(() => {
               $(`#buttonIn`)
               .stop()
@@ -153,11 +163,12 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
    useEffect(() => { // FIRST AUTO WIDTH CHECKER //
       $(`#buttonIn`)
         .css("width", "64px")
-      setButtonHelperWidth($(`#buttonWidthHelper`).outerWidth())
+      //setButtonHelperWidth($(`#buttonWidthHelper`).outerWidth()! - 50)
+      setButtonHelperWidth(getCurrentWidth())
    },[userData.email]) // HELPS WITH NEW WIDTH WHEN USER CHANGES
 
    window.onfocus = function() { // FIRED WHEN TAB IS FOCUSED, CHECK VALID USER
-    checkPrevLogin({ setUserData, userData }) 
+    checkPrevLogin({ setUserData, userData })
     if ($(`#buttonIn`).innerWidth() === 64) {
       userData.email ?
       $(`#buttonGL`).html(` ✔️`) :
@@ -170,29 +181,45 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
       if (clicked) $(this).stop()
       else {
         $(this)
-          .animate({ width: buttonHelperWidth }, { queue: false, easing: 'easeOutBounce', duration: 1000 })
+        
+          //.css("max-width", `${$('#test123').outerWidth()! - 113}px)`)
+          //.css("max-width", `387px)`)
+          //.css("max-width", "calc(100% - 113px)")
+          .animate({ width: getCurrentWidth() }, { queue: false, easing: 'easeOutBounce', duration: 1000 })
         $(`#buttonGL`)
           .html(
             userData.email ?
             `  Signed in as ${userData.email}` :
+            //`  ${userData.email}` :
             `  Sign in with Google` )
+        //$(`.test`)
+          //.css("right", "-1000px")
+          //.css("background", "red")
+          //.css("overflow", "auto")
+          //.animate( { right: 1000 }, { queue: false, easing: 'easeOutCubic', duration: 1500 })
+          // .animate({
+          //   scrollLeft: -500
+          // }, 1000, 'linear');
       }
     })
     .on( "click", function() {
       $(this)
         .stop()
-        .animate({ width: buttonHelperWidth }, { queue: false, easing: 'easeOutBounce', duration: 1000 })
+        .animate({ width: getCurrentWidth() }, { queue: false, easing: 'easeOutBounce', duration: 1000 })
       $(`#buttonGL`)
         .html(
+          userData.email && paginateAmount === 45 ?
+          `  ${userData.email}` :
           userData.email ?
           `  Signed in as ${userData.email}` :
+          //`  ${userData.email}` :
           `  Sign in with Google` )
     })
     .on("mouseleave", function() {
       if (clicked) {
         $(this)
           .stop()
-          .animate({ width: buttonHelperWidth }, { queue: false, easing: 'easeOutCubic', duration: 1000 })
+          .animate({ width: getCurrentWidth() }, { queue: false, easing: 'easeOutCubic', duration: 1000 })
       }
       else {
         $(this)
@@ -211,9 +238,42 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
   let buttonIn = document.getElementById('buttonIn')
   buttonIn && new ResizeObserver(outputsize).observe(buttonIn)
 
+  //console.log("test123", $(`#test123`)[0].clientWidth)
+  //console.log("test123", $(`#test123`))
+  //console.log("test123", $(`#test123`).outerWidth())
+  //console.log("test123", $('#test123').outerWidth()! - 113)
+  
+  useEffect(() => {
+    function handleResize() {
+      //console.log("ACCCION")      
+    }
+    
+    window.addEventListener("resize", handleResize);
+    
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      
+    }
+  })
+
+  //$(window).on("resize", (function() {
+  // $(`#testNavBarTest`).on("resize", function() {
+  //   console.log("SE REEMPLAZO")
+  // });
+
+  // var lastWidth = $(`#testNavBarTest`).width();
+
+  // $(`#testNavBarTest`).on("resize", function(){
+  //   if($(window).width()!== lastWidth){
+  //     console.log("SE REEMPLAZOAA")
+  //       lastWidth = $(`#testNavBarTest`).width();
+  //   }
+  // })
+
   return (
     <div
       className={css.background}
+      id={`test123`}
       style={{
         position: inHome ? 'absolute' : 'fixed',
         visibility: menuShown ? 'visible' : 'hidden'
@@ -227,6 +287,7 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
               `  ${userData.email}` :
               userData.email && paginateAmount === 90 ?
               `  Signed in as ${userData.email}` :
+              //`  ${userData.email}` :
               `  Sign in with Google`
             }
         </div>
@@ -239,9 +300,7 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
         onClick={() => { if (!clicked) {
           setClicked(true);
           paginateAmount === 45 ?
-          setTimeout(() => {
-            login()
-          },1000) :
+          setTimeout(() => login(), 1000) :
           login()
           $(`#onlyForTest`) // NEXT TWO DISABLE MOUSE EVENTS
             .css("cursor", "pointer")
