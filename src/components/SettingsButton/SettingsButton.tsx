@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import css from "./SettingsButtonCSS.module.css";
 import com from "../../commons/commonsCSS.module.css";
-import { Link, useNavigate, useMatch } from "react-router-dom";
+import {
+  Link, useNavigate, useLocation, useMatch
+} from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
 import { Button, FormControlLabel, Switch } from '@mui/material/';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -9,10 +11,12 @@ import { easings } from '../../commons/easingsCSS';
 import $ from 'jquery';
 import { serverStatusI } from '../../interfaces/interfaces';
 import { setServerStatusShown } from '../../actions';
+import { handleReturn } from '../../commons/commonsFunc';
 
-const SettingsButton = () =>  {
+const SettingsButton = ({ recipeCreatedOrEdited }: any) =>  {
 
   const dispatch = useDispatch()
+  const location = useLocation()
   const navigate = useNavigate();
   easings() // JQuery easings..
 
@@ -26,14 +30,18 @@ const SettingsButton = () =>  {
     <div
       className={css.background}
       style={{
-        /* position: inHome ? 'absolute' : 'fixed', */
+        position: inHome ? 'absolute' : 'fixed',
         visibility: menuShown ? 'visible' : 'hidden'
       }}
     >
       <Button
         variant="contained"
         className={css.buttonIn}
-        onClick={() => navigate("/Settings")}
+        //onClick={() => navigate("/Settings")}
+        onClick={() => handleReturn({
+          location, navigate, recipeCreatedOrEdited,
+          origin: `settings`
+        })}
       >
         <SettingsIcon className={css.iconEdit} />
       </Button>

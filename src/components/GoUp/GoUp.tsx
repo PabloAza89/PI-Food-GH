@@ -3,6 +3,8 @@ import { useSelector } from 'react-redux';
 import { Button } from '@mui/material/';
 import $ from 'jquery';
 import TurnLeftIcon from '@mui/icons-material/TurnLeft';
+import ForwardIcon from '@mui/icons-material/Forward';
+import TransitEnterexitIcon from '@mui/icons-material/TransitEnterexit';
 
 const GoUp = () =>  {
 
@@ -15,7 +17,10 @@ const GoUp = () =>  {
       className={css.button}
       style={{ display: scrollPosition >= 270 ? 'flex' : 'none' }}
     >
-      <TurnLeftIcon sx={{ fontSize: 35 }} />
+      <TransitEnterexitIcon
+        className={css.icon}
+        sx={{ fontSize: 32 }}
+      />
     </Button>
   );
 }

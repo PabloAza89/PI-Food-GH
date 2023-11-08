@@ -225,6 +225,11 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
         $(this)
           .stop()
           .animate({ width: '64px' }, { queue: false, easing: 'easeOutBounce', duration: 1000 })
+        if ($(`#buttonIn`).innerWidth() === 64) {
+          userData.email ?
+          $(`#buttonGL`).html(` ✔️`) :
+          $(`#buttonGL`).html(` ❌`)
+        }
       }
     })
 

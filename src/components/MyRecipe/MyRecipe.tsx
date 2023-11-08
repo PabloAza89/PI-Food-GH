@@ -673,6 +673,8 @@ const MyRecipe = ({
     if (recipeCreated.current) clearHandler() // RESET ALL FORM
   }
 
+  $(window).scrollTop(0)
+
   return (
     <div
       className={css.background}

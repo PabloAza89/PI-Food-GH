@@ -145,9 +145,12 @@ export const handleEdit = ({
 }
 
 export const handleReturn = ({
-  location, navigate, recipeCreatedOrEdited, inDetail
+  location, navigate, recipeCreatedOrEdited, inDetail, origin
 }: any) => {
-  if (location.pathname.toLowerCase() === `/myrecipe` && (location.state && location.state.editing) && !recipeCreatedOrEdited) {
+  console.log("location.state && location.state.editing", location.state && location.state.editing)
+  console.log("recipeCreatedOrEdited", recipeCreatedOrEdited)
+  console.log("origin", origin)
+  if (location.pathname.toLowerCase() === `/myrecipe` && !origin && (location.state && location.state.editing) && !recipeCreatedOrEdited) {
     Swal.fire({
       title: 'Do you want to cancel editing and go back ?',
       text: 'Any changes you have made gonna be lost.',
@@ -163,7 +166,7 @@ export const handleReturn = ({
       if (result.isConfirmed) navigate("/")
     })
   }
-  else if (location.pathname.toLowerCase() === `/myrecipe` && !(location.state && location.state.editing) && !recipeCreatedOrEdited) {
+  else if (location.pathname.toLowerCase() === `/myrecipe` && !origin && !(location.state && location.state.editing) && !recipeCreatedOrEdited) {
     Swal.fire({
       title: 'Do you want to cancel create a new recipe and go back ?',
       text: `Don't worry about everything you wrote, it will be saved in browser memory :)`,
@@ -178,6 +181,41 @@ export const handleReturn = ({
     .then((result) => {
       if (result.isConfirmed) navigate("/")
     })
+  }
+  else if (location.pathname.toLowerCase() === `/myrecipe` && origin === `settings` && (location.state && location.state.editing) && !recipeCreatedOrEdited) {
+    Swal.fire({
+      title: 'Do you want to cancel editing and go to setttings ?',
+      text: 'Any changes you have made gonna be lost.',
+      icon: 'info',
+      showDenyButton: true,
+      showCancelButton: false,
+      confirmButtonText: 'CANCEL EDITING',
+      denyButtonText: `CONTINUE EDITING`,
+      confirmButtonColor: '#d14141', // NEW ACTION COLOR
+      denyButtonColor: '#3085d6' // NO ACTION COLOR
+    })
+    .then((result) => {
+      if (result.isConfirmed) navigate("/Settings")
+    })
+  }
+  else if (location.pathname.toLowerCase() === `/myrecipe` && origin === `settings` && !(location.state && location.state.editing) && !recipeCreatedOrEdited) {
+    Swal.fire({
+      title: 'Do you want to cancel create a new recipe and go to settings ?',
+      text: `Don't worry about everything you wrote, it will be saved in browser memory :)`,
+      icon: 'info',
+      showDenyButton: true,
+      showCancelButton: false,
+      confirmButtonText: 'CANCEL CREATING',
+      denyButtonText: `CONTINUE CREATING`,
+      confirmButtonColor: '#d14141', // NEW ACTION COLOR
+      denyButtonColor: '#3085d6' // NO ACTION COLOR
+    })
+    .then((result) => {
+      if (result.isConfirmed) navigate("/Settings")
+    })
+  }
+  else if (origin === `settings`) {
+    navigate("/Settings")
   }
   else navigate("/")
 }

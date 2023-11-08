@@ -214,7 +214,9 @@ function App() {
                 paginateAmount={paginateAmount}
                 recipeCreatedOrEdited={recipeCreatedOrEdited}
               />
-              <SettingsButton />
+              <SettingsButton
+                recipeCreatedOrEdited={recipeCreatedOrEdited}
+              />
               <GoogleAuth
                 paginateAmount={paginateAmount}
                 setUserData={setUserData}
