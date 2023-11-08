@@ -93,6 +93,7 @@ export interface settingsFiltersI {
   showUserRecipes: boolean,
   showOnlineRecipes: boolean,
   showOfflineRecipes: boolean,
+  quantityOfflineRecipes: number
 }
 
 export interface navBarFiltersI {

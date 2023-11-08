@@ -24,7 +24,7 @@ interface initialStateI {
   showOnlineRecipes: boolean,
   showOfflineRecipes: boolean,
   settingsFilters: settingsFiltersI,
-  navBarFilters: navBarFiltersI
+  navBarFilters: navBarFiltersI,
 }
 
 const initialState: initialStateI = {
@@ -52,6 +52,8 @@ const initialState: initialStateI = {
     showUserRecipes: localStorage.getItem('showUserRecipes') !== null ? JSON.parse(localStorage.getItem('showUserRecipes')!) : true,
     showOnlineRecipes: localStorage.getItem('showOnlineRecipes') !== null ? JSON.parse(localStorage.getItem('showOnlineRecipes')!) : true,
     showOfflineRecipes: localStorage.getItem('showOfflineRecipes') !== null ? JSON.parse(localStorage.getItem('showOfflineRecipes')!) : true,
+    quantityOfflineRecipes: localStorage.getItem('quantityOfflineRecipes') !== null ? JSON.parse(localStorage.getItem('quantityOfflineRecipes')!) : 30,
+
   },
   navBarFilters: {
     text: '',

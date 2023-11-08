@@ -24,6 +24,40 @@
   border: 2px solid gray !important;
 }
 
+.accordionContainerDouble {
+  /* width: 800px !important; */
+  /* margin: 10px 10px 5px 10px; */
+  margin-left: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-right: 10px;
+  /* margin-top: 10px;
+  margin-bottom: 10px; */
+}
+
+.accordionDouble {
+  background: beige !important;
+  /* width: 800px !important; */
+  max-width: 800px !important;
+  /* border-radius: 8px !important; */
+  border: 2px solid gray !important;
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
+}
+
+.accordionDoubleUpper {
+  border-radius: 8px 8px 0px 0px !important;
+}
+
+.accordionDoubleLower {
+  border-radius: 0px 0px 8px 8px !important;
+  border-top: 0px !important;
+}
+
+.testTestTest {
+  pointer-events: none;
+}
+
 .switch {
   margin-left: 12px;
   width: 38px !important;
@@ -78,6 +112,7 @@
   /* background: red; */ /* DEV */
   margin-left: 8px;
   margin-bottom: 2px;
+  align-self: center;
 }
 
 .iconInfo {
@@ -89,6 +124,81 @@
   cursor: default !important;
   left: -10px !important;
   margin-right: -10px !important;
+  background-color: transparent !important; /* DISABLE NUMBER INPUT BG COLOR WHEN FOCUSED */
+}
+
+.numberInputRoot {
+  font-family: IBM Plex Sans, sans-serif;
+  font-weight: 400;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+  margin-left: 12px;
+}
+
+.numberInputInput {
+  font-size: 0.875rem;
+  font-family: inherit;
+  font-weight: 400;
+  height: 32px;
+  color: #212121;
+  background: #cfd8dc;
+  border: 0px solid #eeeeee;
+  box-shadow: 0px 2px 4px rgba(0,0,0, 0.05);
+  padding: 0px;
+  outline: 0;
+  min-width: 0;
+  width: 4rem;
+  text-align: center;
+}
+
+.numberInputInput:hover {
+  border-color: #42a5f5;
+}
+
+.numberInputInput:focus {
+  border-color: #42a5f5;
+  box-shadow: 0 0 0 2px #90caf9 inset;
+}
+
+.numberInputInput:focus-visible {
+  outline: 0;
+}
+
+.numberInputButton {
+  font-family: IBM Plex Sans, sans-serif;
+  font-size: 0.875rem;
+  box-sizing: border-box;
+  line-height: 1.5;
+  border: 0px solid;
+  border-color: #eeeeee;
+  background: #78909c;
+  color: #212121;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 120ms;
+}
+
+.numberInputButton:hover {
+  cursor: pointer;
+  background: #90a4ae;
+  border-color: #42a5f5;
+  color: #212121;
+}
+
+.numberInputButton:focus-visible {
+  outline: 0;
+}
+
+.increment {
+  order: 1
 }
 
 /* BREAKPOINTS */
