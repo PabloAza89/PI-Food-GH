@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/PI-Food-GH/static/css/main.c7757337.chunk.css",
-    "main.js": "/PI-Food-GH/static/js/main.4d0db3ba.chunk.js",
-    "main.js.map": "/PI-Food-GH/static/js/main.4d0db3ba.chunk.js.map",
+    "main.css": "/PI-Food-GH/static/css/main.68d829b4.chunk.css",
+    "main.js": "/PI-Food-GH/static/js/main.f8cb93ac.chunk.js",
+    "main.js.map": "/PI-Food-GH/static/js/main.f8cb93ac.chunk.js.map",
     "runtime-main.js": "/PI-Food-GH/static/js/runtime-main.d4ea50b7.js",
     "runtime-main.js.map": "/PI-Food-GH/static/js/runtime-main.d4ea50b7.js.map",
-    "static/js/2.4c47778a.chunk.js": "/PI-Food-GH/static/js/2.4c47778a.chunk.js",
-    "static/js/2.4c47778a.chunk.js.map": "/PI-Food-GH/static/js/2.4c47778a.chunk.js.map",
+    "static/js/2.a76d61ff.chunk.js": "/PI-Food-GH/static/js/2.a76d61ff.chunk.js",
+    "static/js/2.a76d61ff.chunk.js.map": "/PI-Food-GH/static/js/2.a76d61ff.chunk.js.map",
     "index.html": "/PI-Food-GH/index.html",
-    "static/css/main.c7757337.chunk.css.map": "/PI-Food-GH/static/css/main.c7757337.chunk.css.map",
-    "static/js/2.4c47778a.chunk.js.LICENSE.txt": "/PI-Food-GH/static/js/2.4c47778a.chunk.js.LICENSE.txt",
+    "static/css/main.68d829b4.chunk.css.map": "/PI-Food-GH/static/css/main.68d829b4.chunk.css.map",
+    "static/js/2.a76d61ff.chunk.js.LICENSE.txt": "/PI-Food-GH/static/js/2.a76d61ff.chunk.js.LICENSE.txt",
     "static/media/App.module.css": "/PI-Food-GH/static/media/bgImage.190c3144.webp",
     "static/media/error.efa3377b.gif": "/PI-Food-GH/static/media/error.efa3377b.gif",
     "static/media/googleLogo.d7f092af.svg": "/PI-Food-GH/static/media/googleLogo.d7f092af.svg",
@@ -24,8 +24,8 @@
   },
   "entrypoints": [
     "static/js/runtime-main.d4ea50b7.js",
-    "static/js/2.4c47778a.chunk.js",
-    "static/css/main.c7757337.chunk.css",
-    "static/js/main.4d0db3ba.chunk.js"
+    "static/js/2.a76d61ff.chunk.js",
+    "static/css/main.68d829b4.chunk.css",
+    "static/js/main.f8cb93ac.chunk.js"
   ]
 }
