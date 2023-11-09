@@ -29,8 +29,13 @@ const Settings = () =>  {
 
   const settingsFilters = useSelector((state: { settingsFilters:settingsFiltersI }) => state.settingsFilters)
 
+  const toShow = useSelector((state: { toShow:any }) => state.toShow)
+
+  console.log("toShow", toShow)
+
   const [ expandStatus, setExpandStatus ] = useState(false)
   const [ expandUser, setExpandUser ] = useState(false)
+  const [ expandUserNumber, setExpandUserNumber ] = useState(false)
   const [ expandOnline, setExpandOnline ] = useState(false)
   const [ expandOnlineNumber, setExpandOnlineNumber ] = useState(false)
   const [ expandOffline, setExpandOffline ] = useState(false)
@@ -57,13 +62,167 @@ const Settings = () =>  {
         localStorage.setItem('showOfflineRecipes', JSON.stringify(!settingsFilters.showOfflineRecipes))
         dispatch(applyFilters())
       break;
-      // case 'quantityOfflineRecipes':
-      //   dispatch(setSettingsFilters({ type: type, value: !settingsFilters.showOfflineRecipes }))
-      //   localStorage.setItem('showOfflineRecipes', JSON.stringify(!settingsFilters.showOfflineRecipes))
-      //   dispatch(applyFilters())
-      // break;
     }
   }
+
+  const quantityUserRecipesHandler = ({ type, value }: any) => {
+    switch (type) {
+      case 'decrementButton':
+        dispatch(setSettingsFilters({ type: `quantityUserRecipes`, value: settingsFilters.quantityUserRecipes - 1 }))
+        localStorage.setItem('quantityUserRecipes', JSON.stringify(settingsFilters.quantityUserRecipes - 1))
+      break;
+      case 'incrementButton':
+        dispatch(setSettingsFilters({ type: `quantityUserRecipes`, value: settingsFilters.quantityUserRecipes + 1 }))
+        localStorage.setItem('quantityUserRecipes', JSON.stringify(settingsFilters.quantityUserRecipes + 1))
+      break;
+      case 'directChange':
+        if (parseInt(value, 10) > 100) {
+          dispatch(setSettingsFilters({ type: `quantityUserRecipes`, value: 100 }))
+          localStorage.setItem('quantityUserRecipes', JSON.stringify(100))
+        }
+        else if (parseInt(value, 10) >= 0 && parseInt(value, 10) <= 100) {
+          dispatch(setSettingsFilters({ type: `quantityUserRecipes`, value: parseInt(value, 10) }))
+          localStorage.setItem('quantityUserRecipes', JSON.stringify(parseInt(value, 10)))
+        }
+    }
+  }
+
+  const quantityOnlineRecipesHandler = ({ type, value }: any) => {
+    switch (type) {
+      case 'decrementButton':
+        dispatch(setSettingsFilters({ type: `quantityOnlineRecipes`, value: settingsFilters.quantityOnlineRecipes - 1 }))
+        localStorage.setItem('quantityOnlineRecipes', JSON.stringify(settingsFilters.quantityOnlineRecipes - 1))
+      break;
+      case 'incrementButton':
+        dispatch(setSettingsFilters({ type: `quantityOnlineRecipes`, value: settingsFilters.quantityOnlineRecipes + 1 }))
+        localStorage.setItem('quantityOnlineRecipes', JSON.stringify(settingsFilters.quantityOnlineRecipes + 1))
+      break;
+      case 'directChange':
+        if (parseInt(value, 10) > 100) {
+          dispatch(setSettingsFilters({ type: `quantityOnlineRecipes`, value: 100 }))
+          localStorage.setItem('quantityOnlineRecipes', JSON.stringify(100))
+        }
+        else if (parseInt(value, 10) >= 0 && parseInt(value, 10) <= 100) {
+          dispatch(setSettingsFilters({ type: `quantityOnlineRecipes`, value: parseInt(value, 10) }))
+          localStorage.setItem('quantityOnlineRecipes', JSON.stringify(parseInt(value, 10)))
+        }
+    }
+  }
+
+  const quantityOfflineRecipesHandler = ({ type, value }: any) => {
+    switch (type) {
+      case 'decrementButton':
+        dispatch(setSettingsFilters({ type: `quantityOfflineRecipes`, value: settingsFilters.quantityOfflineRecipes - 1 }))
+        localStorage.setItem('quantityOfflineRecipes', JSON.stringify(settingsFilters.quantityOfflineRecipes - 1))
+      break;
+      case 'incrementButton':
+        dispatch(setSettingsFilters({ type: `quantityOfflineRecipes`, value: settingsFilters.quantityOfflineRecipes + 1 }))
+        localStorage.setItem('quantityOfflineRecipes', JSON.stringify(settingsFilters.quantityOfflineRecipes + 1))
+      break;
+      case 'directChange':
+        if (parseInt(value, 10) > 100) {
+          dispatch(setSettingsFilters({ type: `quantityOfflineRecipes`, value: 100 }))
+          localStorage.setItem('quantityOfflineRecipes', JSON.stringify(100))
+        }
+        else if (parseInt(value, 10) >= 0 && parseInt(value, 10) <= 100) {
+          dispatch(setSettingsFilters({ type: `quantityOfflineRecipes`, value: parseInt(value, 10) }))
+          localStorage.setItem('quantityOfflineRecipes', JSON.stringify(parseInt(value, 10)))
+        }
+    }
+  }
+
+  $('.numberInputOnline').on('keypress', function (event) {
+    if (!RegExp(/^[0-9]$/g).test(event.key)) {
+      event.preventDefault();
+      return false;
+    }
+  })
+
+  $('.numberInputOffline').on('keypress', function (event) {
+    if (!RegExp(/^[0-9]$/g).test(event.key)) {
+      event.preventDefault();
+      return false;
+    }
+  })
+
+  $('.numberInputUser').on('keypress', function (event) {
+    if (!RegExp(/^[0-9]$/g).test(event.key)) {
+      event.preventDefault();
+      return false;
+    }
+  })
+
+  useEffect(() => {
+    if (settingsFilters.quantityUserRecipes === 0) {
+      $('#decrementUser')
+        .css("background", "rgba(0, 0, 0, 0.2)")
+        .css("color", "rgba(0, 0, 0, 0.2)")
+        .css("cursor", "default")
+    }
+    else if (settingsFilters.quantityUserRecipes === 100) {
+      $('#incrementUser')
+        .css("background", "rgba(0, 0, 0, 0.2)")
+        .css("color", "rgba(0, 0, 0, 0.2)")
+        .css("cursor", "default")
+    }
+    else {
+      $('#incrementUser, #decrementUser')
+        .css("background", "#78909c")
+        .css("color", "#212121")
+        .css("cursor", "pointer")
+    }
+  },[settingsFilters.quantityUserRecipes])
+
+  useEffect(() => {
+    if (settingsFilters.quantityOnlineRecipes === 0) {
+      $('#decrementOnline')
+        .css("background", "rgba(0, 0, 0, 0.2)")
+        .css("color", "rgba(0, 0, 0, 0.2)")
+        .css("cursor", "default")
+    }
+    else if (settingsFilters.quantityOnlineRecipes === 100) {
+      $('#incrementOnline')
+        .css("background", "rgba(0, 0, 0, 0.2)")
+        .css("color", "rgba(0, 0, 0, 0.2)")
+        .css("cursor", "default")
+    }
+    else {
+      $('#incrementOnline, #decrementOnline')
+        .css("background", "#78909c")
+        .css("color", "#212121")
+        .css("cursor", "pointer")
+    }
+  },[settingsFilters.quantityOnlineRecipes])
+
+  useEffect(() => {
+    if (settingsFilters.quantityOfflineRecipes === 0) {
+      $('#decrementOffline')
+        .css("background", "rgba(0, 0, 0, 0.2)")
+        .css("color", "rgba(0, 0, 0, 0.2)")
+        .css("cursor", "default")
+    }
+    else if (settingsFilters.quantityOfflineRecipes === 100) {
+      $('#incrementOffline')
+        .css("background", "rgba(0, 0, 0, 0.2)")
+        .css("color", "rgba(0, 0, 0, 0.2)")
+        .css("cursor", "default")
+    }
+    else {
+      $('#incrementOffline, #decrementOffline')
+        .css("background", "#78909c")
+        .css("color", "#212121")
+        .css("cursor", "pointer")
+    }
+  },[settingsFilters.quantityOfflineRecipes])
+
+  useEffect(() => { // FIRED WHEN WINDOW IS CLOSED OR REFRESH
+    const onBeforeUnloadd = () => {
+      console.log("al final")
+    };
+    window.addEventListener("beforeunload", onBeforeUnloadd);
+    return () => window.removeEventListener("beforeunload", onBeforeUnloadd);
+    // eslint-disable-next-line
+  },[])
 
   return (
     <div className={css.background}>
@@ -104,17 +263,29 @@ const Settings = () =>  {
           </AccordionDetails>
         </Accordion>
       </div>
-      <div className={css.accordionContainer}>
+
+      <div className={css.accordionContainerDouble}>
         <Accordion
           expanded={expandUser}
-          className={css.accordion}
+          //className={css.accordion}
+          className={`${css.accordionDouble} ${css.accordionDoubleUpper}`}
         >
           <AccordionSummary
             className={css.defaultCursor}
+            // expandIcon={
+            //   <ErrorOutlineIcon
+            //     className={css.iconInfo}
+            //     onClick={(() => setExpandUser(!expandUser))}
+            //   />
+            // }
             expandIcon={
               <ErrorOutlineIcon
                 className={css.iconInfo}
-                onClick={(() => setExpandUser(!expandUser))}
+                //onClick={(() => setExpandOnline(!expandOnline))}
+                onClick={(() => {
+                  setExpandUser(!expandUser)
+                  setExpandUserNumber(false)
+                })}
               />
             }
           >
@@ -140,7 +311,78 @@ const Settings = () =>  {
             </div>
           </AccordionDetails>
         </Accordion>
+
+        <Accordion
+          expanded={expandUserNumber}
+          className={`${css.accordionDouble} ${css.accordionDoubleLower}`}
+        >
+          <AccordionSummary
+            className={css.defaultCursor}
+            expandIcon={
+              <ErrorOutlineIcon
+                className={css.iconInfo}
+                onClick={(() => {
+                  setExpandUserNumber(!expandUserNumber);
+                  setExpandUser(false);
+                })}
+              />
+            }
+          >
+            <BaseNumberInput
+              //defaultValue={2}
+              className={`numberInputUser`}
+              value={settingsFilters.quantityUserRecipes}
+              // ↓↓ direct input handler ↓↓
+              onInputChange={(e) => quantityUserRecipesHandler({ type: `directChange`, value: (e.target as HTMLInputElement).value })}
+              // ↓↓ - + buttons handler ↓↓
+              onChange={(e) => quantityUserRecipesHandler({ type: (e.target as HTMLInputElement).value })}
+              min={0}
+              max={100}
+              slotProps={{
+                root: { className: css.numberInputRoot },
+                input: { className: css.numberInputInput },
+                decrementButton: {
+                  value: `decrementButton`,
+                  /* className: css.numberInputButton, */
+                  className: css.numberInputButton,
+                  id: `decrementUser`,
+                  children:
+                    <RemoveIcon
+                      className={css.incrementButtonIcon}
+                      fontSize="small"
+                    />
+                },
+                incrementButton: {
+                  value: `incrementButton`,
+                  className: `${css.numberInputButton} ${css.increment}`,
+                  id: `incrementUser`,
+                  children:
+                    <AddIcon
+                      className={css.incrementButtonIcon}
+                      fontSize="small"
+                    />
+                }
+              }}
+            />
+            <div className={css.text}>Quantity of User Recipes</div>
+          </AccordionSummary>
+          <AccordionDetails
+            className={com.noSelect}
+          >
+            <div className={css.text}>
+              Quantity of User Recipes required to the Server as long as the server is Online (min: 0, max: 100, default: 30).
+            </div>
+            <div className={css.text}>
+              There are no rate-limits on this type of requests to the Online Database.
+            </div>
+          </AccordionDetails>
+        </Accordion>
+
+
+
+
       </div>
+
       <div className={css.accordionContainerDouble}>
         <Accordion
           expanded={expandOnline}
@@ -199,19 +441,38 @@ const Settings = () =>  {
             }
           >
             <BaseNumberInput
-              defaultValue={2}
+              //defaultValue={2}
+              className={`numberInputOnline`}
+              value={settingsFilters.quantityOnlineRecipes}
+              // ↓↓ direct input handler ↓↓
+              onInputChange={(e) => quantityOnlineRecipesHandler({ type: `directChange`, value: (e.target as HTMLInputElement).value })}
+              // ↓↓ - + buttons handler ↓↓
+              onChange={(e) => quantityOnlineRecipesHandler({ type: (e.target as HTMLInputElement).value })}
               min={0}
-              max={3}
+              max={100}
               slotProps={{
                 root: { className: css.numberInputRoot },
                 input: { className: css.numberInputInput },
                 decrementButton: {
+                  value: `decrementButton`,
+                  /* className: css.numberInputButton, */
                   className: css.numberInputButton,
-                  children: <RemoveIcon fontSize="small" />
+                  id: `decrementOnline`,
+                  children:
+                    <RemoveIcon
+                      className={css.incrementButtonIcon}
+                      fontSize="small"
+                    />
                 },
                 incrementButton: {
+                  value: `incrementButton`,
                   className: `${css.numberInputButton} ${css.increment}`,
-                  children: <AddIcon fontSize="small" />
+                  id: `incrementOnline`,
+                  children:
+                    <AddIcon
+                      className={css.incrementButtonIcon}
+                      fontSize="small"
+                    />
                 }
               }}
             />
@@ -221,7 +482,7 @@ const Settings = () =>  {
             className={com.noSelect}
           >
             <div className={css.text}>
-              Quantity of recipes required to the Server as long as the server is Online (min: 0, max: 10).
+              Quantity of recipes required to the Server as long as the server is Online (min: 0, max: 100, default: 30).
             </div>
             <div className={css.text}>
               Note that the greater the number of requests, the sonner get rate-limited by third-part Online Database Recipes.
@@ -285,65 +546,38 @@ const Settings = () =>  {
             }
           >
             <BaseNumberInput
-              //defaultValue={10}
-              //value={settingsFilters.quantityOfflineRecipes}
-              defaultValue={settingsFilters.quantityOfflineRecipes}
-              //onChange={(e) => {console.log("este", e.target.value)}}
-              //onChange={(e) => {console.log("este", e)}}
-              //onChange={(e) => {console.log("este", e)}}
-              //onChange={(e) => {console.log("este", e)}}
-              //onChange={(e) => {console.log("este", e.target)}}
-              //onInputChange={(e) => {console.log("este", e)}}
-              //onClick={(e) => {console.log("este", e.target)}}
-              //onClick={(e) => {console.log("este", e.target.id)}}
-              //onClick={(e) => { if (e.target.id) console.log(e.target.id) }}
-              onClick={(e) => { console.log(e.target.value) }}
-              
-              //style={button: `${css.numberInputButton} ${css.increment}`}
-              
+              className={`numberInputOffline`}
+              value={settingsFilters.quantityOfflineRecipes}
+              // ↓↓ direct input handler ↓↓
+              onInputChange={(e) => quantityOfflineRecipesHandler({ type: `directChange`, value: (e.target as HTMLInputElement).value })}
+              // ↓↓ - + buttons handler ↓↓
+              onChange={(e) => quantityOfflineRecipesHandler({ type: (e.target as HTMLInputElement).value })}
               min={0}
               max={100}
-              slots={{
-                //incrementButton: {onClick={{ () => console.log("INCREMENT") }}},
-                //decrementButton: StyledButton,
-                //incrementButton: css.numberInputButton/* } ${css.increment */}
-              }}
-              //getDecrementButtonProps={(e) => console.log(e)}
               slotProps={{
                 root: { className: css.numberInputRoot },
                 input: { className: css.numberInputInput },
                 decrementButton: {
                   value: `decrementButton`,
-                  id: `decrementButton`,
                   className: css.numberInputButton,
+                  id: `decrementOffline`,
                   children:
                     <RemoveIcon
-                      id={`decrementButton`}
+                      className={css.incrementButtonIcon}
                       fontSize="small"
-                      //onClick={() => console.log("decrementButton")}
                     />
                 },
                 incrementButton: {
-                  //() => {console.log("INCREMENT")},
-                  //onClick: function() {console.log("INCREMENT BUTTON")},
-                  //function() {console.log("INCREMENT BUTTON")},
-                  //function: function() {console.log("INCREMENT BUTTON")},
-                  id: `incrementButton`,
                   value: `incrementButton`,
-                  //onclick: console.log("INCREMENT BUTTON"),
                   className: `${css.numberInputButton} ${css.increment}`,
-                  //onClick: () => console.log("INCREMENT BUTTON"),
+                  id: `incrementOffline`,
                   children:
                     <AddIcon
-                      id={`incrementButtonIcon`}
-                      className={css.testTestTest}
+                      className={css.incrementButtonIcon}
                       fontSize="small"
-                      //onClick={() => console.log("incrementButton")}
                     />
-                } // incrementButton: function() {console.log("INCREMENT BUTTON")}
-                
-              }
-            }
+                }
+              }}
             />
             <div className={css.text}>Quantity of Offline Database Recipes</div>
           </AccordionSummary>
@@ -351,7 +585,7 @@ const Settings = () =>  {
             className={com.noSelect}
           >
             <div className={css.text}>
-              Quantity of recipes required as long as the server is Offline (min: 0, max: 100).
+              Quantity of recipes required as long as the server is Offline (min: 0, max: 100, default: 30).
             </div>
             <div className={css.text}>
               There are no rate-limits on this type of requests to the Offline Database.

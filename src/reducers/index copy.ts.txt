@@ -50,7 +50,6 @@ const initialState: initialStateI = {
   settingsFilters: {
     showStatus: localStorage.getItem('showStatus') !== null ? JSON.parse(localStorage.getItem('showStatus')!) : true,
     showUserRecipes: localStorage.getItem('showUserRecipes') !== null ? JSON.parse(localStorage.getItem('showUserRecipes')!) : true,
-    quantityUserRecipes: localStorage.getItem('quantityUserRecipes') !== null ? JSON.parse(localStorage.getItem('quantityUserRecipes')!) : 30,
     showOnlineRecipes: localStorage.getItem('showOnlineRecipes') !== null ? JSON.parse(localStorage.getItem('showOnlineRecipes')!) : true,
     quantityOnlineRecipes: localStorage.getItem('quantityOnlineRecipes') !== null ? JSON.parse(localStorage.getItem('quantityOnlineRecipes')!) : 30,
     showOfflineRecipes: localStorage.getItem('showOfflineRecipes') !== null ? JSON.parse(localStorage.getItem('showOfflineRecipes')!) : true,
@@ -67,19 +66,14 @@ const reducer = (state = initialState, action: {type: string; payload: any}) => 
   switch (action.type) {
     case 'FETCH_RECIPES':
       const copyServerStatus = {...state.serverStatus}
-      const copysettingsFiltersFetch: settingsFiltersI = {...state.settingsFilters}
       copyServerStatus.online = action.payload.ok || action.payload.ok === false ? true : false
       copyServerStatus.validKey = action.payload.ok ? true : false
       copyServerStatus.try = action.payload.ok || action.payload.ok === false ? action.payload.try : 1
       let targetArray:any = []
 
       if (action.payload.ok === true) targetArray = action.payload.message
-      else if (action.payload.ok === false) {
-        targetArray = action.payload.message.concat(toAvoidKey.slice(0, copysettingsFiltersFetch.quantityOfflineRecipes))
-      }
-      else {
-        targetArray = toAvoidKey.slice(0, copysettingsFiltersFetch.quantityOfflineRecipes)
-      }
+      else if (action.payload.ok === false) targetArray = action.payload.message.concat(toAvoidKey)
+      else targetArray = toAvoidKey
 
       let parsedArr: recipesI[] = []
       targetArray && targetArray.map((e:any) => parsedArr.push(
@@ -200,11 +194,6 @@ const reducer = (state = initialState, action: {type: string; payload: any}) => 
       const copysettingsFiltersApply: settingsFiltersI = {...state.settingsFilters}
       const copyAllRecipesApply: recipesI[] = [...state.allRecipes]
       let arrayToShowApply: recipesI[] = []
-
-      //if (!copyserverStatusApply.validKey) arrayToShowApply = copyAllRecipesApply.slice(0, copysettingsFiltersApply.quantityOfflineRecipes)
-      //if (copyserverStatusApply.validKey) arrayToShowApply = copyAllRecipesApply
-
-      //if (copyserverStatusApply.online && copyserverStatusApply.validKey) arrayToShowApply = copyAllRecipesApply.slice(0, copysettingsFiltersApply.quantityOnlineRecipes)
 
       if (copysettingsFiltersApply.showUserRecipes) arrayToShowApply = copyAllRecipesApply
       if (!copysettingsFiltersApply.showUserRecipes) arrayToShowApply = copyAllRecipesApply.filter(e => e.userRecipe !== true)

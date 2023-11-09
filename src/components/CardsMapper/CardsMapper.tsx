@@ -53,6 +53,7 @@ const CardsMapper = ({ setUserData, paginateAmount, userData }: CardsMapperI)  =
   )
 
   useEffect(() => { // fetch all recipes
+    console.log("EJECUTADO EJECUTADO EJECUTADO")
     Promise.all([
       dispatch(getDietsFromDB()),
       dispatch(getDishesFromDB()),

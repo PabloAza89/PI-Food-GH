@@ -673,7 +673,9 @@ const MyRecipe = ({
     if (recipeCreated.current) clearHandler() // RESET ALL FORM
   }
 
-  $(window).scrollTop(0)
+  useEffect(() => {
+    $(window).scrollTop(0)
+  },[])
 
   return (
     <div
@@ -1064,7 +1066,7 @@ const MyRecipe = ({
                     id={`${index}`}
                     className={css.buttonNew}
                     sx={{ background: 'green' }}
-                    onClick={(e) => { handlerAddInstructions({ index: parseInt((e.target as HTMLInputElement).id, 10 )}) }}
+                    onClick={(e) => handlerAddInstructions({ index: parseInt((e.target as HTMLInputElement).id, 10 )})}
                   >
                   </Button>
                 </div>

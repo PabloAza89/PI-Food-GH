@@ -89,9 +89,12 @@ export interface paginateAmountI {
 }
 
 export interface settingsFiltersI {
+  [action: string]: any,
   showStatus: boolean,
   showUserRecipes: boolean,
+  quantityUserRecipes: number,
   showOnlineRecipes: boolean,
+  quantityOnlineRecipes: number,
   showOfflineRecipes: boolean,
   quantityOfflineRecipes: number
 }

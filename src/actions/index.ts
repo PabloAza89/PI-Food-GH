@@ -1,7 +1,16 @@
+import store from '../store/store'
+
 export function getRecipesFromDB() {
   return async function(dispatch: any) {
     return (
-      fetch(`${process.env.REACT_APP_SV}/recipes`)
+      fetch(`${process.env.REACT_APP_SV}/recipes`, {
+        method: 'POST', // POST AND NO "GET" BECAUSE NOT BODY ALLOWED ON GET..
+        headers: { 'Content-type': 'application/json; charset=UTF-8' },
+        body: JSON.stringify({
+          amountOnline: store.getState().settingsFilters.quantityOnlineRecipes,
+          amountOffline: store.getState().settingsFilters.quantityUserRecipes
+        })
+      })
       .then(resp => resp.json())
       .then(data => dispatch({type: 'FETCH_RECIPES', payload: data}))
       .catch(error => dispatch({type: 'FETCH_RECIPES', payload: error}))
