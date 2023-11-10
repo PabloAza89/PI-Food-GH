@@ -8,7 +8,12 @@
     <h3 style="display: inline-block">○ What's Foodify ?</h3>
   </ul>
 </div>
-<ul><summary>Foodify is a responsive web App that map 3 type of recipes: User recipes, 3rd-Part Online Recipes & a copy of 3rd-Part Recipes (Offline).</summary></ul>
+<ul>
+  <summary>
+    Foodify is a responsive Web App that displays food recipes.<br />
+    The App map 3 type of recipes: User recipes, 3rd-Part Online Recipes & a copy of 3rd-Part Recipes (Offline).
+  </summary>
+</ul>
 <div id="user-content-toc" align="left">
   <ul>
     <h3 style="display: inline-block">○ Where can I test the app ?</h3>
@@ -20,7 +25,60 @@
     <h3 style="display: inline-block">○ What functions are implemented on ?</h3>
   </ul>
 </div>
-<ul><summary>It's implemented  CRUD to get a persistent storage (Create, Read, Update & Delete).</summary></ul>
+<ul>
+  <summary>
+    It's implemented  CRUD to get a persistent storage (Create, Read, Update & Delete).
+  </summary>
+  <summary>
+    When creating a recipe, there is an algorithm cheking out bad words in form (available on English & Spanish).
+  </summary>
+  <summary>
+    Login with Google (use of httpOnly cookies)
+  </summary>
+  <summary>
+    A complete Settings Filter that can:
+      <ul>
+        <summary>
+          Enable/Disable user recipes.
+          Select quantity of user recipes
+        </summary>
+        <summary>
+          Enable/Disable online recipes.
+          Select quantity of online recipes
+        </summary>
+        <summary>
+          Enable/Disable offline recipes.
+          Select quantity of offline recipes
+        </summary>
+      </ul>
+  </summary>
+  <summary>
+    A complete cumulative Navbar Filter that works in this order:
+      <ul>
+        <summary>
+          Filter by name
+        </summary>
+        <summary>
+          Filter by diet type
+        </summary>
+        <summary>
+          Filter by dish type
+        </summary>
+        <summary>
+          Order by health or alphabetical
+        </summary>
+      </ul>
+  </summary>
+  <summary>
+    Button "Server Status" that show the current status of the server.
+  </summary>
+</ul>
+<div id="user-content-toc" align="left">
+  <ul>
+    <h3 style="display: inline-block">○ Where can I see the running server ?</h3>
+  </ul>
+</div>
+<ul><summary>https://glitch.com/edit/#!/freckle-lavish-tellurium?path=index.js</summary></ul>
 <div id="user-content-toc" align="left">
   <ul>
     <h3 style="display: inline-block">○ Connect with me:</h3>
@@ -40,7 +98,7 @@
 </div>
 <ul>
   <summary>
-    <a href="www.typescriptlang.org/" style="text-decoration: none; &hover: {text-decoration: none}">
+    <a href="https://typescriptlang.org/" style="text-decoration: none; &hover: {text-decoration: none}">
       <img align="center" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/typescript/typescript-original.svg" alt="typescript" width="40" height="40"/>
     </a>
      Typescript
@@ -80,7 +138,7 @@
 </ul>
 <ul>
   <summary>
-    <a href="https://www.postgresql.org" style="text-decoration: none; &hover: {text-decoration: none}">
+    <a href="https://postgresql.org" style="text-decoration: none; &hover: {text-decoration: none}">
       <img align="center" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/postgresql/postgresql-original-wordmark.svg" alt="postgresql" width="40" height="40"/>
     </a>
      Postgresql
@@ -102,5 +160,3 @@
      ExpressJS
   </summary>
 </ul>
-
-
