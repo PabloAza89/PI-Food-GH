@@ -52,7 +52,7 @@ const initialState: initialStateI = {
     showUserRecipes: localStorage.getItem('showUserRecipes') !== null ? JSON.parse(localStorage.getItem('showUserRecipes')!) : true,
     quantityUserRecipes: localStorage.getItem('quantityUserRecipes') !== null ? JSON.parse(localStorage.getItem('quantityUserRecipes')!) : 30,
     showOnlineRecipes: localStorage.getItem('showOnlineRecipes') !== null ? JSON.parse(localStorage.getItem('showOnlineRecipes')!) : true,
-    quantityOnlineRecipes: localStorage.getItem('quantityOnlineRecipes') !== null ? JSON.parse(localStorage.getItem('quantityOnlineRecipes')!) : 30,
+    quantityOnlineRecipes: localStorage.getItem('quantityOnlineRecipes') !== null ? JSON.parse(localStorage.getItem('quantityOnlineRecipes')!) : 15,
     showOfflineRecipes: localStorage.getItem('showOfflineRecipes') !== null ? JSON.parse(localStorage.getItem('showOfflineRecipes')!) : true,
     quantityOfflineRecipes: localStorage.getItem('quantityOfflineRecipes') !== null ? JSON.parse(localStorage.getItem('quantityOfflineRecipes')!) : 30
   },

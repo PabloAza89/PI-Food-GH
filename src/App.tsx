@@ -22,8 +22,10 @@ import { userDataI } from './interfaces/interfaces';
 import { useDispatch } from 'react-redux';
 import {
   setScrollPosition, getRecipesFromDB, getDietsFromDB,
-  getDishesFromDB, applyFilters
+  getDishesFromDB, applyFilters, setSettingsFilters,
+  setIndexChoosen, setTabChoosen
 } from './actions';
+import { settingsFiltersI, SFTypeNumberI, SFTypeBooleanI } from './interfaces/interfaces';
 import $ from 'jquery';
 
 function App() {
@@ -32,6 +34,7 @@ function App() {
   const dispatch = useDispatch()
   const showHelpBG = [useMatch("/:route")?.params.route?.toLowerCase()].filter(e => e !== "about")[0]
   const landingHiddenState = useSelector((state: { landingHidden: boolean }) => state.landingHidden)
+  const settingsFilters = useSelector((state: { settingsFilters:settingsFiltersI }) => state.settingsFilters)
   const menuShown = useSelector((state: {menuShown:boolean}) => state.menuShown)
 
   const [ userData, setUserData ] = useState<userDataI>({
@@ -100,9 +103,79 @@ function App() {
     // eslint-disable-next-line
   },[])
 
-  window.onfocus = function() { // FIRED WHEN TAB IS FOCUSED, CHECK VALID USER
-    checkPrevLogin({ setUserData, userData })
-  }
+  const hasChanged = useRef<boolean>(false)
+
+  useEffect(() => { // FIRED ONLY WHEN TAB IS FOCUSED, CHECK VALID USER
+
+    const onFocusFunc = () => {
+      checkPrevLogin({ setUserData, userData })
+
+      let showStatus: SFTypeBooleanI = {
+        name: `showStatus`,
+        value: localStorage.getItem('showStatus') !== null ? JSON.parse(localStorage.getItem('showStatus')!) : true
+      }
+      let showUserRecipes: SFTypeBooleanI = {
+        name: `showUserRecipes`,
+        value: localStorage.getItem('showUserRecipes') !== null ? JSON.parse(localStorage.getItem('showUserRecipes')!) : true
+      }
+      let quantityUserRecipes: SFTypeNumberI = {
+        name: `quantityUserRecipes`,
+        value: localStorage.getItem('quantityUserRecipes') !== null ? JSON.parse(localStorage.getItem('quantityUserRecipes')!) : 30
+      }
+      let showOnlineRecipes: SFTypeBooleanI = {
+        name: `showOnlineRecipes`,
+        value: localStorage.getItem('showOnlineRecipes') !== null ? JSON.parse(localStorage.getItem('showOnlineRecipes')!) : true
+      }
+      let quantityOnlineRecipes: SFTypeNumberI = {
+        name: `quantityOnlineRecipes`,
+        value: localStorage.getItem('quantityOnlineRecipes') !== null ? JSON.parse(localStorage.getItem('quantityOnlineRecipes')!) : 15
+      }
+      let showOfflineRecipes: SFTypeBooleanI = {
+        name: `showOfflineRecipes`,
+        value:localStorage.getItem('showOfflineRecipes') !== null ? JSON.parse(localStorage.getItem('showOfflineRecipes')!) : true
+      }
+      let quantityOfflineRecipes: SFTypeNumberI = {
+        name: `quantityOfflineRecipes`,
+        value: localStorage.getItem('quantityOfflineRecipes') !== null ? JSON.parse(localStorage.getItem('quantityOfflineRecipes')!) : 30
+      }
+
+      let allFromLS = [
+        showStatus, showUserRecipes, quantityUserRecipes, showOnlineRecipes,
+        quantityOnlineRecipes, showOfflineRecipes, quantityOfflineRecipes
+      ]
+
+      let allFromRedux = [
+        settingsFilters.showStatus, settingsFilters.showUserRecipes, settingsFilters.quantityUserRecipes,
+        settingsFilters.showOnlineRecipes, settingsFilters.quantityOnlineRecipes,
+        settingsFilters.showOfflineRecipes, settingsFilters.quantityOfflineRecipes
+      ]
+
+      Promise.all([
+        allFromLS.forEach((e, index) => {
+          if (e.value !== allFromRedux[index]) {
+            dispatch(setSettingsFilters({ type: e.name, value: e.value }))
+            hasChanged.current = true
+            console.log("focus has Changed")
+          }
+        })
+      ])
+      .then(() => {
+        if (hasChanged.current) {
+          Promise.all([
+            dispatch(setIndexChoosen(0)),
+            dispatch(setTabChoosen(0)),
+            dispatch(getDietsFromDB()),
+            dispatch(getDishesFromDB()),
+            dispatch(getRecipesFromDB())
+          ])
+          .then(() => dispatch(applyFilters()))
+          .then(() => hasChanged.current = false)
+        }
+      })
+    };
+    window.addEventListener("focus", onFocusFunc);
+    return () => window.removeEventListener("focus", onFocusFunc);
+  })
 
   let { width, height } = window.screen
   let orientation = window.matchMedia("(orientation: portrait)").matches
@@ -110,11 +183,6 @@ function App() {
 
   useEffect(() => {
     function handleResize() {
-
-      // if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-      //   console.log("MOBILE")
-      // } else console.log("NO MOBILE")
-
       let { width, height } = window.screen
       let orientation = window.matchMedia("(orientation: portrait)").matches
       if ((width < 425 && orientation) || (height < 425 && !orientation)) setPaginateAmount(45)

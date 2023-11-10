@@ -482,7 +482,7 @@ const Settings = () =>  {
             className={com.noSelect}
           >
             <div className={css.text}>
-              Quantity of recipes required to the Server as long as the server is Online (min: 0, max: 100, default: 30).
+              Quantity of recipes required to the Server as long as the server is Online (min: 0, max: 100, default: 15).
             </div>
             <div className={css.text}>
               Note that the greater the number of requests, the sonner get rate-limited by third-part Online Database Recipes.

@@ -3,7 +3,9 @@ import css from './CardsMapperCSS.module.css';
 import com from "../../commons/commonsCSS.module.css";
 import Card from '../Card/Card';
 import { useSelector, useDispatch } from 'react-redux';
-import { recipesI, userDataI, paginateAmountI  } from '../../interfaces/interfaces';
+import {
+  recipesI, userDataI, paginateAmountI
+} from '../../interfaces/interfaces';
 import {
   getRecipesFromDB, getDietsFromDB,
   getDishesFromDB, applyFilters
@@ -83,6 +85,7 @@ const CardsMapper = ({ setUserData, paginateAmount, userData }: CardsMapperI)  =
       )}
     </div>) :
     allRecipes[0] !== undefined && toShow[0] === undefined ?
+    //toShow[0] === undefined ?
     (<div>
       <div className={`${css.notFoundOrLoading} ${com.noSelect}`}>No recipe was found !</div>
     </div>) :

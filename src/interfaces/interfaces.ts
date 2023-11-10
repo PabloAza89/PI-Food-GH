@@ -106,3 +106,13 @@ export interface navBarFiltersI {
   sortHealth: string,
   sortAlpha: string
 }
+
+export interface SFTypeNumberI { // Settings Filter
+  name: string,
+  value: number
+}
+
+export interface SFTypeBooleanI { // Settings Filter
+  name: string,
+  value: boolean
+}
