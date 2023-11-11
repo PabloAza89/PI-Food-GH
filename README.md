@@ -98,65 +98,66 @@
 </div>
 <ul>
   <summary>
-    <a href="https://typescriptlang.org/" style="text-decoration: none; &hover: {text-decoration: none}">
+    <a href="https://typescriptlang.org/">
       <img align="center" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/typescript/typescript-original.svg" alt="typescript" width="40" height="40"/>
     </a>
-     Typescript
+    &#8203;&nbsp;&nbsp;&#8203;Typescript
   </summary>
 </ul>
 <ul>
   <summary>
-    <a href="https://reactjs.org/" style="text-decoration: none; &hover: {text-decoration: none}">
+    <a href="https://reactjs.org/">
       <img align="center" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/react/react-original-wordmark.svg" alt="react" width="40" height="40"/>
     </a>
-     React
+    &#8203;&nbsp;&nbsp;&#8203;React
   </summary>
 </ul>
 <ul>
   <summary>
-    <a href="https://redux.js.org" style="text-decoration: none; &hover: {text-decoration: none}">
+    <a href="https://redux.js.org">
       <img align="center" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/redux/redux-original.svg" alt="redux" width="40" height="40"/>
     </a>
-     Redux
+    &#8203;&nbsp;&nbsp;&#8203;Redux
   </summary>
 </ul>
 <ul>
   <summary>
-    <a href="https://mui.com/" style="text-decoration: none; &hover: {text-decoration: none}">
+    <a href="https://mui.com/">
       <img align="center" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/materialui/materialui-original.svg" alt="redux" width="40" height="40"/>
     </a>
-     Material UI
+    &#8203;&nbsp;&nbsp;&#8203;Material UI
   </summary>
 </ul>
 <ul>
   <summary>
-    <a href="https://jquery.com" style="text-decoration: none; &hover: {text-decoration: none}">
+    <a href="https://jquery.com">
       <img align="center" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/jquery/jquery-original.svg" alt="jquery" width="40" height="40"/>
     </a>
-     JQuery
+    &#8203;&nbsp;&nbsp;&#8203;JQuery
   </summary>
 </ul>
 <ul>
   <summary>
-    <a href="https://postgresql.org" style="text-decoration: none; &hover: {text-decoration: none}">
+    <a href="https://postgresql.org">
       <img align="center" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/postgresql/postgresql-original-wordmark.svg" alt="postgresql" width="40" height="40"/>
     </a>
-     Postgresql
+    &#8203;&nbsp;&nbsp;&#8203;Postgresql
   </summary>
 </ul>
 <ul>
   <summary>
-    <a href="https://nodejs.org" style="text-decoration: none; &hover: {text-decoration: none}">
+    <a href="https://nodejs.org" target="_blank">
       <img align="center" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/nodejs/nodejs-original-wordmark.svg" alt="nodejs" width="40" height="40"/>
     </a>
-     NodeJS
+    &#8203;&nbsp;&nbsp;&#8203;NodeJS
   </summary>
 </ul>
 <ul>
   <summary>
-    <a href="https://expressjs.com" style="text-decoration: none; &hover: {text-decoration: none}">
-      <img align="center" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/express/express-original-wordmark.svg" alt="express" width="40" height="40"/>
+    <a href="https://expressjs.com" target="_blank" rel="noopener noreferrer">
+      <img align="center" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/express/express-original-wordmark.svg" alt="express" width="40" height="40">
+      </img>
     </a>
-     ExpressJS
+    &#8203;&nbsp;&nbsp;&#8203;ExpressJS
   </summary>
 </ul>
