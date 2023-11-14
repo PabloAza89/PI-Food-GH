@@ -5,7 +5,7 @@ import com from "../../commons/commonsCSS.module.css";
 import { setIndexChoosen, setTabChoosen } from '../../actions';
 import { Button } from '@mui/material/';
 import $ from 'jquery';
-import { recipesI, paginateAmountI } from '../../interfaces/interfaces';
+import { recipesI, paginateAmountI, settingsFiltersI } from '../../interfaces/interfaces';
 import Tooltip from '@mui/joy/Tooltip';
 
 const Paginate = ({ paginateAmount }: paginateAmountI) => {
@@ -18,6 +18,7 @@ const Paginate = ({ paginateAmount }: paginateAmountI) => {
   const toShow = useSelector((state: { toShow: recipesI[] }) => state.toShow )
   const indexChoosen = useSelector((state: {indexChoosen: number}) => state.indexChoosen )
   const tabChoosen = useSelector((state: { tabChoosen: number }) => state.tabChoosen )
+  const settingsFilters = useSelector((state: { settingsFilters: settingsFiltersI }) => state.settingsFilters)
 
   let totalTabs = Math.ceil(toShow.length/9)
   let firstPartPortionTabs = paginateAmount === 45 ? (tabChoosen * 5) + 1 : (Math.floor(tabChoosen / 2) * 10) + 1
@@ -29,33 +30,13 @@ const Paginate = ({ paginateAmount }: paginateAmountI) => {
 
   $(function() {
     result[0] && [...Array(Math.ceil(result[paginateAmount === 45 ? tabChoosen : Math.floor(tabChoosen / 2)].length/9))].forEach((e, i) => {
-      let qq = $(`.Page${i}`).attr("value")
-      if (paginateAmount === 45) {
-        if (indexChoosen === Number(qq)) {
-          $(`.Page${indexChoosen}`)
-            .css("background", "rgba(46, 230, 163, 0.377)")
-        } else {
-          $(`.Page${i}`)
-            .css("background", "rgba(230, 46, 175, 0.363)")
-        }
-      } else {
-        if (tabChoosen % 2 !== 0) {
-          if (indexChoosen + 5 === Number(qq)) {
-            $(`.Page${indexChoosen + 5}`)
-              .css("background", "rgba(46, 230, 163, 0.377)")
-          } else {
-            $(`.Page${i}`)
-              .css("background", "rgba(230, 46, 175, 0.363)")
-          }
-        }  else {
-          if (indexChoosen === Number(qq)) {
-            $(`.Page${indexChoosen}`)
-              .css("background", "rgba(46, 230, 163, 0.377)")
-          } else {
-            $(`.Page${i}`)
-              .css("background", "rgba(230, 46, 175, 0.363)")
-          }
-        }
+      let targetValue = $(`.Page${i}`).attr("value")
+      if (tabChoosen % 2 !== 0 && paginateAmount !== 45) {
+        if (indexChoosen + 5 === Number(targetValue)) $(`.Page${indexChoosen + 5}`).css("background", "rgba(46, 230, 163, 0.377)") // GREEN
+        else $(`.Page${i}`).css("background", "rgba(230, 46, 175, 0.363)") // PINK
+      }  else {
+        if (indexChoosen === Number(targetValue)) $(`.Page${indexChoosen}`).css("background", "rgba(46, 230, 163, 0.377)") // GREEN
+        else $(`.Page${i}`).css("background", "rgba(230, 46, 175, 0.363)") // PINK
       }
     })
   })
@@ -70,9 +51,15 @@ const Paginate = ({ paginateAmount }: paginateAmountI) => {
       className={css.background}
       style={{
         backdropFilter:
-          menuShown && scrollPosition >= 209 ? 'blur(40px)' :
-          !menuShown && scrollPosition >= 109 ? 'blur(40px)' :
-          'blur(0px)'
+          menuShown && scrollPosition >= 209 && settingsFilters.showVisuals ? 'blur(40px)' :
+          !menuShown && scrollPosition >= 109 && settingsFilters.showVisuals ? 'blur(40px)' :
+          'blur(0px)',
+        background:
+          menuShown && scrollPosition >= 209 && !settingsFilters.showVisuals ?
+          'rgba(88, 210, 214, 0.6)' :
+          !menuShown && scrollPosition >= 109 && !settingsFilters.showVisuals ?
+          'rgba(88, 210, 214, 0.6)' :
+          'unset'
       }}
     >
       <div
@@ -86,11 +73,15 @@ const Paginate = ({ paginateAmount }: paginateAmountI) => {
           enterNextDelay={700}
           leaveDelay={0}
           enterTouchDelay={0}
+          disableFocusListener={!settingsFilters.showTooltips}
+          disableHoverListener={!settingsFilters.showTooltips}
+          hidden={ settingsFilters.showTooltips ? false : true }
           title={ tabChoosen === 0 ? `This is the first.` : `Previous` }
           placement="bottom"
         >
-          <div> {/* HELPER FOR BUTTON-DISABLED-TOOLTIP */}
+          <div style={{ display: 'flex' }}> {/* HELPER FOR BUTTON-DISABLED-TOOLTIP */}
             <Button
+              className={css.buttonButtonButton}
               id={css.eachButton}
               disabled={
                 paginateAmount === 45 ?
@@ -173,6 +164,9 @@ const Paginate = ({ paginateAmount }: paginateAmountI) => {
           enterNextDelay={700}
           leaveDelay={0}
           enterTouchDelay={0}
+          disableFocusListener={!settingsFilters.showTooltips}
+          disableHoverListener={!settingsFilters.showTooltips}
+          hidden={ settingsFilters.showTooltips ? false : true }
           title={
             paginateAmount === 45 ?
             (result.length - 1 === tabChoosen ? `This is the last.` : `Next`) :
@@ -180,7 +174,7 @@ const Paginate = ({ paginateAmount }: paginateAmountI) => {
           }
           placement="bottom"
         >
-          <div> {/* HELPER FOR BUTTON-DISABLED-TOOLTIP */}
+          <div style={{ display: 'flex' }}> {/* HELPER FOR BUTTON-DISABLED-TOOLTIP */}
             <Button
               id={css.eachButton}
               disabled={

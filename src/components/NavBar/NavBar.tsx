@@ -20,11 +20,7 @@ import Tooltip from '@mui/joy/Tooltip';
 import serverSDDietsArray from '../../db/diets.json'; // SD = Shut Down
 import serverSDDishesArray from '../../db/dishes.json'; // SD = Shut Down
 import $ from 'jquery';
-
-interface NavBarI {
-  recipeCreatedOrEdited?: boolean,
-  paginateAmount?: number
-}
+import { NavBarI, settingsFiltersI } from '../../interfaces/interfaces';
 
 const NavBar = ({ recipeCreatedOrEdited, paginateAmount }: NavBarI) =>  {
 
@@ -43,6 +39,7 @@ const NavBar = ({ recipeCreatedOrEdited, paginateAmount }: NavBarI) =>  {
   const [alphaLabelShown, setAlphaLabelShown] = useState<boolean>(false);
   const [placeholder, setPlaceholder] = useState<string>('Find recipe..');
   const menuShown = useSelector((state: {menuShown:boolean}) => state.menuShown)
+  const settingsFilters = useSelector((state: { settingsFilters: settingsFiltersI }) => state.settingsFilters)
   //const menuShown = true // DEV
   const allDietsOnline = useSelector((state: {allDietsOnline:boolean}) => state.allDietsOnline)
   const allDishesOnline = useSelector((state: {allDishesOnline:boolean}) => state.allDishesOnline)
@@ -256,6 +253,10 @@ const NavBar = ({ recipeCreatedOrEdited, paginateAmount }: NavBarI) =>  {
           enterTouchDelay={0}
           placement="bottom-end"
           title={`Show/Hide Menu`}
+          //open={true}
+          disableFocusListener={!settingsFilters.showTooltips}
+          disableHoverListener={!settingsFilters.showTooltips}
+          hidden={ settingsFilters.showTooltips ? false : true }
         >
           <Button
             variant="contained"

@@ -121,93 +121,49 @@
   color: rgba(245, 245, 220, 0.3) !important; /* PLACEHOLDER */
 }
 
-/* .input {
+.input { /* ...noSelect; */
   display: flex;
   position: relative;
   background: rgba(128, 128, 128, 0.2);
   border-radius: 4px;
   width: 100% !important;
-} */
+}
 
 .input ::placeholder {
-  color: rgba(245, 245, 220, 0.3) !important;
+  color: rgba(245, 245, 220, 0.3) !important; /* PLACEHOLDER */
 }
 
-/* .inputStyle {
-  color: rgba(245, 245, 220, 0.85) !important;
+.inputStyle {
+  color: rgba(245, 245, 220, 0.85) !important; /* HIDDEN, ONLY LABEL SHOWN */
   caret-color: rgba(0, 0, 0, 0.87) !important;
-} */
+}
 
-.inputLayer {
+.inputShownTitle {
   display: flex !important;
   white-space: pre !important; /* SINGLE LINE */
-  margin-left: 15px !important;
-  padding: 18.5px 0px 16.5px 0px !important;
+  margin-left: 14px !important;
+  padding: 17px 0px 16.5px 0px !important;
   position: absolute !important;
-  /* position: relative !important; */
-  /* width: calc(100% - 113px - 28px); */
-  font-size: 16px;
-  font-family: Roboto;
-  /* width: calc(100% - 113px - 28px); */
-  /* width: calc(100% - 113px - 38px); */
-  overflow: hidden;
-  background: orange;
-  /* color: rgba(245, 245, 220, 0.85) */
-  /* color: transparent; */ /* THIS */
-  color: gray; /* TEST */
-  /* color: transparent !important; */
-   /* 100% - 113px - 57px - 10px - 40px - 10px - 40px - 28px */
-  /* width: calc(100% - 113px - 57px - 10px - 60px - 10px - 80px - 32px); */
-  /* width: calc(100% - 113px - 57px - 10px - 60px - 10px - 80px - 32px) */
-  /* width: calc(100% - 113px - 10px  - 10px) */
-  width: calc(100% - 113px - 32px)
+  width: calc(100% - 113px - 28px);
 }
 
-.inputLayer mark {
-  color: transparent;
-  background: rgba(0, 255, 0, 0.4) !important; /* MARKDOWN BACKGROUND */
-  font-size: 16px;
-  font-family: Roboto;
-}
-
-.inputBase {
+.inputHiddenTitle {
   display: flex !important;
   position: relative !important;
   background: rgba(128, 128, 128, 0.2); /* INPUT BACKGROUND */
   border-radius: 4px;
-  width: calc(100% - 28px); /* ON SINGLE LINE */
-  
-  /* width: calc(100% - 32px); */ /* ON MULTILINE LINE */
-  font-size: 16px;
-  font-family: Roboto;
-  padding: 16.5px 14px 16.5px 14px !important;
-  /* padding: 16.5px 14px 0px 14px !important; */
-  border: 2px solid transparent;
-  outline: 1px solid rgba(0, 0, 0, 0.2);
-  color: rgba(245, 245, 220, 0.85);
-  resize: none; /* FOR TEXTAREA */
-  overflow: hidden;
-  /* height: 20px !important; */
-  /* max-height: 30px; */
-  /* height: 10px; */
-  /* height: 56px !important; */
-  height: 19px; /* ONLY FOR STEPS ? */
 }
 
-.inputBase:hover {
-  outline: 1px solid rgba(0, 0, 0, 0.7);
+.inputShownTitle mark {
+  color: rgba(245, 245, 220, 0.85) !important; /* MARKDOWN COLOR */
+  background: rgba(0, 255, 0, 0.4) !important; /* MARKDOWN BACKGROUND */
 }
 
-.inputBase:focus {
-  border: 2px solid #1E88E5;
-  outline: 1px solid #1E88E5;
+.inputHiddenTitle ::placeholder {
+  color: rgba(245, 245, 220, 0.3) !important; /* PLACEHOLDER */
 }
 
-.inputBase::placeholder {
-  color: rgba(245, 245, 220, 0.45) !important
-}
-
-.inputBaseImage {
+.inputImage {
   color: rgba(245, 245, 220, 0.85) !important; /* HIDDEN, ONLY LABEL SHOWN */
   caret-color: rgba(0, 0, 0, 0.87) !important;
 }
@@ -220,12 +176,12 @@
 .inputShownSummary {
   /* background: lightblue; */ /* DEV */
   display: flex;
-  position: absolute !important;
   flex-wrap: wrap !important; /* MULTILINE */
   white-space: pre-wrap !important; /* MULTILINE */
   overflow-wrap: break-word; /* MULTILINE */
-  margin-left: 10px !important;
+  margin-left: 14px !important;
   padding: 16.5px 0px 16.5px 0px !important;
+  position: absolute !important;
   width: calc(100% - 28px);  /* width: calc(100% - 113px - 28px); */
   color: transparent !important; /* NO GRAY COLOR */
 }
@@ -253,15 +209,44 @@
   width: 100% !important;
 }
 
+.inputShownInstructions {
+  /* background: lightblue; */ /* DEV */
+  display: flex;
+  flex-wrap: wrap !important; /* MULTILINE */
+  white-space: pre-wrap !important; /* MULTILINE */
+  overflow-wrap: break-word; /* MULTILINE */
+  margin-left: 14px !important;
+  padding: 16.5px 0px 16.5px 0px !important;
+  position: absolute !important;
+  color: transparent !important; /* NO GRAY COLOR */
+}
+
+.inputHiddenInstructions {
+  /* background: lightgreen; */ /* DEV */
+  background: rgba(128, 128, 128, 0.2); /* INPUT BACKGROUND */
+  border-radius: 4px;
+  display: flex;
+  position: relative;
+  width: 100% !important;
+}
+
+.inputHiddenInstructions ::placeholder {
+  color: rgba(245, 245, 220, 0.3) !important
+}
+
+.inputShownInstructions mark {
+  color: rgba(245, 245, 220, 0.85) !important; /* MARKDOWN COLOR */
+  background: rgba(0, 255, 0, 0.4) !important; /* MARKDOWN BACKGROUND */
+}
 
 .inputInstructions {
   color: rgba(245, 245, 220, 0.85) !important; /* HIDDEN, ONLY LABEL SHOWN */
   caret-color: rgba(0, 0, 0, 0.87) !important;
 }
 
-/* .inputStep {
+.inputStep {
   width: 48vw;
-} */
+}
 
 .label {
   color: rgba(245, 245, 220, 0.3) !important;
@@ -311,21 +296,11 @@
 /* NEXT HELPS TOOLTIP WHEN
 BUTTON IS DISABLED */
 
-.buttonAddHelper {
-  display: flex;
-  position: relative;
-  /* background: red; */
-  /* background: rgba(0,0,0,0.2); */
-  /* background: rgba(0,0,0,0.1); */
-  background: rgb(255, 215, 0, 0.5);
-  /* height: 36.5px; */
-  height: 36.5px;
-  /* height: 40px; */
-  /* background: rgba(0,0,0,0.2); */
+.buttonNewHelper {
   align-self: center;
-  margin-left: 10px; /* +2px BORDER */
-  /* margin-right: 100px; */
-  /* margin-right: 100px !important; */
+  /* background: gray; */ /* DEV */
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .buttonNew {
@@ -347,27 +322,14 @@ BUTTON IS DISABLED */
 BUTTON IS DISABLED */
 
 .buttonDeleteHelper {
-  display: flex;
-  position: relative;
-  /* background: red; */
-  /* background: rgba(0,0,0,0.2); */
-  /* background: rgba(0,0,0,0.1); */
-  background: rgb(255, 215, 0, 0.5);
-  /* height: 36.5px; */
-  height: 36.5px;
-  /* height: 40px; */
-  /* background: rgba(0,0,0,0.2); */
   align-self: center;
-  margin-left: 10px;
-  /* margin-right: 100px; */
-  /* margin-right: 100px !important; */
 }
 
 .buttonDelete {
   white-space: nowrap;
-  /* height: 36.5px; */
+  height: 36.5px;
   color: white;
-  /* align-self: center; */
+  align-self: center;
   min-width: 0px !important;
 }
 
@@ -411,27 +373,9 @@ BUTTON IS DISABLED */
   .imageSearcher { width: 90% !important }
   .text { display: none }
   .stepTitle  { display: none }
-  .inputShownTitle { /* width: calc(100% - 28px) */ }
-  /* .inputLayerInstructions { */
-    /* 100% - 113px - 57px - 10px - 40px - 10px - 40px - 28px */
-    /* width: calc(100% - 10px - 40px - 10px - 40px - 28px) !important; */
-    /* width: calc(100% - 10px) !important; */
-  /* } */
-  .inputLayer {
-    /* width: calc(100% - 298px); */ /* 100% - 113px - 57px - 10px - 40px - 10px - 40px - 28px */
-    /* width: calc(100% - 113px - 57px - 10px - 40px - 10px - 40px - 32px) !important */
-    /* width: calc(100% - 10px) !important */
-    width: calc(100% - 32px) !important
-    
-
-  }
-  .inputLayerInstructions {
-    /* width: calc(100% - 298px); */ /* 100% - 113px - 57px - 10px - 40px - 10px - 40px - 28px */
-    /* width: calc(100% - 113px - 57px - 10px - 40px - 10px - 40px - 32px) !important */
-    /* width: calc(100% - 10px) !important */
-    width: calc(100% - 40px - 10px - 40px - 10px - 32px) !important
-    
-
+  .inputShownTitle { width: calc(100% - 28px) }
+  .inputShownInstructions {
+    width: calc(100% - 10px - 40px - 10px - 40px - 28px) !important; /* 100% - 113px - 57px - 10px - 40px - 10px - 40px - 28px */
   }
 }
 
@@ -453,24 +397,15 @@ BUTTON IS DISABLED */
   .buttonDelete:after {
     content: '❌';
   }
-  .inputLayerInstructions {
+  .inputShownInstructions {
     /* width: calc(100% - 298px); */ /* 100% - 113px - 57px - 10px - 40px - 10px - 40px - 28px */
-    /* width: calc(100% - 113px - 57px - 10px - 40px - 10px - 40px - 32px) !important */
-    width: calc(100% - 113px - 57px - 10px - 40px - 10px - 40px - 32px)
-    /* width: calc(100% - 10px) !important */
-    /* width: calc(100% - 113px - 57px - 10px - 60px - 10px - 80px - 32px); */ /* 100% - 113px - 57px - 10px - 40px - 10px - 40px - 28px */ 
-
+    width: calc(100% - 113px - 57px - 10px - 40px - 10px - 40px - 28px)
   }
 }
 
 /* MORE THAN 651px */
 @media screen and (min-width: 651px) {
   .buttonNew {
-    max-width: 60px !important;
-    min-width: 60px !important;
-    width: 60px !important;
-  }
-  .buttonAddHelper{
     max-width: 60px !important;
     min-width: 60px !important;
     width: 60px !important;
@@ -483,23 +418,11 @@ BUTTON IS DISABLED */
     min-width: 80px !important;
     width: 80px !important;
   }
-  .buttonDeleteHelper {
-    max-width: 80px !important;
-    min-width: 80px !important;
-    width: 80px !important;
-  }
   .buttonDelete:after {
     content: 'DELETE';
   }
-  .inputBaseInstructions {
+  .inputShownInstructions {
     /* width: calc(100% - 358px); */ /* 100% - 113px - 57px - 10px - 60px - 10px - 80px - 28px */
-    /* width: calc(100% - 113px - 57px - 10px - 60px - 10px - 80px - 28px); */ /* 100% - 113px - 57px - 10px - 40px - 10px - 40px - 28px */
-    /* width: calc(100% - 60px); */ /* 100% - 113px - 57px - 10px - 40px - 10px - 40px - 28px */
-  }
-  .inputLayerInstructions {
-    /* width: calc(100% - 358px); */ /* 100% - 113px - 57px - 10px - 60px - 10px - 80px - 28px */
-    /* width: calc(100% - 113px - 57px - 10px - 60px - 10px - 80px - 28px); */ /* 100% - 113px - 57px - 10px - 40px - 10px - 40px - 28px */
-    /* width: calc(100% - 113px - 57px - 10px - 60px - 10px - 80px - 32px) !important; */ /* 100% - 113px - 57px - 10px - 40px - 10px - 40px - 28px */
-    width: calc(100% - 113px - 57px - 10px - 60px - 10px - 80px - 32px);
+    width: calc(100% - 113px - 57px - 10px - 60px - 10px - 80px - 28px); /* 100% - 113px - 57px - 10px - 40px - 10px - 40px - 28px */
   }
 }

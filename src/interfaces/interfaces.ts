@@ -68,7 +68,8 @@ export interface handlerUpdateInstructionsI {
   value: string
 }
 
-export interface validateStringI {
+export interface validatorI {
+  manual?: boolean,
   type: string,
   value: string,
   index?: number,
@@ -91,6 +92,9 @@ export interface paginateAmountI {
 export interface settingsFiltersI {
   [action: string]: any,
   showStatus: boolean,
+  showVisuals: boolean,
+  showBadWords: boolean,
+  showTooltips: boolean,
   showUserRecipes: boolean,
   quantityUserRecipes: number,
   showOnlineRecipes: boolean,
@@ -115,4 +119,9 @@ export interface SFTypeNumberI { // Settings Filter
 export interface SFTypeBooleanI { // Settings Filter
   name: string,
   value: boolean
+}
+
+export interface NavBarI {
+  recipeCreatedOrEdited?: boolean,
+  paginateAmount?: number
 }

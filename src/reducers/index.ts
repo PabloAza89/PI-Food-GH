@@ -49,6 +49,9 @@ const initialState: initialStateI = {
   showOfflineRecipes: localStorage.getItem('showOfflineRecipes') !== null ? JSON.parse(localStorage.getItem('showOfflineRecipes')!) : true,
   settingsFilters: {
     showStatus: localStorage.getItem('showStatus') !== null ? JSON.parse(localStorage.getItem('showStatus')!) : true,
+    showVisuals: localStorage.getItem('showVisuals') !== null ? JSON.parse(localStorage.getItem('showVisuals')!) : true,
+    showBadWords: localStorage.getItem('showBadWords') !== null ? JSON.parse(localStorage.getItem('showBadWords')!) : true,
+    showTooltips: localStorage.getItem('showTooltips') !== null ? JSON.parse(localStorage.getItem('showTooltips')!) : true,
     showUserRecipes: localStorage.getItem('showUserRecipes') !== null ? JSON.parse(localStorage.getItem('showUserRecipes')!) : true,
     quantityUserRecipes: localStorage.getItem('quantityUserRecipes') !== null ? JSON.parse(localStorage.getItem('quantityUserRecipes')!) : 30,
     showOnlineRecipes: localStorage.getItem('showOnlineRecipes') !== null ? JSON.parse(localStorage.getItem('showOnlineRecipes')!) : true,

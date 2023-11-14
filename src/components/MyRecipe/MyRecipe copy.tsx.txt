@@ -21,8 +21,7 @@ import $ from 'jquery';
 import { setSettingsFilters } from '../../actions';
 import {
   errorI, handlerUpdateInstructionsI, handlerAddInstructionsI,
-  validatorI, highlighterI, handlerDeleteInstructionsI,
-  settingsFiltersI
+  validateStringI, highlighterI, handlerDeleteInstructionsI
 } from '../../interfaces/interfaces';
 
 const MyRecipe = ({
@@ -66,31 +65,25 @@ const MyRecipe = ({
     let copyState = [...stepsState]
     copyState.splice(index, 1)
     setStepsState([...copyState])
+
     if (!isEditing) localStorage.setItem('stepsState', JSON.stringify([...copyState]))
 
-    if (settingsFilters.showBadWords) {
-      let copyError = {...error}
-      copyError.instructions.splice(index, 1)
-      setError(copyError)
+    let copyError = {...error}
+    copyError.instructions.splice(index, 1)
+    setError(copyError)
 
-      copyState.forEach((e, idx) => {
-          $(`#targetInstructions${idx}`).html(e)
-          highlighter({value: e, type: 'instructions', index: idx})
-      })
-    }
-      
-
+    copyState.forEach((e, idx) => {
+        $(`#targetInstructions${idx}`).html(e)
+        highlighter({value: e, type: 'instructions', index: idx})
+    })
   }
 
   const handlerAddInstructions = async ({ index }: handlerAddInstructionsI) => {
+    const firstStep = async () => {
 
       let copyState = [...stepsState]
       copyState.splice(index + 1, 0, "")
       setStepsState([...copyState])
-
-    const firstStep = async () => {
-
-      
 
       let copyError = {...error}
       copyError.instructions.splice(index + 1, 0, { character: false, badWord: false, empty: true })
@@ -98,60 +91,21 @@ const MyRecipe = ({
 
       copyState.forEach((e,indexx) => {
         highlighter({value: e, type: 'instructions', index: indexx})
-
-        // let qwee = document.getElementById(`${indexx + 1}instructions`)
-        // function auto_grow(element: any) {
-        // element.style.height = "5px";
-        // element.style.height = (element.scrollHeight - 33) + "px";
-        // }
-        // qwee && auto_grow(qwee)
-
-        // let qwee = document.getElementById(`${indexx}instructions`)
-        // function auto_grow(element: any) {
-        // element.style.height = "5px";
-        // element.style.height = (element.scrollHeight - 33) + "px";
-        // }
-        // qwee && auto_grow(qwee)
-
       })
       if (!isEditing) localStorage.setItem('stepsState', JSON.stringify([...copyState]))
     }
     const secondStep = async () => { // only highlight for last index
       let copyState2 = [...stepsState]
-
-    
-
-
-      if (copyState2.length > 1 && index !== copyState2.length - 1 ) {
-        highlighter({value: copyState2.slice(copyState2.length-1)[0], type: 'instructions', index: copyState2.length})
-
-        
-        //var qwee = document.getElementById('instructions');
-        //let qwee = document.getElementById('targetSummary')
-       
-        //qwee && auto_grow(qwee)
-
-      }
-      
+      if (copyState2.length > 1 && index !== copyState2.length - 1 ) highlighter({value: copyState2.slice(copyState2.length-1)[0], type: 'instructions', index: copyState2.length})
     }
-
-
-    if (settingsFilters.showBadWords) {
-      firstStep().then(() => secondStep())
-    }
-    
-
-
-
-
-
+    firstStep().then(() => secondStep())
   }
 
   const handlerUpdateInstructions = ({ index, value }: handlerUpdateInstructionsI) => {
-    // let copy = [...stepsState]
-    // copy.splice(index, 1, value)
-    // setStepsState([...copy])
-    // if (!isEditing) localStorage.setItem('stepsState', JSON.stringify([...copy]))
+    let copy = [...stepsState]
+    copy.splice(index, 1, value)
+    setStepsState([...copy])
+    if (!isEditing) localStorage.setItem('stepsState', JSON.stringify([...copy]))
   }
 
   const [error, setError] = useState<errorI>({
@@ -280,21 +234,7 @@ const MyRecipe = ({
     }
 
     $(index !== undefined ? `#target${type.slice(0,1).toUpperCase() + type.slice(1) + index}` : `#target${type.slice(0,1).toUpperCase() + type.slice(1)}`)
-    //$(`#target${type.slice(0,1).toUpperCase() + type.slice(1) + index}`)
-    //$(`#targetInstructions${index}`)
-    //$(`#${index}instructions`)
-    
-    //$(`#targetSummary`)
-    //$(`#targetInstructions`)
-    //$(`#targetInstructions0`)
-    //$(`#targetInstructions${index}`)
-    //$(`#0instructions`)
-    //$(`#targetSummary`)
-    
-    //$(`#targetInstructions0`)
-    //$(`#targetInstructions`)
-    //$(`#0instructions`)
-      .html(function() {
+      .html( function() {
         let parsedToReturn:string[] = []
         if (array[0]) array.forEach((e:any, actualIndex:any) => {
           if (array.length === 1) parsedToReturn.push(
@@ -306,76 +246,57 @@ const MyRecipe = ({
             "<mark>" + value.substring(e.start, e.end) + "</mark>" + //
             (actualIndex === 0 ? "" : !array[actualIndex + 1 ]?.end ? value.substring(e.end) :""))
         })
-
-        if (type === `summary` || type === `instructions`) parsedToReturn.unshift("<div style='text-wrap: wrap'>")
-        else parsedToReturn.unshift("<div>")
-        //parsedToReturn.unshift("<div style='text-wrap: wrap'>")
-        //parsedToReturn.unshift("<div>")
+        parsedToReturn.unshift("<div>")
         parsedToReturn.push("</div>")
 
         return array[0] ? parsedToReturn.join("") : value
       })
   }
 
-  const validator = async ({ manual, type, value, index }: validatorI) => {
+  const validator = async ({ type, value, index }: validateStringI) => {
     switch (type) {
       case (`title`):
+        let copyObjTitle = {...error}
+        if (/[^A-Za-z0-9-(áÁéÉíÍóÓúÚüÜñÑ),;.:¡!¿?'"()[\] ]/g.test(value) && value.length !== 0) { copyObjTitle[type].character = true; setError({ ...copyObjTitle }) }
+        else { copyObjTitle[type].character = false; setError({ ...copyObjTitle })}
+        if (value.replaceAll(" ","").replaceAll("\n", "") === "") { copyObjTitle[type].empty = true; setError({ ...copyObjTitle }) }
+        else { copyObjTitle[type].empty = false; setError({ ...copyObjTitle }) }
         setTitleValue(value);
         if (!isEditing) localStorage.setItem('titleValue', value)
-        if (settingsFilters.showBadWords) {
-          let copyObjTitle = {...error}
-          if (/[^A-Za-z0-9-(áÁéÉíÍóÓúÚüÜñÑ),;.:¡!¿?'"()[\] ]/g.test(value) && value.length !== 0) { copyObjTitle[type].character = true; setError({ ...copyObjTitle }) }
-          else { copyObjTitle[type].character = false; setError({ ...copyObjTitle })}
-          if (value.replaceAll(" ","").replaceAll("\n", "") === "") { copyObjTitle[type].empty = true; setError({ ...copyObjTitle }) }
-          else { copyObjTitle[type].empty = false; setError({ ...copyObjTitle }) }
-          highlighter({value, type})
-        }
+        highlighter({value, type})
       break;
       case (`health`):
+        let copyObj = {...error}
+        if (!/^\d+$/.test(value) && value.length !== 0 ) { copyObj.health.string = true; setError({ ...copyObj })}
+        else { copyObj.health.string = false; setError({ ...copyObj })}
+        if (parseInt(value, 10) > 100 && value.length !== 0) {copyObj.health.max = true; setError({ ...copyObj })}
+        else { copyObj.health.max = false; setError({ ...copyObj })}
         setHealthValue(value);
         if (!isEditing) localStorage.setItem('healthValue', value)
-        if (settingsFilters.showBadWords) {
-          let copyObj = {...error}
-          if (!/^\d+$/.test(value) && value.length !== 0 ) { copyObj.health.string = true; setError({ ...copyObj })}
-          else { copyObj.health.string = false; setError({ ...copyObj })}
-          if (parseInt(value, 10) > 100 && value.length !== 0) {copyObj.health.max = true; setError({ ...copyObj })}
-          else { copyObj.health.max = false; setError({ ...copyObj })}
-        }
       break;
       case (`summary`):
+        let copyObjSummary = {...error}
+        if (/[^A-Za-z0-9-(áÁéÉíÍóÓúÚüÜñÑ),\n;.:¡!¿?'"()[\] ]/g.test(value) && value.length !== 0) { copyObjSummary[type].character = true; setError({ ...copyObjSummary }) }
+        else { copyObjSummary[type].character = false; setError({ ...copyObjSummary })}
+        if (value.replaceAll(" ","").replaceAll("\n", "") === "") { copyObjSummary[type].empty = true; setError({ ...copyObjSummary }) }
+        else { copyObjSummary[type].empty = false; setError({ ...copyObjSummary }) }
         setSummaryValue(value);
         if (!isEditing) localStorage.setItem('summaryValue', value)
-        if (settingsFilters.showBadWords) {
-          let copyObjSummary = {...error}
-          if (/[^A-Za-z0-9-(áÁéÉíÍóÓúÚüÜñÑ),\n;.:¡!¿?'"()[\] ]/g.test(value) && value.length !== 0) { copyObjSummary[type].character = true; setError({ ...copyObjSummary }) }
-          else { copyObjSummary[type].character = false; setError({ ...copyObjSummary })}
-          if (value.replaceAll(" ","").replaceAll("\n", "") === "") { copyObjSummary[type].empty = true; setError({ ...copyObjSummary }) }
-          else { copyObjSummary[type].empty = false; setError({ ...copyObjSummary }) }
-          highlighter({value, type})
-        }
+        highlighter({value, type})
       break;
       case (`instructions`):
-        if (manual) {
-          console.log("se ejecuto entro aca 123")
-          let copyStepsState = [...stepsState]
-          copyStepsState.splice(index!, 1, value)
-          setStepsState([...copyStepsState])
-          if (!isEditing) localStorage.setItem('stepsState', JSON.stringify([...copyStepsState]))
+        if (/[^A-Za-z0-9-(áÁéÉíÍóÓúÚüÜñÑ),\n;.:¡!¿?'"()[\] ]/g.test(value) && value.length !== 0) {
+          let copyObjInstructions = {...error}
+          copyObjInstructions.instructions[index!].character = true
+          copyObjInstructions.instructions[index!].empty = value.replaceAll(" ","").replaceAll("\n", "") === "" ? true : false
+          setError({ ...copyObjInstructions })
+        } else {
+          let copyObjInstructions = {...error}
+          copyObjInstructions.instructions[index!].character = false
+          copyObjInstructions.instructions[index!].empty = value.replaceAll(" ","").replaceAll("\n", "") === "" ? true : false
+          setError({ ...copyObjInstructions })
         }
-        if (settingsFilters.showBadWords) {
-          if (/[^A-Za-z0-9-(áÁéÉíÍóÓúÚüÜñÑ),\n;.:¡!¿?'"()[\] ]/g.test(value) && value.length !== 0) {
-            let copyObjInstructions = {...error}
-            copyObjInstructions.instructions[index!].character = true
-            copyObjInstructions.instructions[index!].empty = value.replaceAll(" ","").replaceAll("\n", "") === "" ? true : false
-            setError({ ...copyObjInstructions })
-          } else {
-            let copyObjInstructions = {...error}
-            copyObjInstructions.instructions[index!].character = false
-            copyObjInstructions.instructions[index!].empty = value.replaceAll(" ","").replaceAll("\n", "") === "" ? true : false
-            setError({ ...copyObjInstructions })
-          }
-          highlighter({value, type, index})
-        }
+        highlighter({value, type, index})
       break;
     }
   }
@@ -713,7 +634,6 @@ const MyRecipe = ({
   }
 
   useEffect(() => { // RETRIEVES INFO FROM LS
-    console.log("SE EJECUTO USEEFFECT")
     if (isEditing) {
         setTitleValue(location.state.title) // validator not necessary since no badWords are stored.
         setHealthValue(location.state.healthScore)
@@ -733,40 +653,26 @@ const MyRecipe = ({
         if (dietsArrayLS !== null) setDietsArray(JSON.parse(dietsArrayLS))
         if (stepsStateLS !== null) {
           setStepsState(JSON.parse(stepsStateLS))
-          console.log("se ejecuto ESTE DE ACA")
           setTimeout(() => {
-            // function auto_grow(element: any) { // EXECUTED AFTER LS READING/RETRIEVING
-            //   element.style.height = "5px";
-            //   element.style.height = (element.scrollHeight - 33) + "px";
-            // }
-            //stepsStateLS !== null && JSON.parse(stepsStateLS).forEach((el:any, idx:any) => {
-            stepsStateLS && JSON.parse(stepsStateLS).forEach((el:any, idx:any) => {
+            stepsStateLS !== null && JSON.parse(stepsStateLS).forEach((el:any, idx:any) => {
               validator({ value: el, type: `instructions`, index: idx })
-              // let qwe = document.getElementById(`${idx}instructions`)
-              // qwe && auto_grow(qwe)
             })
           }, 0)
        }
       }
       return () => {
-        if (recipeCreated.current) {
-          clearHandler() // CLEAR FORM: SAVED && FIRES WHEN USER GO TO ANOTHER ROUTE/COMPONENT
-          console.log("se ejecuto clearHandler")
-
-        }
+        if (recipeCreated.current) clearHandler() // CLEAR FORM: SAVED && FIRES WHEN USER GO TO ANOTHER ROUTE/COMPONENT
       }
     // eslint-disable-next-line
   },[])
 
   useEffect(() => {
-    console.log("SE EJECUTO USEEFFECT")
     if (saveButtonDisabled && allDisabled) retrieveRecipeCreatedOrEdited(true)
     else retrieveRecipeCreatedOrEdited(false)
     // eslint-disable-next-line
   },[allDisabled])
 
   useEffect(() => {
-    console.log("SE EJECUTO USEEFFECT")
     if (paginateAmount === 45 && localStorage.getItem('showVisuals') === null) {
       $(`[class*="formDetail"]`)
         .css('backdrop-filter', 'unset')
@@ -790,18 +696,15 @@ const MyRecipe = ({
         .css('box-shadow', 'unset')
         .css('background', 'rgba(196, 34, 147, 0.2)')
     }
-  },[])
+  })
 
   useEffect(() => {
-    console.log("SE EJECUTO USEEFFECT")
     if (paginateAmount === 45 && localStorage.getItem('showVisuals') === null) {
       console.log("dispatched 1")
       dispatch(setSettingsFilters({ type: `showVisuals`, value: false }))
-      //dispatch(setSettingsFilters({ type: `showBadWords`, value: false }))
     } else if (paginateAmount === 90 && localStorage.getItem('showVisuals') === null) {
       console.log("dispatched 2")
       dispatch(setSettingsFilters({ type: `showVisuals`, value: true }))
-      //dispatch(setSettingsFilters({ type: `showBadWords`, value: true }))
     }
   },[paginateAmount, dispatch])
   
@@ -810,62 +713,8 @@ const MyRecipe = ({
   }
 
   useEffect(() => {
-    console.log("SE EJECUTO USEEFFECT")
     $(window).scrollTop(0)
   },[])
-
-  //console.log("$('#test').prop('scrollHeight')", $('#summary').prop('scrollHeight'))
-  
-  // $('#summary')
-  //   .css("height", `${$('#summary').prop('scrollHeight')}`)
-  // let qwe = document.getElementById('summary')
-  // function auto_grow(element: any) {
-  //   element.style.height = "5px";
-  //   element.style.height = (element.scrollHeight) + "px";
-  // }
-  // auto_grow(qwe)
-
-  // useEffect(() => {
-  //   let qwe = document.getElementById('summary')
-  //   var qwee = document.querySelectorAll('[id$=instructions]');
-  //   function auto_grow(element: any) {
-  //     element.style.height = "5px";
-  //     element.style.height = (element.scrollHeight - 33) + "px";
-  //   }
-  //   qwe && auto_grow(qwe)
-  //   qwee && qwee.forEach(e => { auto_grow(e) })
-
-  // })
-
-  useEffect(() => {
-    let qwe = document.getElementById('summary')
-    var qwee = document.querySelectorAll('[id$=instructions]');
-    function auto_grow(element: any) {
-      element.style.height = "5px";
-      element.style.height = (element.scrollHeight - 33) + "px";
-    }
-    qwe && auto_grow(qwe)
-    qwee && qwee.forEach(e => { auto_grow(e) })
-    function handleResizee() {
-      qwe && auto_grow(qwe)
-      qwee && qwee.forEach(e => { auto_grow(e) })
-      
-    }
-    window.addEventListener("resize", handleResizee);
-    return () => {
-      window.removeEventListener("resize", handleResizee);
-    }
-  })
-
-  // useEffect(() => {
-  //   let qwe = document.getElementById('targetSummary')
-  //   function auto_grow(element: any) {
-  //     element.style.height = "5px";
-  //     element.style.height = (element.scrollHeight - 33) + "px";
-  //   }
-  //   auto_grow(qwe)
-  // })
-
 
   return (
     <div
@@ -916,17 +765,6 @@ const MyRecipe = ({
           open={error.title.character || error.title.badWord}
           placement="bottom"
           style={{ zIndex: '1' }}
-          hidden={ settingsFilters.showTooltips ? false : true }
-          //style={{ zIndex: '1', display: 'none' }}
-          // style={{
-          //   zIndex: '1',
-          //   display: // hidden={true} DONT WORK ON INPUT CHILDREN
-          //     settingsFilters.showTooltips ?
-          //     'inherit' :
-          //     'none'
-          // }}
-          //hidden={true} // Deactivate Tooltip render
-          //hidden={false} // Deactivate Tooltip render
           title={
             <div className={css.innerTooltip}>
               { error.title.character ? <div style={{ fontWeight: '400', fontSize: '17px' }}>Special characters not allowed in "Title" !</div> : null }
@@ -943,29 +781,26 @@ const MyRecipe = ({
             </div>
           }
         >
-          <div style={{ display: 'flex', width: '100%' }}>
-            <div
+          <div style={{ width: '100%' }}>
+            <InputLabel
               id={"targetTitle"}
-              className={css.inputLayer}
-            />
-            <input
+              disabled={allDisabled}
+              shrink={false}
+              className={css.inputShownTitle}
+            >{ titleValue }</InputLabel>
+            <TextField
               id="title"
               disabled={allDisabled}
               autoComplete='off'
-              className={css.inputBase}
+              className={css.inputHiddenTitle}
+              InputProps={{ className: css.inputStyle }}
               value={titleValue}
               placeholder={
                 paginateAmount === 45 ?
                 `Enter your title` :
                 `e.g. Pasta with tomatoes..`
               }
-              //onChange={(e) => { validator({ value: e.target.value, type: e.target.id }) }}
-              onChange={(e) => {
-                //settingsFilters.showBadWords ?
-                //validator({ value: e.target.value, type: e.target.id }) :
-                //setTitleValue(e.target.value)
-                validator({ value: e.target.value, type: e.target.id })
-              }}
+              onChange={(e) => { validator({ value: e.target.value, type: e.target.id }) }}
             />
           </div>
         </Tooltip>
@@ -983,10 +818,6 @@ const MyRecipe = ({
           disableFocusListener={ saveButtonDisabled && allDisabled ? true : false }
           disableHoverListener={ saveButtonDisabled && allDisabled ? true : false }
           style={{ zIndex: '1' }}
-          //style={{ zIndex: '1', display: 'none' }}
-          //style={{ zIndex: '1', display: 'inherit' }}
-          hidden={ settingsFilters.showTooltips ? false : true }
-          //settingsFilters.showTooltips ?
           title={
             <div className={css.innerTooltip}>
               { isEditing ? <div>Leave it empty for use the same image !</div> : <div>Please, copy and paste your food recipe image url here !</div> }
@@ -996,14 +827,13 @@ const MyRecipe = ({
             </div>
           }
         >
-          <input
+          <TextField
             id={`image`}
             disabled={allDisabled}
-            //className={css.input}
-            className={css.inputBase}
-            // InputProps={{
-            //   className: css.inputBaseImage
-            // }}
+            className={css.input}
+            InputProps={{
+              className: css.inputImage
+            }}
             value={imageValue}
             autoComplete='off'
             placeholder={
@@ -1040,8 +870,6 @@ const MyRecipe = ({
           open={error.health.string || error.health.max}
           placement="bottom-start"
           style={{ zIndex: '1' }}
-          //style={{ zIndex: '1', display: 'none' }}
-          hidden={ settingsFilters.showTooltips ? false : true }
           title={
             <div className={css.innerTooltip}>
               <div
@@ -1053,13 +881,12 @@ const MyRecipe = ({
             </div>
           }
         >
-          <input
+          <TextField
             id="health"
-            //className={css.input}
-            className={css.inputBase}
-            // InputProps={{
-            //   className: css.inputHealth
-            // }}
+            className={css.input}
+            InputProps={{
+              className: css.inputHealth
+            }}
             disabled={allDisabled}
             value={healthValue}
             autoComplete='off'
@@ -1068,10 +895,7 @@ const MyRecipe = ({
               `Enter health level` :
               `e.g. 73`
             }
-            onChange={(e) => {
-              validator({ value: e.target.value, type: e.target.id })
-              //setHealthValue(e.target.value)
-            }}
+            onChange={(e) => { validator({ value: e.target.value, type: e.target.id }) }}
           />
         </Tooltip>
       </div>
@@ -1117,8 +941,6 @@ const MyRecipe = ({
           open={error.summary.character || error.summary.badWord}
           placement="bottom"
           style={{ zIndex: '1' }}
-          //style={{ zIndex: '1', display: 'none' }}
-          hidden={ settingsFilters.showTooltips ? false : true }
           title={
             <div className={css.innerTooltip}>
               { error.summary.character ? <div style={{ fontWeight: '400', fontSize: '17px' }}>Special characters not allowed in "Summary" !</div> : null }
@@ -1136,23 +958,25 @@ const MyRecipe = ({
             </div>
           }
         >
-          {/* <div className={css.summaryContainer}> */}
-          <div style={{ display: 'flex', width: '100%' }}>
-            <div
+          <div className={css.summaryContainer}>
+            <InputLabel
               id={"targetSummary"}
-              className={css.inputLayer}
-            />
-            <textarea
+              disabled={allDisabled}
+              shrink={false}
+              className={css.inputShownSummary}
+            >{ summaryValue }</InputLabel>
+            <TextField
               id={"summary"}
-              className={css.inputBase}
+              className={css.inputHiddenSummary}
+              InputProps={{
+                className: css.inputSummary
+              }}
+              disabled={allDisabled}
               autoComplete='off'
+              multiline
               value={summaryValue}
               placeholder={`e.g. Healthy pasta recipe`}
-              //onChange={(e) => { validator({ value: e.target.value, type: e.target.id }) }}
-              onChange={(e) => {
-                validator({ value: e.target.value, type: e.target.id })
-                //setSummaryValue(e.target.value)
-              }}
+              onChange={(e) => { validator({ value: e.target.value, type: e.target.id }) }}
             />
           </div>
         </Tooltip>
@@ -1206,8 +1030,6 @@ const MyRecipe = ({
                 open={(error.instructions[index] && error.instructions[index].character) || (error.instructions[index] && error.instructions[index].badWord)}
                 placement={ index % 2 === 0 ? `bottom-end` : `bottom-start` }
                 style={{ zIndex: '1' }}
-                //style={{ zIndex: '1', display: 'none' }}
-                hidden={ settingsFilters.showTooltips ? false : true }
                 title={
                   <div className={css.innerTooltip}>
                     { error.instructions[index] && error.instructions[index].character ? <div style={{ fontWeight: '400' }}>Special characters not allowed in "Instructions" !</div> : null }
@@ -1226,55 +1048,32 @@ const MyRecipe = ({
                   </div>
                 }
               >
-                {/* <div className={css.instructionsContainer}> */}
-                {/* <div style={{ width: '50%' }}> */}
-                <div style={{ display: 'flex', width: '100%' }}>
-                  <div
+                <div className={css.instructionsContainer}>
+                  <InputLabel
                     id={`targetInstructions${index}`}
-                    //id={`targetInstructions`}
-                    //disabled={allDisabled}
-                    //shrink={false}
-                    //className={css.inputShownInstructions}
-                    className={`${css.inputLayer} ${css.inputLayerInstructions}`}
-                  />
-                  <textarea
+                    disabled={allDisabled}
+                    shrink={false}
+                    className={css.inputShownInstructions}
+                  >{ stepsState[index] }</InputLabel>
+                  <TextField
                     id={`${index}instructions`}
-                    className={`${css.inputBase} ${css.inputBaseInstructions}`}
-                    // InputProps={{
-                    //   className: css.inputInstructions
-                    // }}
+                    className={css.inputHiddenInstructions}
+                    InputProps={{
+                      className: css.inputInstructions
+                    }}
                     disabled={allDisabled}
                     autoComplete='off'
-                    //multiline
+                    multiline
                     value={stepsState[index]}
                     placeholder={`e.g. Cut pasta, fry tomatoes..`}
-                    // sx={{
-                    //   "& .MuiInputBase-input": { // 'pre-wrap' - AUTO-FITS // 'nowrap' - 1 SINGLE LINE
-                    //     whiteSpace: stepsState[index] !== '' ? 'pre-wrap' : 'nowrap'
-                    //   }
-                    // }}
-                    onChange={(e) => {
-                      console.log("XXX e.target.value", e.target.value)
-                      console.log("XXX e.target.id", e.target.id)
-                      console.log("(e.target as HTMLTextAreaElement).id", (e.target as HTMLTextAreaElement).id)
-                      
-                      //handlerUpdateInstructions({ index: parseInt((e.target as HTMLTextAreaElement).id, 10), value: e.target.value });
-                      validator({ manual: true, value: (e.target as HTMLTextAreaElement).value, type: (e.target as HTMLTextAreaElement).id.replace(/[0-9]/g, ''), index: parseInt((e.target as HTMLTextAreaElement).id, 10) });
-                      //setSummaryValue(e.target.value)
-
-                      //var qwee = document.querySelectorAll('[id$=instructions]');
-                      
-                      //var qwee = document.getElementById('instructions');
-                      //let qwee = document.getElementById('targetSummary')
-
-                      let qwee = document.getElementById(`${parseInt((e.target as HTMLTextAreaElement).id, 10)}instructions`)
-                      function auto_grow(element: any) {
-                        element.style.height = "5px";
-                        element.style.height = (element.scrollHeight - 33) + "px";
+                    sx={{
+                      "& .MuiInputBase-input": { // 'pre-wrap' - AUTO-FITS // 'nowrap' - 1 SINGLE LINE
+                        whiteSpace: stepsState[index] !== '' ? 'pre-wrap' : 'nowrap'
                       }
-                      qwee && auto_grow(qwee)
-                      
-                      
+                    }}
+                    onChange={(e) => {
+                      handlerUpdateInstructions({ index: parseInt((e.target as HTMLInputElement).id, 10), value: e.target.value });
+                      validator({ value: e.target.value, type: e.target.id.replace(/[0-9]/g, ''), index: parseInt((e.target as HTMLInputElement).id, 10) })
                     }}
                   />
                 </div>
@@ -1290,11 +1089,6 @@ const MyRecipe = ({
                 disableHoverListener={ saveButtonDisabled && allDisabled ? true : stepsState.length >= 10 ? false : true }
                 placement="bottom-end"
                 style={{ zIndex: '1' }}
-                hidden={ settingsFilters.showTooltips ? false : true } // Deactivate Tooltip render
-                //hidden={false} // Deactivate Tooltip render
-                //style={{ zIndex: '1', display: 'contents' }}
-                //style={{ zIndex: '1', display: 'inherit' }}
-                //style={{ zIndex: '1', display: 'inherit' }}
                 title={
                   <div className={css.newStepTooltip}>
                     <div>Max steps {`<`}10{`>`} reached !</div>
@@ -1303,7 +1097,7 @@ const MyRecipe = ({
                 }
               >
                 <div
-                  className={css.buttonAddHelper}
+                  className={css.buttonNewHelper}
                 >
                   <Button
                     variant="contained"
@@ -1327,12 +1121,6 @@ const MyRecipe = ({
                 disableHoverListener={ saveButtonDisabled && allDisabled ? true : stepsState.length === 1 ? false : true }
                 placement="bottom-end"
                 style={{ zIndex: '1' }}
-                hidden={ settingsFilters.showTooltips ? false : true }
-                //hidden={true} // Deactivate Tooltip render
-                //hidden={false} // Deactivate Tooltip render
-                //style={{ zIndex: '1', display: 'none' }}
-                //style={{ zIndex: '1', display: 'contents' }}
-                //style={{ zIndex: '1', display: 'inherit' }}
                 title={"You can't delete first step !"}
               >
                 <div
@@ -1346,9 +1134,6 @@ const MyRecipe = ({
                     sx={{ background: 'red' }}
                     onClick={(e) => { handlerDeleteInstructions({ index: parseInt((e.target as HTMLInputElement).id, 10) }) }}
                   >
-                    
-
-
                   </Button>
                 </div>
               </Tooltip>

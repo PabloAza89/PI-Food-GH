@@ -4,12 +4,13 @@ import com from "../../commons/commonsCSS.module.css";
 import Card from '../Card/Card';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  recipesI, userDataI, paginateAmountI
+  recipesI, userDataI, paginateAmountI, settingsFiltersI
 } from '../../interfaces/interfaces';
 import {
   getRecipesFromDB, getDietsFromDB,
-  getDishesFromDB, applyFilters
+  getDishesFromDB, applyFilters, setSettingsFilters
 } from '../../actions';
+import $ from 'jquery';
 
 interface CardsMapperI {
   setUserData: Dispatch<SetStateAction<userDataI>>
@@ -30,6 +31,7 @@ const CardsMapper = ({ setUserData, paginateAmount, userData }: CardsMapperI)  =
   const tabChoosen = useSelector((state: { tabChoosen: number }) => state.tabChoosen )
   const toShow = useSelector((state: { toShow: recipesI[] }) => state.toShow)
   const allRecipes = useSelector((state: { allRecipes: recipesI[] }) => state.allRecipes)
+  const settingsFilters = useSelector((state: { settingsFilters: settingsFiltersI }) => state.settingsFilters)
 
   let result: any = []
 
@@ -64,6 +66,50 @@ const CardsMapper = ({ setUserData, paginateAmount, userData }: CardsMapperI)  =
 
   },[dispatch])
 
+  useEffect(() => {
+    if (paginateAmount === 45 && localStorage.getItem('showVisuals') === null) {
+      $(`[class*="backgroundCard"]`)
+        .css('backdrop-filter', 'unset')
+        .css('box-shadow', 'unset')
+        .css('background', 'rgba(196, 34, 147, 0.2)')
+      $(`[class*="Page"]`)
+        .css('box-shadow', 'unset')
+    } else if (paginateAmount === 90 && localStorage.getItem('showVisuals') === null) {
+      $(`[class*="backgroundCard"]`)
+        .css('backdrop-filter', 'blur(20px)')
+        .css('box-shadow', '0 8px 32px 0 rgba(0, 0, 0, 0.37)')
+        .css('background', 'linear-gradient(135deg, rgba(196, 34, 147, 0.1), rgba(196, 34, 147, 0))')
+      $(`[class*="Page"]`)
+        .css('box-shadow', '0 8px 32px 0 rgba(0, 0, 0, 0.37)')
+    } else if (settingsFilters.showVisuals) {
+      $(`[class*="backgroundCard"]`)
+        .css('backdrop-filter', 'blur(20px)')
+        .css('box-shadow', '0 8px 32px 0 rgba(0, 0, 0, 0.37)')
+        .css('background', 'linear-gradient(135deg, rgba(196, 34, 147, 0.1), rgba(196, 34, 147, 0))')
+      $(`[class*="Page"]`)
+        .css('box-shadow', '0 8px 32px 0 rgba(0, 0, 0, 0.37)')
+    } else {
+      $(`[class*="backgroundCard"]`)
+        .css('backdrop-filter', 'unset')
+        .css('box-shadow', 'unset')
+        .css('background', 'rgba(196, 34, 147, 0.2)')
+      $(`[class*="Page"]`)
+        .css('box-shadow', 'unset')
+    }
+  })
+
+  useEffect(() => {
+    if (paginateAmount === 45 && localStorage.getItem('showVisuals') === null) {
+      console.log("dispatched 1")
+      dispatch(setSettingsFilters({ type: `showVisuals`, value: false }))
+      //dispatch(setSettingsFilters({ type: `showBadWords`, value: false }))
+    } else if (paginateAmount === 90 && localStorage.getItem('showVisuals') === null) {
+      console.log("dispatched 2")
+      dispatch(setSettingsFilters({ type: `showVisuals`, value: true }))
+      //dispatch(setSettingsFilters({ type: `showBadWords`, value: true }))
+    }
+  },[paginateAmount, dispatch])
+
   return allRecipes[0] !== undefined && toShow[0] !== undefined ?
     (<div className={css.background}>
       {arraySplitedBy9.map((e:any) =>
@@ -85,7 +131,6 @@ const CardsMapper = ({ setUserData, paginateAmount, userData }: CardsMapperI)  =
       )}
     </div>) :
     allRecipes[0] !== undefined && toShow[0] === undefined ?
-    //toShow[0] === undefined ?
     (<div>
       <div className={`${css.notFoundOrLoading} ${com.noSelect}`}>No recipe was found !</div>
     </div>) :

@@ -8,7 +8,7 @@
   z-index: 1;
 }
 
-.card {
+.cardDetail {
   width: 90% !important;
   display: flex;
   position: relative;
@@ -19,12 +19,12 @@
   max-width: 750px;
   margin-top: 16px;
   margin-bottom: 16px;
-  /* background: red; */ /* DEV */
-  background: linear-gradient(135deg, rgba(64, 117, 117, 0.1), rgba(64, 117, 117, 0));
-  -webkit-backdrop-filter: blur(20px);
-  backdrop-filter: blur(20px);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
   border: 1px solid rgb(255, 255, 255, 0.18);
+  /* background: red; */ /* DEV */
+
+  /* backdrop-filter: blur(20px);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  background: linear-gradient(135deg, rgba(64, 117, 117, 0.1), rgba(64, 117, 117, 0)); */
 }
 
 #editDeleteContainer {

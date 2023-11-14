@@ -2,7 +2,7 @@ import { useState, useEffect, Dispatch, SetStateAction } from "react";
 import css from "./CardCSS.module.css";
 import com from "../../commons/commonsCSS.module.css";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import noImage1 from "../../images/noImage1.jpg";
 import noImage2 from "../../images/noImage2.jpg";
 import noImage3 from "../../images/noImage3.jpg";
@@ -17,7 +17,7 @@ import {
   getRecipesFromDB, getDietsFromDB, getDishesFromDB,
   applyFilters
 } from '../../actions';
-import { recipesI, userDataI } from '../../interfaces/interfaces';
+import { recipesI, userDataI, settingsFiltersI } from '../../interfaces/interfaces';
 
 interface CardI {
   setUserData: Dispatch<SetStateAction<userDataI>>
@@ -49,6 +49,7 @@ const Card = ({
 
   let arrImages = [noImage1, noImage2, noImage3]
 
+  const settingsFilters = useSelector((state: { settingsFilters: settingsFiltersI }) => state.settingsFilters)
   const [ fitTitle, setFitTitle ] = useState<boolean>(true)
   const [ fitDiet, setFitDiet ] = useState<boolean>(true)
   const [ fitDish, setFitDish ] = useState<boolean>(true)
@@ -73,10 +74,21 @@ const Card = ({
     }
     // eslint-disable-next-line
   },[])
-    
+
+  
+  // $(`[class*="backgroundCard"]`)
+  //    .css('backdrop-filter', 'unset')
+  //    .css('box-shadow', 'unset')
+
+  //   //  .css('backdrop-filter', 'blur(20px)')
+  //   //  .css('box-shadow', '0 8px 32px 0 rgba(0, 0, 0, 0.37)')
+
+  
 
   return (
-    <div className={css.background}>
+    <div
+      className={css.backgroundCard}
+    >
       <div
         className={css.editDeleteContainer}
         style={{
@@ -104,79 +116,101 @@ const Card = ({
           <ClearIcon className={css.iconDelete} />
         </Button>
       </div>
-      <Link className={`${css.imageOrTitleContainer} ${com.noSelect}`} to={`/${id}`} state={{ webFlow: true }}>
-        <img
-          className={css.image}
-          src={
-            brokenImage ?
-            notAvailable :
-            userRecipe && image.length === 1 ?
-            arrImages[parseInt(image, 10) - 1] :
-            userRecipe && image.length > 1 ?
-            `https://res.cloudinary.com/dtembdocm/image/upload/` + image :
-            image
-          }
-          alt=""
-          loading="lazy"
-        >
-        </img>
-      </Link>
-      <Link className={`${css.imageOrTitleContainer} ${com.noSelect}`} to={`/${id}`} state={{ testTest: true }}>
+      <div className={`${css.imageOrTitleContainer} ${com.noSelect}`}>
+        <Link className={css.linkStyle} to={`/${id}`} state={{ webFlow: true }}>
+          <img
+            className={css.image}
+            src={
+              brokenImage ?
+              notAvailable :
+              userRecipe && image.length === 1 ?
+              arrImages[parseInt(image, 10) - 1] :
+              userRecipe && image.length > 1 ?
+              `https://res.cloudinary.com/dtembdocm/image/upload/` + image :
+              image
+            }
+            alt=""
+            loading="lazy"
+          />
+        </Link>
+      </div>
+      <div className={`${css.imageOrTitleContainer} ${com.noSelect}`}>
         <Tooltip
           arrow
           enterDelay={700}
           enterNextDelay={700}
           leaveDelay={200}
           enterTouchDelay={0}
-          disableFocusListener={fitTitle}
-          disableHoverListener={fitTitle}
+          disableFocusListener={ !settingsFilters.showTooltips ? true : fitTitle}
+          disableHoverListener={ !settingsFilters.showTooltips ? true : fitTitle}
           placement="bottom"
-          title={title}
+          title={
+            <div className={css.innerTooltip}>
+              {title}
+            </div>
+          }
+          //hidden={true}
+          //hidden={false}
+          //open={true}
+          hidden={ settingsFilters.showTooltips ? false : true }
         >
+          
           <div
             className={`titleCard${id}`}
             id={css.title}
           >
-            {title}
+            <Link className={css.linkStyle} to={`/${id}`} state={{ webFlow: true }}>
+            
+              {title}
+            </Link>
+            
+          </div>
+          
+        </Tooltip>
+      </div>
+      {/* <div className={`${css.imageOrTitleContainer} ${com.noSelect}`}> */}
+        <Tooltip
+          arrow
+          enterDelay={700}
+          enterNextDelay={700}
+          leaveDelay={200}
+          enterTouchDelay={0}
+          disableFocusListener={ !settingsFilters.showTooltips ? true : fitDiet}
+          disableHoverListener={ !settingsFilters.showTooltips ? true : fitDiet}
+          placement="bottom"
+          //hidden={true}
+          //hidden={false}
+          //open={true}
+          hidden={ settingsFilters.showTooltips ? false : true }
+          title={
+            <div className={css.innerTooltip}>
+              <b>Diets: </b>
+              {diets[0] && diets.map((e:any) => {
+                if ((diets.indexOf(e) !== diets.length - 1)) return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ") + " + "
+                else return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ")
+              })}
+            </div>
+          }
+        >
+          <div
+            className={`dietCard${id} ${com.noSelect}`}
+            id={css.text}
+            //id={css.title}
+          >
+            <b>Diets: </b>
+            {
+              diets[0] !== undefined ?
+              diets.map((e:any) => {
+                if ((diets.indexOf(e) !== diets.length - 1)) return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ") + " + "
+                else return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ")
+              }) :
+              `Not specified`
+            }
           </div>
         </Tooltip>
-      </Link>
-      <Tooltip
-        arrow
-        enterDelay={700}
-        enterNextDelay={700}
-        leaveDelay={200}
-        enterTouchDelay={0}
-        disableFocusListener={fitDiet}
-        disableHoverListener={fitDiet}
-        placement="bottom"
-        title={
-          <div className={css.innerTooltip}>
-            <b>Diets: </b>
-            {diets[0] && diets.map((e:any) => {
-              if ((diets.indexOf(e) !== diets.length - 1)) return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ") + " + "
-              else return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ")
-            })}
-          </div>
-        }
-      >
-        <div
-          className={`dietCard${id} ${com.noSelect}`}
-          id={css.text}
-        >
-          <b>Diets: </b>
-          {
-            diets[0] !== undefined ?
-            diets.map((e:any) => {
-              if ((diets.indexOf(e) !== diets.length - 1)) return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ") + " + "
-              else return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ")
-            }) :
-            `Not specified`
-          }
-        </div>
-      </Tooltip>
+      {/* </div> */}
       <div className={com.noSelect} id={css.text}>
-        <b>Healt Score: </b>{healthScore}
+        <b>Healt Score: </b>{healthScore}
       </div>
       <Tooltip
         arrow
@@ -184,11 +218,13 @@ const Card = ({
         enterNextDelay={700}
         leaveDelay={200}
         enterTouchDelay={0}
-        disableFocusListener={fitDish}
-        disableHoverListener={fitDish}
+        disableFocusListener={ !settingsFilters.showTooltips ? true : fitDish}
+        disableHoverListener={ !settingsFilters.showTooltips ? true : fitDish}
         placement="bottom"
+        hidden={ settingsFilters.showTooltips ? false : true }
+        //open={true}
         title={
-          <div>
+          <div className={css.innerTooltip}>
             <b>Dish Types: </b>
             {dishTypes && dishTypes.map((e:any) => {
               if ((dishTypes.indexOf(e) !== dishTypes.length - 1)) return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join("  ") + " + "
@@ -201,7 +237,7 @@ const Card = ({
           className={`dishCard${id} ${com.noSelect}`}
           id={css.text}
         >
-          <b>Dish Types: </b>
+          <b>Dish Types: </b>
           {
             dishTypes[0] !== undefined ?
             dishTypes.map((e:any) => {

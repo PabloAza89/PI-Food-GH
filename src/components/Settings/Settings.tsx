@@ -34,6 +34,9 @@ const Settings = () =>  {
   console.log("toShow", toShow)
 
   const [ expandStatus, setExpandStatus ] = useState(false)
+  const [ expandVisuals, setExpandVisuals ] = useState(false)
+  const [ expandBadWords, setExpandBadWords ] = useState(false)
+  const [ expandTooltips, setExpandTooltips ] = useState(false)
   const [ expandUser, setExpandUser ] = useState(false)
   const [ expandUserNumber, setExpandUserNumber ] = useState(false)
   const [ expandOnline, setExpandOnline ] = useState(false)
@@ -42,27 +45,9 @@ const Settings = () =>  {
   const [ expandOfflineNumber, setExpandOfflineNumber ] = useState(false)
 
   const settingsFiltersHandler = ({ type }: any) => {
-    switch (type) {
-      case 'showStatus':
-        dispatch(setSettingsFilters({ type: type, value: !settingsFilters.showStatus }))
-        localStorage.setItem('showStatus', JSON.stringify(!settingsFilters.showStatus))
-      break;
-      case 'showUserRecipes':
-        dispatch(setSettingsFilters({ type: type, value: !settingsFilters.showUserRecipes }))
-        localStorage.setItem('showUserRecipes', JSON.stringify(!settingsFilters.showUserRecipes))
-        dispatch(applyFilters())
-      break;
-      case 'showOnlineRecipes':
-        dispatch(setSettingsFilters({ type: type, value: !settingsFilters.showOnlineRecipes }))
-        localStorage.setItem('showOnlineRecipes', JSON.stringify(!settingsFilters.showOnlineRecipes))
-        dispatch(applyFilters())
-      break;
-      case 'showOfflineRecipes':
-        dispatch(setSettingsFilters({ type: type, value: !settingsFilters.showOfflineRecipes }))
-        localStorage.setItem('showOfflineRecipes', JSON.stringify(!settingsFilters.showOfflineRecipes))
-        dispatch(applyFilters())
-      break;
-    }
+    dispatch(setSettingsFilters({ type: type, value: !settingsFilters[type] }))
+    localStorage.setItem(`${type}`, JSON.stringify(!settingsFilters[type]))
+    if (type.slice(-7) === `Recipes`) dispatch(applyFilters())
   }
 
   const quantityUserRecipesHandler = ({ type, value }: any) => {
@@ -264,24 +249,130 @@ const Settings = () =>  {
         </Accordion>
       </div>
 
+      <div className={css.accordionContainer}>
+        <Accordion
+          expanded={expandVisuals}
+          className={css.accordion}
+        >
+          <AccordionSummary
+            className={css.defaultCursor}
+            expandIcon={
+              <ErrorOutlineIcon
+                className={css.iconInfo}
+                onClick={(() => setExpandVisuals(!expandVisuals))}
+              />
+            }
+          >
+            <Switch
+              onClick={() => settingsFiltersHandler({ type: 'showVisuals' })} ///
+              checked={ settingsFilters.showVisuals ? true : false }
+              className={css.switch}
+              classes={{
+                track: settingsFilters.showVisuals ? `${css.track} ${css.trackEnabled}` : `${css.track} ${css.trackDisabled}`,
+                thumb: css.thumb,
+                switchBase:  css.switchBase,
+                checked: css.checked,
+                colorPrimary: css.colorPrimary
+              }}
+            />
+            <div className={css.text}>Enable Visuals Effects</div>
+          </AccordionSummary>
+          <AccordionDetails
+            className={com.noSelect}
+          >
+            <div className={css.text}>
+              Enable/Disable glass effect filters. If disabled, improved performance on mobile devices. (Default value on mobile devices: disabled)
+            </div>
+          </AccordionDetails>
+        </Accordion>
+      </div>
+
+      <div className={css.accordionContainer}>
+        <Accordion
+          expanded={expandBadWords}
+          className={css.accordion}
+        >
+          <AccordionSummary
+            className={css.defaultCursor}
+            expandIcon={
+              <ErrorOutlineIcon
+                className={css.iconInfo}
+                onClick={(() => setExpandBadWords(!expandBadWords))}
+              />
+            }
+          >
+            <Switch
+              onClick={() => settingsFiltersHandler({ type: 'showBadWords' })} ///
+              checked={ settingsFilters.showBadWords ? true : false }
+              className={css.switch}
+              classes={{
+                track: settingsFilters.showBadWords ? `${css.track} ${css.trackEnabled}` : `${css.track} ${css.trackDisabled}`,
+                thumb: css.thumb,
+                switchBase:  css.switchBase,
+                checked: css.checked,
+                colorPrimary: css.colorPrimary
+              }}
+            />
+            <div className={css.text}>Enable bad words real time processing</div>
+          </AccordionSummary>
+          <AccordionDetails
+            className={com.noSelect}
+          >
+            <div className={css.text}>
+              Enable/Disable bad words real time processing. If disabled, improved performance on mobile devices & bad words are processed after you submit. (Default value on mobile devices: disabled)
+            </div>
+          </AccordionDetails>
+        </Accordion>
+      </div>
+
+      <div className={css.accordionContainer}>
+        <Accordion
+          expanded={expandTooltips}
+          className={css.accordion}
+        >
+          <AccordionSummary
+            className={css.defaultCursor}
+            expandIcon={
+              <ErrorOutlineIcon
+                className={css.iconInfo}
+                onClick={(() => setExpandTooltips(!expandTooltips))}
+              />
+            }
+          >
+            <Switch
+              onClick={() => settingsFiltersHandler({ type: 'showTooltips' })} ///
+              checked={ settingsFilters.showTooltips ? true : false }
+              className={css.switch}
+              classes={{
+                track: settingsFilters.showTooltips ? `${css.track} ${css.trackEnabled}` : `${css.track} ${css.trackDisabled}`,
+                thumb: css.thumb,
+                switchBase:  css.switchBase,
+                checked: css.checked,
+                colorPrimary: css.colorPrimary
+              }}
+            />
+            <div className={css.text}>Enable tooltips</div>
+          </AccordionSummary>
+          <AccordionDetails
+            className={com.noSelect}
+          >
+            <div className={css.text}>
+              Enable/Disable tooltips. Tooltips display informative text when users hover over, focus on, or tap an element. If disabled, improved performance on mobile devices. (Default value on mobile devices: disabled)
+            </div>
+          </AccordionDetails>
+        </Accordion>
+      </div>
+
       <div className={css.accordionContainerDouble}>
         <Accordion
           expanded={expandUser}
-          //className={css.accordion}
           className={`${css.accordionDouble} ${css.accordionDoubleUpper}`}
         >
           <AccordionSummary
             className={css.defaultCursor}
-            // expandIcon={
-            //   <ErrorOutlineIcon
-            //     className={css.iconInfo}
-            //     onClick={(() => setExpandUser(!expandUser))}
-            //   />
-            // }
             expandIcon={
               <ErrorOutlineIcon
                 className={css.iconInfo}
-                //onClick={(() => setExpandOnline(!expandOnline))}
                 onClick={(() => {
                   setExpandUser(!expandUser)
                   setExpandUserNumber(false)
@@ -329,7 +420,6 @@ const Settings = () =>  {
             }
           >
             <BaseNumberInput
-              //defaultValue={2}
               className={`numberInputUser`}
               value={settingsFilters.quantityUserRecipes}
               // ↓↓ direct input handler ↓↓
@@ -343,7 +433,6 @@ const Settings = () =>  {
                 input: { className: css.numberInputInput },
                 decrementButton: {
                   value: `decrementButton`,
-                  /* className: css.numberInputButton, */
                   className: css.numberInputButton,
                   id: `decrementUser`,
                   children:
@@ -370,23 +459,17 @@ const Settings = () =>  {
             className={com.noSelect}
           >
             <div className={css.text}>
-              Quantity of User Recipes required to the Server as long as the server is Online (min: 0, max: 100, default: 30).
+              Quantity of User Recipes required to the Server as long as the server is Online. (min: 0, max: 100, default: 30)
             </div>
             <div className={css.text}>
               There are no rate-limits on this type of requests to the Online Database.
             </div>
           </AccordionDetails>
         </Accordion>
-
-
-
-
       </div>
-
       <div className={css.accordionContainerDouble}>
         <Accordion
           expanded={expandOnline}
-          //className={css.accordion}
           className={`${css.accordionDouble} ${css.accordionDoubleUpper}`}
         >
           <AccordionSummary
@@ -394,7 +477,6 @@ const Settings = () =>  {
             expandIcon={
               <ErrorOutlineIcon
                 className={css.iconInfo}
-                //onClick={(() => setExpandOnline(!expandOnline))}
                 onClick={(() => {
                   setExpandOnline(!expandOnline)
                   setExpandOnlineNumber(false)
@@ -441,7 +523,6 @@ const Settings = () =>  {
             }
           >
             <BaseNumberInput
-              //defaultValue={2}
               className={`numberInputOnline`}
               value={settingsFilters.quantityOnlineRecipes}
               // ↓↓ direct input handler ↓↓
@@ -455,7 +536,6 @@ const Settings = () =>  {
                 input: { className: css.numberInputInput },
                 decrementButton: {
                   value: `decrementButton`,
-                  /* className: css.numberInputButton, */
                   className: css.numberInputButton,
                   id: `decrementOnline`,
                   children:
@@ -482,7 +562,7 @@ const Settings = () =>  {
             className={com.noSelect}
           >
             <div className={css.text}>
-              Quantity of recipes required to the Server as long as the server is Online (min: 0, max: 100, default: 15).
+              Quantity of recipes required to the Server as long as the server is Online (min: 0, max: 100, default: 15)
             </div>
             <div className={css.text}>
               Note that the greater the number of requests, the sonner get rate-limited by third-part Online Database Recipes.
@@ -585,7 +665,7 @@ const Settings = () =>  {
             className={com.noSelect}
           >
             <div className={css.text}>
-              Quantity of recipes required as long as the server is Offline (min: 0, max: 100, default: 30).
+              Quantity of recipes required as long as the server is Offline (min: 0, max: 100, default: 30)
             </div>
             <div className={css.text}>
               There are no rate-limits on this type of requests to the Offline Database.

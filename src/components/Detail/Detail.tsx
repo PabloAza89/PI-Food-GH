@@ -9,17 +9,17 @@ import noImage3 from "../../images/noImage3.jpg";
 import notAvailable from "../../images/notAvailable.jpg";
 import { handleDelete, handleEdit } from '../../commons/commonsFunc';
 import { Button } from '@mui/material/';
-import { recipesI } from '../../interfaces/interfaces';
+import { recipesI, settingsFiltersI } from '../../interfaces/interfaces';
 import EditIcon from '@mui/icons-material/Edit';
 import ClearIcon from '@mui/icons-material/Clear';
 import {
   getRecipesFromDB, getDietsFromDB,
   getDishesFromDB, setMenuShown,
-  applyFilters
+  applyFilters, setSettingsFilters
 } from '../../actions';
 import $ from 'jquery';
 
-export default function Detail({ userData, setUserData }: any) {
+export default function Detail({ userData, setUserData, paginateAmount }: any) {
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -53,6 +53,7 @@ export default function Detail({ userData, setUserData }: any) {
     // eslint-disable-next-line
   },[])
 
+  const settingsFilters = useSelector((state: { settingsFilters: settingsFiltersI }) => state.settingsFilters)
   const menuShown = useSelector((state: {menuShown:boolean}) => state.menuShown)
   const [ brokenImage, setBrokenImage ] = useState<boolean>(false)
   function regexInSummary(text: any) { return text.replaceAll(/(<[/]b>|<b>|<[/]a>|<a\b[^>]*>|[/]a>)/g, '') }
@@ -81,13 +82,53 @@ export default function Detail({ userData, setUserData }: any) {
     window.history.replaceState({ usr: { webFlow: null }}, "");
   }
 
+  useEffect(() => {
+    if (paginateAmount === 45 && localStorage.getItem('showVisuals') === null) {
+      $(`[class*="cardDetail"]`)
+        .css('backdrop-filter', 'unset')
+        .css('box-shadow', 'unset')
+        .css('background', 'rgba(196, 34, 147, 0.2)')
+    } else if (paginateAmount === 90 && localStorage.getItem('showVisuals') === null) {
+      $(`[class*="cardDetail"]`)
+        .css('backdrop-filter', 'blur(20px)')
+        .css('box-shadow', '0 8px 32px 0 rgba(0, 0, 0, 0.37)')
+        .css('background', 'linear-gradient(135deg, rgba(196, 34, 147, 0.1), rgba(196, 34, 147, 0))')
+    } else if (settingsFilters.showVisuals) {
+      console.log("entro aca 3")
+      $(`[class*="cardDetail"]`)
+        .css('backdrop-filter', 'blur(20px)')
+        .css('box-shadow', '0 8px 32px 0 rgba(0, 0, 0, 0.37)')
+        .css('background', 'linear-gradient(135deg, rgba(196, 34, 147, 0.1), rgba(196, 34, 147, 0))')
+    } else {
+      console.log("entro aca 4")
+      $(`[class*="cardDetail"]`)
+        .css('backdrop-filter', 'unset')
+        .css('box-shadow', 'unset')
+        .css('background', 'rgba(196, 34, 147, 0.2)')
+    }
+  })
+
+  useEffect(() => {
+    if (paginateAmount === 45 && localStorage.getItem('showVisuals') === null) {
+      console.log("dispatched 1")
+      dispatch(setSettingsFilters({ type: `showVisuals`, value: false }))
+      //dispatch(setSettingsFilters({ type: `showBadWords`, value: false }))
+    } else if (paginateAmount === 90 && localStorage.getItem('showVisuals') === null) {
+      console.log("dispatched 2")
+      dispatch(setSettingsFilters({ type: `showVisuals`, value: true }))
+      //dispatch(setSettingsFilters({ type: `showBadWords`, value: true }))
+    }
+  },[paginateAmount, dispatch])
+      
+      
+
   if (goOn && toShow[0] !== undefined && recipe !== undefined) {
     return (
       <div
         className={css.background}
         style={{ marginTop: menuShown ? '150px' : '100px' }}
       >
-        <div className={css.card}>
+        <div className={css.cardDetail}>
           <div
             id={css.editDeleteContainer}
             style={{

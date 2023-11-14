@@ -266,6 +266,7 @@ function App() {
               />
               <ServerStatus />
               <Detail
+                paginateAmount={paginateAmount}
                 setUserData={setUserData}
                 userData={userData}
               />
