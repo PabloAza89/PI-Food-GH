@@ -703,6 +703,7 @@ const MyRecipe = ({
       //}, 0)
 
       //console.log("123123 RETURN EN FETCH", errorChecker())
+      console.log("123123 RETURN EN FETCH 11 ", error.instructions.map(e => Object.values(e)))
       //console.log("123123 RETURN EN FETCH 11 ", error.instructions.map(e => Object.values(e)).flat())
       //console.log("123123 RETURN EN FETCH 22 ", error.instructions.map(e => Object.values(e)).flat().some(f => f === true))
       
@@ -716,7 +717,7 @@ const MyRecipe = ({
         !error.instructions.map(e => Object.values(e)).flat().some(f => f === true)
       ) {
         console.log("123123 entro en el inner submit")
-        fetchFunction()
+        //fetchFunction()
       }
     }
     else fetchFunction()
@@ -999,6 +1000,8 @@ const MyRecipe = ({
           open={error.title.character || error.title.badWord}
           placement="bottom"
           style={{ zIndex: '1' }}
+          disableHoverListener={true}
+          disableFocusListener={true}
           hidden={ checkDisabledBadWords.current ? false : settingsFilters.showTooltips ? false : true }
           title={
             <div className={css.innerTooltip}>
@@ -1122,6 +1125,8 @@ const MyRecipe = ({
           placement="bottom-start"
           style={{ zIndex: '1' }}
           //style={{ zIndex: '1', display: 'none' }}
+          disableHoverListener={true}
+          disableFocusListener={true}
           hidden={ checkDisabledBadWords.current ? false : settingsFilters.showTooltips ? false : true }
           title={
             <div className={css.innerTooltip}>
@@ -1211,6 +1216,8 @@ const MyRecipe = ({
           placement="bottom"
           style={{ zIndex: '1' }}
           //style={{ zIndex: '1', display: 'none' }}
+          disableHoverListener={true}
+          disableFocusListener={true}
           hidden={ checkDisabledBadWords.current ? false : settingsFilters.showTooltips ? false : true }
           title={
             <div className={css.innerTooltip}>
@@ -1298,11 +1305,18 @@ const MyRecipe = ({
                 enterDelay={500}
                 leaveDelay={200}
                 enterTouchDelay={0}
-                open={(error.instructions[index] && error.instructions[index].character) || (error.instructions[index] && error.instructions[index].badWord)}
+                //open={(error.instructions[index] && error.instructions[index].character) || (error.instructions[index] && error.instructions[index].badWord)}
+                //open={error.instructions[index] && error.instructions[index].badWord}
+                open={
+                  error.instructions[index] ?
+                  error.instructions[index].character || error.instructions[index].badWord :
+                  false
+                } // continuar aca
                 placement={ index % 2 === 0 ? `bottom-end` : `bottom-start` }
                 style={{ zIndex: '1' }}
                 //style={{ zIndex: '1', display: 'none' }}
                 disableHoverListener={true}
+                disableFocusListener={true}
                 hidden={ checkDisabledBadWords.current ? false : settingsFilters.showTooltips ? false : true }
                 title={
                   <div className={css.innerTooltip}>
@@ -1409,8 +1423,9 @@ const MyRecipe = ({
                     className={css.buttonNew}
                     sx={{ background: 'green' }}
                     //onFocus={() => badWordsUIOnChangeResetter()}
+                    onFocus={() => badWordsUIOnChangeResetter()}
                     onClick={(e) => {
-                      badWordsUIOnChangeResetter()
+                      //badWordsUIOnChangeResetter()
                       handlerAddInstructions({ index: parseInt((e.target as HTMLInputElement).id, 10 )})
                     }}
                   >
@@ -1445,9 +1460,9 @@ const MyRecipe = ({
                     id={`${index}`}
                     className={css.buttonDelete}
                     sx={{ background: 'red' }}
-                    onFocus={() => badWordsUIOnChangeResetter()} // SEGUIR ACA
+                    onFocus={() => badWordsUIOnChangeResetter()}
                     onClick={(e) => {
-                      badWordsUIOnChangeResetter()
+                      //badWordsUIOnChangeResetter()
                       handlerDeleteInstructions({ index: parseInt((e.target as HTMLInputElement).id, 10) })
                     }}
                   >
