@@ -35,8 +35,10 @@ const CardsMapper = ({ setUserData, paginateAmount, userData }: CardsMapperI)  =
 
   let result: any = []
 
-  for (let i = 0; i < toShow.length; i += paginateAmount) {
-    result.push(toShow.slice(i, i + paginateAmount))
+  if (toShow[0]) {
+    for (let i = 0; i < toShow.length; i += paginateAmount) {
+      result.push(toShow.slice(i, i + paginateAmount))
+    }
   }
 
   let arraySplitedBy9: any[] = result[0] && result[

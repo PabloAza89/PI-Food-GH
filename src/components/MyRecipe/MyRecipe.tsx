@@ -62,96 +62,52 @@ const MyRecipe = ({
   const [saveButtonDisabled, setSaveButtonDisabled] = useState<boolean>(false);
   const [imageLoaded, setImageLoaded] = useState<boolean>(false);
 
+
+
+  const checkDisabledBadWords = useRef(false) // USED WHEN BADWORDS REAL-TIME IS DISABLED
+
   const handlerDeleteInstructions = ({ index }: handlerDeleteInstructionsI) => {
+
     let copyState = [...stepsState]
     copyState.splice(index, 1)
     setStepsState([...copyState])
     if (!isEditing) localStorage.setItem('stepsState', JSON.stringify([...copyState]))
 
-    if (settingsFilters.showBadWords) {
-      let copyError = {...error}
+    let copyError = {...error}
       copyError.instructions.splice(index, 1)
       setError(copyError)
 
+    if (settingsFilters.showBadWords) {
       copyState.forEach((e, idx) => {
-          $(`#targetInstructions${idx}`).html(e)
-          highlighter({value: e, type: 'instructions', index: idx})
+        $(`#targetInstructions${idx}`).html(e)
+        highlighter({value: e, type: 'instructions', index: idx})
       })
     }
-      
-
   }
 
   const handlerAddInstructions = async ({ index }: handlerAddInstructionsI) => {
 
+    const firstStep = async () => { // only copy state
       let copyState = [...stepsState]
       copyState.splice(index + 1, 0, "")
       setStepsState([...copyState])
-
-    const firstStep = async () => {
-
-      
-
-      let copyError = {...error}
-      copyError.instructions.splice(index + 1, 0, { character: false, badWord: false, empty: true })
-      setError(copyError)
-
-      copyState.forEach((e,indexx) => {
-        highlighter({value: e, type: 'instructions', index: indexx})
-
-        // let qwee = document.getElementById(`${indexx + 1}instructions`)
-        // function auto_grow(element: any) {
-        // element.style.height = "5px";
-        // element.style.height = (element.scrollHeight - 33) + "px";
-        // }
-        // qwee && auto_grow(qwee)
-
-        // let qwee = document.getElementById(`${indexx}instructions`)
-        // function auto_grow(element: any) {
-        // element.style.height = "5px";
-        // element.style.height = (element.scrollHeight - 33) + "px";
-        // }
-        // qwee && auto_grow(qwee)
-
-      })
       if (!isEditing) localStorage.setItem('stepsState', JSON.stringify([...copyState]))
+      return copyState
     }
-    const secondStep = async () => { // only highlight for last index
+
+    const secondStep = async (copyState: string[]) => { // execute highlighter
+      let copyError = {...error}
+      copyError.instructions.splice(index + 1, 0, { character: false, badWord: false, empty: false })
+      setError(copyError)
+      copyState.forEach((e,index) => highlighter({value: e, type: 'instructions', index: index}))
       let copyState2 = [...stepsState]
-
-    
-
-
-      if (copyState2.length > 1 && index !== copyState2.length - 1 ) {
+      if (copyState2.length > 1 && index !== copyState2.length - 1) {
         highlighter({value: copyState2.slice(copyState2.length-1)[0], type: 'instructions', index: copyState2.length})
-
-        
-        //var qwee = document.getElementById('instructions');
-        //let qwee = document.getElementById('targetSummary')
-       
-        //qwee && auto_grow(qwee)
-
       }
-      
     }
 
-
-    if (settingsFilters.showBadWords) {
-      firstStep().then(() => secondStep())
-    }
-    
-
-
-
-
-
-  }
-
-  const handlerUpdateInstructions = ({ index, value }: handlerUpdateInstructionsI) => {
-    // let copy = [...stepsState]
-    // copy.splice(index, 1, value)
-    // setStepsState([...copy])
-    // if (!isEditing) localStorage.setItem('stepsState', JSON.stringify([...copy]))
+    if (settingsFilters.showBadWords) firstStep().then((res) => secondStep(res))
+    else firstStep()
   }
 
   const [error, setError] = useState<errorI>({
@@ -280,20 +236,6 @@ const MyRecipe = ({
     }
 
     $(index !== undefined ? `#target${type.slice(0,1).toUpperCase() + type.slice(1) + index}` : `#target${type.slice(0,1).toUpperCase() + type.slice(1)}`)
-    //$(`#target${type.slice(0,1).toUpperCase() + type.slice(1) + index}`)
-    //$(`#targetInstructions${index}`)
-    //$(`#${index}instructions`)
-    
-    //$(`#targetSummary`)
-    //$(`#targetInstructions`)
-    //$(`#targetInstructions0`)
-    //$(`#targetInstructions${index}`)
-    //$(`#0instructions`)
-    //$(`#targetSummary`)
-    
-    //$(`#targetInstructions0`)
-    //$(`#targetInstructions`)
-    //$(`#0instructions`)
       .html(function() {
         let parsedToReturn:string[] = []
         if (array[0]) array.forEach((e:any, actualIndex:any) => {
@@ -309,8 +251,6 @@ const MyRecipe = ({
 
         if (type === `summary` || type === `instructions`) parsedToReturn.unshift("<div style='text-wrap: wrap'>")
         else parsedToReturn.unshift("<div>")
-        //parsedToReturn.unshift("<div style='text-wrap: wrap'>")
-        //parsedToReturn.unshift("<div>")
         parsedToReturn.push("</div>")
 
         return array[0] ? parsedToReturn.join("") : value
@@ -322,7 +262,9 @@ const MyRecipe = ({
       case (`title`):
         setTitleValue(value);
         if (!isEditing) localStorage.setItem('titleValue', value)
-        if (settingsFilters.showBadWords) {
+        if (settingsFilters.showBadWords || checkDisabledBadWords.current) {
+          //checkDisabledBadWords.current = false
+          //console.log("123123, se ejecuto en validator")
           let copyObjTitle = {...error}
           if (/[^A-Za-z0-9-(áÁéÉíÍóÓúÚüÜñÑ),;.:¡!¿?'"()[\] ]/g.test(value) && value.length !== 0) { copyObjTitle[type].character = true; setError({ ...copyObjTitle }) }
           else { copyObjTitle[type].character = false; setError({ ...copyObjTitle })}
@@ -334,18 +276,18 @@ const MyRecipe = ({
       case (`health`):
         setHealthValue(value);
         if (!isEditing) localStorage.setItem('healthValue', value)
-        if (settingsFilters.showBadWords) {
+        if (settingsFilters.showBadWords || checkDisabledBadWords.current) {
           let copyObj = {...error}
           if (!/^\d+$/.test(value) && value.length !== 0 ) { copyObj.health.string = true; setError({ ...copyObj })}
-          else { copyObj.health.string = false; setError({ ...copyObj })}
+          else { copyObj.health.string = false; copyObj.health.empty = false; setError({ ...copyObj }) }
           if (parseInt(value, 10) > 100 && value.length !== 0) {copyObj.health.max = true; setError({ ...copyObj })}
-          else { copyObj.health.max = false; setError({ ...copyObj })}
+          else { copyObj.health.max = false; copyObj.health.empty = false; setError({ ...copyObj }) }
         }
       break;
       case (`summary`):
         setSummaryValue(value);
         if (!isEditing) localStorage.setItem('summaryValue', value)
-        if (settingsFilters.showBadWords) {
+        if (settingsFilters.showBadWords || checkDisabledBadWords.current) {
           let copyObjSummary = {...error}
           if (/[^A-Za-z0-9-(áÁéÉíÍóÓúÚüÜñÑ),\n;.:¡!¿?'"()[\] ]/g.test(value) && value.length !== 0) { copyObjSummary[type].character = true; setError({ ...copyObjSummary }) }
           else { copyObjSummary[type].character = false; setError({ ...copyObjSummary })}
@@ -362,16 +304,19 @@ const MyRecipe = ({
           setStepsState([...copyStepsState])
           if (!isEditing) localStorage.setItem('stepsState', JSON.stringify([...copyStepsState]))
         }
-        if (settingsFilters.showBadWords) {
+        if (settingsFilters.showBadWords || checkDisabledBadWords.current) {
+          console.log("123123 ingreso ACAA")
           if (/[^A-Za-z0-9-(áÁéÉíÍóÓúÚüÜñÑ),\n;.:¡!¿?'"()[\] ]/g.test(value) && value.length !== 0) {
             let copyObjInstructions = {...error}
             copyObjInstructions.instructions[index!].character = true
-            copyObjInstructions.instructions[index!].empty = value.replaceAll(" ","").replaceAll("\n", "") === "" ? true : false
+            //copyObjInstructions.instructions[index!].empty = value.replaceAll(" ","").replaceAll("\n", "") === "" ? true : false
+            copyObjInstructions.instructions[index!].empty = false
             setError({ ...copyObjInstructions })
           } else {
             let copyObjInstructions = {...error}
             copyObjInstructions.instructions[index!].character = false
-            copyObjInstructions.instructions[index!].empty = value.replaceAll(" ","").replaceAll("\n", "") === "" ? true : false
+            //copyObjInstructions.instructions[index!].empty = value.replaceAll(" ","").replaceAll("\n", "") === "" ? true : false
+            copyObjInstructions.instructions[index!].empty = false
             setError({ ...copyObjInstructions })
           }
           highlighter({value, type, index})
@@ -406,7 +351,7 @@ const MyRecipe = ({
       title: { character: false, badWord: false, empty: false },
       health: { string: false, max: false, empty: false },
       summary: { character: false, badWord: false, empty: false },
-      instructions: [{ character: false, badWord: false, empty: false },]
+      instructions: [{ character: false, badWord: false, empty: false }]
     });
     localStorage.removeItem('titleValue');
     localStorage.removeItem('imageValue');
@@ -468,7 +413,230 @@ const MyRecipe = ({
     })
   })
 
+  const fetchEditFunction = () => {
+    fetch(`${process.env.REACT_APP_SV}/recipe`, {
+      method: 'PUT',
+      credentials: 'include',
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+      body: JSON.stringify({
+        id: location.state.id,
+        title: titleValue,
+        image: imageValue,
+        healthScore: healthValue,
+        summary: summaryValue,
+        dishes: dishesArray,
+        diets: dietsArray,
+        analyzedInstructions: stepsState,
+        email: userData.email,
+        fd_tkn: userData.fd_tkn
+      })
+    })
+    .then((res) => res.json())
+    .then((res) => {
+      if (res.status === 400 && res.message.name === 'SequelizeDatabaseError') {
+        Swal.fire({
+          title: `There was an error when updating your recipe.. `,
+          text: `Please, try save again.`,
+          icon: 'info',
+          showConfirmButton: false,
+          showDenyButton: false,
+          showCancelButton: false,
+          timer: 3000,
+        })
+        setSaveButtonDisabled(false)
+        setAllDisabled(false)
+      }
+
+      if (res.status === 200 && res.message === `1 item updated`) {
+        Swal.fire({
+          title: 'Recipe updated successfully !',
+          icon: 'success',
+          showConfirmButton: false,
+          showDenyButton: false,
+          showCancelButton: false,
+          timer: 1500,
+        })
+        setSaveButtonDisabled(true)
+        setAllDisabled(true)
+      }
+
+      if (res.status === 400 && res.message === 'Invalid Credentials') {
+        setUserData({ email: '', fd_tkn: '' })
+        Swal.fire({
+          title: `There was an error when cheking your loggin.. `,
+          text: `Please, log in again.`,
+          icon: 'info',
+          showConfirmButton: false,
+          showDenyButton: false,
+          showCancelButton: false,
+          timer: 3000,
+        })
+        setSaveButtonDisabled(false)
+        setAllDisabled(false)
+      }
+    })
+    .catch((rej) => {
+      console.log(rej)
+      Swal.fire({
+        title: `It looks like server its sleeping..`,
+        html: `So you cannot save your recipe.<br>We are sorry. Please try againg later..<br><br>Don't worry about everything you wrote, it will be saved in browser memory :) `,
+        icon: 'error',
+        showConfirmButton: false,
+        showDenyButton: false,
+        showCancelButton: false,
+        timer: 3000,
+      })
+    })
+  }
+
+  const fetchFunction = () => {
+    console.log("tttTTTTTT fetch function")
+    fetch(`${process.env.REACT_APP_SV}/recipe`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-type': 'application/json; charset=UTF-8' },
+      body: JSON.stringify({
+        title: titleValue,
+        image: imageValue,
+        healthScore: healthValue,
+        summary: summaryValue,
+        dishes: dishesArray,
+        diets: dietsArray,
+        analyzedInstructions: stepsState,
+        email: userData.email,
+        fd_tkn: userData.fd_tkn
+      })
+    })
+    .then((res) => res.json())
+    .then((res) => {
+      if (res.status === 200) {
+        Swal.fire({
+          title: 'Recipe saved successfully !',
+          icon: 'info',
+          showConfirmButton: false,
+          showDenyButton: false,
+          showCancelButton: false,
+          timer: 1000,
+        })
+        setSaveButtonDisabled(true)
+        setAllDisabled(true)
+        recipeCreated.current = true
+      }
+      if (res.status === 400 && res.message === 'Invalid Credentials') {
+        setUserData({ email: '', fd_tkn: '' })
+        Swal.fire({
+          title: `There was an error when cheking your loggin.. `,
+          text: `Please, log in again.`,
+          icon: 'info',
+          showConfirmButton: false,
+          showDenyButton: false,
+          showCancelButton: false,
+          timer: 3000,
+        })
+        setSaveButtonDisabled(false)
+        setAllDisabled(false)
+      }
+      if (res.status === 400 && res.message !== 'Invalid Credentials') {
+        Swal.fire({
+          title: `There was an error when saving your recipe.. `,
+          text: `Please try again.`,
+          icon: 'info',
+          showConfirmButton: false,
+          showDenyButton: false,
+          showCancelButton: false,
+          timer: 3000,
+        })
+        setSaveButtonDisabled(false)
+        setAllDisabled(false)
+      }
+    })
+    .catch((rej) => {
+      Swal.fire({
+        title: `It looks like server its sleeping..`,
+        html: `So you cannot save your recipe.<br>We are sorry. Please try againg later..<br><br>Don't worry about everything you wrote, it will be saved in browser memory :) `,
+        icon: 'error',
+        showConfirmButton: false,
+        showDenyButton: false,
+        showCancelButton: false,
+        timer: 3000,
+      })
+    })
+  }
+
+
+  const badWordsUIOnChangeResetter = () => {
+    if (!settingsFilters.showBadWords) {
+      checkDisabledBadWords.current = false
+      $(`#targetTitle`)
+        .html("<div />")
+      $(`#targetSummary, [id^="targetInstructions"]`)
+        .html("<div style='text-wrap: wrap'></div>")
+      setError({
+        title: { character: false, badWord: false, empty: false },
+        health: { string: false, max: false, empty: false },
+        summary: { character: false, badWord: false, empty: false },
+        //instructions: [{ character: false, badWord: false, empty: false }]
+        instructions: Array.from({length: stepsState.length}, (e,i) => ({ character: false, badWord: false, empty: false }))
+      });
+    }
+  }
+
+  //console.log("123123 error.instructions POR FUERA", error.instructions)
+
+  const errorChecker = () => {
+    // CHECK IF SOME ERROR VALUE IS TRUE..
+    //console.log("123123 error.title", error.title)
+    //return error.title
+    //return error.instructions
+    //return Object.values(error).flat().map(e => Object.values(e)).flat().some(e => e === true)
+
+    //return Object.values(error).flat().map(e => Object.values(e)).flat()
+
+    //return Object.values(error.title).flat().some(e => e === true) // FUNCIONA OK
+    //return Object.values(error.health).flat().some(e => e === true) // FUNCIONA OK
+    //return Object.values(error.summary).flat().some(e => e === true) // FUNCIONA OK
+
+    //return error.instructions.map(e => Object.values(e)).flat() //
+    //return error.instructions.map(e => Object.values(e)).flat().some(f => f === true) // SEGUIR ACA
+
+
+    //console.log("123123 error.health", error.health)
+    //console.log("123123 error.summary", error.summary)
+    //console.log("123123 error.instructions 11", error.instructions) // ESTE OK
+    //let qq = []
+    //error.instructions.forEach(e => qq.push(Object.values(e)))
+    //console.log("123123 error.instructions 22", qq.flat()) // ESTE OK
+    //let rr = [...error.instructions]
+    //console.log("123123 error.instructions 22", rr.map(e => Object.values(e))) // ESTE OK
+
+    //let qq = []
+    //error.instructions.forEach(e => qq.push(Object.keys(e)))
+    //console.log("123123 error.instructions 22", qq) // ESTE OK
+    //character
+    //badWord
+    //empty
+    //let copyError = [...error.instructions]
+    //let copyError = Array.from(error.instructions, x => x)
+    //let copyError = error.instructions
+
+    // copyError.map(e =>
+    //   qq.push(e.character,
+    //   e.badWord,
+    //   e.empty)
+    // ) // ESTE OK
+
+    //console.log("123123 error.instructions 22", qq)
+    //console.log("123123 error.title", Object.values(error.title).flat().some(e => e === true) )
+    //console.log("123123 error.health", Object.values(error.health).flat().some(e => e === true) )
+    //console.log("123123 error.summary", Object.values(error.summary).flat().some(e => e === true) )
+    //console.log("123123 error.instructions", error.instructions.map(e => Object.values(e)).flat().some(e => e === true) ) // SEGUIR ACA
+    //console.log("123123 error.instructions 33", error.instructions.map(e => Object.values(e)).flat() ) // ESTE DA CUALQUIER COSA
+  }
+
   const handleSubmit = (e:any) => {
+    console.log("ttt settingsFilters.showBadWords", settingsFilters.showBadWords)
     let emptyInputs = []
 
     if (titleValue.replaceAll(" ","").replaceAll("\n", "") === "") emptyInputs.push("Title")
@@ -514,78 +682,44 @@ const MyRecipe = ({
       })
     }
 
-    else {
-      fetch(`${process.env.REACT_APP_SV}/recipe`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-type': 'application/json; charset=UTF-8' },
-        body: JSON.stringify({
-          title: titleValue,
-          image: imageValue,
-          healthScore: healthValue,
-          summary: summaryValue,
-          dishes: dishesArray,
-          diets: dietsArray,
-          analyzedInstructions: stepsState,
-          email: userData.email,
-          fd_tkn: userData.fd_tkn
+    // TEST A CONTINUACION // SUBMIT
+    // Object.values(qq).flat().map(e => Object.values(e)).flat().some(e => e === true)
+
+    else if (!settingsFilters.showBadWords) {
+      //let errorCopy = {...error}
+      console.log("123123 entro en el submit")
+      //dispatch(setSettingsFilters({ type: `showBadWords`, value: true }))
+      checkDisabledBadWords.current = true
+      
+      //console.log("123123, se ejecuto en submit")
+      validator({ type: `title`, value: titleValue })
+      validator({ type: `health`, value: healthValue })
+      validator({ type: `summary`, value: summaryValue })
+      //setTimeout(() => {
+        //stepsState && stepsState.forEach((el:any, idx:any) => {
+        stepsState.forEach((el:any, idx:any) => {
+          validator({ value: el, type: `instructions`, index: idx })
         })
-      })
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.status === 200) {
-          Swal.fire({
-            title: 'Recipe saved successfully !',
-            icon: 'info',
-            showConfirmButton: false,
-            showDenyButton: false,
-            showCancelButton: false,
-            timer: 1000,
-          })
-          setSaveButtonDisabled(true)
-          setAllDisabled(true)
-          recipeCreated.current = true
-        }
-        if (res.status === 400 && res.message === 'Invalid Credentials') {
-          setUserData({ email: '', fd_tkn: '' })
-          Swal.fire({
-            title: `There was an error when cheking your loggin.. `,
-            text: `Please, log in again.`,
-            icon: 'info',
-            showConfirmButton: false,
-            showDenyButton: false,
-            showCancelButton: false,
-            timer: 3000,
-          })
-          setSaveButtonDisabled(false)
-          setAllDisabled(false)
-        }
-        if (res.status === 400 && res.message !== 'Invalid Credentials') {
-          Swal.fire({
-            title: `There was an error when saving your recipe.. `,
-            text: `Please try again.`,
-            icon: 'info',
-            showConfirmButton: false,
-            showDenyButton: false,
-            showCancelButton: false,
-            timer: 3000,
-          })
-          setSaveButtonDisabled(false)
-          setAllDisabled(false)
-        }
-      })
-      .catch((rej) => {
-        Swal.fire({
-          title: `It looks like server its sleeping..`,
-          html: `So you cannot save your recipe.<br>We are sorry. Please try againg later..<br><br>Don't worry about everything you wrote, it will be saved in browser memory :) `,
-          icon: 'error',
-          showConfirmButton: false,
-          showDenyButton: false,
-          showCancelButton: false,
-          timer: 3000,
-        })
-      })
+      //}, 0)
+
+      //console.log("123123 RETURN EN FETCH", errorChecker())
+      //console.log("123123 RETURN EN FETCH 11 ", error.instructions.map(e => Object.values(e)).flat())
+      //console.log("123123 RETURN EN FETCH 22 ", error.instructions.map(e => Object.values(e)).flat().some(f => f === true))
+      
+
+      //if (false) {
+      //if (false) {
+      if ( // IF NO ERROR, SUBMIT
+        !Object.values(error.title).flat().some(e => e === true) &&
+        !Object.values(error.health).flat().some(e => e === true) &&
+        !Object.values(error.summary).flat().some(e => e === true) &&
+        !error.instructions.map(e => Object.values(e)).flat().some(f => f === true)
+      ) {
+        console.log("123123 entro en el inner submit")
+        fetchFunction()
+      }
     }
+    else fetchFunction()
   }
 
   const handleSaveEdit = (e:any) => {
@@ -633,82 +767,27 @@ const MyRecipe = ({
       })
     }
 
+    else if (!settingsFilters.showBadWords) {
+      console.log("ttt entro en el submit")
+      //dispatch(setSettingsFilters({ type: `showBadWords`, value: true }))
+      checkDisabledBadWords.current = true
+      
+      //console.log("123123, se ejecuto en submit")
+      validator({ type: `title`, value: titleValue })
+      validator({ type: `health`, value: healthValue })
+      validator({ type: `summary`, value: summaryValue })
+      setTimeout(() => {
+        stepsState && stepsState.forEach((el:any, idx:any) => {
+          validator({ value: el, type: `instructions`, index: idx })
+        })
+      }, 0)
+
+      // CHECK IF SOME ERROR VALUE IS TRUE..
+      if (!Object.values(error).flat().map(e => Object.values(e)).flat().some(e => e === true)) fetchEditFunction()
+    }
+
     else {
-      fetch(`${process.env.REACT_APP_SV}/recipe`, {
-        method: 'PUT',
-        credentials: 'include',
-        headers: {
-          'Content-type': 'application/json; charset=UTF-8',
-        },
-        body: JSON.stringify({
-          id: location.state.id,
-          title: titleValue,
-          image: imageValue,
-          healthScore: healthValue,
-          summary: summaryValue,
-          dishes: dishesArray,
-          diets: dietsArray,
-          analyzedInstructions: stepsState,
-          email: userData.email,
-          fd_tkn: userData.fd_tkn
-        })
-      })
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.status === 400 && res.message.name === 'SequelizeDatabaseError') {
-          Swal.fire({
-            title: `There was an error when updating your recipe.. `,
-            text: `Please, try save again.`,
-            icon: 'info',
-            showConfirmButton: false,
-            showDenyButton: false,
-            showCancelButton: false,
-            timer: 3000,
-          })
-          setSaveButtonDisabled(false)
-          setAllDisabled(false)
-        }
-
-        if (res.status === 200 && res.message === `1 item updated`) {
-          Swal.fire({
-            title: 'Recipe updated successfully !',
-            icon: 'success',
-            showConfirmButton: false,
-            showDenyButton: false,
-            showCancelButton: false,
-            timer: 1500,
-          })
-          setSaveButtonDisabled(true)
-          setAllDisabled(true)
-        }
-
-        if (res.status === 400 && res.message === 'Invalid Credentials') {
-          setUserData({ email: '', fd_tkn: '' })
-          Swal.fire({
-            title: `There was an error when cheking your loggin.. `,
-            text: `Please, log in again.`,
-            icon: 'info',
-            showConfirmButton: false,
-            showDenyButton: false,
-            showCancelButton: false,
-            timer: 3000,
-          })
-          setSaveButtonDisabled(false)
-          setAllDisabled(false)
-        }
-      })
-      .catch((rej) => {
-        console.log(rej)
-        Swal.fire({
-          title: `It looks like server its sleeping..`,
-          html: `So you cannot save your recipe.<br>We are sorry. Please try againg later..<br><br>Don't worry about everything you wrote, it will be saved in browser memory :) `,
-          icon: 'error',
-          showConfirmButton: false,
-          showDenyButton: false,
-          showCancelButton: false,
-          timer: 3000,
-        })
-      })
+      fetchEditFunction()
     }
   }
 
@@ -746,7 +825,7 @@ const MyRecipe = ({
               // qwe && auto_grow(qwe)
             })
           }, 0)
-       }
+        }
       }
       return () => {
         if (recipeCreated.current) {
@@ -866,6 +945,10 @@ const MyRecipe = ({
   //   auto_grow(qwe)
   // })
 
+  console.log("ttt saveButtonDisabled", saveButtonDisabled)
+  console.log("ttt error.title.character", error.title.character)
+  console.log("ttt error.title.badWord", error.title.badWord)
+  
 
   return (
     <div
@@ -916,17 +999,7 @@ const MyRecipe = ({
           open={error.title.character || error.title.badWord}
           placement="bottom"
           style={{ zIndex: '1' }}
-          hidden={ settingsFilters.showTooltips ? false : true }
-          //style={{ zIndex: '1', display: 'none' }}
-          // style={{
-          //   zIndex: '1',
-          //   display: // hidden={true} DONT WORK ON INPUT CHILDREN
-          //     settingsFilters.showTooltips ?
-          //     'inherit' :
-          //     'none'
-          // }}
-          //hidden={true} // Deactivate Tooltip render
-          //hidden={false} // Deactivate Tooltip render
+          hidden={ checkDisabledBadWords.current ? false : settingsFilters.showTooltips ? false : true }
           title={
             <div className={css.innerTooltip}>
               { error.title.character ? <div style={{ fontWeight: '400', fontSize: '17px' }}>Special characters not allowed in "Title" !</div> : null }
@@ -960,11 +1033,18 @@ const MyRecipe = ({
                 `e.g. Pasta with tomatoes..`
               }
               //onChange={(e) => { validator({ value: e.target.value, type: e.target.id }) }}
+              onFocus={() => badWordsUIOnChangeResetter()}
+              // onClick={() => {
+              //   //console.log("123123 SELECTER")
+              //   badWordsUIOnChangeResetter()
+              // }}
               onChange={(e) => {
                 //settingsFilters.showBadWords ?
                 //validator({ value: e.target.value, type: e.target.id }) :
                 //setTitleValue(e.target.value)
                 validator({ value: e.target.value, type: e.target.id })
+                
+                
               }}
             />
           </div>
@@ -1011,8 +1091,9 @@ const MyRecipe = ({
               `Enter image url` :
               `e.g. https://commons.wikimedia.org/wiki/File:Elaboraci%C3%B3n_del_tomate_frito_(4).jpg`
             }
+            onFocus={() => badWordsUIOnChangeResetter()}
             onChange={(e) => { // DOUBLE CHECK/LOADING FOR EDITED ENCODED URL IMAGE
-
+              //badWordsUIOnChangeResetter()
               let copyImageValue = e.target.value.trim()
               if (!isEditing) localStorage.setItem('imageValue', e.target.value)
               setImageValue(e.target.value.trim())
@@ -1041,7 +1122,7 @@ const MyRecipe = ({
           placement="bottom-start"
           style={{ zIndex: '1' }}
           //style={{ zIndex: '1', display: 'none' }}
-          hidden={ settingsFilters.showTooltips ? false : true }
+          hidden={ checkDisabledBadWords.current ? false : settingsFilters.showTooltips ? false : true }
           title={
             <div className={css.innerTooltip}>
               <div
@@ -1068,8 +1149,10 @@ const MyRecipe = ({
               `Enter health level` :
               `e.g. 73`
             }
+            onFocus={() => badWordsUIOnChangeResetter()}
             onChange={(e) => {
               validator({ value: e.target.value, type: e.target.id })
+              //badWordsUIOnChangeResetter()
               //setHealthValue(e.target.value)
             }}
           />
@@ -1089,7 +1172,17 @@ const MyRecipe = ({
             value={dishesArray}
             disabled={allDisabled}
             label="Select Dishes"
-            onChange={handleChangeDishes}
+            //onFocus={() => console.log("123123 SELECTER")}
+            // onClick={() => {
+            //   //console.log("123123 SELECTER")
+            //   //badWordsUIOnChangeResetter()
+            // }}
+            //onClick={console.log("123123 SELECTER")}
+            onFocus={() => badWordsUIOnChangeResetter()}
+            onChange={(e) => {
+              handleChangeDishes(e);
+              //badWordsUIOnChangeResetter()
+            }}
             renderValue={(selected) => selected.join(', ')}
             MenuProps={ {PaperProps: { style: { maxHeight: `${48 * 4.5}px`, width: 300 }}}}
           >
@@ -1118,7 +1211,7 @@ const MyRecipe = ({
           placement="bottom"
           style={{ zIndex: '1' }}
           //style={{ zIndex: '1', display: 'none' }}
-          hidden={ settingsFilters.showTooltips ? false : true }
+          hidden={ checkDisabledBadWords.current ? false : settingsFilters.showTooltips ? false : true }
           title={
             <div className={css.innerTooltip}>
               { error.summary.character ? <div style={{ fontWeight: '400', fontSize: '17px' }}>Special characters not allowed in "Summary" !</div> : null }
@@ -1149,6 +1242,7 @@ const MyRecipe = ({
               value={summaryValue}
               placeholder={`e.g. Healthy pasta recipe`}
               //onChange={(e) => { validator({ value: e.target.value, type: e.target.id }) }}
+              onFocus={() => badWordsUIOnChangeResetter()}
               onChange={(e) => {
                 validator({ value: e.target.value, type: e.target.id })
                 //setSummaryValue(e.target.value)
@@ -1171,6 +1265,7 @@ const MyRecipe = ({
               className: css.selectInput
             }}
             label="Select Diets"
+            onFocus={() => badWordsUIOnChangeResetter()}
             onChange={handleChangeDiets}
             renderValue={(selected) => selected.join(', ')}
             MenuProps={ {PaperProps: { style: { maxHeight: `${48 * 4.5}px`, width: 300 }}}}
@@ -1207,7 +1302,8 @@ const MyRecipe = ({
                 placement={ index % 2 === 0 ? `bottom-end` : `bottom-start` }
                 style={{ zIndex: '1' }}
                 //style={{ zIndex: '1', display: 'none' }}
-                hidden={ settingsFilters.showTooltips ? false : true }
+                disableHoverListener={true}
+                hidden={ checkDisabledBadWords.current ? false : settingsFilters.showTooltips ? false : true }
                 title={
                   <div className={css.innerTooltip}>
                     { error.instructions[index] && error.instructions[index].character ? <div style={{ fontWeight: '400' }}>Special characters not allowed in "Instructions" !</div> : null }
@@ -1253,6 +1349,7 @@ const MyRecipe = ({
                     //     whiteSpace: stepsState[index] !== '' ? 'pre-wrap' : 'nowrap'
                     //   }
                     // }}
+                    onFocus={() => badWordsUIOnChangeResetter()}
                     onChange={(e) => {
                       console.log("XXX e.target.value", e.target.value)
                       console.log("XXX e.target.id", e.target.id)
@@ -1311,7 +1408,11 @@ const MyRecipe = ({
                     id={`${index}`}
                     className={css.buttonNew}
                     sx={{ background: 'green' }}
-                    onClick={(e) => handlerAddInstructions({ index: parseInt((e.target as HTMLInputElement).id, 10 )})}
+                    //onFocus={() => badWordsUIOnChangeResetter()}
+                    onClick={(e) => {
+                      badWordsUIOnChangeResetter()
+                      handlerAddInstructions({ index: parseInt((e.target as HTMLInputElement).id, 10 )})
+                    }}
                   >
                   </Button>
                 </div>
@@ -1344,7 +1445,11 @@ const MyRecipe = ({
                     id={`${index}`}
                     className={css.buttonDelete}
                     sx={{ background: 'red' }}
-                    onClick={(e) => { handlerDeleteInstructions({ index: parseInt((e.target as HTMLInputElement).id, 10) }) }}
+                    onFocus={() => badWordsUIOnChangeResetter()} // SEGUIR ACA
+                    onClick={(e) => {
+                      badWordsUIOnChangeResetter()
+                      handlerDeleteInstructions({ index: parseInt((e.target as HTMLInputElement).id, 10) })
+                    }}
                   >
                     
 
@@ -1380,7 +1485,15 @@ const MyRecipe = ({
         <Button
           className={css.buttonClearSave}
           variant="contained"
-          onClick={(e) => isEditing ? handleSaveEdit(e) : handleSubmit(e) }
+          onClick={(e) => {
+            // !settingsFilters.showBadWords ?
+            // testHandler() :
+            isEditing ?
+            handleSaveEdit(e) :
+            handleSubmit(e)
+
+          }}
+          //settingsFilters.showBadWords
           disabled={
             saveButtonDisabled ||
             error.title.character ||
