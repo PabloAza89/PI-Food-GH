@@ -133,8 +133,9 @@
   outline: 1px solid rgba(0, 0, 0, 0.2);
   color: rgba(245, 245, 220, 0.85);
   resize: none; /* FOR TEXTAREA */
-  overflow: hidden;
   height: 19px; /* ONLY FOR STEPS ? */
+  overflow: hidden; /* DETELE FOR FULL PLACEHOLDER DESCRIPTION */
+  text-overflow: ellipsis; /* DETELE FOR FULL PLACEHOLDER DESCRIPTION */
 }
 
 .inputBase:hover {
@@ -147,7 +148,10 @@
 }
 
 .inputBase::placeholder {
-  color: rgba(245, 245, 220, 0.45) !important
+  color: rgba(245, 245, 220, 0.45) !important;
+  white-space: nowrap; /* DETELE FOR FULL PLACEHOLDER DESCRIPTION */
+  overflow: hidden; /* DETELE FOR FULL PLACEHOLDER DESCRIPTION */
+  text-overflow: ellipsis; /* DETELE FOR FULL PLACEHOLDER DESCRIPTION */
 }
 
 .label {

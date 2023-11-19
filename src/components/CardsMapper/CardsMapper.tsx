@@ -123,6 +123,7 @@ const CardsMapper = ({ setUserData, paginateAmount, userData }: CardsMapperI)  =
           setUserData={setUserData}
           summary={e.summary}
           analyzedInstructions={e.analyzedInstructions}
+          paginateAmount={paginateAmount}
         />
       )}
     </div>) :

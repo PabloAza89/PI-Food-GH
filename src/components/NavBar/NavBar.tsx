@@ -121,7 +121,7 @@ const NavBar = ({ recipeCreatedOrEdited, paginateAmount }: NavBarI) =>  {
         </div>
         <Tooltip
           // MOBILE
-          enterTouchDelay={1000}
+          enterTouchDelay={500}
           leaveTouchDelay={2000}
           // DESKTOP
           enterDelay={1000}
@@ -139,8 +139,8 @@ const NavBar = ({ recipeCreatedOrEdited, paginateAmount }: NavBarI) =>  {
           }
           arrow
           placement="bottom-end"
-          title={`Show/Hide Menu`}
           hidden={ settingsFilters.showTooltips ? false : true }
+          title={`Show/Hide Menu`}
         >
           <Button
             variant="contained"

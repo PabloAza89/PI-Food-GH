@@ -17,19 +17,21 @@ import {
   getRecipesFromDB, getDietsFromDB, getDishesFromDB,
   applyFilters
 } from '../../actions';
-import { recipesI, userDataI, settingsFiltersI } from '../../interfaces/interfaces';
+import {
+  recipesI, userDataI, settingsFiltersI, paginateAmountI
+} from '../../interfaces/interfaces';
 
 interface CardI {
   setUserData: Dispatch<SetStateAction<userDataI>>
   userData: userDataI
 }
 
-interface CardI extends recipesI {}
+interface CardI extends recipesI, paginateAmountI {}
 
 const Card = ({
   id, image, title, healthScore , diets, email,
   dishTypes, userRecipe, setUserData, userData,
-  summary, analyzedInstructions
+  summary, analyzedInstructions, paginateAmount
 }: CardI) => {
 
   const dispatch = useDispatch();
@@ -126,20 +128,31 @@ const Card = ({
       </div>
       <div className={`${css.imageOrTitleContainer} ${com.noSelect}`}>
         <Tooltip
+          // MOBILE
+          enterTouchDelay={500}
+          leaveTouchDelay={2000}
+          // DESKTOP
+          enterDelay={1000}
+          enterNextDelay={1000}
+          leaveDelay={500}
+          disableFocusListener={
+            paginateAmount === 45 ?
+            true :
+            !settingsFilters.showTooltips || fitTitle
+          }
+          disableHoverListener={
+            paginateAmount === 45 ?
+            true :
+            !settingsFilters.showTooltips || fitTitle
+          }
           arrow
-          enterDelay={700}
-          enterNextDelay={700}
-          leaveDelay={200}
-          enterTouchDelay={0}
-          disableFocusListener={ !settingsFilters.showTooltips ? true : fitTitle}
-          disableHoverListener={ !settingsFilters.showTooltips ? true : fitTitle}
           placement="bottom"
+          hidden={ settingsFilters.showTooltips ? false : true }
           title={
             <div className={css.innerTooltip}>
               {title}
             </div>
           }
-          hidden={ settingsFilters.showTooltips ? false : true }
         >
           <div
             className={`titleCard${id}`}
@@ -152,18 +165,29 @@ const Card = ({
         </Tooltip>
       </div>
         <Tooltip
+          // MOBILE
+          enterTouchDelay={500}
+          leaveTouchDelay={2000}
+          // DESKTOP
+          enterDelay={1000}
+          enterNextDelay={1000}
+          leaveDelay={500}
+          disableFocusListener={
+            paginateAmount === 45 ?
+            true :
+            !settingsFilters.showTooltips || fitTitle
+          }
+          disableHoverListener={
+            paginateAmount === 45 ?
+            true :
+            !settingsFilters.showTooltips || fitTitle
+          }
           arrow
-          enterDelay={700}
-          enterNextDelay={700}
-          leaveDelay={200}
-          enterTouchDelay={0}
-          disableFocusListener={ !settingsFilters.showTooltips ? true : fitDiet}
-          disableHoverListener={ !settingsFilters.showTooltips ? true : fitDiet}
           placement="bottom"
           hidden={ settingsFilters.showTooltips ? false : true }
           title={
             <div className={css.innerTooltip}>
-              <b>Diets: </b>
+              <b>Diets: </b>
               {diets[0] && diets.map((e:any) => {
                 if ((diets.indexOf(e) !== diets.length - 1)) return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ") + " + "
                 else return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ")
@@ -190,18 +214,29 @@ const Card = ({
         <b>Healt Score: </b>{healthScore}
       </div>
       <Tooltip
+        // MOBILE
+        enterTouchDelay={500}
+        leaveTouchDelay={2000}
+        // DESKTOP
+        enterDelay={1000}
+        enterNextDelay={1000}
+        leaveDelay={500}
+        disableFocusListener={
+          paginateAmount === 45 ?
+          true :
+          !settingsFilters.showTooltips || fitTitle
+        }
+        disableHoverListener={
+          paginateAmount === 45 ?
+          true :
+          !settingsFilters.showTooltips || fitTitle
+        }
         arrow
-        enterDelay={700}
-        enterNextDelay={700}
-        leaveDelay={200}
-        enterTouchDelay={0}
-        disableFocusListener={ !settingsFilters.showTooltips ? true : fitDish}
-        disableHoverListener={ !settingsFilters.showTooltips ? true : fitDish}
         placement="bottom"
         hidden={ settingsFilters.showTooltips ? false : true }
         title={
           <div className={css.innerTooltip}>
-            <b>Dish Types: </b>
+            <b>Dish Types: </b>
             {dishTypes && dishTypes.map((e:any) => {
               if ((dishTypes.indexOf(e) !== dishTypes.length - 1)) return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join("  ") + " + "
               else return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ")

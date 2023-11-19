@@ -67,17 +67,28 @@ const Paginate = ({ paginateAmount }: paginateAmountI) => {
         className={css.buttonsAndHintContainer}
       >
         <Tooltip
+          // MOBILE
+          enterTouchDelay={500}
+          leaveTouchDelay={2000}
+          // DESKTOP
+          enterDelay={1000}
+          enterNextDelay={1000}
+          leaveDelay={500}
+          disableFocusListener={
+            paginateAmount === 45 ?
+            true :
+            !settingsFilters.showTooltips
+          }
+          disableHoverListener={
+            paginateAmount === 45 ?
+            true :
+            !settingsFilters.showTooltips
+          }
           arrow
+          placement="bottom"
           variant="outlined"
-          enterDelay={700}
-          enterNextDelay={700}
-          leaveDelay={0}
-          enterTouchDelay={0}
-          disableFocusListener={!settingsFilters.showTooltips}
-          disableHoverListener={!settingsFilters.showTooltips}
           hidden={ settingsFilters.showTooltips ? false : true }
           title={ tabChoosen === 0 ? `This is the first.` : `Previous` }
-          placement="bottom"
         >
           <div style={{ display: 'flex' }}> {/* HELPER FOR BUTTON-DISABLED-TOOLTIP */}
             <Button
@@ -158,21 +169,32 @@ const Paginate = ({ paginateAmount }: paginateAmountI) => {
           )
         })}
         <Tooltip
+          // MOBILE
+          enterTouchDelay={500}
+          leaveTouchDelay={2000}
+          // DESKTOP
+          enterDelay={1000}
+          enterNextDelay={1000}
+          leaveDelay={500}
+          disableFocusListener={
+            paginateAmount === 45 ?
+            true :
+            !settingsFilters.showTooltips
+          }
+          disableHoverListener={
+            paginateAmount === 45 ?
+            true :
+            !settingsFilters.showTooltips
+          }
           arrow
+          placement="bottom"
           variant="outlined"
-          enterDelay={700}
-          enterNextDelay={700}
-          leaveDelay={0}
-          enterTouchDelay={0}
-          disableFocusListener={!settingsFilters.showTooltips}
-          disableHoverListener={!settingsFilters.showTooltips}
           hidden={ settingsFilters.showTooltips ? false : true }
           title={
             paginateAmount === 45 ?
             (result.length - 1 === tabChoosen ? `This is the last.` : `Next`) :
             (result.length - 1 === (tabChoosen / 2) ? `This is the last.` : `Next`)
           }
-          placement="bottom"
         >
           <div style={{ display: 'flex' }}> {/* HELPER FOR BUTTON-DISABLED-TOOLTIP */}
             <Button

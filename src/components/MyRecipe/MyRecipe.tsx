@@ -847,18 +847,14 @@ const MyRecipe = ({
       <div className={css.eachRow}>
         <div className={css.text}>Title:</div>
         <Tooltip
-          arrow
-          variant="outlined"
-          size="md"
-          enterDelay={5000}
-          enterNextDelay={5000}
-          leaveDelay={200}
-          enterTouchDelay={0}
-          open={error.title.character || error.title.badWord}
-          placement="bottom"
+          disableTouchListener={true} // FOR PERFOMANCE
+          disableHoverListener={true} // FOR PERFOMANCE
+          disableFocusListener={true} // FOR PERFOMANCE
           style={{ zIndex: '1' }}
-          disableHoverListener={true}
-          disableFocusListener={true}
+          open={ error.title.character || error.title.badWord }
+          arrow
+          placement="bottom"
+          variant="outlined"
           hidden={ checkDisabledBadWords.current ? false : settingsFilters.showTooltips ? false : true }
           title={
             <div className={css.innerTooltip}>
@@ -866,13 +862,18 @@ const MyRecipe = ({
               { error.title.character ? <div style={{ color: '#42424f' }}>Allowed characters:</div> : null }
               { error.title.character ? <div style={{ color: '#42424f', textAlign: 'center' }}><b>, ; . : - ! ¡ ¿ ? ' " ( ) [ ] á Á é É í Í ó Ó ú Ú ü Ü ñ Ñ</b></div> : null }
               { error.title.badWord ? <div style={{ fontWeight: '400' }}><em>Please, remove </em><mark style={{ background: 'rgba(0, 255, 0, 0.4)' }}>highlighted</mark> <em>bad words.</em></div> : null }
-              { error.title.character ? <div style={{ display: 'flex', flexDirection: 'row', fontWeight: '400', fontStyle: 'italic' }}>Please, 
-                <Tooltip
-                  title={`Ä ä % { } @ / \\ # À à ° + ¬ $ & = * etc..`}
-                  style={{ display: 'flex', flexDirection: 'column', color: '#42424f', background: '#f5f5f9', fontFamily: 'Roboto'}}
-                >
-                  <u>remove unallowed characters</u></Tooltip>.
-              </div> : null }
+              {
+                error.title.character ?
+                <div style={{ display: 'flex', flexDirection: 'row', fontWeight: '400', fontStyle: 'italic' }}>Please, 
+                  <Tooltip
+                    title={`Ä ä % { } @ / \\ # À à ° + ¬ $ & = * etc..`}
+                    style={{ display: 'flex', flexDirection: 'column', color: '#42424f', background: '#f5f5f9', fontFamily: 'Roboto'}}
+                  >
+                    <u>remove unallowed characters</u>
+                  </Tooltip>.
+                </div> :
+                null
+              }
             </div>
           }
         >
@@ -901,17 +902,36 @@ const MyRecipe = ({
       <div className={css.eachRow}>
         <div className={css.text}>Image:</div>
         <Tooltip
-          arrow
-          variant="outlined"
-          size="md"
-          enterDelay={500}
-          leaveDelay={200}
-          enterTouchDelay={0}
-          placement="bottom"
-          disableFocusListener={ saveButtonDisabled && allDisabled ? true : false }
-          disableHoverListener={ saveButtonDisabled && allDisabled ? true : false }
+          // MOBILE
+          enterTouchDelay={500}
+          leaveTouchDelay={2000}
+          disableTouchListener={
+            saveButtonDisabled && allDisabled ?
+            true :
+            false
+          }
+          // DESKTOP
+          enterDelay={1000}
+          enterNextDelay={1000}
+          leaveDelay={500}
+          disableFocusListener={
+            paginateAmount === 45 ?
+            true :
+            saveButtonDisabled && allDisabled ?
+            true :
+            !settingsFilters.showTooltips
+          }
+          disableHoverListener={
+            paginateAmount === 45 ?
+            true :
+            saveButtonDisabled && allDisabled ?
+            true :
+            !settingsFilters.showTooltips
+          }
           style={{ zIndex: '1' }}
-          hidden={ settingsFilters.showTooltips ? false : true }
+          arrow
+          placement="bottom"
+          variant="outlined"
           title={
             <div className={css.innerTooltip}>
               { isEditing ? <div>Leave it empty for use the same image !</div> : <div>Please, copy and paste your food recipe image url here !</div> }
@@ -951,17 +971,14 @@ const MyRecipe = ({
       <div className={css.eachRow}>
         <div className={css.text}>Health Score:</div>
         <Tooltip
-          arrow
-          variant="outlined"
-          size="md"
-          enterDelay={500}
-          leaveDelay={200}
-          enterTouchDelay={0}
-          open={error.health.string || error.health.max}
-          placement="bottom-start"
+          disableTouchListener={true} // FOR PERFOMANCE
+          disableHoverListener={true} // FOR PERFOMANCE
+          disableFocusListener={true} // FOR PERFOMANCE
+          open={ error.health.string || error.health.max }
           style={{ zIndex: '1' }}
-          disableHoverListener={true}
-          disableFocusListener={true}
+          arrow
+          placement="bottom-start"
+          variant="outlined"
           hidden={ checkDisabledBadWords.current ? false : settingsFilters.showTooltips ? false : true }
           title={
             <div className={css.innerTooltip}>
@@ -1027,17 +1044,14 @@ const MyRecipe = ({
       <div className={css.eachRow}>
         <div className={css.text}>Summary:</div>
         <Tooltip
-          arrow
-          variant="outlined"
-          size="md"
-          enterDelay={500}
-          leaveDelay={200}
-          enterTouchDelay={0}
-          open={error.summary.character || error.summary.badWord}
-          placement="bottom"
+          disableTouchListener={true} // FOR PERFOMANCE
+          disableHoverListener={true} // FOR PERFOMANCE
+          disableFocusListener={true} // FOR PERFOMANCE
+          open={ error.summary.character || error.summary.badWord }
           style={{ zIndex: '1' }}
-          disableHoverListener={true}
-          disableFocusListener={true}
+          arrow
+          placement="bottom"
+          variant="outlined"
           hidden={ checkDisabledBadWords.current ? false : settingsFilters.showTooltips ? false : true }
           title={
             <div className={css.innerTooltip}>
@@ -1116,21 +1130,18 @@ const MyRecipe = ({
 
               <Tooltip
                 key={index}
-                arrow
-                variant="outlined"
-                size="md"
-                enterDelay={500}
-                leaveDelay={200}
-                enterTouchDelay={0}
+                disableTouchListener={true} // FOR PERFOMANCE
+                disableHoverListener={true} // FOR PERFOMANCE
+                disableFocusListener={true} // FOR PERFOMANCE
                 open={
                   error.instructions[index] ?
                   error.instructions[index].character || error.instructions[index].badWord :
                   false
                 }
-                placement={ index % 2 === 0 ? `bottom-end` : `bottom-start` }
                 style={{ zIndex: '1' }}
-                disableHoverListener={true}
-                disableFocusListener={true}
+                arrow
+                placement={ index % 2 === 0 ? `bottom-end` : `bottom-start` }
+                variant="outlined"
                 hidden={ checkDisabledBadWords.current ? false : settingsFilters.showTooltips ? false : true }
                 title={
                   <div className={css.innerTooltip}>
@@ -1150,21 +1161,19 @@ const MyRecipe = ({
                   </div>
                 }
               >
-                <div
-                  className={`target123`}
-                  style={{ display: 'flex', width: '100%' }}
-                >
+                <div style={{ display: 'flex', width: '100%' }}>
                   <div
                     id={`targetInstructions${index}`}
                     className={`${css.inputLayer} ${css.inputLayerInstructions}`}
                   />
                   <textarea
                     id={`${index}instructions`}
-                    className={`${css.inputBase} ${css.inputBaseInstructions}`}
+                    className={css.inputBase}
                     disabled={allDisabled}
                     autoComplete='off'
                     value={stepsState[index]}
                     placeholder={`e.g. Cut pasta, fry tomatoes..`}
+                    //white-space: nowrap;
                     onFocus={() => badWordsUIOnChangeResetter()}
                     onChange={(e) => validator({ manual: true, value: (e.target as HTMLTextAreaElement).value, type: (e.target as HTMLTextAreaElement).id.replace(/[0-9]/g, ''), index: parseInt((e.target as HTMLTextAreaElement).id, 10) })}
                   />
@@ -1172,16 +1181,39 @@ const MyRecipe = ({
               </Tooltip>
 
               <Tooltip
-                arrow
-                enterDelay={700}
-                enterNextDelay={700}
-                leaveDelay={200}
-                enterTouchDelay={0}
-                disableFocusListener={ saveButtonDisabled && allDisabled ? true : stepsState.length >= 10 ? false : true }
-                disableHoverListener={ saveButtonDisabled && allDisabled ? true : stepsState.length >= 10 ? false : true }
-                placement="bottom-end"
+                // MOBILE
+                enterTouchDelay={500}
+                leaveTouchDelay={2000}
+                disableTouchListener={
+                  saveButtonDisabled && allDisabled ?
+                  true :
+                  false
+                }
+                // DESKTOP
+                enterDelay={1000}
+                enterNextDelay={1000}
+                leaveDelay={500}
+                disableFocusListener={
+                  paginateAmount === 45 ?
+                  true :
+                  saveButtonDisabled && allDisabled ?
+                  true :
+                  stepsState.length >= 10 ?
+                  false :
+                  true
+                }
+                disableHoverListener={
+                  paginateAmount === 45 ?
+                  true :
+                  saveButtonDisabled && allDisabled ?
+                  true :
+                  stepsState.length >= 10 ?
+                  false :
+                  true
+                }
                 style={{ zIndex: '1' }}
-                hidden={ settingsFilters.showTooltips ? false : true } // Deactivate Tooltip render
+                arrow
+                placement="bottom-end"
                 title={
                   <div className={css.newStepTooltip}>
                     <div>Max steps {`<`}10{`>`} reached !</div>
@@ -1206,16 +1238,39 @@ const MyRecipe = ({
               </Tooltip>
 
               <Tooltip
-                arrow
-                enterDelay={700}
-                enterNextDelay={700}
-                leaveDelay={200}
-                enterTouchDelay={0}
-                disableFocusListener={ saveButtonDisabled && allDisabled ? true : stepsState.length === 1 ? false : true }
-                disableHoverListener={ saveButtonDisabled && allDisabled ? true : stepsState.length === 1 ? false : true }
-                placement="bottom-end"
+                // MOBILE
+                enterTouchDelay={500}
+                leaveTouchDelay={2000}
+                disableTouchListener={
+                  saveButtonDisabled && allDisabled ?
+                  true :
+                  false
+                }
+                // DESKTOP
+                enterDelay={1000}
+                enterNextDelay={1000}
+                leaveDelay={500}
+                disableFocusListener={
+                  paginateAmount === 45 ?
+                  true :
+                  saveButtonDisabled && allDisabled ?
+                  true :
+                  stepsState.length === 1 ?
+                  false :
+                  true
+                }
+                disableHoverListener={
+                  paginateAmount === 45 ?
+                  true :
+                  saveButtonDisabled && allDisabled ?
+                  true :
+                  stepsState.length === 1 ?
+                  false :
+                  true
+                }
                 style={{ zIndex: '1' }}
-                hidden={ settingsFilters.showTooltips ? false : true }
+                arrow
+                placement="bottom-end"
                 title={"You can't delete first step !"}
               >
                 <div
