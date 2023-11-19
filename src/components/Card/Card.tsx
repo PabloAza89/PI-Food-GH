@@ -75,16 +75,6 @@ const Card = ({
     // eslint-disable-next-line
   },[])
 
-  
-  // $(`[class*="backgroundCard"]`)
-  //    .css('backdrop-filter', 'unset')
-  //    .css('box-shadow', 'unset')
-
-  //   //  .css('backdrop-filter', 'blur(20px)')
-  //   //  .css('box-shadow', '0 8px 32px 0 rgba(0, 0, 0, 0.37)')
-
-  
-
   return (
     <div
       className={css.backgroundCard}
@@ -149,26 +139,18 @@ const Card = ({
               {title}
             </div>
           }
-          //hidden={true}
-          //hidden={false}
-          //open={true}
           hidden={ settingsFilters.showTooltips ? false : true }
         >
-          
           <div
             className={`titleCard${id}`}
             id={css.title}
           >
             <Link className={css.linkStyle} to={`/${id}`} state={{ webFlow: true }}>
-            
               {title}
             </Link>
-            
           </div>
-          
         </Tooltip>
       </div>
-      {/* <div className={`${css.imageOrTitleContainer} ${com.noSelect}`}> */}
         <Tooltip
           arrow
           enterDelay={700}
@@ -178,9 +160,6 @@ const Card = ({
           disableFocusListener={ !settingsFilters.showTooltips ? true : fitDiet}
           disableHoverListener={ !settingsFilters.showTooltips ? true : fitDiet}
           placement="bottom"
-          //hidden={true}
-          //hidden={false}
-          //open={true}
           hidden={ settingsFilters.showTooltips ? false : true }
           title={
             <div className={css.innerTooltip}>
@@ -195,7 +174,6 @@ const Card = ({
           <div
             className={`dietCard${id} ${com.noSelect}`}
             id={css.text}
-            //id={css.title}
           >
             <b>Diets: </b>
             {
@@ -208,7 +186,6 @@ const Card = ({
             }
           </div>
         </Tooltip>
-      {/* </div> */}
       <div className={com.noSelect} id={css.text}>
         <b>Healt Score: </b>{healthScore}
       </div>
@@ -222,7 +199,6 @@ const Card = ({
         disableHoverListener={ !settingsFilters.showTooltips ? true : fitDish}
         placement="bottom"
         hidden={ settingsFilters.showTooltips ? false : true }
-        //open={true}
         title={
           <div className={css.innerTooltip}>
             <b>Dish Types: </b>

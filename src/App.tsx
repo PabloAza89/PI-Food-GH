@@ -53,7 +53,7 @@ function App() {
 
   useEffect(() => { // FIRST ONLY-ONE-TIME AUTO-CHECK USER (CHECK USER TOKEN)
 
-    checkPrevLogin({ setUserData, userData }) // test
+    checkPrevLogin({ setUserData, userData })
 
     feedbackBC.onmessage = (e) => {
       if (e.data.subscribe.length > tabsArrREF.current.subscribe.length) {
@@ -155,7 +155,6 @@ function App() {
           if (e.value !== allFromRedux[index]) {
             dispatch(setSettingsFilters({ type: e.name, value: e.value }))
             hasChanged.current = true
-            console.log("focus has Changed")
           }
         })
       ])

@@ -59,7 +59,6 @@ const CardsMapper = ({ setUserData, paginateAmount, userData }: CardsMapperI)  =
   )
 
   useEffect(() => { // fetch all recipes
-    console.log("EJECUTADO EJECUTADO EJECUTADO")
     Promise.all([
       dispatch(getDietsFromDB()),
       dispatch(getDishesFromDB()),
@@ -101,15 +100,10 @@ const CardsMapper = ({ setUserData, paginateAmount, userData }: CardsMapperI)  =
   })
 
   useEffect(() => {
-    if (paginateAmount === 45 && localStorage.getItem('showVisuals') === null) {
-      console.log("dispatched 1")
+    if (paginateAmount === 45 && localStorage.getItem('showVisuals') === null)
       dispatch(setSettingsFilters({ type: `showVisuals`, value: false }))
-      //dispatch(setSettingsFilters({ type: `showBadWords`, value: false }))
-    } else if (paginateAmount === 90 && localStorage.getItem('showVisuals') === null) {
-      console.log("dispatched 2")
+    else if (paginateAmount === 90 && localStorage.getItem('showVisuals') === null)
       dispatch(setSettingsFilters({ type: `showVisuals`, value: true }))
-      //dispatch(setSettingsFilters({ type: `showBadWords`, value: true }))
-    }
   },[paginateAmount, dispatch])
 
   return allRecipes[0] !== undefined && toShow[0] !== undefined ?

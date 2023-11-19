@@ -1,30 +1,17 @@
-import { useEffect, useState } from "react";
 import css from "./SettingsButtonCSS.module.css";
-import com from "../../commons/commonsCSS.module.css";
-import {
-  Link, useNavigate, useLocation, useMatch
-} from "react-router-dom";
+import { useNavigate, useLocation, useMatch } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
-import { Button, FormControlLabel, Switch } from '@mui/material/';
+import { Button } from '@mui/material/';
 import SettingsIcon from '@mui/icons-material/Settings';
-import { easings } from '../../commons/easingsCSS';
-import $ from 'jquery';
-import { serverStatusI } from '../../interfaces/interfaces';
-import { setServerStatusShown } from '../../actions';
 import { handleReturn } from '../../commons/commonsFunc';
 
 const SettingsButton = ({ recipeCreatedOrEdited }: any) =>  {
 
-  const dispatch = useDispatch()
   const location = useLocation()
   const navigate = useNavigate();
-  easings() // JQuery easings..
 
   const inHome = useMatch("/")?.pattern.path === "/" ? true : false; // "/" === Home
   const menuShown = useSelector((state: {menuShown:boolean}) => state.menuShown)
-  const serverStatus = useSelector((state: { serverStatus: serverStatusI }) => state.serverStatus)
-  const serverStatusShown = useSelector((state: { serverStatusShown: boolean }) => state.serverStatusShown)
-  //const serverStatusShown = true // DEV
 
   return (
     <div
@@ -37,7 +24,6 @@ const SettingsButton = ({ recipeCreatedOrEdited }: any) =>  {
       <Button
         variant="contained"
         className={css.buttonIn}
-        //onClick={() => navigate("/Settings")}
         onClick={() => handleReturn({
           location, navigate, recipeCreatedOrEdited,
           origin: `settings`

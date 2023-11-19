@@ -1,5 +1,5 @@
 .background {
-  /* background: orange; */ /* DEV */
+  /* background: orange !important; */ /* DEV */
   display: flex;
   background: rgba(148, 179, 138, 0.171); /* GREEN EFFECT */
   justify-content: space-between;
@@ -8,7 +8,7 @@
   width: 100vw;
   z-index: -1;
   /* z-index: 0; */ /* DEV */
-  min-height: 280px !important;
+  min-height: 350px !important;
   justify-content: center;
 }
 
@@ -49,4 +49,14 @@
   color: antiquewhite;
   text-shadow: 0px 0px 10px black;
   font-size: 20px;
+}
+
+/* ONLY SMAPORT AND SMALAND */
+@media screen
+and (orientation: portrait)
+and (max-device-width: 424px),
+screen
+and (orientation: landscape)
+and (max-device-height: 424px) {
+  .background { min-height: 280px !important }
 }

@@ -23,4 +23,6 @@
   font-size: calc(32px + 3vw);
   white-space:nowrap;
   margin-top: 7px;
+  white-space: balance;
+  text-align: center;
 }

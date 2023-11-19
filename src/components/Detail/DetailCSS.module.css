@@ -59,7 +59,8 @@
 
 .image {
   display: flex;
-  width: 400px;
+  width: 100%;
+  max-width: 400px;
   height: 260px;
   margin-bottom: 16px;
 }
@@ -156,12 +157,11 @@
   align-items: center;
   justify-content: space-evenly;
   text-align: center;
-  /* background: darkgreen; */ /* DEV */
-  background: linear-gradient(135deg, rgba(64, 117, 117, 0.1), rgba(64, 117, 117, 0));
-  -webkit-backdrop-filter: blur(20px);
-  backdrop-filter: blur(20px);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
   border: 1px solid rgb(255, 255, 255, 0.18);
+  /* background: darkgreen; */ /* DEV */
+  /* backdrop-filter: blur(20px);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  background: linear-gradient(135deg, rgba(64, 117, 117, 0.1), rgba(64, 117, 117, 0)); */
 }
 
 .loading {
@@ -201,7 +201,10 @@
 /* MIN <    MED    > LAR */
 /* 424 < 425 ~ 825 > 826 */
 
-/* MINPORT */
-@media screen and (orientation: portrait) and (max-width: 424px) {
+/* ONLY SMAPORT */
+@media screen
+and (orientation: portrait)
+and (max-device-width: 424px) {
+  /* .backgroundCard { width: 90% } */
   .image { width: 100% }
 }

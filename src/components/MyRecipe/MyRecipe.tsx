@@ -8,7 +8,7 @@ import noImage3 from "../../images/noImage3.jpg";
 import noLoaded from "../../images/noLoaded.jpg";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
-  Button, TextField, ListItemText, Checkbox, FormControl,
+  Button, ListItemText, Checkbox, FormControl,
   InputLabel, MenuItem, Select, SelectChangeEvent
 } from '@mui/material/';
 import dietsEntireArray from '../../db/diets.json';
@@ -20,7 +20,7 @@ import dicEn from '../../dictionary/en.json';
 import $ from 'jquery';
 import { setSettingsFilters } from '../../actions';
 import {
-  errorI, handlerUpdateInstructionsI, handlerAddInstructionsI,
+  errorI, handlerAddInstructionsI,
   validatorI, highlighterI, handlerDeleteInstructionsI,
   settingsFiltersI
 } from '../../interfaces/interfaces';
@@ -43,7 +43,7 @@ const MyRecipe = ({
   let dishesArrayLS: string | null = localStorage.getItem('dishesArray');
   let dietsArrayLS: string | null = localStorage.getItem('dietsArray');
   let stepsStateLS: string | null = localStorage.getItem('stepsState');
- 
+
   const menuShown = useSelector((state: {menuShown:boolean}) => state.menuShown)
   const settingsFilters = useSelector((state: { settingsFilters: settingsFiltersI }) => state.settingsFilters)
   // eslint-disable-next-line
@@ -62,8 +62,6 @@ const MyRecipe = ({
   const [saveButtonDisabled, setSaveButtonDisabled] = useState<boolean>(false);
   const [imageLoaded, setImageLoaded] = useState<boolean>(false);
 
-
-
   const checkDisabledBadWords = useRef(false) // USED WHEN BADWORDS REAL-TIME IS DISABLED
 
   const handlerDeleteInstructions = ({ index }: handlerDeleteInstructionsI) => {
@@ -74,8 +72,8 @@ const MyRecipe = ({
     if (!isEditing) localStorage.setItem('stepsState', JSON.stringify([...copyState]))
 
     let copyError = {...error}
-      copyError.instructions.splice(index, 1)
-      setError(copyError)
+    copyError.instructions.splice(index, 1)
+    setError(copyError)
 
     if (settingsFilters.showBadWords) {
       copyState.forEach((e, idx) => {
@@ -83,31 +81,31 @@ const MyRecipe = ({
         highlighter({value: e, type: 'instructions', index: idx})
       })
     }
+    scrollBottom()
   }
 
-  const handlerAddInstructions = async ({ index }: handlerAddInstructionsI) => {
+  const handlerAddInstructions = ({ index }: handlerAddInstructionsI) => {
 
-    const firstStep = async () => { // only copy state
+    const firstStep = async () => {
       let copyState = [...stepsState]
       copyState.splice(index + 1, 0, "")
       setStepsState([...copyState])
       if (!isEditing) localStorage.setItem('stepsState', JSON.stringify([...copyState]))
-      return copyState
     }
 
-    const secondStep = async (copyState: string[]) => { // execute highlighter
+    const secondStep = () => {
       let copyError = {...error}
       copyError.instructions.splice(index + 1, 0, { character: false, badWord: false, empty: false })
       setError(copyError)
-      copyState.forEach((e,index) => highlighter({value: e, type: 'instructions', index: index}))
-      let copyState2 = [...stepsState]
-      if (copyState2.length > 1 && index !== copyState2.length - 1) {
-        highlighter({value: copyState2.slice(copyState2.length-1)[0], type: 'instructions', index: copyState2.length})
+      for (let i = stepsState.length ; i > index ; i--) {
+        $(`#targetInstructions${i+1}`).html($(`#targetInstructions${i}`).html())
+        $(`#targetInstructions${i}`).html("<div></div>")
       }
     }
 
-    if (settingsFilters.showBadWords) firstStep().then((res) => secondStep(res))
-    else firstStep()
+    if (settingsFilters.showBadWords) firstStep().then(() => { secondStep(); scrollBottom() })
+    else firstStep(); scrollBottom()
+
   }
 
   const [error, setError] = useState<errorI>({
@@ -143,7 +141,7 @@ const MyRecipe = ({
   const highlighter = ({value, type, index}: highlighterI) => {
 
     const characterReplacer = (string: string) => {
-      return  string.replaceAll("á", "a").replaceAll("Á", "A")
+      return string.replaceAll("á", "a").replaceAll("Á", "A")
         .replaceAll("é", "e").replaceAll("É", "E")
         .replaceAll("í", "i").replaceAll("Í", "I")
         .replaceAll("ó", "o").replaceAll("Ó", "O")
@@ -249,7 +247,7 @@ const MyRecipe = ({
             (actualIndex === 0 ? "" : !array[actualIndex + 1 ]?.end ? value.substring(e.end) :""))
         })
 
-        if (type === `summary` || type === `instructions`) parsedToReturn.unshift("<div style='text-wrap: wrap'>")
+        if (type === `summary` || type === `instructions`) parsedToReturn.unshift("<div style='text-wrap: wrap'>") // multiline
         else parsedToReturn.unshift("<div>")
         parsedToReturn.push("</div>")
 
@@ -263,8 +261,6 @@ const MyRecipe = ({
         setTitleValue(value);
         if (!isEditing) localStorage.setItem('titleValue', value)
         if (settingsFilters.showBadWords || checkDisabledBadWords.current) {
-          //checkDisabledBadWords.current = false
-          //console.log("123123, se ejecuto en validator")
           let copyObjTitle = {...error}
           if (/[^A-Za-z0-9-(áÁéÉíÍóÓúÚüÜñÑ),;.:¡!¿?'"()[\] ]/g.test(value) && value.length !== 0) { copyObjTitle[type].character = true; setError({ ...copyObjTitle }) }
           else { copyObjTitle[type].character = false; setError({ ...copyObjTitle })}
@@ -298,25 +294,21 @@ const MyRecipe = ({
       break;
       case (`instructions`):
         if (manual) {
-          console.log("se ejecuto entro aca 123")
           let copyStepsState = [...stepsState]
           copyStepsState.splice(index!, 1, value)
           setStepsState([...copyStepsState])
           if (!isEditing) localStorage.setItem('stepsState', JSON.stringify([...copyStepsState]))
         }
         if (settingsFilters.showBadWords || checkDisabledBadWords.current) {
-          console.log("123123 ingreso ACAA")
           if (/[^A-Za-z0-9-(áÁéÉíÍóÓúÚüÜñÑ),\n;.:¡!¿?'"()[\] ]/g.test(value) && value.length !== 0) {
             let copyObjInstructions = {...error}
             copyObjInstructions.instructions[index!].character = true
-            //copyObjInstructions.instructions[index!].empty = value.replaceAll(" ","").replaceAll("\n", "") === "" ? true : false
-            copyObjInstructions.instructions[index!].empty = false
+            copyObjInstructions.instructions[index!].empty = value.replaceAll(" ","").replaceAll("\n", "") === "" ? true : false
             setError({ ...copyObjInstructions })
           } else {
             let copyObjInstructions = {...error}
             copyObjInstructions.instructions[index!].character = false
-            //copyObjInstructions.instructions[index!].empty = value.replaceAll(" ","").replaceAll("\n", "") === "" ? true : false
-            copyObjInstructions.instructions[index!].empty = false
+            copyObjInstructions.instructions[index!].empty = value.replaceAll(" ","").replaceAll("\n", "") === "" ? true : false
             setError({ ...copyObjInstructions })
           }
           highlighter({value, type, index})
@@ -345,8 +337,6 @@ const MyRecipe = ({
     setDishesArray([]);
     setDietsArray([]);
     setStepsState(['']);
-    // setSaveButtonDisabled(false);
-    // setAllDisabled(false)
     setError({
       title: { character: false, badWord: false, empty: false },
       health: { string: false, max: false, empty: false },
@@ -492,7 +482,6 @@ const MyRecipe = ({
   }
 
   const fetchFunction = () => {
-    console.log("tttTTTTTT fetch function")
     fetch(`${process.env.REACT_APP_SV}/recipe`, {
       method: 'POST',
       credentials: 'include',
@@ -577,66 +566,12 @@ const MyRecipe = ({
         title: { character: false, badWord: false, empty: false },
         health: { string: false, max: false, empty: false },
         summary: { character: false, badWord: false, empty: false },
-        //instructions: [{ character: false, badWord: false, empty: false }]
         instructions: Array.from({length: stepsState.length}, (e,i) => ({ character: false, badWord: false, empty: false }))
       });
     }
   }
 
-  //console.log("123123 error.instructions POR FUERA", error.instructions)
-
-  const errorChecker = () => {
-    // CHECK IF SOME ERROR VALUE IS TRUE..
-    //console.log("123123 error.title", error.title)
-    //return error.title
-    //return error.instructions
-    //return Object.values(error).flat().map(e => Object.values(e)).flat().some(e => e === true)
-
-    //return Object.values(error).flat().map(e => Object.values(e)).flat()
-
-    //return Object.values(error.title).flat().some(e => e === true) // FUNCIONA OK
-    //return Object.values(error.health).flat().some(e => e === true) // FUNCIONA OK
-    //return Object.values(error.summary).flat().some(e => e === true) // FUNCIONA OK
-
-    //return error.instructions.map(e => Object.values(e)).flat() //
-    //return error.instructions.map(e => Object.values(e)).flat().some(f => f === true) // SEGUIR ACA
-
-
-    //console.log("123123 error.health", error.health)
-    //console.log("123123 error.summary", error.summary)
-    //console.log("123123 error.instructions 11", error.instructions) // ESTE OK
-    //let qq = []
-    //error.instructions.forEach(e => qq.push(Object.values(e)))
-    //console.log("123123 error.instructions 22", qq.flat()) // ESTE OK
-    //let rr = [...error.instructions]
-    //console.log("123123 error.instructions 22", rr.map(e => Object.values(e))) // ESTE OK
-
-    //let qq = []
-    //error.instructions.forEach(e => qq.push(Object.keys(e)))
-    //console.log("123123 error.instructions 22", qq) // ESTE OK
-    //character
-    //badWord
-    //empty
-    //let copyError = [...error.instructions]
-    //let copyError = Array.from(error.instructions, x => x)
-    //let copyError = error.instructions
-
-    // copyError.map(e =>
-    //   qq.push(e.character,
-    //   e.badWord,
-    //   e.empty)
-    // ) // ESTE OK
-
-    //console.log("123123 error.instructions 22", qq)
-    //console.log("123123 error.title", Object.values(error.title).flat().some(e => e === true) )
-    //console.log("123123 error.health", Object.values(error.health).flat().some(e => e === true) )
-    //console.log("123123 error.summary", Object.values(error.summary).flat().some(e => e === true) )
-    //console.log("123123 error.instructions", error.instructions.map(e => Object.values(e)).flat().some(e => e === true) ) // SEGUIR ACA
-    //console.log("123123 error.instructions 33", error.instructions.map(e => Object.values(e)).flat() ) // ESTE DA CUALQUIER COSA
-  }
-
   const handleSubmit = (e:any) => {
-    console.log("ttt settingsFilters.showBadWords", settingsFilters.showBadWords)
     let emptyInputs = []
 
     if (titleValue.replaceAll(" ","").replaceAll("\n", "") === "") emptyInputs.push("Title")
@@ -682,43 +617,19 @@ const MyRecipe = ({
       })
     }
 
-    // TEST A CONTINUACION // SUBMIT
-    // Object.values(qq).flat().map(e => Object.values(e)).flat().some(e => e === true)
-
     else if (!settingsFilters.showBadWords) {
-      //let errorCopy = {...error}
-      console.log("123123 entro en el submit")
-      //dispatch(setSettingsFilters({ type: `showBadWords`, value: true }))
       checkDisabledBadWords.current = true
-      
-      //console.log("123123, se ejecuto en submit")
       validator({ type: `title`, value: titleValue })
       validator({ type: `health`, value: healthValue })
       validator({ type: `summary`, value: summaryValue })
-      //setTimeout(() => {
-        //stepsState && stepsState.forEach((el:any, idx:any) => {
-        stepsState.forEach((el:any, idx:any) => {
-          validator({ value: el, type: `instructions`, index: idx })
-        })
-      //}, 0)
+      stepsState.forEach((el:any, idx:any) => validator({ value: el, type: `instructions`, index: idx }))
 
-      //console.log("123123 RETURN EN FETCH", errorChecker())
-      console.log("123123 RETURN EN FETCH 11 ", error.instructions.map(e => Object.values(e)))
-      //console.log("123123 RETURN EN FETCH 11 ", error.instructions.map(e => Object.values(e)).flat())
-      //console.log("123123 RETURN EN FETCH 22 ", error.instructions.map(e => Object.values(e)).flat().some(f => f === true))
-      
-
-      //if (false) {
-      //if (false) {
       if ( // IF NO ERROR, SUBMIT
         !Object.values(error.title).flat().some(e => e === true) &&
         !Object.values(error.health).flat().some(e => e === true) &&
         !Object.values(error.summary).flat().some(e => e === true) &&
         !error.instructions.map(e => Object.values(e)).flat().some(f => f === true)
-      ) {
-        console.log("123123 entro en el inner submit")
-        //fetchFunction()
-      }
+      ) fetchFunction()
     }
     else fetchFunction()
   }
@@ -769,11 +680,7 @@ const MyRecipe = ({
     }
 
     else if (!settingsFilters.showBadWords) {
-      console.log("ttt entro en el submit")
-      //dispatch(setSettingsFilters({ type: `showBadWords`, value: true }))
       checkDisabledBadWords.current = true
-      
-      //console.log("123123, se ejecuto en submit")
       validator({ type: `title`, value: titleValue })
       validator({ type: `health`, value: healthValue })
       validator({ type: `summary`, value: summaryValue })
@@ -787,149 +694,101 @@ const MyRecipe = ({
       if (!Object.values(error).flat().map(e => Object.values(e)).flat().some(e => e === true)) fetchEditFunction()
     }
 
-    else {
-      fetchEditFunction()
-    }
+    else fetchEditFunction()
   }
 
   useEffect(() => { // RETRIEVES INFO FROM LS
-    console.log("SE EJECUTO USEEFFECT")
     if (isEditing) {
-        setTitleValue(location.state.title) // validator not necessary since no badWords are stored.
-        setHealthValue(location.state.healthScore)
-        let dishesParsed = location.state.dishTypes.map((e:any, idx: any) => {
-          return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ")
-        })
-        setDishesArray(dishesParsed)
-        setSummaryValue(location.state.summary)
-        setDietsArray(location.state.diets)
-        setStepsState(location.state.analyzedInstructions)
-      } else {
-        if (titleValueLS !== null) { setTitleValue(titleValueLS); validator({ type: `title`, value: titleValueLS }) }
-        if (imageValueLS !== null) setImageValue(imageValueLS)
-        if (healthValueLS !== null) { setHealthValue(healthValueLS); validator({ type: `health`, value: healthValueLS }) }
-        if (summaryValueLS !== null) { setSummaryValue(summaryValueLS); validator({ type: `summary`, value: summaryValueLS }) }
-        if (dishesArrayLS !== null) setDishesArray(JSON.parse(dishesArrayLS))
-        if (dietsArrayLS !== null) setDietsArray(JSON.parse(dietsArrayLS))
-        if (stepsStateLS !== null) {
-          setStepsState(JSON.parse(stepsStateLS))
-          console.log("se ejecuto ESTE DE ACA")
-          setTimeout(() => {
-            // function auto_grow(element: any) { // EXECUTED AFTER LS READING/RETRIEVING
-            //   element.style.height = "5px";
-            //   element.style.height = (element.scrollHeight - 33) + "px";
-            // }
-            //stepsStateLS !== null && JSON.parse(stepsStateLS).forEach((el:any, idx:any) => {
-            stepsStateLS && JSON.parse(stepsStateLS).forEach((el:any, idx:any) => {
-              validator({ value: el, type: `instructions`, index: idx })
-              // let qwe = document.getElementById(`${idx}instructions`)
-              // qwe && auto_grow(qwe)
-            })
-          }, 0)
-        }
+      setTitleValue(location.state.title) // validator not necessary since no badWords are stored.
+      setHealthValue(location.state.healthScore)
+      let dishesParsed = location.state.dishTypes.map((e:any, idx: any) => {
+        return e.split(" ").map((e:any) => e[0].toUpperCase() + e.slice(1)).join(" ")
+      })
+      setDishesArray(dishesParsed)
+      setSummaryValue(location.state.summary)
+      setDietsArray(location.state.diets)
+      setStepsState(location.state.analyzedInstructions)
+    } else {
+      if (titleValueLS !== null) { setTitleValue(titleValueLS); validator({ type: `title`, value: titleValueLS }) }
+      if (imageValueLS !== null) setImageValue(imageValueLS)
+      if (healthValueLS !== null) { setHealthValue(healthValueLS); validator({ type: `health`, value: healthValueLS }) }
+      if (summaryValueLS !== null) { setSummaryValue(summaryValueLS); validator({ type: `summary`, value: summaryValueLS }) }
+      if (dishesArrayLS !== null) setDishesArray(JSON.parse(dishesArrayLS))
+      if (dietsArrayLS !== null) setDietsArray(JSON.parse(dietsArrayLS))
+      if (stepsStateLS !== null) {
+        setStepsState(JSON.parse(stepsStateLS))
+        setTimeout(() => {
+          stepsStateLS && JSON.parse(stepsStateLS).forEach((el:any, idx:any) => {
+            validator({ value: el, type: `instructions`, index: idx })
+          })
+        }, 0)
       }
-      return () => {
-        if (recipeCreated.current) {
-          clearHandler() // CLEAR FORM: SAVED && FIRES WHEN USER GO TO ANOTHER ROUTE/COMPONENT
-          console.log("se ejecuto clearHandler")
-
-        }
-      }
-    // eslint-disable-next-line
+    }
+    return () => {
+      // CLEAR FORM: SAVED && FIRES WHEN USER GO TO ANOTHER ROUTE/COMPONENT
+      if (recipeCreated.current) clearHandler()
+    }
+  // eslint-disable-next-line
   },[])
 
   useEffect(() => {
-    console.log("SE EJECUTO USEEFFECT")
     if (saveButtonDisabled && allDisabled) retrieveRecipeCreatedOrEdited(true)
     else retrieveRecipeCreatedOrEdited(false)
     // eslint-disable-next-line
   },[allDisabled])
 
   useEffect(() => {
-    console.log("SE EJECUTO USEEFFECT")
-    if (paginateAmount === 45 && localStorage.getItem('showVisuals') === null) {
+    if (paginateAmount === 45 && localStorage.getItem('showVisuals') === null)
       $(`[class*="formDetail"]`)
         .css('backdrop-filter', 'unset')
         .css('box-shadow', 'unset')
         .css('background', 'rgba(196, 34, 147, 0.2)')
-    } else if (paginateAmount === 90 && localStorage.getItem('showVisuals') === null) {
+    else if (paginateAmount === 90 && localStorage.getItem('showVisuals') === null)
       $(`[class*="formDetail"]`)
         .css('backdrop-filter', 'blur(20px)')
         .css('box-shadow', '0 8px 32px 0 rgba(0, 0, 0, 0.37)')
         .css('background', 'linear-gradient(135deg, rgba(196, 34, 147, 0.1), rgba(196, 34, 147, 0))')
-    } else if (settingsFilters.showVisuals) {
-      console.log("entro aca 3")
+    else if (settingsFilters.showVisuals)
       $(`[class*="formDetail"]`)
         .css('backdrop-filter', 'blur(20px)')
         .css('box-shadow', '0 8px 32px 0 rgba(0, 0, 0, 0.37)')
         .css('background', 'linear-gradient(135deg, rgba(196, 34, 147, 0.1), rgba(196, 34, 147, 0))')
-    } else {
-      console.log("entro aca 4")
+    else
       $(`[class*="formDetail"]`)
         .css('backdrop-filter', 'unset')
         .css('box-shadow', 'unset')
         .css('background', 'rgba(196, 34, 147, 0.2)')
-    }
+  // eslint-disable-next-line
   },[])
 
   useEffect(() => {
-    console.log("SE EJECUTO USEEFFECT")
-    if (paginateAmount === 45 && localStorage.getItem('showVisuals') === null) {
-      console.log("dispatched 1")
+    if (paginateAmount === 45 && localStorage.getItem('showVisuals') === null)
       dispatch(setSettingsFilters({ type: `showVisuals`, value: false }))
-      //dispatch(setSettingsFilters({ type: `showBadWords`, value: false }))
-    } else if (paginateAmount === 90 && localStorage.getItem('showVisuals') === null) {
-      console.log("dispatched 2")
+    else if (paginateAmount === 90 && localStorage.getItem('showVisuals') === null)
       dispatch(setSettingsFilters({ type: `showVisuals`, value: true }))
-      //dispatch(setSettingsFilters({ type: `showBadWords`, value: true }))
-    }
   },[paginateAmount, dispatch])
-  
+
   window.onbeforeunload = function() { // CLEAR FORM: SAVED && FIRES WHEN WINDOW IS CLOSED OR REFRESH
     if (recipeCreated.current) clearHandler() // RESET ALL FORM
   }
 
   useEffect(() => {
-    console.log("SE EJECUTO USEEFFECT")
     $(window).scrollTop(0)
   },[])
 
-  //console.log("$('#test').prop('scrollHeight')", $('#summary').prop('scrollHeight'))
-  
-  // $('#summary')
-  //   .css("height", `${$('#summary').prop('scrollHeight')}`)
-  // let qwe = document.getElementById('summary')
-  // function auto_grow(element: any) {
-  //   element.style.height = "5px";
-  //   element.style.height = (element.scrollHeight) + "px";
-  // }
-  // auto_grow(qwe)
-
-  // useEffect(() => {
-  //   let qwe = document.getElementById('summary')
-  //   var qwee = document.querySelectorAll('[id$=instructions]');
-  //   function auto_grow(element: any) {
-  //     element.style.height = "5px";
-  //     element.style.height = (element.scrollHeight - 33) + "px";
-  //   }
-  //   qwe && auto_grow(qwe)
-  //   qwee && qwee.forEach(e => { auto_grow(e) })
-
-  // })
-
   useEffect(() => {
-    let qwe = document.getElementById('summary')
-    var qwee = document.querySelectorAll('[id$=instructions]');
+    let summaryJQ = document.getElementById('summary')
+    var instructionsJQ = document.querySelectorAll('[id$=instructions]');
     function auto_grow(element: any) {
       element.style.height = "5px";
       element.style.height = (element.scrollHeight - 33) + "px";
     }
-    qwe && auto_grow(qwe)
-    qwee && qwee.forEach(e => { auto_grow(e) })
+    summaryJQ && auto_grow(summaryJQ)
+    instructionsJQ && instructionsJQ.forEach(e => { auto_grow(e) })
     function handleResizee() {
-      qwe && auto_grow(qwe)
-      qwee && qwee.forEach(e => { auto_grow(e) })
-      
+      summaryJQ && auto_grow(summaryJQ)
+      instructionsJQ && instructionsJQ.forEach(e => { auto_grow(e) })
+
     }
     window.addEventListener("resize", handleResizee);
     return () => {
@@ -937,19 +796,17 @@ const MyRecipe = ({
     }
   })
 
-  // useEffect(() => {
-  //   let qwe = document.getElementById('targetSummary')
-  //   function auto_grow(element: any) {
-  //     element.style.height = "5px";
-  //     element.style.height = (element.scrollHeight - 33) + "px";
-  //   }
-  //   auto_grow(qwe)
-  // })
 
-  console.log("ttt saveButtonDisabled", saveButtonDisabled)
-  console.log("ttt error.title.character", error.title.character)
-  console.log("ttt error.title.badWord", error.title.badWord)
-  
+  //.animate({ scrollTop: $(document).height() }, 1000)
+
+  const scrollBottom = () => {
+    $("html, body")
+      .on("wheel DOMMouseScroll mousewheel keyup", function() {
+        $(this).stop()
+      })
+      .animate({ scrollTop: $(document).height() }, 1000)
+    //window.scrollTo(0, document.body.scrollHeight)
+  }
 
   return (
     <div
@@ -1035,20 +892,8 @@ const MyRecipe = ({
                 `Enter your title` :
                 `e.g. Pasta with tomatoes..`
               }
-              //onChange={(e) => { validator({ value: e.target.value, type: e.target.id }) }}
               onFocus={() => badWordsUIOnChangeResetter()}
-              // onClick={() => {
-              //   //console.log("123123 SELECTER")
-              //   badWordsUIOnChangeResetter()
-              // }}
-              onChange={(e) => {
-                //settingsFilters.showBadWords ?
-                //validator({ value: e.target.value, type: e.target.id }) :
-                //setTitleValue(e.target.value)
-                validator({ value: e.target.value, type: e.target.id })
-                
-                
-              }}
+              onChange={(e) => validator({ value: e.target.value, type: e.target.id })}
             />
           </div>
         </Tooltip>
@@ -1066,10 +911,7 @@ const MyRecipe = ({
           disableFocusListener={ saveButtonDisabled && allDisabled ? true : false }
           disableHoverListener={ saveButtonDisabled && allDisabled ? true : false }
           style={{ zIndex: '1' }}
-          //style={{ zIndex: '1', display: 'none' }}
-          //style={{ zIndex: '1', display: 'inherit' }}
           hidden={ settingsFilters.showTooltips ? false : true }
-          //settingsFilters.showTooltips ?
           title={
             <div className={css.innerTooltip}>
               { isEditing ? <div>Leave it empty for use the same image !</div> : <div>Please, copy and paste your food recipe image url here !</div> }
@@ -1082,11 +924,7 @@ const MyRecipe = ({
           <input
             id={`image`}
             disabled={allDisabled}
-            //className={css.input}
             className={css.inputBase}
-            // InputProps={{
-            //   className: css.inputBaseImage
-            // }}
             value={imageValue}
             autoComplete='off'
             placeholder={
@@ -1096,7 +934,6 @@ const MyRecipe = ({
             }
             onFocus={() => badWordsUIOnChangeResetter()}
             onChange={(e) => { // DOUBLE CHECK/LOADING FOR EDITED ENCODED URL IMAGE
-              //badWordsUIOnChangeResetter()
               let copyImageValue = e.target.value.trim()
               if (!isEditing) localStorage.setItem('imageValue', e.target.value)
               setImageValue(e.target.value.trim())
@@ -1107,7 +944,6 @@ const MyRecipe = ({
               setTimeout(() => {
                 setImageValueDoubleCheck(copyImageValue)
               }, 200)
-
             }}
           />
         </Tooltip>
@@ -1124,7 +960,6 @@ const MyRecipe = ({
           open={error.health.string || error.health.max}
           placement="bottom-start"
           style={{ zIndex: '1' }}
-          //style={{ zIndex: '1', display: 'none' }}
           disableHoverListener={true}
           disableFocusListener={true}
           hidden={ checkDisabledBadWords.current ? false : settingsFilters.showTooltips ? false : true }
@@ -1132,20 +967,19 @@ const MyRecipe = ({
             <div className={css.innerTooltip}>
               <div
                 style={{ color: '#25252d', fontWeight: '400' }}
-              >{error.health.string ?
-                `Only numbers allowed in "Health Score" !` :
-                `Allowed numbers are between 0 and 100 !`}
+              >
+                {
+                  error.health.string ?
+                  `Only numbers allowed in "Health Score" !` :
+                  `Allowed numbers are between 0 and 100 !`
+                }
               </div>
             </div>
           }
         >
           <input
             id="health"
-            //className={css.input}
             className={css.inputBase}
-            // InputProps={{
-            //   className: css.inputHealth
-            // }}
             disabled={allDisabled}
             value={healthValue}
             autoComplete='off'
@@ -1155,11 +989,7 @@ const MyRecipe = ({
               `e.g. 73`
             }
             onFocus={() => badWordsUIOnChangeResetter()}
-            onChange={(e) => {
-              validator({ value: e.target.value, type: e.target.id })
-              //badWordsUIOnChangeResetter()
-              //setHealthValue(e.target.value)
-            }}
+            onChange={(e) => validator({ value: e.target.value, type: e.target.id })}
           />
         </Tooltip>
       </div>
@@ -1177,17 +1007,8 @@ const MyRecipe = ({
             value={dishesArray}
             disabled={allDisabled}
             label="Select Dishes"
-            //onFocus={() => console.log("123123 SELECTER")}
-            // onClick={() => {
-            //   //console.log("123123 SELECTER")
-            //   //badWordsUIOnChangeResetter()
-            // }}
-            //onClick={console.log("123123 SELECTER")}
             onFocus={() => badWordsUIOnChangeResetter()}
-            onChange={(e) => {
-              handleChangeDishes(e);
-              //badWordsUIOnChangeResetter()
-            }}
+            onChange={(e) => handleChangeDishes(e)}
             renderValue={(selected) => selected.join(', ')}
             MenuProps={ {PaperProps: { style: { maxHeight: `${48 * 4.5}px`, width: 300 }}}}
           >
@@ -1215,7 +1036,6 @@ const MyRecipe = ({
           open={error.summary.character || error.summary.badWord}
           placement="bottom"
           style={{ zIndex: '1' }}
-          //style={{ zIndex: '1', display: 'none' }}
           disableHoverListener={true}
           disableFocusListener={true}
           hidden={ checkDisabledBadWords.current ? false : settingsFilters.showTooltips ? false : true }
@@ -1236,7 +1056,6 @@ const MyRecipe = ({
             </div>
           }
         >
-          {/* <div className={css.summaryContainer}> */}
           <div style={{ display: 'flex', width: '100%' }}>
             <div
               id={"targetSummary"}
@@ -1248,11 +1067,9 @@ const MyRecipe = ({
               autoComplete='off'
               value={summaryValue}
               placeholder={`e.g. Healthy pasta recipe`}
-              //onChange={(e) => { validator({ value: e.target.value, type: e.target.id }) }}
               onFocus={() => badWordsUIOnChangeResetter()}
               onChange={(e) => {
                 validator({ value: e.target.value, type: e.target.id })
-                //setSummaryValue(e.target.value)
               }}
             />
           </div>
@@ -1305,16 +1122,13 @@ const MyRecipe = ({
                 enterDelay={500}
                 leaveDelay={200}
                 enterTouchDelay={0}
-                //open={(error.instructions[index] && error.instructions[index].character) || (error.instructions[index] && error.instructions[index].badWord)}
-                //open={error.instructions[index] && error.instructions[index].badWord}
                 open={
                   error.instructions[index] ?
                   error.instructions[index].character || error.instructions[index].badWord :
                   false
-                } // continuar aca
+                }
                 placement={ index % 2 === 0 ? `bottom-end` : `bottom-start` }
                 style={{ zIndex: '1' }}
-                //style={{ zIndex: '1', display: 'none' }}
                 disableHoverListener={true}
                 disableFocusListener={true}
                 hidden={ checkDisabledBadWords.current ? false : settingsFilters.showTooltips ? false : true }
@@ -1336,57 +1150,23 @@ const MyRecipe = ({
                   </div>
                 }
               >
-                {/* <div className={css.instructionsContainer}> */}
-                {/* <div style={{ width: '50%' }}> */}
-                <div style={{ display: 'flex', width: '100%' }}>
+                <div
+                  className={`target123`}
+                  style={{ display: 'flex', width: '100%' }}
+                >
                   <div
                     id={`targetInstructions${index}`}
-                    //id={`targetInstructions`}
-                    //disabled={allDisabled}
-                    //shrink={false}
-                    //className={css.inputShownInstructions}
                     className={`${css.inputLayer} ${css.inputLayerInstructions}`}
                   />
                   <textarea
                     id={`${index}instructions`}
                     className={`${css.inputBase} ${css.inputBaseInstructions}`}
-                    // InputProps={{
-                    //   className: css.inputInstructions
-                    // }}
                     disabled={allDisabled}
                     autoComplete='off'
-                    //multiline
                     value={stepsState[index]}
                     placeholder={`e.g. Cut pasta, fry tomatoes..`}
-                    // sx={{
-                    //   "& .MuiInputBase-input": { // 'pre-wrap' - AUTO-FITS // 'nowrap' - 1 SINGLE LINE
-                    //     whiteSpace: stepsState[index] !== '' ? 'pre-wrap' : 'nowrap'
-                    //   }
-                    // }}
                     onFocus={() => badWordsUIOnChangeResetter()}
-                    onChange={(e) => {
-                      console.log("XXX e.target.value", e.target.value)
-                      console.log("XXX e.target.id", e.target.id)
-                      console.log("(e.target as HTMLTextAreaElement).id", (e.target as HTMLTextAreaElement).id)
-                      
-                      //handlerUpdateInstructions({ index: parseInt((e.target as HTMLTextAreaElement).id, 10), value: e.target.value });
-                      validator({ manual: true, value: (e.target as HTMLTextAreaElement).value, type: (e.target as HTMLTextAreaElement).id.replace(/[0-9]/g, ''), index: parseInt((e.target as HTMLTextAreaElement).id, 10) });
-                      //setSummaryValue(e.target.value)
-
-                      //var qwee = document.querySelectorAll('[id$=instructions]');
-                      
-                      //var qwee = document.getElementById('instructions');
-                      //let qwee = document.getElementById('targetSummary')
-
-                      let qwee = document.getElementById(`${parseInt((e.target as HTMLTextAreaElement).id, 10)}instructions`)
-                      function auto_grow(element: any) {
-                        element.style.height = "5px";
-                        element.style.height = (element.scrollHeight - 33) + "px";
-                      }
-                      qwee && auto_grow(qwee)
-                      
-                      
-                    }}
+                    onChange={(e) => validator({ manual: true, value: (e.target as HTMLTextAreaElement).value, type: (e.target as HTMLTextAreaElement).id.replace(/[0-9]/g, ''), index: parseInt((e.target as HTMLTextAreaElement).id, 10) })}
                   />
                 </div>
               </Tooltip>
@@ -1402,10 +1182,6 @@ const MyRecipe = ({
                 placement="bottom-end"
                 style={{ zIndex: '1' }}
                 hidden={ settingsFilters.showTooltips ? false : true } // Deactivate Tooltip render
-                //hidden={false} // Deactivate Tooltip render
-                //style={{ zIndex: '1', display: 'contents' }}
-                //style={{ zIndex: '1', display: 'inherit' }}
-                //style={{ zIndex: '1', display: 'inherit' }}
                 title={
                   <div className={css.newStepTooltip}>
                     <div>Max steps {`<`}10{`>`} reached !</div>
@@ -1422,12 +1198,8 @@ const MyRecipe = ({
                     id={`${index}`}
                     className={css.buttonNew}
                     sx={{ background: 'green' }}
-                    //onFocus={() => badWordsUIOnChangeResetter()}
                     onFocus={() => badWordsUIOnChangeResetter()}
-                    onClick={(e) => {
-                      //badWordsUIOnChangeResetter()
-                      handlerAddInstructions({ index: parseInt((e.target as HTMLInputElement).id, 10 )})
-                    }}
+                    onClick={(e) => handlerAddInstructions({ index: parseInt((e.target as HTMLInputElement).id, 10) })}
                   >
                   </Button>
                 </div>
@@ -1444,11 +1216,6 @@ const MyRecipe = ({
                 placement="bottom-end"
                 style={{ zIndex: '1' }}
                 hidden={ settingsFilters.showTooltips ? false : true }
-                //hidden={true} // Deactivate Tooltip render
-                //hidden={false} // Deactivate Tooltip render
-                //style={{ zIndex: '1', display: 'none' }}
-                //style={{ zIndex: '1', display: 'contents' }}
-                //style={{ zIndex: '1', display: 'inherit' }}
                 title={"You can't delete first step !"}
               >
                 <div
@@ -1461,14 +1228,8 @@ const MyRecipe = ({
                     className={css.buttonDelete}
                     sx={{ background: 'red' }}
                     onFocus={() => badWordsUIOnChangeResetter()}
-                    onClick={(e) => {
-                      //badWordsUIOnChangeResetter()
-                      handlerDeleteInstructions({ index: parseInt((e.target as HTMLInputElement).id, 10) })
-                    }}
+                    onClick={(e) => handlerDeleteInstructions({ index: parseInt((e.target as HTMLInputElement).id, 10) })}
                   >
-                    
-
-
                   </Button>
                 </div>
               </Tooltip>
@@ -1501,14 +1262,11 @@ const MyRecipe = ({
           className={css.buttonClearSave}
           variant="contained"
           onClick={(e) => {
-            // !settingsFilters.showBadWords ?
-            // testHandler() :
             isEditing ?
             handleSaveEdit(e) :
             handleSubmit(e)
 
           }}
-          //settingsFilters.showBadWords
           disabled={
             saveButtonDisabled ||
             error.title.character ||

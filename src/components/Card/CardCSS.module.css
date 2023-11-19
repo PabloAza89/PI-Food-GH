@@ -65,7 +65,12 @@
 .image {
   display: flex;
   height: 115px;
-  width: 350px
+  /* width: 350px; */
+  width: 100%;
+  /* max-width: 350px; */
+  /* min-width: calc(100% - 80px); */
+  /* padding-left: 50px; */
+  /* padding-right: 50px; */
 }
 
 .innerTooltip {
@@ -97,12 +102,14 @@
   display: table-cell;
   text-align: center;
   color: antiquewhite !important;
-  
+
 }
 
 .linkStyle {
   text-decoration: none !important;
   color: antiquewhite !important;
+  /* width: 100%; */
+  width: calc(100% - 80px);
 }
 
 #innerText {
@@ -134,14 +141,9 @@
 /* MIN <    MED    > LAR */
 /* 424 < 425 ~ 825 > 826 */
 
-/* MINPORT */
-@media screen and (orientation: portrait) and (max-width: 424px) {
+/* ONLY SMAPORT */
+@media screen
+and (orientation: portrait)
+and (max-device-width: 424px) {
   .backgroundCard { width: 90% }
-  .image { width: calc(100% - 80px) }
-  /* .editDeleteContainer { flex-direction: column-reverse } */
-}
-
-/* MINLAND */
-@media screen and (orientation: landscape) and (max-height: 424px) {
-  /* .editDeleteContainer { flex-direction: column-reverse } */
 }

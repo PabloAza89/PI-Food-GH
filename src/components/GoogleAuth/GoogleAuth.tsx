@@ -25,8 +25,6 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
     $(`#test123`).outerWidth()! - 108
   }
 
- 
-
   const login = useGoogleLogin({
     onSuccess: (codeResponse) => {
       fetch(`https://www.googleapis.com/oauth2/v3/userinfo?access_token=${codeResponse.access_token}`, {
@@ -157,14 +155,11 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
     .catch(rej => console.log(rej))
   }
 
-  const [ buttonHelperWidth, setButtonHelperWidth ] = useState<number | undefined>(undefined)
   const [ clicked, setClicked ] = useState<boolean>(false)
 
    useEffect(() => { // FIRST AUTO WIDTH CHECKER //
       $(`#buttonIn`)
         .css("width", "64px")
-      //setButtonHelperWidth($(`#buttonWidthHelper`).outerWidth()! - 50)
-      setButtonHelperWidth(getCurrentWidth())
    },[userData.email]) // HELPS WITH NEW WIDTH WHEN USER CHANGES
 
    window.onfocus = function() { // FIRED WHEN TAB IS FOCUSED, CHECK VALID USER
@@ -181,25 +176,12 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
       if (clicked) $(this).stop()
       else {
         $(this)
-        
-          //.css("max-width", `${$('#test123').outerWidth()! - 113}px)`)
-          //.css("max-width", `387px)`)
-          //.css("max-width", "calc(100% - 113px)")
           .animate({ width: getCurrentWidth() }, { queue: false, easing: 'easeOutBounce', duration: 1000 })
         $(`#buttonGL`)
           .html(
             userData.email ?
             `  Signed in as ${userData.email}` :
-            //`  ${userData.email}` :
             `  Sign in with Google` )
-        //$(`.test`)
-          //.css("right", "-1000px")
-          //.css("background", "red")
-          //.css("overflow", "auto")
-          //.animate( { right: 1000 }, { queue: false, easing: 'easeOutCubic', duration: 1500 })
-          // .animate({
-          //   scrollLeft: -500
-          // }, 1000, 'linear');
       }
     })
     .on( "click", function() {
@@ -212,7 +194,6 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
           `  ${userData.email}` :
           userData.email ?
           `  Signed in as ${userData.email}` :
-          //`  ${userData.email}` :
           `  Sign in with Google` )
     })
     .on("mouseleave", function() {
@@ -243,38 +224,6 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
   let buttonIn = document.getElementById('buttonIn')
   buttonIn && new ResizeObserver(outputsize).observe(buttonIn)
 
-  //console.log("test123", $(`#test123`)[0].clientWidth)
-  //console.log("test123", $(`#test123`))
-  //console.log("test123", $(`#test123`).outerWidth())
-  //console.log("test123", $('#test123').outerWidth()! - 113)
-  
-  useEffect(() => {
-    function handleResize() {
-      //console.log("ACCCION")      
-    }
-    
-    window.addEventListener("resize", handleResize);
-    
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      
-    }
-  })
-
-  //$(window).on("resize", (function() {
-  // $(`#testNavBarTest`).on("resize", function() {
-  //   console.log("SE REEMPLAZO")
-  // });
-
-  // var lastWidth = $(`#testNavBarTest`).width();
-
-  // $(`#testNavBarTest`).on("resize", function(){
-  //   if($(window).width()!== lastWidth){
-  //     console.log("SE REEMPLAZOAA")
-  //       lastWidth = $(`#testNavBarTest`).width();
-  //   }
-  // })
-
   return (
     <div
       className={css.background}
@@ -292,7 +241,6 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
               `  ${userData.email}` :
               userData.email && paginateAmount === 90 ?
               `  Signed in as ${userData.email}` :
-              //`  ${userData.email}` :
               `  Sign in with Google`
             }
         </div>

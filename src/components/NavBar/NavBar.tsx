@@ -30,17 +30,13 @@ const NavBar = ({ recipeCreatedOrEdited, paginateAmount }: NavBarI) =>  {
 
 
   const navBarFilters = useSelector((state: {navBarFilters: any}) => state.navBarFilters)
-  //console.log("AAA", navBarFilters)
-
   const inDetail = [useMatch("/:route")?.params.route?.toLowerCase()].filter(e => e !== "about")[0]
-  const [healthLevel, setHealthLevel] = useState<string>('');
   const [healthLabelShown, setHealthLabelShown] = useState<boolean>(false);
   const [sortAlpha, setSortAlpha] = useState<string>('');
   const [alphaLabelShown, setAlphaLabelShown] = useState<boolean>(false);
   const [placeholder, setPlaceholder] = useState<string>('Find recipe..');
   const menuShown = useSelector((state: {menuShown:boolean}) => state.menuShown)
   const settingsFilters = useSelector((state: { settingsFilters: settingsFiltersI }) => state.settingsFilters)
-  //const menuShown = true // DEV
   const allDietsOnline = useSelector((state: {allDietsOnline:boolean}) => state.allDietsOnline)
   const allDishesOnline = useSelector((state: {allDishesOnline:boolean}) => state.allDishesOnline)
 
@@ -57,37 +53,15 @@ const NavBar = ({ recipeCreatedOrEdited, paginateAmount }: NavBarI) =>  {
   const allDietsArray = useSelector((state: {allDiets: allDietsI[]}) => state.allDiets)
   const allDishesArray = useSelector((state: {allDishes: allDishesI[]}) => state.allDishes)
 
-  // interface entireFilterI {
-  //   diet: string,
-  //   dish: string,
-  //   text: string,
-  //   alphaOrHealthy: string,
-  // }
-
-  // const [entireFilter, setEntireFilter] = useState<entireFilterI>(
-  //   {
-  //     diet: 'All Diets',
-  //     dish: 'All Dishes',
-  //     text: '',
-  //     alphaOrHealthy: ''
-  //   }
-  // )
-
   const healthLevelHandler = (e: SelectChangeEvent) => {
     setSortAlpha('' as string);
-    setHealthLevel(e.target.value as string);
     setAlphaLabelShown(false)
   };
 
   const sortAlphaHandler = (e: SelectChangeEvent) => {
-    setHealthLevel('' as string);
     setSortAlpha(e.target.value as string);
     setHealthLabelShown(false)
   };
-
-  // useEffect(() => {
-  //   dispatch(filter(entireFilter))
-  // },[ dispatch, entireFilter ])
 
   useEffect(() => {
     function handleResize() {
@@ -105,119 +79,18 @@ const NavBar = ({ recipeCreatedOrEdited, paginateAmount }: NavBarI) =>  {
       dispatch(setIndexChoosen(0));
       dispatch(setTabChoosen(0));
     }
-      
-    
-      
-    // switch (type) {
-    //   case 'text':
-    //     dispatch(setIndexChoosen(0));
-    //     dispatch(setTabChoosen(0));
-    //     Promise.all([dispatch(setNavBarFilters({ type: 'text', value: value }))])
-    //     .then(() => dispatch(applyFilters()))
-    //   break;
-    //   case 'diet':
-    //     dispatch(setIndexChoosen(0));
-    //     dispatch(setTabChoosen(0));
-    //     Promise.all([dispatch(setNavBarFilters({ type: 'diet', value: value }))])
-    //     .then(() => dispatch(applyFilters()))
-    //   break;
-    //   case 'dish':
-    //     dispatch(setIndexChoosen(0));
-    //     dispatch(setTabChoosen(0));
-    //     Promise.all([dispatch(setNavBarFilters({ type: 'dish', value: value }))])
-    //     .then(() => dispatch(applyFilters()))
-    //   break;
-    //   case 'sortHealth':
-    //     //dispatch(setIndexChoosen(0));
-    //     //dispatch(setTabChoosen(0));
-    //     Promise.all([dispatch(setNavBarFilters({ type: 'sortHealth', value: value }))])
-    //     .then(() => dispatch(applyFilters()))
-    //   break;
-    //   case 'sortAlpha':
-    //     //dispatch(setIndexChoosen(0));
-    //     //dispatch(setTabChoosen(0));
-    //     Promise.all([dispatch(setNavBarFilters({ type: 'sortAlpha', value: value }))])
-    //     .then(() => dispatch(applyFilters()))
-    //   break;
 
-      
-
-
-    //}
     Promise.all([dispatch(setNavBarFilters({ type: type, value: value }))])
     .then(() => dispatch(applyFilters()))
   }
 
-  // useEffect(() => {
-  //   var lastWidth = $(`#testNavBarTest`).width();
-
-  //   $(`#testNavBarTest`).on("resize", function(){
-  //     if($(`#testNavBarTest`).width()!== lastWidth){
-  //       console.log("SE REEMPLAZOAA")
-  //         lastWidth = $(`#testNavBarTest`).width();
-  //     }
-  //   })
-
-  // })
-
-  // useEffect(() => {
-  //   // $(`#testNavBarTest`).resize(function() {
-  //   //   //$('body').prepend('<div>' + $(window).width() + '</div>');
-  //   //   console.log("SE REEMPLAZOAA")
-  //   // });
-  //       //var lastWidth = $(window).width();
-
-  //   // $(window).on("resize", function(){
-  //   //   if($(window).width()!== lastWidth){
-  //   //     console.log("SE REEMPLAZOAA")
-  //   //       lastWidth = $(window).width();
-  //   //   }
-  //   // })
-
-  //   var lastWidth = $(`body`).width();
-
-  //   console.log("SE REEMPLAZOAA", $(`body`).width())
-
-  //   $(`body`).on("resize", function(){
-  //     if($(`body`).width()!== lastWidth){
-  //       console.log("SE REEMPLAZOAA")
-  //         lastWidth = $(`body`).width();
-  //     }
-  //   })
-
-  // })
-
-  useEffect(() => {
-    function handleResize() {
-      console.log("SE REEMPLAZOAA", $(`#testNavBarTest`).outerWidth()!)
-    }
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    }
-  })
-
   useEffect(() => {
     var lastWidth = $(`#testNavBarTest`).outerWidth()!
-
-    //console.log("SE REEMPLAZOAA", $(`body`).width())
-    console.log("SE REEMPLAZOAA", $(`#testNavBarTest`).outerWidth()!)
-
-    console.log("SE asdasdasd", $('body')[0].scrollWidth)
-
-    
-    
-    
-
     $(`#testNavBarTest`).on("resize", function(){
-      if($(`#testNavBarTest`).outerWidth()! !== lastWidth){
-        console.log("SE REEMPLAZOAA")
-          lastWidth = $(`#testNavBarTest`).outerWidth()!
-      }
+      if($(`#testNavBarTest`).outerWidth()! !== lastWidth)
+        lastWidth = $(`#testNavBarTest`).outerWidth()!
     })
-
   })
-
 
   return (
     <div
@@ -247,15 +120,26 @@ const NavBar = ({ recipeCreatedOrEdited, paginateAmount }: NavBarI) =>  {
           </div>
         </div>
         <Tooltip
+          // MOBILE
+          enterTouchDelay={1000}
+          leaveTouchDelay={2000}
+          // DESKTOP
+          enterDelay={1000}
+          enterNextDelay={1000}
+          leaveDelay={500}
+          disableFocusListener={
+            paginateAmount === 45 ?
+            true :
+            !settingsFilters.showTooltips
+          }
+          disableHoverListener={
+            paginateAmount === 45 ?
+            true :
+            !settingsFilters.showTooltips
+          }
           arrow
-          enterDelay={500}
-          leaveDelay={200}
-          enterTouchDelay={0}
           placement="bottom-end"
           title={`Show/Hide Menu`}
-          //open={true}
-          disableFocusListener={!settingsFilters.showTooltips}
-          disableHoverListener={!settingsFilters.showTooltips}
           hidden={ settingsFilters.showTooltips ? false : true }
         >
           <Button
@@ -290,15 +174,7 @@ const NavBar = ({ recipeCreatedOrEdited, paginateAmount }: NavBarI) =>  {
             onBlur={() => setPlaceholder(`Find recipe..`)}
             InputProps={{ className: css.inputProps }}
             className={`${css.input} ${com.noSelect}`}
-            onChange={(e) => {
-              
-              //setEntireFilter({...entireFilter, text: e.target.value});
-              // dispatch(setIndexChoosen(0));
-              // dispatch(setTabChoosen(0));
-              // Promise.all([dispatch(setNavBarFilters({ type: 'text', value: e.target.value }))])
-              // .then(() => dispatch(applyFilters()))
-              navBarValuesHandler({ type: 'text', value: e.target.value })
-            }}
+            onChange={(e) => navBarValuesHandler({ type: 'text', value: e.target.value })}
           />
           <Link
             className={css.linkStyleCreate}
@@ -326,21 +202,8 @@ const NavBar = ({ recipeCreatedOrEdited, paginateAmount }: NavBarI) =>  {
         <div className={css.upperLower}>
           <Select
             className={css.containerDietsDishesHealthAlpha}
-            //value={entireFilter.diet}
             value={navBarFilters.diet}
-            onChange={(e) => {
-              
-              //setEntireFilter({...entireFilter, diet:e.target.value});
-              // dispatch(setIndexChoosen(0));
-              // dispatch(setTabChoosen(0));
-
-              // Promise.all([dispatch(setNavBarFilters({ type: 'diet', value: e.target.value }))])
-              // .then(() => dispatch(applyFilters()))
-
-              navBarValuesHandler({ type: 'diet', value: e.target.value })
-
-
-            }}
+            onChange={(e) => navBarValuesHandler({ type: 'diet', value: e.target.value })}
           >
             { allDietsOnline ?
               allDietsArray.map(e => {
@@ -361,20 +224,8 @@ const NavBar = ({ recipeCreatedOrEdited, paginateAmount }: NavBarI) =>  {
           </Select>
           <Select
             className={css.containerDietsDishesHealthAlpha}
-            //value={entireFilter.dish}
             value={navBarFilters.dish}
-            onChange={(e) => {
-              
-              //setEntireFilter({...entireFilter, dish:e.target.value});
-              // dispatch(setIndexChoosen(0));
-              // dispatch(setTabChoosen(0));
-
-              // Promise.all([dispatch(setNavBarFilters({ type: 'dish', value: e.target.value }))])
-              // .then(() => dispatch(applyFilters()))
-
-              navBarValuesHandler({ type: 'dish', value: e.target.value })
-
-            }}
+            onChange={(e) => navBarValuesHandler({ type: 'dish', value: e.target.value })}
           >
             { allDishesOnline ?
               allDishesArray.map(e => {
@@ -406,16 +257,9 @@ const NavBar = ({ recipeCreatedOrEdited, paginateAmount }: NavBarI) =>  {
               size="small"
               className={css.selectWithLabel}
               onFocus={() => setHealthLabelShown(true)}
-              //value={healthLevel}
               value={navBarFilters.sortHealth}
               onChange={(e) => {
-                
-                //setEntireFilter({...entireFilter, alphaOrHealthy: e.target.value});
                 healthLevelHandler(e)
-
-                // Promise.all([dispatch(setNavBarFilters({ type: 'sortHealth', value: e.target.value }))])
-                // .then(() => dispatch(applyFilters()))
-
                 navBarValuesHandler({ type: 'sortHealth', value: e.target.value })
               }}
             >
@@ -435,16 +279,9 @@ const NavBar = ({ recipeCreatedOrEdited, paginateAmount }: NavBarI) =>  {
               onFocus={() => setAlphaLabelShown(true)}
               className={css.selectWithLabel}
               label="Sort alphabetically"
-              //value={sortAlpha}
               value={navBarFilters.sortAlpha}
               onChange={(e) => {
-                
-                //setEntireFilter({...entireFilter, alphaOrHealthy: e.target.value});
                 sortAlphaHandler(e)
-
-                //Promise.all([dispatch(setNavBarFilters({ type: 'sortAlpha', value: e.target.value }))])
-                //.then(() => dispatch(applyFilters()))
-
                 navBarValuesHandler({ type: 'sortAlpha', value: e.target.value })
               }}
             >

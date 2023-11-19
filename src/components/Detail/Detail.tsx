@@ -83,44 +83,36 @@ export default function Detail({ userData, setUserData, paginateAmount }: any) {
   }
 
   useEffect(() => {
-    if (paginateAmount === 45 && localStorage.getItem('showVisuals') === null) {
-      $(`[class*="cardDetail"]`)
+    if (paginateAmount === 45 && localStorage.getItem('showVisuals') === null)
+      $(`[class*="cardDetail"], [class*="errorCard"]`)
         .css('backdrop-filter', 'unset')
         .css('box-shadow', 'unset')
         .css('background', 'rgba(196, 34, 147, 0.2)')
-    } else if (paginateAmount === 90 && localStorage.getItem('showVisuals') === null) {
-      $(`[class*="cardDetail"]`)
+    else if (paginateAmount === 90 && localStorage.getItem('showVisuals') === null)
+      $(`[class*="cardDetail"], [class*="errorCard"]`)
         .css('backdrop-filter', 'blur(20px)')
         .css('box-shadow', '0 8px 32px 0 rgba(0, 0, 0, 0.37)')
         .css('background', 'linear-gradient(135deg, rgba(196, 34, 147, 0.1), rgba(196, 34, 147, 0))')
-    } else if (settingsFilters.showVisuals) {
-      console.log("entro aca 3")
-      $(`[class*="cardDetail"]`)
+    else if (settingsFilters.showVisuals)
+      $(`[class*="cardDetail"], [class*="errorCard"]`)
         .css('backdrop-filter', 'blur(20px)')
         .css('box-shadow', '0 8px 32px 0 rgba(0, 0, 0, 0.37)')
         .css('background', 'linear-gradient(135deg, rgba(196, 34, 147, 0.1), rgba(196, 34, 147, 0))')
-    } else {
-      console.log("entro aca 4")
-      $(`[class*="cardDetail"]`)
+    else
+      $(`[class*="cardDetail"], [class*="errorCard"]`)
         .css('backdrop-filter', 'unset')
         .css('box-shadow', 'unset')
         .css('background', 'rgba(196, 34, 147, 0.2)')
-    }
   })
 
   useEffect(() => {
-    if (paginateAmount === 45 && localStorage.getItem('showVisuals') === null) {
-      console.log("dispatched 1")
+    if (paginateAmount === 45 && localStorage.getItem('showVisuals') === null)
       dispatch(setSettingsFilters({ type: `showVisuals`, value: false }))
-      //dispatch(setSettingsFilters({ type: `showBadWords`, value: false }))
-    } else if (paginateAmount === 90 && localStorage.getItem('showVisuals') === null) {
-      console.log("dispatched 2")
+    else if (paginateAmount === 90 && localStorage.getItem('showVisuals') === null)
       dispatch(setSettingsFilters({ type: `showVisuals`, value: true }))
-      //dispatch(setSettingsFilters({ type: `showBadWords`, value: true }))
-    }
   },[paginateAmount, dispatch])
-      
-      
+
+
 
   if (goOn && toShow[0] !== undefined && recipe !== undefined) {
     return (
@@ -243,20 +235,22 @@ export default function Detail({ userData, setUserData, paginateAmount }: any) {
         </div>
       </div>
     )
-  } else if (goOn && toShow[0] !== undefined && recipe === undefined) {return (
-    <div className={css.backgroundError}>
-      <div className={css.errorCard}>
-        <b>THERE ARE NO MATCHING RECIPES WITH THAT ID !</b>
-        <Link to="/" style={{ textDecoration: 'none' }}>
-          <Button
-            variant="contained"
-            className={css.button}
-          >GO BACK !
-          </Button>
-        </Link>
+  } else if (goOn && toShow[0] !== undefined && recipe === undefined) {
+    return (
+      <div className={css.backgroundError}>
+        <div className={css.errorCard}>
+          <b>THERE ARE NO MATCHING RECIPES WITH THAT ID !</b>
+          <Link to="/" style={{ textDecoration: 'none' }}>
+            <Button
+              variant="contained"
+              className={css.button}
+            >GO BACK !
+            </Button>
+          </Link>
+        </div>
       </div>
-    </div>
-  )}
+    )
+  }
   else return (
     <div style={{ marginTop: menuShown ? '150px' : '100px' }}>
       <div className={css.loading}>Loading..</div>

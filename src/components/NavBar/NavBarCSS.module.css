@@ -1,5 +1,6 @@
 .background {
   display: flex;
+  /* background: red; */ /* DEV */
   background-color: rgba(0, 255, 255, .264);
   z-index: 3;
   width: 100%;
@@ -58,6 +59,7 @@
 
 
 .linkText {
+  /* background: gray; */ /* DEV */
   display: flex;
   flex-direction: column;
   text-decoration: none;
@@ -65,11 +67,12 @@
   justify-content: center;
   font-size: 24px;
   font-weight: 700;
-  width: 115px;
-  text-align: right;
   color: #FFFFFF;
   text-decoration: none !important;
   cursor: pointer;
+  text-align: left;
+  margin-left: 10px;
+  width: max-content;
 }
 
 .linkStyleCreate {

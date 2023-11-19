@@ -73,10 +73,11 @@ export const handleDelete = async ({ id, fd_tkn, setUserData, handleReload }: ha
           })
 
           // NEXT CHECKS IF RECIPE WAS THE LAST IN THE TAB, THEN GO ONE LEVEL LOWER
+          console.log("se ejecuto aca")
 
           let copyToShow: any[] = store.getState().toShow
           let actualIndexChoosen = store.getState().indexChoosen
-          if (copyToShow[copyToShow.length - 1].id === id && (copyToShow.length - 1) % 9 === 0) {
+          if (copyToShow.length > 1 && copyToShow[copyToShow.length - 1].id === id && (copyToShow.length - 1) % 9 === 0) {
             store.dispatch(setIndexChoosen( actualIndexChoosen === 0 ? 4 : actualIndexChoosen - 1))
             if (actualIndexChoosen === 0) store.dispatch(setTabChoosen( store.getState().tabChoosen - 1 ))
           }
@@ -147,9 +148,6 @@ export const handleEdit = ({
 export const handleReturn = ({
   location, navigate, recipeCreatedOrEdited, inDetail, origin
 }: any) => {
-  console.log("location.state && location.state.editing", location.state && location.state.editing)
-  console.log("recipeCreatedOrEdited", recipeCreatedOrEdited)
-  console.log("origin", origin)
   if (location.pathname.toLowerCase() === `/myrecipe` && !origin && (location.state && location.state.editing) && !recipeCreatedOrEdited) {
     Swal.fire({
       title: 'Do you want to cancel editing and go back ?',

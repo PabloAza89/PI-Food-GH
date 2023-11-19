@@ -204,11 +204,6 @@ const reducer = (state = initialState, action: {type: string; payload: any}) => 
       const copyAllRecipesApply: recipesI[] = [...state.allRecipes]
       let arrayToShowApply: recipesI[] = []
 
-      //if (!copyserverStatusApply.validKey) arrayToShowApply = copyAllRecipesApply.slice(0, copysettingsFiltersApply.quantityOfflineRecipes)
-      //if (copyserverStatusApply.validKey) arrayToShowApply = copyAllRecipesApply
-
-      //if (copyserverStatusApply.online && copyserverStatusApply.validKey) arrayToShowApply = copyAllRecipesApply.slice(0, copysettingsFiltersApply.quantityOnlineRecipes)
-
       if (copysettingsFiltersApply.showUserRecipes) arrayToShowApply = copyAllRecipesApply
       if (!copysettingsFiltersApply.showUserRecipes) arrayToShowApply = copyAllRecipesApply.filter(e => e.userRecipe !== true)
 

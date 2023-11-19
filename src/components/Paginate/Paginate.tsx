@@ -34,7 +34,7 @@ const Paginate = ({ paginateAmount }: paginateAmountI) => {
       if (tabChoosen % 2 !== 0 && paginateAmount !== 45) {
         if (indexChoosen + 5 === Number(targetValue)) $(`.Page${indexChoosen + 5}`).css("background", "rgba(46, 230, 163, 0.377)") // GREEN
         else $(`.Page${i}`).css("background", "rgba(230, 46, 175, 0.363)") // PINK
-      }  else {
+      } else {
         if (indexChoosen === Number(targetValue)) $(`.Page${indexChoosen}`).css("background", "rgba(46, 230, 163, 0.377)") // GREEN
         else $(`.Page${i}`).css("background", "rgba(230, 46, 175, 0.363)") // PINK
       }

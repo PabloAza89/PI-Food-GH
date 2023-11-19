@@ -29,10 +29,6 @@ const Settings = () =>  {
 
   const settingsFilters = useSelector((state: { settingsFilters:settingsFiltersI }) => state.settingsFilters)
 
-  const toShow = useSelector((state: { toShow:any }) => state.toShow)
-
-  console.log("toShow", toShow)
-
   const [ expandStatus, setExpandStatus ] = useState(false)
   const [ expandVisuals, setExpandVisuals ] = useState(false)
   const [ expandBadWords, setExpandBadWords ] = useState(false)
@@ -200,15 +196,6 @@ const Settings = () =>  {
     }
   },[settingsFilters.quantityOfflineRecipes])
 
-  useEffect(() => { // FIRED WHEN WINDOW IS CLOSED OR REFRESH
-    const onBeforeUnloadd = () => {
-      console.log("al final")
-    };
-    window.addEventListener("beforeunload", onBeforeUnloadd);
-    return () => window.removeEventListener("beforeunload", onBeforeUnloadd);
-    // eslint-disable-next-line
-  },[])
-
   return (
     <div className={css.background}>
       <div className={css.accordionContainer}>
@@ -264,7 +251,7 @@ const Settings = () =>  {
             }
           >
             <Switch
-              onClick={() => settingsFiltersHandler({ type: 'showVisuals' })} ///
+              onClick={() => settingsFiltersHandler({ type: 'showVisuals' })}
               checked={ settingsFilters.showVisuals ? true : false }
               className={css.switch}
               classes={{
@@ -302,7 +289,7 @@ const Settings = () =>  {
             }
           >
             <Switch
-              onClick={() => settingsFiltersHandler({ type: 'showBadWords' })} ///
+              onClick={() => settingsFiltersHandler({ type: 'showBadWords' })}
               checked={ settingsFilters.showBadWords ? true : false }
               className={css.switch}
               classes={{
@@ -340,7 +327,7 @@ const Settings = () =>  {
             }
           >
             <Switch
-              onClick={() => settingsFiltersHandler({ type: 'showTooltips' })} ///
+              onClick={() => settingsFiltersHandler({ type: 'showTooltips' })}
               checked={ settingsFilters.showTooltips ? true : false }
               className={css.switch}
               classes={{

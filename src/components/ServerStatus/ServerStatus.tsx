@@ -15,23 +15,13 @@ const ServerStatus = () =>  {
 
   const serverStatus = useSelector((state: { serverStatus: serverStatusI }) => state.serverStatus)
   const serverStatusShown = useSelector((state: { serverStatusShown: boolean }) => state.serverStatusShown)
-
-  //const showStatus = useSelector((state: { showStatus:boolean }) => state.showStatus)
   const settingsFilters = useSelector((state: { settingsFilters:settingsFiltersI }) => state.settingsFilters)
-
-  // let showStatusEl = document.getElementById('showStatusEl')
-  // showStatusEl && (
-  // showStatus ?
-  // showStatusEl.style.display = "none" :
-  // showStatusEl.style.display = "none" )
 
   useEffect(() => {
     settingsFilters.showStatus ?
     $(`#showStatusEl`).css(`display`, `flex`) :
     $(`#showStatusEl`).css(`display`, `none`)
   },[settingsFilters.showStatus])
-  
-  //const serverStatusShown = true // DEV
 
   useEffect(() => {
     $(function() {

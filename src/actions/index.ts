@@ -40,20 +40,6 @@ export function getDishesFromDB() {
   }
 };
 
-// interface filterI {
-//   diet: string,
-//   dish: string,
-//   text: string,
-//   alphaOrHealthy: string,
-// }
-
-// export function filter(payload: filterI) {
-//   return {
-//     type: 'FILTER',
-//     payload: payload
-//   }
-// };
-
 export function setIndexChoosen(payload: any) {
   return {
     type: 'SET_INDEX_CHOOSEN',
