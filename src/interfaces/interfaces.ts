@@ -127,3 +127,8 @@ export interface NavBarI {
   recipeCreatedOrEdited?: boolean,
   paginateAmount?: number
 }
+
+export interface colorsArrayI {
+  value: string,
+  name: string
+}

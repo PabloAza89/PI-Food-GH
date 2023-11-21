@@ -128,11 +128,9 @@ const Card = ({
       </div>
       <div className={`${css.imageOrTitleContainer} ${com.noSelect}`}>
         <Tooltip
-          //id={`2342w32w4234`}
           // MOBILE
           enterTouchDelay={500}
           leaveTouchDelay={2000}
-          //disableTouchListener={true}
           // DESKTOP
           enterDelay={1000}
           enterNextDelay={1000}
@@ -161,7 +159,7 @@ const Card = ({
             id={css.title}
           >
             <Link
-              onContextMenu={(e) => { // DISABLE MOBILE CONTEXT MENU --> THEN MAKES TOOLTIP NOT FAIL ON MOBILE
+              onContextMenu={(e) => { // DISABLE CONTEXT MENU --> THEN MAKES TOOLTIP NOT FAIL ON MOBILE
                 e.preventDefault();
                 e.stopPropagation();
                 return false;

@@ -48,7 +48,7 @@ const initialState: initialStateI = {
   showOnlineRecipes: localStorage.getItem('showOnlineRecipes') !== null ? JSON.parse(localStorage.getItem('showOnlineRecipes')!) : true,
   showOfflineRecipes: localStorage.getItem('showOfflineRecipes') !== null ? JSON.parse(localStorage.getItem('showOfflineRecipes')!) : true,
   settingsFilters: {
-    showColor: localStorage.getItem('showColor') !== null ? JSON.parse(localStorage.getItem('showColor')!) : false,
+    showColor: localStorage.getItem('showColor') !== null ? JSON.parse(localStorage.getItem('showColor')!) : true,
     backgroundColor: localStorage.getItem('backgroundColor') !== null ? JSON.parse(localStorage.getItem('backgroundColor')!) : '#2e074a',
     showStatus: localStorage.getItem('showStatus') !== null ? JSON.parse(localStorage.getItem('showStatus')!) : true,
     showVisuals: localStorage.getItem('showVisuals') !== null ? JSON.parse(localStorage.getItem('showVisuals')!) : true,

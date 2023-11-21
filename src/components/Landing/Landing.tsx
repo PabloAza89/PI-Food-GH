@@ -5,14 +5,15 @@ import { checkPrevLogin } from '../../commons/commonsFunc';
 import { useNavigate } from "react-router-dom";
 import { Button } from '@mui/material/';
 import { useDispatch, useSelector } from 'react-redux';
-import { landingHidden } from '../../actions';
+import { landingHidden, setSettingsFilters } from '../../actions';
 import { ReactComponent as MySvg } from '../../images/googleLogo.svg';
 import Swal from 'sweetalert2';
 import { useGoogleLogin } from '@react-oauth/google';
 import bgImage from '../../images/bgImage.webp';
+import noImage1 from '../../images/noImage1.jpg';
 import { settingsFiltersI } from '../../interfaces/interfaces';
 
-const LandingPage = ({ setUserData, userData }: any) => {
+const LandingPage = ({ setUserData, userData, paginateAmount }: any) => {
 
   const dispatch = useDispatch()
   const navigate = useNavigate();
@@ -20,23 +21,39 @@ const LandingPage = ({ setUserData, userData }: any) => {
   const settingsFilters = useSelector((state: { settingsFilters:settingsFiltersI }) => state.settingsFilters)
 
   useEffect(() => {
+    
     let wallpaperBody = document.getElementById('bgImage')
-    if (settingsFilters.showColor) {
-      if (wallpaperBody !== null) {
+    let meta = document.querySelector("meta[name='theme-color']")
+
+    if (paginateAmount === 45 && localStorage.getItem('showColor') === null) {
+      if (wallpaperBody !== null && meta !== null) {
         wallpaperBody.style.background = settingsFilters.backgroundColor
         wallpaperBody.style.backgroundImage = 'unset'
         wallpaperBody.style.filter = 'unset'
+        meta.setAttribute("content", settingsFilters.backgroundColor)
       }
-    } else {
-      if (wallpaperBody !== null) {
-        if (settingsFilters.showVisuals) wallpaperBody.style.filter = 'blur(3px)'
-        else wallpaperBody.style.filter = 'unset'
+      dispatch(setSettingsFilters({ type: `showColor`, value: true }))
+    } if (paginateAmount === 45  && localStorage.getItem('showVisuals') === null) {
+      if (wallpaperBody !== null) wallpaperBody.style.filter = 'unset'
+      dispatch(setSettingsFilters({ type: `showVisuals`, value: false }))
+    } if (paginateAmount === 90 && localStorage.getItem('showColor') === null) {
+      if (wallpaperBody !== null && meta !== null) {
+        wallpaperBody.style.background = 'unset'
         wallpaperBody.style.backgroundImage = `url(${bgImage})`
         wallpaperBody.style.backgroundSize = `cover`
         wallpaperBody.style.backgroundRepeat = `no-repeat`
+        meta.setAttribute("content", "#10b58c")
       }
+      dispatch(setSettingsFilters({ type: `showColor`, value: false }))
+    } if (paginateAmount === 90  && localStorage.getItem('showVisuals') === null) {
+      if (wallpaperBody !== null) wallpaperBody.style.filter = 'blur(3px)'
+      dispatch(setSettingsFilters({ type: `showVisuals`, value: true }))
     }
-  },[settingsFilters.showColor, settingsFilters.backgroundColor])
+  },[
+    settingsFilters.showColor, settingsFilters.backgroundColor,
+    dispatch, paginateAmount, settingsFilters.showVisuals
+  ])
+  //})
 
   let landingHiddenLS: string | null = localStorage.getItem('landingHidden');
   const landingHiddenState = useSelector((state: { landingHidden: boolean }) => state.landingHidden)

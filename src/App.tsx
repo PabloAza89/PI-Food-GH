@@ -55,21 +55,24 @@ function App() {
   useEffect(() => {
     let wallpaperBody = document.getElementById('wallpaperBody')
     let wallpaperNav = document.getElementById('wallpaperNav')
+    let meta = document.querySelector("meta[name='theme-color']")
     if (settingsFilters.showColor) {
-      if (wallpaperBody !== null && wallpaperNav !== null) {
+      if (wallpaperBody !== null && wallpaperNav !== null && meta !== null) {
         wallpaperBody.style.background = settingsFilters.backgroundColor
         wallpaperBody.style.backgroundImage = 'unset'
         wallpaperNav.style.background = settingsFilters.backgroundColor
         wallpaperNav.style.backgroundImage = 'unset'
+        meta.setAttribute("content", settingsFilters.backgroundColor)
       }
     } else {
-      if (wallpaperBody !== null && wallpaperNav !== null) {
+      if (wallpaperBody !== null && wallpaperNav !== null && meta !== null) {
         wallpaperBody.style.backgroundImage = `url(${bgImage})`
         wallpaperBody.style.backgroundSize = `cover`
         wallpaperBody.style.backgroundRepeat = `no-repeat`
         wallpaperNav.style.background = `url(${bgImage})`
         wallpaperNav.style.backgroundSize = `cover`
         wallpaperNav.style.backgroundRepeat = `no-repeat`
+        meta.setAttribute("content", "#10b58c")
       }
     }
   },[settingsFilters.showColor, settingsFilters.backgroundColor])
@@ -274,7 +277,11 @@ function App() {
               />
               <GoUp />
             </> :
-            <Landing setUserData={setUserData} userData={userData} />
+            <Landing
+              paginateAmount={paginateAmount}
+              setUserData={setUserData}
+              userData={userData}
+            />
           }
         />
         <Route

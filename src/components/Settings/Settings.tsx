@@ -5,20 +5,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
-import { Button, FormControlLabel, Switch, Typography } from '@mui/material/';
+import { Switch } from '@mui/material/';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { easings } from '../../commons/easingsCSS';
 import $ from 'jquery';
-import { serverStatusI, settingsFiltersI } from '../../interfaces/interfaces';
-import {
-  setShowStatus, setShowUserRecipes,
-  setShowOnlineRecipes, setShowOfflineRecipes,
-  setSettingsFilters, applyFilters
-} from '../../actions';
-import {
-  Unstable_NumberInput as BaseNumberInput,
-  NumberInputProps,
-} from '@mui/base/Unstable_NumberInput';
+import { settingsFiltersI, colorsArrayI } from '../../interfaces/interfaces';
+import { setSettingsFilters, applyFilters } from '../../actions';
+import { Unstable_NumberInput as BaseNumberInput } from '@mui/base/Unstable_NumberInput';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
 
@@ -29,8 +22,7 @@ const Settings = () =>  {
 
   const settingsFilters = useSelector((state: { settingsFilters:settingsFiltersI }) => state.settingsFilters)
 
-  const [ expandColor, setExpandColor ] = useState(true)
-  //const [ expandColor, setExpandColor ] = useState(false)
+  const [ expandColor, setExpandColor ] = useState(false)
   const [ expandStatus, setExpandStatus ] = useState(false)
   const [ expandVisuals, setExpandVisuals ] = useState(false)
   const [ expandBadWords, setExpandBadWords ] = useState(false)
@@ -41,7 +33,6 @@ const Settings = () =>  {
   const [ expandOnlineNumber, setExpandOnlineNumber ] = useState(false)
   const [ expandOffline, setExpandOffline ] = useState(false)
   const [ expandOfflineNumber, setExpandOfflineNumber ] = useState(false)
-
   const [ focusUser, setFocusUser ] = useState(false)
   const [ focusOnline, setFocusOnline ] = useState(false)
   const [ focusOffline, setFocusOffline ] = useState(false)
@@ -299,13 +290,13 @@ const Settings = () =>  {
     }
   })
 
-  const colorsArray = [
+  const colorsArray: colorsArrayI[] = [
     { value: '#808080', name: 'DARKGRAY' },
     { value: '#dcdcdc', name: 'LIGHTGRAY' },
     { value: '#2e074a', name: 'DARKVIOLET' },
     { value: '#4f6b16', name: 'DARKOLIVE' },
     { value: '#5c0606', name: 'DARKRED' },
-    { value: '#030380', name: 'DARKBLUE' },
+    { value: '#030380', name: 'DARKBLUE' }
   ]
 
   return (
@@ -364,6 +355,9 @@ const Settings = () =>  {
                   })
                 }
               </div>
+              Enable/Disable custom background color. If enabled, improved performance on mobile devices.
+              If disabled, default background image is displayed.
+              (Default value on mobile devices: enabled, default color: darkviolet)
             </div>
           </AccordionDetails>
         </Accordion>
