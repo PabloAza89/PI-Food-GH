@@ -25,6 +25,8 @@
   letter-spacing: 0.25px;
   font-family: "Google Sans", arial, sans-serif;
   font-weight: 500;
+  /* width: 64px; */
+  /* min-width: 64px !important; */
   /* max-width: calc(100vw - 60.5px) !important; */
   /* max-width: calc(100vw - 108px) !important; */
   /* max-width: calc(100% - 108px) !important; */

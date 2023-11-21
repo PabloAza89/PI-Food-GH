@@ -21,8 +21,8 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
 
   const getCurrentWidth = () => {
     return $(`#test123`).outerWidth()! - 108 > $(`#buttonWidthHelper`).outerWidth()! ?
-    $(`#buttonWidthHelper`).outerWidth()! :
-    $(`#test123`).outerWidth()! - 108
+      $(`#buttonWidthHelper`).outerWidth()! :
+      $(`#test123`).outerWidth()! - 108
   }
 
   const login = useGoogleLogin({
@@ -157,45 +157,21 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
 
   const [ clicked, setClicked ] = useState<boolean>(false)
 
-   useEffect(() => { // FIRST AUTO WIDTH CHECKER //
-      $(`#buttonIn`)
-        .css("width", "64px")
-   },[userData.email]) // HELPS WITH NEW WIDTH WHEN USER CHANGES
-
-   window.onfocus = function() { // FIRED WHEN TAB IS FOCUSED, CHECK VALID USER
-    checkPrevLogin({ setUserData, userData })
-    if ($(`#buttonIn`).innerWidth() === 64) {
-      userData.email ?
-      $(`#buttonGL`).html(` ✔️`) :
-      $(`#buttonGL`).html(` ❌`)
-    }
-  }
-
-  $(`#buttonIn`)
-    .on( "mouseenter", function() {
-      if (clicked) $(this).stop()
-      else {
-        $(this)
-          .animate({ width: getCurrentWidth() }, { queue: false, easing: 'easeOutBounce', duration: 1000 })
-        $(`#buttonGL`)
-          .html(
-            userData.email ?
-            `  Signed in as ${userData.email}` :
-            `  Sign in with Google` )
-      }
-    })
-    .on( "click", function() {
-      $(this)
-        .stop()
-        .animate({ width: getCurrentWidth() }, { queue: false, easing: 'easeOutBounce', duration: 1000 })
-      $(`#buttonGL`)
-        .html(
-          userData.email && paginateAmount === 45 ?
-          `  ${userData.email}` :
-          userData.email ?
-          `  Signed in as ${userData.email}` :
-          `  Sign in with Google` )
-    })
+  const widthHandler = () => {
+    $(`#buttonIn`)
+      .on("mouseenter", function() {
+        if (clicked) $(this).stop()
+        else {
+          $(this)
+            .animate({ width: getCurrentWidth() }, { queue: false, easing: 'easeOutBounce', duration: 1000 })
+          $(`#buttonGL`)
+              .html(
+                userData.email ?
+                `  Signed in as ${userData.email}` :
+                `  Sign in with Google`
+              )
+        }
+      })
     .on("mouseleave", function() {
       if (clicked) {
         $(this)
@@ -206,23 +182,40 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
         $(this)
           .stop()
           .animate({ width: '64px' }, { queue: false, easing: 'easeOutBounce', duration: 1000 })
-        if ($(`#buttonIn`).innerWidth() === 64) {
-          userData.email ?
-          $(`#buttonGL`).html(` ✔️`) :
-          $(`#buttonGL`).html(` ❌`)
-        }
       }
     })
+  }
 
-  function outputsize() {
+  useEffect(() => { // FIRST CHECK
     if ($(`#buttonIn`).innerWidth() === 64) {
       userData.email ?
       $(`#buttonGL`).html(` ✔️`) :
       $(`#buttonGL`).html(` ❌`)
     }
-  }
-  let buttonIn = document.getElementById('buttonIn')
-  buttonIn && new ResizeObserver(outputsize).observe(buttonIn)
+    widthHandler()
+  },[userData.email])
+
+  useEffect(() => { // FIRED ONLY WHEN TAB IS FOCUSED, CHECK VALID USER
+    const onFocusGoogle = () => {
+      checkPrevLogin({ setUserData, userData })
+    }
+    window.addEventListener("focus", onFocusGoogle);
+    return () => window.removeEventListener("focus", onFocusGoogle);
+  })
+
+  widthHandler()
+
+  useEffect(() => {
+    let buttonIn = document.getElementById('buttonIn')
+    buttonIn && new ResizeObserver(outputsize).observe(buttonIn)
+    function outputsize() {
+      if ($(`#buttonIn`).innerWidth() === 64) {
+        userData.email ?
+        $(`#buttonGL`).html(` ✔️`) :
+        $(`#buttonGL`).html(` ❌`)
+      }
+    }
+  })
 
   return (
     <div
