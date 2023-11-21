@@ -65,7 +65,11 @@ function App() {
     } else {
       if (wallpaperBody !== null && wallpaperNav !== null) {
         wallpaperBody.style.backgroundImage = `url(${bgImage})`
+        wallpaperBody.style.backgroundSize = `cover`
+        wallpaperBody.style.backgroundRepeat = `no-repeat`
         wallpaperNav.style.background = `url(${bgImage})`
+        wallpaperNav.style.backgroundSize = `cover`
+        wallpaperNav.style.backgroundRepeat = `no-repeat`
       }
     }
   },[settingsFilters.showColor, settingsFilters.backgroundColor])

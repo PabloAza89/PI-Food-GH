@@ -9,11 +9,34 @@ import { landingHidden } from '../../actions';
 import { ReactComponent as MySvg } from '../../images/googleLogo.svg';
 import Swal from 'sweetalert2';
 import { useGoogleLogin } from '@react-oauth/google';
+import bgImage from '../../images/bgImage.webp';
+import { settingsFiltersI } from '../../interfaces/interfaces';
 
 const LandingPage = ({ setUserData, userData }: any) => {
 
   const dispatch = useDispatch()
   const navigate = useNavigate();
+
+  const settingsFilters = useSelector((state: { settingsFilters:settingsFiltersI }) => state.settingsFilters)
+
+  useEffect(() => {
+    let wallpaperBody = document.getElementById('bgImage')
+    if (settingsFilters.showColor) {
+      if (wallpaperBody !== null) {
+        wallpaperBody.style.background = settingsFilters.backgroundColor
+        wallpaperBody.style.backgroundImage = 'unset'
+        wallpaperBody.style.filter = 'unset'
+      }
+    } else {
+      if (wallpaperBody !== null) {
+        if (settingsFilters.showVisuals) wallpaperBody.style.filter = 'blur(3px)'
+        else wallpaperBody.style.filter = 'unset'
+        wallpaperBody.style.backgroundImage = `url(${bgImage})`
+        wallpaperBody.style.backgroundSize = `cover`
+        wallpaperBody.style.backgroundRepeat = `no-repeat`
+      }
+    }
+  },[settingsFilters.showColor, settingsFilters.backgroundColor])
 
   let landingHiddenLS: string | null = localStorage.getItem('landingHidden');
   const landingHiddenState = useSelector((state: { landingHidden: boolean }) => state.landingHidden)
@@ -118,7 +141,10 @@ const LandingPage = ({ setUserData, userData }: any) => {
       }}
       className={css.background}
     >
-      <div className={css.bgImage}></div>
+      <div
+        className={css.bgImage}
+        id={`bgImage`}
+      />
       <div className={css.buttonsAndText}>
         <h1 className={`${css.text} ${com.noSelect}`}>Welcome to Foodify !</h1>
         <div className={css.divider} />

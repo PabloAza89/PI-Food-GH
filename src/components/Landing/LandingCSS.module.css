@@ -16,10 +16,8 @@
   position: fixed;
   width: 100vw;
   height: 100vh;
-  background-image: url("../../images/landingBG.jpg");
-  background-size: cover;
-  background-repeat: no-repeat;
-  filter: blur(3px);
+  /* filter: blur(3px); */
+  /* filter: unset; */
   top: -5px;
   left: -5px;
   padding-right: 10px;
@@ -94,5 +92,4 @@
     border-bottom: 0px solid white;
     margin: 35px 0px 15px 0px;
   }
-
 }
