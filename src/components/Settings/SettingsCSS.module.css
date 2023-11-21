@@ -105,7 +105,7 @@
 }
 
 .boxColorContainer {
-  background: lightcoral; /* DEV */
+  /* background: lightcoral; */ /* DEV */
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -123,7 +123,8 @@
   flex-direction: column;
   width: 95px;
   align-items: center;
-  /* box-shadow: 0 0 0 2px red inset; */
+  /* box-shadow: 0 0 0 2px red inset; */ /* DEV */
+  margin-bottom: 3px;
 }
 
 .iconInfo {

@@ -54,10 +54,19 @@ function App() {
 
   useEffect(() => {
     let wallpaperBody = document.getElementById('wallpaperBody')
+    let wallpaperNav = document.getElementById('wallpaperNav')
     if (settingsFilters.showColor) {
-      if (wallpaperBody !== null) wallpaperBody.style.background = settingsFilters.backgroundColor
+      if (wallpaperBody !== null && wallpaperNav !== null) {
+        wallpaperBody.style.background = settingsFilters.backgroundColor
+        wallpaperBody.style.backgroundImage = 'unset'
+        wallpaperNav.style.background = settingsFilters.backgroundColor
+        wallpaperNav.style.backgroundImage = 'unset'
+      }
     } else {
-      if (wallpaperBody !== null) wallpaperBody.style.background = `url(${bgImage})`
+      if (wallpaperBody !== null && wallpaperNav !== null) {
+        wallpaperBody.style.backgroundImage = `url(${bgImage})`
+        wallpaperNav.style.background = `url(${bgImage})`
+      }
     }
   },[settingsFilters.showColor, settingsFilters.backgroundColor])
 
@@ -223,6 +232,7 @@ function App() {
   return (
     <div className={css.background}>
       <div
+        id={`wallpaperNav`}
         className={css.wallpaperNav}
         style={{
           display: showHelpBG ? 'flex' : 'none',

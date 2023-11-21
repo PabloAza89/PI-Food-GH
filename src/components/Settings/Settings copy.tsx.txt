@@ -48,10 +48,7 @@ const Settings = () =>  {
 
   const settingsFiltersHandler = ({ type, value }: any) => {
     if (value) {
-      if (settingsFilters.showColor) {
-        dispatch(setSettingsFilters({ type: type, value: value }))
-        localStorage.setItem(`${type}`, JSON.stringify(value))
-      }
+      if (settingsFilters.showColor) dispatch(setSettingsFilters({ type: type, value: value }))
     }
     else {
       dispatch(setSettingsFilters({ type: type, value: !settingsFilters[type] }))
@@ -276,40 +273,15 @@ const Settings = () =>  {
       })
   })
 
-  useEffect(() => {
-    if (settingsFilters.showColor) {
-      $(`[id^=boxColor]`) // NOT SELECTED
-        .not(`#boxColor${settingsFilters.backgroundColor.slice(1)}`)
-        .css("box-shadow", "0 0 0 2px transparent inset")
-      $(`[id^=boxColorText]`)
-        .not(`#boxColorText${settingsFilters.backgroundColor.slice(1)}`)
-        .css("font-weight", "400")
-        .css("font-size", "16px")
-      $(`#boxColor${settingsFilters.backgroundColor.slice(1)}`) // SELECTED
-        .css("box-shadow", "0 0 0 2px #90caf9 inset")
-      $(`#boxColorText${settingsFilters.backgroundColor.slice(1)}`)
-        .css("font-weight", "500")
-        .css("font-size", "15.5px")
-    } else { // NOT SELECTED
-      $(`[id^=boxColor]`)
-        .css("box-shadow", "0 0 0 2px transparent inset")
-      $(`[id^=boxColorText]`)
-        .css("font-weight", "400")
-        .css("font-size", "16px")
-    }
-  })
+  // const handlerColorSelected = () => {
 
-  const colorsArray = [
-    { value: '#808080', name: 'DARKGRAY' },
-    { value: '#dcdcdc', name: 'LIGHTGRAY' },
-    { value: '#2e074a', name: 'DARKVIOLET' },
-    { value: '#4f6b16', name: 'DARKOLIVE' },
-    { value: '#5c0606', name: 'DARKRED' },
-    { value: '#030380', name: 'DARKBLUE' },
-  ]
+  // }
+
+  const colorsArray = []
 
   return (
     <div className={css.background}>
+
       <div className={css.accordionContainer}>
         <Accordion
           expanded={expandColor}
@@ -343,26 +315,69 @@ const Settings = () =>  {
           >
             <div className={css.text}>
               <div className={css.boxColorContainer}>
-                {
-                  colorsArray.map((e,index) => {
-                    return (
-                      <div
-                        key={index}
-                        className={css.eachBoxColor}
-                        onClick={() => settingsFiltersHandler({ type: 'backgroundColor', value: e.value })}
-                      >
-                        <div
-                          id={`boxColor${e.value.slice(1)}`}
-                          className={css.boxColor}
-                          style={{ background: e.value }}
-                        />
-                        <div id={`boxColorText${e.value.slice(1)}`}>
-                          {e.name}
-                        </div>
-                      </div>
-                    )
-                  })
-                }
+                <div
+                  className={css.eachBoxColor}
+                  onClick={() => {
+                    settingsFiltersHandler({ type: 'backgroundColor', value: '#808080' })
+
+                  }}
+                >
+                  <div
+                    className={css.boxColor}
+                    style={{ background: '#808080' }}
+                  />
+                  DARKGRAY
+                </div>
+                <div
+                  className={css.eachBoxColor}
+                  onClick={() => settingsFiltersHandler({ type: 'backgroundColor', value: '#dcdcdc' })}
+                >
+                  <div
+                    className={css.boxColor}
+                    style={{ background: '#dcdcdc' }}
+                  />
+                  LIGHTGRAY
+                </div>
+                <div
+                  className={css.eachBoxColor}
+                  onClick={() => settingsFiltersHandler({ type: 'backgroundColor', value: '#2e074a' })}
+                >
+                  <div
+                    className={css.boxColor}
+                    style={{ background: '#2e074a' }}
+                  />
+                  DARKVIOLET
+                </div>
+                <div
+                  className={css.eachBoxColor}
+                  onClick={() => settingsFiltersHandler({ type: 'backgroundColor', value: '#4f6b16' })}
+                >
+                  <div
+                    className={css.boxColor}
+                    style={{ background: '#4f6b16' }}
+                  />
+                  DARKOLIVE
+                </div>
+                <div
+                  className={css.eachBoxColor}
+                  onClick={() => settingsFiltersHandler({ type: 'backgroundColor', value: '#5c0606' })}
+                >
+                  <div
+                    className={css.boxColor}
+                    style={{ background: '#5c0606' }}
+                  />
+                  DARKRED
+                </div>
+                <div
+                  className={css.eachBoxColor}
+                  onClick={() => settingsFiltersHandler({ type: 'backgroundColor', value: '#030380' })}
+                >
+                  <div
+                    className={css.boxColor}
+                    style={{ background: '#030380' }}
+                  />
+                  DARKBLUE
+                </div>
               </div>
             </div>
           </AccordionDetails>
