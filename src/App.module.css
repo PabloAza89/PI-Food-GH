@@ -11,10 +11,18 @@
   z-index: -1;
   width: 100%;
   height: 100%;
-  background-image: url('./images/bgImage.webp');
+  /* background: url('./images/bgImage.webp'); */
+  /* background-image: unset; */
   background-size: cover;
   background-repeat: no-repeat;
 }
+
+/* background: #808080; DARKGRAY */
+/* background: #dcdcdc; LIGHTGRAY */
+/* background: #2e074a; DARKVIOLET */
+/* background: #4f6b16; DARKOLIVE */
+/* background: #5c0606; DARKRED */
+/* background: #030380; DARKBLUE */
 
 .wallpaperNav {
   display: flex;
@@ -22,7 +30,11 @@
   z-index: 2 !important;
   width: 100% !important;
   height: 100% !important;
-  background-image: url('./images/bgImage.webp');
+  /* background-image: url('./images/bgImage.webp'); */
+  background-image: unset;
+  background: #808080; /* gray */
+  /* background: #00008b; */
+
   background-size: cover;
   background-repeat: no-repeat;
   clip-path: polygon(0% 0, 100% 0%, 100% 100px, 0 100px); /* CROP THE BAVBAR IMAGE */

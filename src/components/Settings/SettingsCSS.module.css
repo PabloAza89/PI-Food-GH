@@ -3,43 +3,32 @@
   display: flex;
   position: relative;
   flex-direction: column;
-  /* top: 100px; */
   width: 100%;
-  /* height: calc(100vh - 100px); */
-  /* margin-top: 5px; */
   margin-top: 100px;
   margin-bottom: 10px;
 }
 
 .accordionContainer {
-  /* width: 800px !important; */
   margin: 10px 10px 5px 10px;
 }
 
 .accordion {
   background: beige !important;
-  /* width: 800px !important; */
   max-width: 800px !important;
   border-radius: 8px !important;
   border: 2px solid gray !important;
 }
 
 .accordionContainerDouble {
-  /* width: 800px !important; */
-  /* margin: 10px 10px 5px 10px; */
   margin-left: 10px;
   margin-top: 10px;
   margin-bottom: 10px;
   margin-right: 10px;
-  /* margin-top: 10px;
-  margin-bottom: 10px; */
 }
 
 .accordionDouble {
   background: beige !important;
-  /* width: 800px !important; */
   max-width: 800px !important;
-  /* border-radius: 8px !important; */
   border: 2px solid gray !important;
   margin-top: 0px !important;
   margin-bottom: 0px !important;
@@ -109,10 +98,32 @@
 }
 
 .text {
-  /* background: red; */ /* DEV */
+  /* background: lightcoral; */ /* DEV */
   margin-left: 8px;
   margin-bottom: 2px;
   align-self: center;
+}
+
+.boxColorContainer {
+  background: lightcoral; /* DEV */
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.boxColor {
+  width: 80px;
+  height: 18px;
+  background: red;
+}
+
+.eachBoxColor {
+  display: flex;
+  flex-direction: column;
+  width: 95px;
+  align-items: center;
+  /* box-shadow: 0 0 0 2px red inset; */
 }
 
 .iconInfo {
@@ -135,10 +146,12 @@
   justify-content: center;
   align-items: center;
   margin-left: 12px;
+  /* background: red; */ /* DEV */
+  height: 36px;
+  align-self: center;
 }
 
 .numberInputInput {
-  /* order: 1; */
   font-size: 0.875rem;
   font-family: inherit;
   font-weight: 400;
@@ -147,26 +160,11 @@
   background: #cfd8dc;
   border: 0px solid #eeeeee;
   box-shadow: 0px 2px 4px rgba(0,0,0, 0.05);
-  /* padding: 10px; */
   padding: 0px 10px;
-  /* padding: 10px 12px; */
   outline: 0;
   min-width: 0;
   width: 40px;
   text-align: center;
-}
-
-.numberInputInput:hover {
-  border-color: #42a5f5;
-}
-
-.numberInputInput:focus {
-  border-color: #42a5f5;
-  box-shadow: 0 0 0 2px #90caf9 inset;
-}
-
-.numberInputInput:focus-visible {
-  outline: 0;
 }
 
 .numberInputButton {
@@ -202,9 +200,6 @@
 
 .increment {
   order: 2;
-  /* background: rgba(0, 0, 0, 0.2) !important;
-  color: rgba(0, 0, 0, 0.2) !important;
-  cursor: default !important */
 }
 
 /* BREAKPOINTS */

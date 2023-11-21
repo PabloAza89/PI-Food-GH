@@ -175,12 +175,12 @@ const Card = ({
           disableFocusListener={
             paginateAmount === 45 ?
             true :
-            !settingsFilters.showTooltips || fitTitle
+            !settingsFilters.showTooltips || fitDiet
           }
           disableHoverListener={
             paginateAmount === 45 ?
             true :
-            !settingsFilters.showTooltips || fitTitle
+            !settingsFilters.showTooltips || fitDiet
           }
           arrow
           placement="bottom"
@@ -224,12 +224,12 @@ const Card = ({
         disableFocusListener={
           paginateAmount === 45 ?
           true :
-          !settingsFilters.showTooltips || fitTitle
+          !settingsFilters.showTooltips || fitDish
         }
         disableHoverListener={
           paginateAmount === 45 ?
           true :
-          !settingsFilters.showTooltips || fitTitle
+          !settingsFilters.showTooltips || fitDish
         }
         arrow
         placement="bottom"

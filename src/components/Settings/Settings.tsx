@@ -29,6 +29,8 @@ const Settings = () =>  {
 
   const settingsFilters = useSelector((state: { settingsFilters:settingsFiltersI }) => state.settingsFilters)
 
+  const [ expandColor, setExpandColor ] = useState(true)
+  //const [ expandColor, setExpandColor ] = useState(false)
   const [ expandStatus, setExpandStatus ] = useState(false)
   const [ expandVisuals, setExpandVisuals ] = useState(false)
   const [ expandBadWords, setExpandBadWords ] = useState(false)
@@ -40,9 +42,18 @@ const Settings = () =>  {
   const [ expandOffline, setExpandOffline ] = useState(false)
   const [ expandOfflineNumber, setExpandOfflineNumber ] = useState(false)
 
-  const settingsFiltersHandler = ({ type }: any) => {
-    dispatch(setSettingsFilters({ type: type, value: !settingsFilters[type] }))
-    localStorage.setItem(`${type}`, JSON.stringify(!settingsFilters[type]))
+  const [ focusUser, setFocusUser ] = useState(false)
+  const [ focusOnline, setFocusOnline ] = useState(false)
+  const [ focusOffline, setFocusOffline ] = useState(false)
+
+  const settingsFiltersHandler = ({ type, value }: any) => {
+    if (value) {
+      if (settingsFilters.showColor) dispatch(setSettingsFilters({ type: type, value: value }))
+    }
+    else {
+      dispatch(setSettingsFilters({ type: type, value: !settingsFilters[type] }))
+      localStorage.setItem(`${type}`, JSON.stringify(!settingsFilters[type]))
+    }
     if (type.slice(-7) === `Recipes`) dispatch(applyFilters())
   }
 
@@ -196,8 +207,175 @@ const Settings = () =>  {
     }
   },[settingsFilters.quantityOfflineRecipes])
 
+  $(function() {
+    $(`#incrementUser, #decrementUser`).on("click", function() { // NO FOCUS
+      $(`#numberInputUser`)
+        .css("box-shadow", "0 0 0 2px transparent inset")
+        .css("caret-color", "transparent")
+        setFocusUser(true)
+    })
+    $(`#numberInputUser`)
+      .on("click", function() { // FOCUS ONLY ON DIRECT INPUT
+        $(this)
+          .css("box-shadow", "0 0 0 2px #90caf9 inset")
+          .css("caret-color", "black")
+          setFocusUser(false)
+      })
+      .on("blur", function() { // NO FOCUS
+        $(this)
+          .css("box-shadow", "0 0 0 2px transparent inset")
+          .css("caret-color", "transparent")
+          setFocusUser(false)
+      })
+  })
+
+  $(function() {
+    $(`#incrementOnline, #decrementOnline`).on("click", function() { // NO FOCUS
+      $(`#numberInputOnline`)
+        .css("box-shadow", "0 0 0 2px transparent inset")
+        .css("caret-color", "transparent")
+        setFocusOnline(true)
+    })
+    $(`#numberInputOnline`)
+      .on("click", function() { // FOCUS ONLY ON DIRECT INPUT
+        $(this)
+          .css("box-shadow", "0 0 0 2px #90caf9 inset")
+          .css("caret-color", "black")
+          setFocusOnline(false)
+      })
+      .on("blur", function() { // NO FOCUS
+        $(this)
+          .css("box-shadow", "0 0 0 2px transparent inset")
+          .css("caret-color", "transparent")
+          setFocusOnline(false)
+      })
+  })
+
+  $(function() {
+    $(`#incrementOffline, #decrementOffline`).on("click", function() { // NO FOCUS
+      $(`#numberInputOffline`)
+        .css("box-shadow", "0 0 0 2px transparent inset")
+        .css("caret-color", "transparent")
+        setFocusOffline(true)
+    })
+    $(`#numberInputOffline`)
+      .on("click", function() { // FOCUS ONLY ON DIRECT INPUT
+        $(this)
+          .css("box-shadow", "0 0 0 2px #90caf9 inset")
+          .css("caret-color", "black")
+          setFocusOffline(false)
+      })
+      .on("blur", function() { // NO FOCUS
+        $(this)
+          .css("box-shadow", "0 0 0 2px transparent inset")
+          .css("caret-color", "transparent")
+          setFocusOffline(false)
+      })
+  })
+
   return (
     <div className={css.background}>
+
+      <div className={css.accordionContainer}>
+        <Accordion
+          expanded={expandColor}
+          className={css.accordion}
+        >
+          <AccordionSummary
+            className={css.defaultCursor}
+            expandIcon={
+              <ErrorOutlineIcon
+                className={css.iconInfo}
+                onClick={(() => setExpandColor(!expandColor))}
+              />
+            }
+          >
+            <Switch
+              onClick={() => settingsFiltersHandler({ type: 'showColor' })}
+              checked={ settingsFilters.showColor ? true : false }
+              className={css.switch}
+              classes={{
+                track: settingsFilters.showColor ? `${css.track} ${css.trackEnabled}` : `${css.track} ${css.trackDisabled}`,
+                thumb: css.thumb,
+                switchBase:  css.switchBase,
+                checked: css.checked,
+                colorPrimary: css.colorPrimary
+              }}
+            />
+            <div className={css.text}>Enable custom background color</div>
+          </AccordionSummary>
+          <AccordionDetails
+            className={com.noSelect}
+          >
+            <div className={css.text}>
+              <div className={css.boxColorContainer}>
+                <div
+                  className={css.eachBoxColor}
+                  onClick={() => settingsFiltersHandler({ type: 'backgroundColor', value: '#808080' })}
+                >
+                  <div
+                    className={css.boxColor}
+                    style={{ background: '#808080' }}
+                  />
+                  DARKGRAY
+                </div>
+                <div
+                  className={css.eachBoxColor}
+                  onClick={() => settingsFiltersHandler({ type: 'backgroundColor', value: '#dcdcdc' })}
+                >
+                  <div
+                    className={css.boxColor}
+                    style={{ background: '#dcdcdc' }}
+                  />
+                  LIGHTGRAY
+                </div>
+                <div 
+                  className={css.eachBoxColor}
+                  onClick={() => settingsFiltersHandler({ type: 'backgroundColor', value: '#2e074a' })}
+                >
+                  <div
+                    className={css.boxColor}
+                    style={{ background: '#2e074a' }}
+                  />
+                  DARKVIOLET
+                </div>
+                <div 
+                  className={css.eachBoxColor}
+                  onClick={() => settingsFiltersHandler({ type: 'backgroundColor', value: '#4f6b16' })}
+                >
+                  <div
+                    className={css.boxColor}
+                    style={{ background: '#4f6b16' }}
+                  />
+                  DARKOLIVE
+                </div>
+                <div
+                  className={css.eachBoxColor}
+                  onClick={() => settingsFiltersHandler({ type: 'backgroundColor', value: '#5c0606' })}
+                >
+                  <div
+                    className={css.boxColor}
+                    style={{ background: '#5c0606' }}
+                  />
+                  DARKRED
+                </div>
+                <div
+                  className={css.eachBoxColor}
+                  onClick={() => settingsFiltersHandler({ type: 'backgroundColor', value: '#030380' })}
+                >
+                  <div
+                    className={css.boxColor}
+                    style={{ background: '#030380' }}
+                  />
+                  DARKBLUE
+                </div>
+              </div>
+            </div>
+          </AccordionDetails>
+        </Accordion>
+      </div>
+
+
       <div className={css.accordionContainer}>
         <Accordion
           expanded={expandStatus}
@@ -415,9 +593,13 @@ const Settings = () =>  {
               onChange={(e) => quantityUserRecipesHandler({ type: (e.target as HTMLInputElement).value })}
               min={0}
               max={100}
+              readOnly={focusUser}
               slotProps={{
                 root: { className: css.numberInputRoot },
-                input: { className: css.numberInputInput },
+                input: {
+                  className: css.numberInputInput,
+                  id: `numberInputUser`
+                },
                 decrementButton: {
                   value: `decrementButton`,
                   className: css.numberInputButton,
@@ -518,9 +700,13 @@ const Settings = () =>  {
               onChange={(e) => quantityOnlineRecipesHandler({ type: (e.target as HTMLInputElement).value })}
               min={0}
               max={100}
+              readOnly={focusOnline}
               slotProps={{
                 root: { className: css.numberInputRoot },
-                input: { className: css.numberInputInput },
+                input: {
+                  className: css.numberInputInput,
+                  id: `numberInputOnline`
+                },
                 decrementButton: {
                   value: `decrementButton`,
                   className: css.numberInputButton,
@@ -621,9 +807,13 @@ const Settings = () =>  {
               onChange={(e) => quantityOfflineRecipesHandler({ type: (e.target as HTMLInputElement).value })}
               min={0}
               max={100}
+              readOnly={focusOffline}
               slotProps={{
                 root: { className: css.numberInputRoot },
-                input: { className: css.numberInputInput },
+                input: {
+                  className: css.numberInputInput,
+                  id: `numberInputOffline`
+                },
                 decrementButton: {
                   value: `decrementButton`,
                   className: css.numberInputButton,

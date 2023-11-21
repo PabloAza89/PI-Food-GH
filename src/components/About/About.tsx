@@ -17,7 +17,7 @@ function About() {
           href={`https://www.linkedin.com/in/juan-pablo-azambuyo`}
           target="_blank"
           rel="noopener noreferrer"
-        >&#10145; {`MI PERFIL DE LINKEDIN`} &#11013;</a>
+        >&#10145; {`MY LINKEDIN PROFILE`} &#11013;</a>
         <Link to="/" style={{ textDecoration: 'none' }}>
           <Button
             variant="contained"

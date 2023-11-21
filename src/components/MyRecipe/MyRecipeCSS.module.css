@@ -107,7 +107,8 @@
   font-family: Roboto;
   overflow: hidden;
   /* background: orange; */ /* DEV */
-  /* color: gray; */ /* DEV */
+  /* color: red; */ /* DEV */
+  color: transparent;
   /* width: calc(100% - 113px - 57px - 10px - 60px - 10px - 80px - 32px) */
   /* width: calc(100% - 113px - 10px  - 10px) */
   width: calc(100% - 113px - 32px)

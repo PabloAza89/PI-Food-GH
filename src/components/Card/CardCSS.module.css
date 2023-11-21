@@ -71,6 +71,8 @@
   /* min-width: calc(100% - 80px); */
   /* padding-left: 50px; */
   /* padding-right: 50px; */
+  /* margin-bottom: 3px; */
+  margin-top: 6px;
 }
 
 .innerTooltip {
@@ -102,7 +104,11 @@
   display: table-cell;
   text-align: center;
   color: antiquewhite !important;
-
+  padding-top: 3px;
+  /* margin-top: 3px; */
+  /* margin-bottom: 3px; */
+  /* align-items: flex-end;
+  padding: 0px !important */
 }
 
 .linkStyle {

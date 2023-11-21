@@ -91,6 +91,8 @@ export interface paginateAmountI {
 
 export interface settingsFiltersI {
   [action: string]: any,
+  showColor: boolean,
+  backgroundColor: string,
   showStatus: boolean,
   showVisuals: boolean,
   showBadWords: boolean,

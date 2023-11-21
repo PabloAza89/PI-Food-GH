@@ -27,6 +27,7 @@ import {
 } from './actions';
 import { settingsFiltersI, SFTypeNumberI, SFTypeBooleanI } from './interfaces/interfaces';
 import $ from 'jquery';
+import bgImage from './images/bgImage.webp';
 
 function App() {
 
@@ -50,6 +51,15 @@ function App() {
   const tabIDREF = useRef(0)
   const castBC = new BroadcastChannel("cast_BC");
   const feedbackBC = new BroadcastChannel("feedback_BC");
+
+  useEffect(() => {
+    let wallpaperBody = document.getElementById('wallpaperBody')
+    if (settingsFilters.showColor) {
+      if (wallpaperBody !== null) wallpaperBody.style.background = settingsFilters.backgroundColor
+    } else {
+      if (wallpaperBody !== null) wallpaperBody.style.background = `url(${bgImage})`
+    }
+  },[settingsFilters.showColor, settingsFilters.backgroundColor])
 
   useEffect(() => { // FIRST ONLY-ONE-TIME AUTO-CHECK USER (CHECK USER TOKEN)
 
@@ -106,7 +116,6 @@ function App() {
   const hasChanged = useRef<boolean>(false)
 
   useEffect(() => { // FIRED ONLY WHEN TAB IS FOCUSED, CHECK VALID USER
-
     const onFocusFunc = () => {
       checkPrevLogin({ setUserData, userData })
 
@@ -225,7 +234,10 @@ function App() {
             'polygon(0% 0, 100% 0%, 100% 100px, 0 100px)'
         }}
       />
-      <div className={css.wallpaperBody} />
+      <div
+        className={css.wallpaperBody}
+        id={`wallpaperBody`}
+      />
       <Routes>
         <Route
           path="/"

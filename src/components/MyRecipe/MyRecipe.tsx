@@ -796,16 +796,12 @@ const MyRecipe = ({
     }
   })
 
-
-  //.animate({ scrollTop: $(document).height() }, 1000)
-
   const scrollBottom = () => {
     $("html, body")
-      .on("wheel DOMMouseScroll mousewheel keyup", function() {
+      .on("mousedown wheel DOMMouseScroll mousewheel keyup touchmove", function() {
         $(this).stop()
       })
       .animate({ scrollTop: $(document).height() }, 1000)
-    //window.scrollTo(0, document.body.scrollHeight)
   }
 
   return (
@@ -906,6 +902,8 @@ const MyRecipe = ({
           enterTouchDelay={500}
           leaveTouchDelay={2000}
           disableTouchListener={
+            !settingsFilters.showTooltips ?
+            true :
             saveButtonDisabled && allDisabled ?
             true :
             false
@@ -1185,6 +1183,8 @@ const MyRecipe = ({
                 enterTouchDelay={500}
                 leaveTouchDelay={2000}
                 disableTouchListener={
+                  !settingsFilters.showTooltips ?
+                  true :
                   saveButtonDisabled && allDisabled ?
                   true :
                   false
@@ -1196,6 +1196,8 @@ const MyRecipe = ({
                 disableFocusListener={
                   paginateAmount === 45 ?
                   true :
+                  !settingsFilters.showTooltips ?
+                  true :
                   saveButtonDisabled && allDisabled ?
                   true :
                   stepsState.length >= 10 ?
@@ -1204,6 +1206,8 @@ const MyRecipe = ({
                 }
                 disableHoverListener={
                   paginateAmount === 45 ?
+                  true :
+                  !settingsFilters.showTooltips ?
                   true :
                   saveButtonDisabled && allDisabled ?
                   true :
@@ -1214,6 +1218,7 @@ const MyRecipe = ({
                 style={{ zIndex: '1' }}
                 arrow
                 placement="bottom-end"
+                hidden={!settingsFilters.showTooltips}
                 title={
                   <div className={css.newStepTooltip}>
                     <div>Max steps {`<`}10{`>`} reached !</div>
@@ -1242,6 +1247,8 @@ const MyRecipe = ({
                 enterTouchDelay={500}
                 leaveTouchDelay={2000}
                 disableTouchListener={
+                  !settingsFilters.showTooltips ?
+                  true :
                   saveButtonDisabled && allDisabled ?
                   true :
                   false
@@ -1253,6 +1260,8 @@ const MyRecipe = ({
                 disableFocusListener={
                   paginateAmount === 45 ?
                   true :
+                  !settingsFilters.showTooltips ?
+                  true :
                   saveButtonDisabled && allDisabled ?
                   true :
                   stepsState.length === 1 ?
@@ -1261,6 +1270,8 @@ const MyRecipe = ({
                 }
                 disableHoverListener={
                   paginateAmount === 45 ?
+                  true :
+                  !settingsFilters.showTooltips ?
                   true :
                   saveButtonDisabled && allDisabled ?
                   true :
@@ -1271,6 +1282,7 @@ const MyRecipe = ({
                 style={{ zIndex: '1' }}
                 arrow
                 placement="bottom-end"
+                hidden={!settingsFilters.showTooltips}
                 title={"You can't delete first step !"}
               >
                 <div
