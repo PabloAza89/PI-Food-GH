@@ -39,16 +39,25 @@
     A complete Settings Filter that can:
       <ul>
         <summary>
-          Enable/Disable user recipes.
-          Select quantity of user recipes
+          Enable/Disable user recipes. Select quantity of user recipes
         </summary>
         <summary>
-          Enable/Disable online recipes.
-          Select quantity of online recipes
+          Enable/Disable online recipes. Select quantity of online recipes
         </summary>
         <summary>
-          Enable/Disable offline recipes.
-          Select quantity of offline recipes
+          Enable/Disable offline recipes. Select quantity of offline recipes
+        </summary>
+        <summary>
+          Enable/Disable: visual effects (glass effect). If disabled, better experience in low performance devices.
+        </summary>
+        <summary>
+          Enable/Disable tooltips. Tooltips are hints when text overflows.
+          <br />On laptop: tooltips are displayed when hover.
+          <br />On mobile: tooltips are displayed when press.
+        </summary>
+        <summary>
+          Enable/Disable custom background color. Choose between 6 colors to custom the App.
+          <br />If disabled, default background image is displayer and the experience is better in low performance devices.
         </summary>
       </ul>
   </summary>
@@ -88,6 +97,10 @@
   <summary>
     <a href="https://linkedin.com/in/juan-pablo-azambuyo" target="blank">
       <img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/linked-in-alt.svg" alt="juan-pablo-azambuyo" height="30" width="40" />
+    </a>
+    &#8203;&nbsp;&nbsp;&nbsp;&#8203;
+    <a href="mailto:juanpabloazambuyo@gmail.com" target="blank">
+      <img align="center" src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Gmail_icon_%282020%29.svg" alt="juan-pablo-azambuyo" height="30" width="40" />
     </a>
   </summary>
 </ul>
@@ -162,4 +175,4 @@
   </summary>
 </ul>
 
-<b>Last Update: 10 Nov '23</b>
+<b>Last Update: 22 Nov '23</b>
