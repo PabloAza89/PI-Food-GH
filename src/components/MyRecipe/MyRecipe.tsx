@@ -554,7 +554,6 @@ const MyRecipe = ({
     })
   }
 
-
   const badWordsUIOnChangeResetter = () => {
     if (!settingsFilters.showBadWords) {
       checkDisabledBadWords.current = false
@@ -804,6 +803,14 @@ const MyRecipe = ({
       .animate({ scrollTop: $(document).height() }, 1000)
   }
 
+  $('#imageInput').on('keypress', function (event) { // REMOVE WHITE SPACES
+    console.log("pressed", event.key)
+    if (event.key === " " || event.key === " ") {
+      event.preventDefault();
+      return false;
+    }
+  })
+
   return (
     <div
       className={css.background}
@@ -940,7 +947,7 @@ const MyRecipe = ({
           }
         >
           <input
-            id={`image`}
+            id={`imageInput`}
             disabled={allDisabled}
             className={css.inputBase}
             value={imageValue}
@@ -950,6 +957,13 @@ const MyRecipe = ({
               `Enter image url` :
               `e.g. https://commons.wikimedia.org/wiki/File:Elaboraci%C3%B3n_del_tomate_frito_(4).jpg`
             }
+            onInput={() => { // REMOVE EMPTY VALUES WHEN PASTED FROM CLIPBOARD
+              $('#imageInput').val(function(i, v) {
+                let value = v.replaceAll(/[ | ]/g, "");
+                setImageValue(value)
+                return value
+              });
+            }}
             onFocus={() => badWordsUIOnChangeResetter()}
             onChange={(e) => { // DOUBLE CHECK/LOADING FOR EDITED ENCODED URL IMAGE
               let copyImageValue = e.target.value.trim()

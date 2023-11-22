@@ -10,7 +10,6 @@ import { ReactComponent as MySvg } from '../../images/googleLogo.svg';
 import Swal from 'sweetalert2';
 import { useGoogleLogin } from '@react-oauth/google';
 import bgImage from '../../images/bgImage.webp';
-import noImage1 from '../../images/noImage1.jpg';
 import { settingsFiltersI } from '../../interfaces/interfaces';
 
 const LandingPage = ({ setUserData, userData, paginateAmount }: any) => {
@@ -21,7 +20,7 @@ const LandingPage = ({ setUserData, userData, paginateAmount }: any) => {
   const settingsFilters = useSelector((state: { settingsFilters:settingsFiltersI }) => state.settingsFilters)
 
   useEffect(() => {
-    
+
     let wallpaperBody = document.getElementById('bgImage')
     let meta = document.querySelector("meta[name='theme-color']")
 
@@ -53,7 +52,6 @@ const LandingPage = ({ setUserData, userData, paginateAmount }: any) => {
     settingsFilters.showColor, settingsFilters.backgroundColor,
     dispatch, paginateAmount, settingsFilters.showVisuals
   ])
-  //})
 
   let landingHiddenLS: string | null = localStorage.getItem('landingHidden');
   const landingHiddenState = useSelector((state: { landingHidden: boolean }) => state.landingHidden)

@@ -16,9 +16,6 @@
   position: fixed;
   width: 100vw;
   height: 100vh;
-  /* filter: blur(3px); */
-  /* backdrop-filter: blur(3px); */
-  /* filter: unset; */
   top: -5px;
   left: -5px;
   padding-right: 10px;
