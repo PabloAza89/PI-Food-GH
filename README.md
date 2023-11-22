@@ -108,6 +108,10 @@
     <a href="mailto:juanpabloazambuyo@gmail.com" target="blank">
       <img align="center" src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Gmail_icon_%282020%29.svg" alt="juan-pablo-azambuyo" height="30" width="40" />
     </a>
+    &#8203;&nbsp;&#8203;
+    <a href="https://wa.me/5491124688005?text=Hi,%20I'm%20interested%20in%20your%20web%20projects" target="blank">
+      <img align="center" src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="juan-pablo-azambuyo" height="42" width="56" />
+    </a>
   </summary>
 </ul>
 <div id="user-content-toc" align="left">
