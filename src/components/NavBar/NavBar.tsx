@@ -85,17 +85,17 @@ const NavBar = ({ recipeCreatedOrEdited, paginateAmount }: NavBarI) =>  {
   }
 
   useEffect(() => {
-    var lastWidth = $(`#testNavBarTest`).outerWidth()!
-    $(`#testNavBarTest`).on("resize", function(){
-      if($(`#testNavBarTest`).outerWidth()! !== lastWidth)
-        lastWidth = $(`#testNavBarTest`).outerWidth()!
+    var lastWidth = $(`#backgroundNavBar`).outerWidth()!
+    $(`#backgroundNavBar`).on("resize", function(){
+      if($(`#backgroundNavBar`).outerWidth()! !== lastWidth)
+        lastWidth = $(`#backgroundNavBar`).outerWidth()!
     })
   })
 
   return (
     <div
       className={css.background}
-      id={`testNavBarTest`}
+      id={`backgroundNavBar`}
       style={{
         position: location.pathname !== `/` ? 'fixed' : 'relative',
         height: location.pathname.toLowerCase() === `/settings` ? '100px' : location.pathname !== `/` && menuShown ? '150px' : 'unset',

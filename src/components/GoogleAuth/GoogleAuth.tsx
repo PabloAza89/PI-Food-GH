@@ -20,9 +20,9 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
   const menuShown = useSelector((state: {menuShown:boolean}) => state.menuShown)
 
   const getCurrentWidth = () => {
-    return $(`#test123`).outerWidth()! - 108 > $(`#buttonWidthHelper`).outerWidth()! ?
+    return $(`#backgroundGoogleAuth`).outerWidth()! - 108 > $(`#buttonWidthHelper`).outerWidth()! ?
       $(`#buttonWidthHelper`).outerWidth()! :
-      $(`#test123`).outerWidth()! - 108
+      $(`#backgroundGoogleAuth`).outerWidth()! - 108
   }
 
   const login = useGoogleLogin({
@@ -48,8 +48,6 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
             dispatch(landingHidden(true))
             localStorage.setItem('landingHidden', 'true')
 
-            $(`#onlyForTest`) // DISABLE CLICK/HOVER EVENT (UNDESIRABLE NAME CHANGE)
-              .css("cursor", "pointer")
             $(`#buttonIn`)
               .css("pointer-events", "none")
             $(`#buttonGL`)
@@ -159,17 +157,17 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
 
   const widthHandler = () => {
     $(`#buttonIn`)
-      .on("mouseenter", function() {
+      .on("mouseenter click", function() {
         if (clicked) $(this).stop()
         else {
           $(this)
             .animate({ width: getCurrentWidth() }, { queue: false, easing: 'easeOutBounce', duration: 1000 })
           $(`#buttonGL`)
-              .html(
-                userData.email ?
-                `  Signed in as ${userData.email}` :
-                `  Sign in with Google`
-              )
+            .html(
+              userData.email ?
+              `  Signed in as ${userData.email}` :
+              `  Sign in with Google`
+            )
         }
       })
     .on("mouseleave", function() {
@@ -220,7 +218,7 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
   return (
     <div
       className={css.background}
-      id={`test123`}
+      id={`backgroundGoogleAuth`}
       style={{
         position: inHome ? 'absolute' : 'fixed',
         visibility: menuShown ? 'visible' : 'hidden'
@@ -238,28 +236,26 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
             }
         </div>
       </Button>
-      <div id={`onlyForTest`}>
-      <Button
-        variant="contained"
-        id={`buttonIn`}
-        className={css.buttonIn}
-        onClick={() => { if (!clicked) {
-          setClicked(true);
-          paginateAmount === 45 ?
-          setTimeout(() => login(), 1000) :
-          login()
-          $(`#onlyForTest`) // NEXT TWO DISABLE MOUSE EVENTS
-            .css("cursor", "pointer")
-          $(`#buttonIn`)
-            .css("pointer-events", "none")
-        } }}
-      >
-        <div className={css.buttonInInner}>
-          <div><MySvg/></div>
-          <div id={`buttonGL`} className={css.test}>
+      <div>
+        <Button
+          variant="contained"
+          id={`buttonIn`}
+          className={css.buttonIn}
+          onClick={() => { if (!clicked) {
+            setClicked(true);
+            paginateAmount === 45 ?
+            setTimeout(() => login(), 1000) :
+            login()
+            $(`#buttonIn`)
+              .css("pointer-events", "none")
+          } }}
+        >
+          <div className={css.buttonInInner}>
+            <div><MySvg/></div>
+            <div id={`buttonGL`}>
+            </div>
           </div>
-        </div>
-      </Button>
+        </Button>
       </div>
       {
         userData.email ?
