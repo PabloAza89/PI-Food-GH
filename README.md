@@ -30,7 +30,8 @@
     It's implemented  CRUD to get a persistent storage (Create, Read, Update & Delete).
   </summary>
   <summary>
-    When creating a recipe, there is an algorithm cheking out bad words in form (available on English & Spanish).
+    When creating a recipe, there is an algorithm checking out bad words in form (available on English & Spanish).
+    <br />Also, there is an algorithm checking out allowed characters: , ; . : - ! ¡ ¿ ? ' " ( ) [ ] á Á é É í Í ó Ó ú Ú ü Ü ñ Ñ
   </summary>
   <summary>
     Login with Google (use of httpOnly cookies)
@@ -38,6 +39,9 @@
   <summary>
     A complete Settings Filter that can:
       <ul>
+        <summary>
+          Enable/Disable bad words real-time processing. If disabled, bad words are checked when try form submit & the better experience on low performance devices.
+        </summary>
         <summary>
           Enable/Disable user recipes. Select quantity of user recipes
         </summary>
@@ -57,7 +61,7 @@
         </summary>
         <summary>
           Enable/Disable custom background color. Choose between 6 colors to custom the App.
-          <br />If disabled, default background image is displayer and the experience is better in low performance devices.
+          <br />If disabled, default background image is displayed. If enabled, the better experience on low performance devices.
         </summary>
       </ul>
   </summary>
