@@ -96,6 +96,21 @@
 <ul><summary>https://glitch.com/edit/#!/freckle-lavish-tellurium?path=index.js</summary></ul>
 <div id="user-content-toc" align="left">
   <ul>
+    <h3 style="display: inline-block">○ How can I see Redux data ?</h3>
+  </ul>
+</div>
+<ul>
+  <summary>
+    Redux DevTools Extension Enabled !
+    <br />Get 
+    <a href="https://chromewebstore.google.com/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd" target="blank">
+      Redux DevTools
+    </a>
+    &#8203;&nbsp;&#8203;for Google Chrome and see how Redux shares data between components.
+  </summary>
+</ul>
+<div id="user-content-toc" align="left">
+  <ul>
     <h3 style="display: inline-block">○ Connect with me:</h3>
   </ul>
 </div>
