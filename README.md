@@ -52,8 +52,8 @@
         </summary>
         <summary>
           Enable/Disable tooltips. Tooltips are hints when text overflows.
-          <br />On laptop: tooltips are displayed when hover.
-          <br />On mobile: tooltips are displayed when press.
+          <br />On laptop: tooltips are displayed when hover. At each card, is displayed only if text overflow.
+          <br />On mobile: tooltips are displayed when press. At each card, is displayed always.
         </summary>
         <summary>
           Enable/Disable custom background color. Choose between 6 colors to custom the App.
