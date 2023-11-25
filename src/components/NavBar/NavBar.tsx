@@ -32,7 +32,6 @@ const NavBar = ({ recipeCreatedOrEdited, paginateAmount }: NavBarI) =>  {
   const navBarFilters = useSelector((state: {navBarFilters: any}) => state.navBarFilters)
   const inDetail = [useMatch("/:route")?.params.route?.toLowerCase()].filter(e => e !== "about")[0]
   const [healthLabelShown, setHealthLabelShown] = useState<boolean>(false);
-  const [sortAlpha, setSortAlpha] = useState<string>('');
   const [alphaLabelShown, setAlphaLabelShown] = useState<boolean>(false);
   const [placeholder, setPlaceholder] = useState<string>('Find recipe..');
   const menuShown = useSelector((state: {menuShown:boolean}) => state.menuShown)
@@ -54,12 +53,10 @@ const NavBar = ({ recipeCreatedOrEdited, paginateAmount }: NavBarI) =>  {
   const allDishesArray = useSelector((state: {allDishes: allDishesI[]}) => state.allDishes)
 
   const healthLevelHandler = (e: SelectChangeEvent) => {
-    setSortAlpha('' as string);
     setAlphaLabelShown(false)
   };
 
   const sortAlphaHandler = (e: SelectChangeEvent) => {
-    setSortAlpha(e.target.value as string);
     setHealthLabelShown(false)
   };
 

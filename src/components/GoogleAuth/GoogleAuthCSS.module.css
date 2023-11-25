@@ -1,18 +1,14 @@
 .background {
-  background: red; /* DEV */
-  /* width: 100vw; */
+  /* background: red; */ /* DEV */
   width: 100%;
   height: 0px;
-  /* height: 10px; */
   display: flex;
   right: 0px;
   flex-direction: row;
   z-index: 4;
-  /* margin-right: 16px; */
   margin-right: 8px;
   margin-top: 30.5px;
   justify-content: flex-end;
-  /* max-width:100% */
 }
 
 .buttonIn {
@@ -25,13 +21,7 @@
   letter-spacing: 0.25px;
   font-family: "Google Sans", arial, sans-serif;
   font-weight: 500;
-  /* width: 64px; */
-  /* min-width: 64px !important; */
-  /* max-width: calc(100vw - 60.5px) !important; */
-  /* max-width: calc(100vw - 108px) !important; */
-  /* max-width: calc(100% - 108px) !important; */
-  /* max-width: calc(100% - 108px); */
-  /* max-width: calc(100% - 116px); */
+  width: 64px; /* DEFAULT WIDTH */
 }
 
 .buttonIn:hover {
@@ -71,15 +61,10 @@
 
 .bgOut {
   margin-left: 8px !important;
-  /* margin-right: 8px !important; */
-  /* margin: 0px 8px !important; */
-  /* margin: 0px 8px !important; */
   padding: 0vw !important;
   min-width: 0px !important;
   width: 36.5px !important;
   height: 39px !important;
-  /* margin-right: 16px !important; */
-  
 }
 
 /* BREAKPOINTS */
@@ -96,17 +81,10 @@
 
 /* LESS THAN 800px */
 @media screen and (max-width: 800px) {
-  .background {
-    /* margin-right: 8px; */
-    margin-top: 98px;
-  }
+  .background { margin-top: 98px }
 }
 
 /* MORE THAN 800px */
 @media screen and (min-width: 801px) {
-  .background {
-    /* margin-right: 16px !important; */
-    /* padding-right: 16px !important; */
-    visibility: visible !important
-  }
+  .background { visibility: visible !important }
 }

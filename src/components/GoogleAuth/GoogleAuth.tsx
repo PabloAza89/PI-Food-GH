@@ -149,6 +149,11 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
           headers: { 'Content-type': 'application/json; charset=UTF-8' }
         })
       }
+      $(`#buttonIn`).each(function() { // THEN RETURN TO SMALL WIDTH
+        if ($(this).innerWidth() === 64)  $(this).css("width", "64px")
+        else  $(this).animate({ width: '64px' }, { queue: false, easing: 'easeOutBounce', duration: 1000 })
+      })
+      setClicked(false)
     })
     .catch(rej => console.log(rej))
   }
@@ -191,6 +196,7 @@ const GoogleAuth = ({ paginateAmount, setUserData, userData }: any) => {
       $(`#buttonGL`).html(` ❌`)
     }
     widthHandler()
+    // eslint-disable-next-line
   },[userData.email])
 
   useEffect(() => { // FIRED ONLY WHEN TAB IS FOCUSED, CHECK VALID USER

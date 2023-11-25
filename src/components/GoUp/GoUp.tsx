@@ -2,8 +2,6 @@ import css from './GoUpCSS.module.css';
 import { useSelector } from 'react-redux';
 import { Button } from '@mui/material/';
 import $ from 'jquery';
-import TurnLeftIcon from '@mui/icons-material/TurnLeft';
-import ForwardIcon from '@mui/icons-material/Forward';
 import TransitEnterexitIcon from '@mui/icons-material/TransitEnterexit';
 
 const GoUp = () =>  {

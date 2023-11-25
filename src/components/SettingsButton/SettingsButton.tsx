@@ -1,6 +1,6 @@
 import css from "./SettingsButtonCSS.module.css";
 import { useNavigate, useLocation, useMatch } from "react-router-dom";
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Button } from '@mui/material/';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { handleReturn } from '../../commons/commonsFunc';
